@@ -6,7 +6,7 @@
 using System;
 using System.Collections;
 
-namespace fit
+namespace fit.Fixtures
 {
 	public class IntFixture : ColumnFixture
 	{

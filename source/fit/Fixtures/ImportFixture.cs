@@ -4,8 +4,9 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System;
+using fit.Model;
 
-namespace fit
+namespace fit.Fixtures
 {
 	[Obsolete("Use suite configuration file")]
     public class ImportFixture : Fixture

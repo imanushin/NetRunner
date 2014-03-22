@@ -54,7 +54,8 @@ namespace fit.Runner {
                 else
                     storyTest.Execute(new Service.Service(service));
 			}
-			catch (Exception e) {
+            catch (System.Exception e)
+            {
 			    var testStatus = new TestStatus();
 			    var parse = new CellBase(parseError, "div");
                 parse.SetAttribute(CellAttribute.Body, parseError );

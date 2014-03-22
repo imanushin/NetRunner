@@ -1,4 +1,4 @@
-|SampleTests.PingTest||12:48:31 Сб, мар 22, 2014|
+|SampleTests.PingTest||13:24:52 Сб, мар 22, 2014|
 |FrontPage||12:48:12 Сб, мар 22, 2014|
 |NetRunnerTests.PingTest||12:25:38 Сб, мар 22, 2014|
 |OtherTests||21:52:27 Сб, мар 08, 2014|

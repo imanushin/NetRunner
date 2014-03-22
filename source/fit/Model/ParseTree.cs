@@ -6,10 +6,9 @@
 using System;
 using System.Collections;
 using System.Text;
-using fit;
 using fitSharp.Machine.Model;
 
-namespace fitlibrary.tree {
+namespace fit.Model {
 
     [Serializable] public class ParseTree: Tree {
 

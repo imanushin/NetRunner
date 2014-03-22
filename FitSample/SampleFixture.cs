@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using fitlibrary;
+using fit.Fixtures;
 
 namespace FitSample
 {
@@ -11,6 +12,7 @@ namespace FitSample
     {
         public SampleFixture()
         {
+            Debugger.Break();
         }
 
         public bool PingSite(string url)

@@ -4,7 +4,7 @@
 
 using System.Collections;
 
-namespace fitlibrary.tree {
+namespace fit.Model {
 
     public interface Tree {
         string Title {get;}

@@ -8,7 +8,7 @@
 
 using System;
 
-namespace fit
+namespace fit.Model
 {
 	public class ScientificDouble
 	{

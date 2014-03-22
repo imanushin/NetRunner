@@ -4,12 +4,12 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System.Collections;
-using fitlibrary;
+using fit.Model;
 using fitSharp.Fit.Engine;
 using fitSharp.Machine.Application;
 using fitSharp.Machine.Engine;
 
-namespace fit {
+namespace fit.Fixtures {
     public class ConfigurationSetupFixture: DoFixture {
 
         public override void DoTable(Parse table) {

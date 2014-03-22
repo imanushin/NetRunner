@@ -3,15 +3,15 @@
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-using fit;
-using fitlibrary.exception;
+using fit.Exceptions;
+using fit.Model;
 using fitSharp.Fit.Engine;
 using fitSharp.Fit.Exception;
 using fitSharp.Fit.Model;
 using fitSharp.Machine.Exception;
 using fitSharp.Machine.Model;
 
-namespace fitlibrary {
+namespace fit.Fixtures {
 
 	public class ConstraintFixture: DoFixtureBase {
 

@@ -12,7 +12,7 @@ using fitSharp.Machine.Engine;
 
 namespace fitSharp.Machine.Application
 {
-    public class Shell : MarshalByRefObject
+    public sealed class Shell : MarshalByRefObject
     {
         private Runnable runner;
 

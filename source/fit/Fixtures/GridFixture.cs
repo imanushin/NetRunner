@@ -5,7 +5,7 @@
 
 using System.Collections.Generic;
 
-namespace fitlibrary {
+namespace fit.Fixtures {
 
     public class GridFixture: UnnamedCollectionFixtureBase {
 

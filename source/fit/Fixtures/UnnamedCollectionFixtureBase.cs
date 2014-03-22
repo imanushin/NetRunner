@@ -5,12 +5,12 @@
 
 using System.Collections;
 using System.Collections.Generic;
-using fit;
+using fit.Model;
 using fitSharp.Fit.Engine;
 using fitSharp.Fit.Model;
 using fitSharp.Machine.Model;
 
-namespace fitlibrary {
+namespace fit.Fixtures {
 
     public class UnnamedCollectionFixtureBase: CollectionFixtureBase {
 

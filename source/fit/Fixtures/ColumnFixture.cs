@@ -3,10 +3,10 @@
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-using System;
+using fit.Model;
 using fitSharp.Fit.Service;
 
-namespace fit
+namespace fit.Fixtures
 {
 	public class ColumnFixture : BoundFixture
 	{
@@ -27,7 +27,7 @@ namespace fit
 				if (!HasExecuted) 
 					Execute();
 			} 
-			catch (Exception e) {
+			catch (System.Exception e) {
 				TestStatus.MarkException(row.Leaf, e);
 			}
 		}
@@ -41,7 +41,7 @@ namespace fit
 			try {
 				binding.Do(cell);
 			} 
-			catch(Exception e) {
+			catch(System.Exception e) {
 				TestStatus.MarkException(cell, e);
 			}
 		}

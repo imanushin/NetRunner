@@ -6,7 +6,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace fitnesse.fitserver {
+namespace fit.Runner {
 	public class PathParser {
 
 		public PathParser(string pathNames) {

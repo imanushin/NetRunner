@@ -6,12 +6,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using fit.Model;
 using fitSharp.Fit.Engine;
 using fitSharp.Fit.Model;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
-namespace fit
+namespace fit.Fixtures
 {
 	public class Fixture: MutableDomainAdapter, TargetObjectProvider, Interpreter
 	{
@@ -70,7 +71,7 @@ namespace fit
 				{
 					DoCell(cells, i);
 				}
-				catch (Exception e)
+				catch (System.Exception e)
 				{
 					TestStatus.MarkException(cells, e);
 				}
@@ -89,7 +90,7 @@ namespace fit
 		public virtual void Wrong(Parse cell) { TestStatus.MarkWrong(cell); }
 		public virtual void Wrong(Parse cell, string actual) { TestStatus.MarkWrong(cell, actual); }
 		public virtual void Ignore(Parse cell) { TestStatus.MarkIgnore(cell); }
-		public virtual void Exception(Parse cell, Exception exception) { TestStatus.MarkException(cell, exception); }
+		public virtual void Exception(Parse cell, System.Exception exception) { TestStatus.MarkException(cell, exception); }
 
 		// Utility //////////////////////////////////
 

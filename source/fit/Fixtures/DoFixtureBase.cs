@@ -5,7 +5,7 @@
 
 using fitSharp.Fit.Model;
 
-namespace fitlibrary {
+namespace fit.Fixtures {
 
 	public class DoFixtureBase: FlowFixtureBase {
 

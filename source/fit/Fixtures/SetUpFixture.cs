@@ -3,14 +3,13 @@
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-using fit;
 using System;
 using fit.Model;
 using fitSharp.Fit.Engine;
 using fitSharp.Fit.Exception;
 using fitSharp.Machine.Exception;
 
-namespace fitlibrary {
+namespace fit.Fixtures {
 
 	public class SetUpFixture: Fixture {
 	    private Parse headerCells;
@@ -37,7 +36,7 @@ namespace fitlibrary {
                 TestStatus.MarkException(headerCells, e);
                 throw new IgnoredException();
             }
-            catch (Exception e) {
+            catch (System.Exception e) {
                 TestStatus.MarkException(theRow.Parts, e);
             }
         }

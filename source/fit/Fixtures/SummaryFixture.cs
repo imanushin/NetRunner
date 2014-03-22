@@ -5,9 +5,10 @@
 
 using System;
 using System.Collections;
+using fit.Model;
 using fitSharp.Machine.Model;
 
-namespace fit
+namespace fit.Fixtures
 {
 	public class SummaryFixture : Fixture
 	{

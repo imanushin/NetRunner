@@ -39,7 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Exception\AbandonStoryTestException.cs" />
+    <Compile Include="Exceptions\AbandonStoryTestException.cs" />
     <Compile Include="Fixtures\CalculateFixture.cs" />
     <Compile Include="Fixtures\CombinationFixture.cs" />
     <Compile Include="Fixtures\ConfigurationSetupFixture.cs" />
@@ -54,13 +54,11 @@
     <Compile Include="Operators\NamedMatchStrategy.cs" />
     <Compile Include="Operators\InvokeProcedure.cs" />
     <Compile Include="Runner\FitSocket.cs" />
-    <Compile Include="Runner\FolderRunner.cs" />
-    <Compile Include="Runner\HttpRunner.cs" />
     <Compile Include="Runner\SocketServer.cs" />
     <Compile Include="Runner\SuiteRunner.cs" />
     <Compile Include="Service\Operators.cs" />
     <Compile Include="Service\Service.cs" />
-    <Compile Include="Exception\RowWidthException.cs" />
+    <Compile Include="Exceptions\RowWidthException.cs" />
     <Compile Include="Fixtures\ActionFixture.cs" />
     <Compile Include="Fixtures\ArrayFixture.cs" />
     <Compile Include="Fixtures\BoundFixture.cs" />

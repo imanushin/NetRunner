@@ -3,18 +3,17 @@
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-using System.Linq;
-using fit;
-using fit.Model;
-using fitlibrary.exception;
 using System;
+using System.Linq;
+using fit.Exceptions;
+using fit.Model;
 using fitSharp.Fit.Engine;
 using fitSharp.Fit.Exception;
 using fitSharp.Fit.Model;
 using fitSharp.Machine.Exception;
 using fitSharp.Machine.Model;
 
-namespace fitlibrary {
+namespace fit.Fixtures {
 
     public class CalculateFixture: DoFixtureBase {
 
@@ -67,12 +66,12 @@ namespace fitlibrary {
                     catch (IgnoredException) {
                         TestStatus.MarkIgnore(expectedCell);
                     }
-                    catch (Exception e) {
+                    catch (System.Exception e) {
                         TestStatus.MarkException(expectedCell, e);
                     }
                 }
             }
-            catch (Exception e) {
+            catch (System.Exception e) {
                 TestStatus.MarkException(theRow.Parts, e);
             }
         }
@@ -116,7 +115,7 @@ namespace fitlibrary {
                     expectedCount++;
                 }
             }
-            catch (Exception e) {
+            catch (System.Exception e) {
                 TestStatus.MarkException(theHeaderCells, e);
             }
         }

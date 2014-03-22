@@ -3,15 +3,14 @@
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-using fit;
-using System;
+using fit.Model;
 using fitSharp.Fit.Engine;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Operators;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
-namespace fitlibrary {
+namespace fit.Fixtures {
 
 	public abstract class FlowFixtureBase: Fixture, FlowInterpreter {
 
@@ -42,7 +41,7 @@ namespace fitlibrary {
             try {
                 Processor.Invoke(this, theMethodName, theCell); //todo: invokewiththrow?
             }
-            catch (Exception e) { 
+            catch (System.Exception e) { 
                 TestStatus.MarkException(theCell, e);
             }
         }

@@ -6,11 +6,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
-using fit;
+using fit.Model;
 using fit.Operators;
 using fitSharp.Fit.Engine;
 
-namespace fitlibrary {
+namespace fit.Fixtures {
 
 	public class SubsetFixture: NamedCollectionFixtureBase {
         public SubsetFixture(): base() {}

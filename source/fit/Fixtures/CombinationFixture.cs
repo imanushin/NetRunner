@@ -3,16 +3,14 @@
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-using System;
 using System.Linq;
-using fit;
-using fitlibrary.exception;
+using fit.Exceptions;
+using fit.Model;
 using fitSharp.Fit.Engine;
-using fitSharp.Fit.Model;
 using fitSharp.Machine.Exception;
 using fitSharp.Machine.Model;
 
-namespace fitlibrary {
+namespace fit.Fixtures {
 
 	public class CombinationFixture: DoFixtureBase {
         static readonly Tree<Cell> combineMember = new CellTreeLeaf("combine");
@@ -43,7 +41,7 @@ namespace fitlibrary {
 	            catch (IgnoredException) {
 	                TestStatus.MarkIgnore(expectedValueCell);
 	            }
-	            catch (Exception e) {
+	            catch (System.Exception e) {
 	                TestStatus.MarkException(expectedValueCell, e);
 	            }
 	            headerCell = headerCell.More;

@@ -12,107 +12,141 @@ using fitSharp.IO;
 using fitSharp.Machine.Application;
 using fitSharp.Machine.Engine;
 
-namespace fit.Runner {
-	public class SuiteRunner {
-	    
-	    public TestCounts TestCounts { get; private set; }
-	    private readonly ProgressReporter myReporter;
-	    private ResultWriter resultWriter;
-	    private readonly Memory memory;
+namespace fit.Runner
+{
+    public class SuiteRunner
+    {
 
-		public SuiteRunner(Memory memory, ProgressReporter theReporter) {
-		    TestCounts = new TestCounts();
-		    myReporter = theReporter;
-		    this.memory = memory;
-		}
+        public TestCounts TestCounts
+        {
+            get;
+            private set;
+        }
+        private readonly ProgressReporter myReporter;
+        private ResultWriter resultWriter;
+        private readonly Memory memory;
 
-	    public void Run(StoryTestSuite theSuite, string theSelectedFile) {
+        public SuiteRunner(Memory memory, ProgressReporter theReporter)
+        {
+            TestCounts = new TestCounts();
+            myReporter = theReporter;
+            this.memory = memory;
+        }
+
+        public void Run(StoryTestSuite theSuite, string theSelectedFile)
+        {
             resultWriter = CreateResultWriter();
-            if (!string.IsNullOrEmpty(theSelectedFile)) theSuite.Select(theSelectedFile);
+            if (!string.IsNullOrEmpty(theSelectedFile))
+                theSuite.Select(theSelectedFile);
 
-	        RunFolder(theSuite, memory.GetItem<Settings>().DryRun);
+            RunFolder(theSuite, memory.GetItem<Settings>().DryRun);
 
             resultWriter.WriteFinalCount(TestCounts);
             resultWriter.Close();
-	    }
+        }
 
-	    private ResultWriter CreateResultWriter() {
-	        if (memory.GetItem<Settings>().XmlOutput != null) {
-	            return new XmlResultWriter(memory.GetItem<Settings>().XmlOutput,
-	                                       new FileSystemModel(memory.GetItem<Settings>().CodePageNumber));
-	        }
-	        return new NullResultWriter();
-	    }
+        private ResultWriter CreateResultWriter()
+        {
+            if (memory.GetItem<Settings>().XmlOutput != null)
+            {
+                return new XmlResultWriter(memory.GetItem<Settings>().XmlOutput,
+                                           new FileSystemModel(memory.GetItem<Settings>().CodePageNumber));
+            }
+            return new NullResultWriter();
+        }
 
-	    private void RunFolder(StoryTestSuite theSuite, bool dryRun) {
-	        var executor = SelectExecutor(dryRun);
+        private void RunFolder(StoryTestSuite theSuite, bool dryRun)
+        {
+            var executor = SelectExecutor(dryRun);
 
-	        StoryTestPage suiteSetUp = theSuite.SuiteSetUp;
-            if (suiteSetUp != null) executor.Do(suiteSetUp);
-	        foreach (StoryTestPage testPage in theSuite.Pages) {
-                try {
+            StoryTestPage suiteSetUp = theSuite.SuiteSetUp;
+            if (suiteSetUp != null)
+                executor.Do(suiteSetUp);
+            foreach (StoryTestPage testPage in theSuite.Pages)
+            {
+                try
+                {
                     executor.Do(testPage);
                 }
-                catch (Exception e) {
-	                myReporter.Write(e.ToString());
-	            }
-                if (executor.SuiteIsAbandoned) break;
+                catch (Exception e)
+                {
+                    myReporter.Write(e.ToString());
+                }
+                if (executor.SuiteIsAbandoned)
+                    break;
             }
 
-            if (!executor.SuiteIsAbandoned) {
-                foreach (StoryTestSuite childSuite in theSuite.Suites) {
+            if (!executor.SuiteIsAbandoned)
+            {
+                foreach (StoryTestSuite childSuite in theSuite.Suites)
+                {
                     RunFolder(childSuite, dryRun);
                 }
                 StoryTestPage suiteTearDown = theSuite.SuiteTearDown;
-                if (suiteTearDown != null) executor.Do(suiteTearDown);
+                if (suiteTearDown != null)
+                    executor.Do(suiteTearDown);
             }
 
-	        if (!dryRun) theSuite.Finish();
-	    }
-
-	    private StoryTestPageExecutor SelectExecutor(bool dryRun) {
-	        if (dryRun) return new ReportPage(myReporter);
-	        return new ExecutePage(memory, resultWriter, HandleTestStatus);
-	    }
-
-	    private void HandleTestStatus(TestCounts counts) {
-	        myReporter.Write(counts.Letter);
-	        TestCounts.TallyCounts(counts);
+            if (!dryRun)
+                theSuite.Finish();
         }
 
-        class ExecutePage: StoryTestPageExecutor {
-            public ExecutePage(Memory memory, ResultWriter resultWriter,  Action<TestCounts> handleCounts) {
+        private StoryTestPageExecutor SelectExecutor(bool dryRun)
+        {
+            if (dryRun)
+                return new ReportPage(myReporter);
+            return new ExecutePage(memory, resultWriter, HandleTestStatus);
+        }
+
+        private void HandleTestStatus(TestCounts counts)
+        {
+            myReporter.Write(counts.Letter);
+            TestCounts.TallyCounts(counts);
+        }
+
+        class ExecutePage : StoryTestPageExecutor
+        {
+            public ExecutePage(Memory memory, ResultWriter resultWriter, Action<TestCounts> handleCounts)
+            {
                 this.memory = memory;
                 this.resultWriter = resultWriter;
                 this.handleCounts = handleCounts;
             }
 
-            public void Do(StoryTestPage page) {
+            public void Do(StoryTestPage page)
+            {
                 var elapsedTime = new ElapsedTime();
                 var input = page.TestContent;
-                if (string.IsNullOrEmpty(input)) {
+                if (string.IsNullOrEmpty(input))
+                {
                     page.WriteNonTest();
                     DoNoTest();
                 }
 
                 StoreCurrentlyExecutingPagePath(page.Name.Name);
 
-	            var service = new Service.Service(memory);
+                var service = new Service.Service(memory);
                 var writer = new StoryTestStringWriter(service);
                 var storyTest = new StoryTest(service, writer).WithInput(input);
 
-                if (!storyTest.IsExecutable) {
+                if (!storyTest.IsExecutable)
+                {
                     page.WriteNonTest();
                     DoNoTest();
-	                return;
-	            }
+                    return;
+                }
 
-                storyTest.OnAbandonSuite(() => { SuiteIsAbandoned = true; });
+                storyTest.OnAbandonSuite(() =>
+                {
+                    SuiteIsAbandoned = true;
+                });
 
-                if (page.Name.IsSuitePage) {
+                if (page.Name.IsSuitePage)
+                {
                     storyTest.Execute();
                 }
-                else {
+                else
+                {
                     storyTest.Execute(new Service.Service(service));
                 }
 
@@ -122,36 +156,54 @@ namespace fit.Runner {
                 resultWriter.WritePageResult(pageResult);
             }
 
-            public void DoNoTest() {
+            public void DoNoTest()
+            {
                 handleCounts(new TestCounts());
             }
 
-            private void StoreCurrentlyExecutingPagePath(string path) {
+            private void StoreCurrentlyExecutingPagePath(string path)
+            {
                 memory.GetItem<Context>().TestPagePath = new FilePath(path);
             }
 
-            public bool SuiteIsAbandoned { get; private set; }
+            public bool SuiteIsAbandoned
+            {
+                get;
+                private set;
+            }
 
             readonly ResultWriter resultWriter;
             readonly Memory memory;
             readonly Action<TestCounts> handleCounts;
         }
 
-        class ReportPage: StoryTestPageExecutor {
-            public ReportPage(ProgressReporter reporter) {
+        class ReportPage : StoryTestPageExecutor
+        {
+            public ReportPage(ProgressReporter reporter)
+            {
                 this.reporter = reporter;
             }
 
-            public void Do(StoryTestPage page) {
-                if (string.IsNullOrEmpty(page.TestContent)) return;
-	            reporter.WriteLine(page.Name.Name);
+            public void Do(StoryTestPage page)
+            {
+                if (string.IsNullOrEmpty(page.TestContent))
+                    return;
+                reporter.WriteLine(page.Name.Name);
             }
 
-            public void DoNoTest() {}
+            public void DoNoTest()
+            {
+            }
 
-            public bool SuiteIsAbandoned { get { return false; } }
+            public bool SuiteIsAbandoned
+            {
+                get
+                {
+                    return false;
+                }
+            }
 
             readonly ProgressReporter reporter;
         }
-	}
+    }
 }

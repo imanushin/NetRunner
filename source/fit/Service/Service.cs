@@ -5,6 +5,7 @@
 
 using System.Collections.Generic;
 using System.Reflection;
+using fit.Model;
 using fitSharp.Fit.Operators;
 using fitSharp.Fit.Service;
 using fitSharp.Machine.Engine;

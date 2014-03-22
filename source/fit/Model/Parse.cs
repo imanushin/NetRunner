@@ -12,7 +12,7 @@ using fitSharp.Fit.Operators;
 using fitSharp.Machine.Model;
 using fitSharp.Parser;
 
-namespace fit
+namespace fit.Model
 {
 	public class Parse: CellBase, Tree<Cell>
 	{

@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="NetRunnerTestContainer.cs" />
     <Compile Include="SampleFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -50,6 +51,10 @@
     <ProjectReference Include="..\source\fit\fit.csproj">
       <Project>{C83FBAF8-9569-406B-A75A-56BC7D993ABC}</Project>
       <Name>fit</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\source\NetRunner.ExternalLibrary\NetRunner.ExternalLibrary.csproj">
+      <Project>{19D01E12-2663-4BD7-8D71-425BD4F1643C}</Project>
+      <Name>NetRunner.ExternalLibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

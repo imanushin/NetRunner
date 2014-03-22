@@ -3,10 +3,10 @@
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-using fit;
+using fit.Model;
 using fitSharp.Machine.Model;
 
-namespace fitnesse.fixtures
+namespace fit.Fixtures
 {
 	public abstract class TableFixture : Fixture
 	{

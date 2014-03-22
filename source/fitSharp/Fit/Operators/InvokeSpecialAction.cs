@@ -9,38 +9,43 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Exception;
 using fitSharp.Machine.Model;
 
-namespace fitSharp.Fit.Operators {
-    public class InvokeSpecialAction: CellOperator, InvokeSpecialOperator {
+namespace fitSharp.Fit.Operators
+{
+    public class InvokeSpecialAction : CellOperator, InvokeSpecialOperator
+    {
 
-        public bool CanInvokeSpecial(TypedValue instance, MemberName memberName, Tree<Cell> parameters) {
+        public bool CanInvokeSpecial(TypedValue instance, MemberName memberName, Tree<Cell> parameters)
+        {
             return true;
         }
 
-        public TypedValue InvokeSpecial(TypedValue instance, MemberName memberName, Tree<Cell> parameters) {
-            var type = Processor.ApplicationUnderTest.FindType("fit.Parse").Type;
+        public TypedValue InvokeSpecial(TypedValue instance, MemberName memberName, Tree<Cell> parameters)
+        {
+            var type = Processor.ApplicationUnderTest.FindType("fit.Model.Parse").Type;
 
-    		// lookup Fixture
-			foreach (var member in FindMember(instance, memberName, type).Value)
-			{
+            // lookup Fixture
+            foreach (var member in FindMember(instance, memberName, type).Value)
+            {
                 return member.Invoke(new object[] { parameters.Value });
             }
 
-			// lookup FlowKeywords
-			var runtimeType = Processor.ApplicationUnderTest.FindType("fit.Fixtures.FlowKeywords");
-			var runtimeMember = runtimeType.GetConstructor(2);
-			var flowKeywords = runtimeMember.Invoke(new[] { instance.Value, Processor });
+            // lookup FlowKeywords
+            var runtimeType = Processor.ApplicationUnderTest.FindType("fit.Fixtures.FlowKeywords");
+            var runtimeMember = runtimeType.GetConstructor(2);
+            var flowKeywords = runtimeMember.Invoke(new[] { instance.Value, Processor });
 
-			foreach (var member in FindMember(flowKeywords, memberName, type).Value)
-			{
-				return member.Invoke(new object[] { parameters.Value });
-			}
-			
-			return TypedValue.MakeInvalid(new MemberMissingException(instance.Type, memberName.Name, 1));
+            foreach (var member in FindMember(flowKeywords, memberName, type).Value)
+            {
+                return member.Invoke(new object[] { parameters.Value });
+            }
+
+            return TypedValue.MakeInvalid(new MemberMissingException(instance.Type, memberName.Name, 1));
         }
 
-        static Maybe<RuntimeMember> FindMember(TypedValue flowKeywords, MemberName memberName, Type type) {
+        static Maybe<RuntimeMember> FindMember(TypedValue flowKeywords, MemberName memberName, Type type)
+        {
             return MemberQuery.FindDirectInstance(flowKeywords.Value,
-                    new MemberSpecification(memberName).WithParameterTypes(new[] {type}));
+                    new MemberSpecification(memberName).WithParameterTypes(new[] { type }));
         }
     }
 }

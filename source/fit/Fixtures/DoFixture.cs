@@ -3,16 +3,22 @@
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-using fit;
+using fit.Model;
 
-namespace fitlibrary {
+namespace fit.Fixtures
+{
 
-    public class DoFixture: DoFixtureBase	{
+    public class DoFixture : DoFixtureBase
+    {
+        public DoFixture()
+        {
+        }
+        public DoFixture(object theSystemUnderTest) : base(theSystemUnderTest)
+        {
+        }
 
-        public DoFixture() {}
-        public DoFixture(object theSystemUnderTest): base(theSystemUnderTest) {}
-
-        public override void DoTable(Parse table) {
+        public override void DoTable(Parse table)
+        {
             ProcessFlowRows(table);
         }
 

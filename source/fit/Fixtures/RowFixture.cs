@@ -10,7 +10,7 @@ using fitSharp.Fit.Engine;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
-namespace fit
+namespace fit.Fixtures
 {
 	public abstract class RowFixture : BoundFixture
 	{

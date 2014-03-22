@@ -6,9 +6,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using fit.exception;
+using fit.Exceptions;
 using fit.Model;
-using fitlibrary;
 using fitSharp.Fit.Engine;
 using fitSharp.Fit.Exception;
 using fitSharp.Fit.Fixtures;
@@ -54,7 +53,7 @@ namespace fit.Fixtures {
                 catch (MemberMissingException e) {
                     processor.TestStatus.MarkException(theCells.More, e);
                 }
-                catch (Exception e) {
+                catch (System.Exception e) {
                     processor.TestStatus.MarkException(theCells.Last, e);
                 }
             }
@@ -87,7 +86,7 @@ namespace fit.Fixtures {
                 processor.TestStatus.ColorCell(theCells, (bool) ExecuteEmbeddedMethod(theCells));
             }
             catch (IgnoredException) {}
-            catch (Exception e) {
+            catch (System.Exception e) {
                 processor.TestStatus.MarkException(theCells, e);
             }
         }
@@ -97,7 +96,8 @@ namespace fit.Fixtures {
                 processor.TestStatus.ColorCell(theCells, !(bool) ExecuteEmbeddedMethod(theCells));
             }
             catch (IgnoredException) {}
-            catch (Exception) {
+            catch (System.Exception)
+            {
                 processor.TestStatus.MarkRight(theCells);
             }
         }
@@ -150,7 +150,8 @@ namespace fit.Fixtures {
             try {
                 fixture.SetSystemUnderTest(new MethodPhrase(new CellRange(theCells)).EvaluateNew(processor));
             }
-            catch (Exception e) {
+            catch (System.Exception e)
+            {
                 processor.TestStatus.MarkException(theCells, e);
             }
         }

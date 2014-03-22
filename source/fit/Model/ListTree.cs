@@ -7,7 +7,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace fitlibrary.tree {
+namespace fit.Model {
 
 	[Serializable] public class ListTree: Tree {
 

@@ -25,17 +25,17 @@ namespace fitSharp.Fit.Operators {
             var wrapInterpreter = result.GetValueAs<Interpreter>();
             if (wrapInterpreter != null) return result;
             if (typeof (IEnumerable<object>).IsAssignableFrom(result.Type))
-                return MakeInterpreter("fitlibrary.ArrayFixture", typeof(IEnumerable<object>), result.Value);
+                return MakeInterpreter("fit.Fixtures.ArrayFixture", typeof(IEnumerable<object>), result.Value);
             if (typeof (IDictionary).IsAssignableFrom(result.Type))
-                return MakeInterpreter("fitlibrary.SetFixture", typeof(IEnumerable), result.GetValue<IDictionary>().Values);
+                return MakeInterpreter("fit.Fixtures.SetFixture", typeof(IEnumerable), result.GetValue<IDictionary>().Values);
             if (typeof (DataTable).IsAssignableFrom(result.Type))
-                return MakeInterpreter("fitlibrary.ArrayFixture", typeof(DataTable), result.Value);
+                return MakeInterpreter("fit.Fixtures.ArrayFixture", typeof(DataTable), result.Value);
             if (typeof (XmlDocument).IsAssignableFrom(result.Type))
-                return MakeInterpreter("fitlibrary.XmlFixture", typeof(XmlDocument), result.Value);
+                return MakeInterpreter("fit.Fixtures.XmlFixture", typeof(XmlDocument), result.Value);
             if (typeof (IEnumerable).IsAssignableFrom(result.Type))
-                return MakeInterpreter("fitlibrary.ArrayFixture", typeof(IEnumerable), result.Value);
+                return MakeInterpreter("fit.Fixtures.ArrayFixture", typeof(IEnumerable), result.Value);
             if (typeof (IEnumerator).IsAssignableFrom(result.Type))
-                return MakeInterpreter("fitlibrary.ArrayFixture", typeof(IEnumerator), result.Value);
+                return MakeInterpreter("fit.Fixtures.ArrayFixture", typeof(IEnumerator), result.Value);
             return MakeInterpreter(ParseInterpreter.DefaultFlowInterpreter, typeof (object), result.Value);
         }
 

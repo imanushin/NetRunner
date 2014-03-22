@@ -3,14 +3,14 @@
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-using System;
+using fit.Model;
 using fitSharp.Fit.Engine;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Service;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
-namespace fit
+namespace fit.Fixtures
 {
 	public class ActionFixture : Fixture
 	{
@@ -29,7 +29,7 @@ namespace fit
 			    Processor.ExecuteWithThrow(this, cells);
 				targetObject = actor;
 			}
-			catch (Exception e)
+			catch (System.Exception e)
 			{
 				TestStatus.MarkException(cells, e);
 			}

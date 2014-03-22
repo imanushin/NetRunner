@@ -5,6 +5,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System;
+using fit.Model;
 using fitSharp.Fit.Operators;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
@@ -12,12 +13,12 @@ using fitSharp.Machine.Model;
 namespace fit.Operators {
     public class ParseTree : CellOperator, ParseOperator<Cell> {
         public bool CanParse(Type type, TypedValue instance, Tree<Cell> parameters) {
-            return typeof(fitlibrary.tree.Tree).IsAssignableFrom(type);
+            return typeof(Tree).IsAssignableFrom(type);
         }
 
         public TypedValue Parse(Type type, TypedValue instance, Tree<Cell> parameters) {
             var cell = (Parse)parameters.Value;
-            return new TypedValue(new fitlibrary.tree.ParseTree(
+            return new TypedValue(new Model.ParseTree(
                 cell.Parts
                 ?? new Parse("ul", Processor.Parse<Cell, string>(cell), null, null)));
         }

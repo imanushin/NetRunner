@@ -5,15 +5,34 @@
 
 using System;
 
-namespace fitSharp.Machine.Exception {
-    public class ParseException<T>: ValidationException {
-        public T Subject { get; private set; }
-        public string MemberName { get; private set; }
-        public int Index { get; private set; }
-        public Type Type { get; private set; }
+namespace fitSharp.Machine.Exception
+{
+    public class ParseException<T> : ValidationException
+    {
+        public T Subject
+        {
+            get;
+            private set;
+        }
+        public string MemberName
+        {
+            get;
+            private set;
+        }
+        public int Index
+        {
+            get;
+            private set;
+        }
+        public Type Type
+        {
+            get;
+            private set;
+        }
 
         public ParseException(string memberName, Type type, int index, T subject, System.Exception inner)
-            : base(string.Format("Parse parameter {1} for '{0}' type {2} failed.", memberName, index, type), inner) {
+            : base(string.Format("Parse parameter {1} for '{0}' type {2} failed.", memberName, index, type), inner)
+        {
             Subject = subject;
             MemberName = memberName;
             Type = type;

@@ -4,7 +4,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System;
-using fitlibrary.table;
+using fit.Model;
 using fitSharp.Fit.Operators;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
@@ -16,7 +16,7 @@ namespace fit.Operators {
         }
 
         public TypedValue Parse(Type type, TypedValue instance, Tree<Cell> parameters) {
-            return new TypedValue(new fitlibrary.table.ParseTable(((Parse)parameters.Value).Parts), type);
+            return new TypedValue(new Model.ParseTable(((Parse)parameters.Value).Parts), type);
         }
     }
 }

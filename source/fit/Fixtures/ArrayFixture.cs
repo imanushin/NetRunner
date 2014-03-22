@@ -9,7 +9,7 @@ using System.Data;
 using fit.Operators;
 using fitSharp.Fit.Engine;
 
-namespace fitlibrary {
+namespace fit.Fixtures {
 
     public class ArrayFixture: NamedCollectionFixtureBase {
         public ArrayFixture(): base() {}
