@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NetRunner.Executable.RawData;
 
 namespace NetRunner.Executable
 {
@@ -41,6 +42,8 @@ namespace NetRunner.Executable
                 {
                     var counts = new TestCounts();
 
+                    var tables = HtmlParser.Parse(document);
+
                     /*init test context*/
 
                     Trace.WriteLine("test...");
@@ -56,13 +59,12 @@ namespace NetRunner.Executable
 
                     communicator.SendDocument(@"<br/> TEST !!!!");
 
-                    counts.IncrementSuccessCount();
-                    counts.IncrementSuccessCount();
-                    counts.IncrementSuccessCount();
-                    counts.IncrementSuccessCount();
+                    foreach (var table in tables)
+                    {
+                        counts.IncrementSuccessCount();    
+                    }
 
                     communicator.SendCounts(counts);
-
                 }
                 catch (Exception e)
                 {
