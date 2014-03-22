@@ -5,27 +5,31 @@
 
 using System.Net.Sockets;
 
-namespace fitSharp.IO {
-    public class SocketModelImpl: ISocketModel {
+namespace fitSharp.IO
+{
+    public class SocketModelImpl : ISocketModel
+    {
         private readonly Socket socket;
 
-        public SocketModelImpl(string hostName, int port) {
-			socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-		    socket.Connect(hostName, port);
+        public SocketModelImpl(string hostName, int port)
+        {
+            socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            socket.Connect(hostName, port);
         }
 
-        public SocketModelImpl(Socket socket) {
-            this.socket = socket;
-        }
-
-        public int Receive(byte[] buffer, int offset, int bytesToRead) {
+        public int Receive(byte[] buffer, int offset, int bytesToRead)
+        {
             return socket.Receive(buffer, offset, bytesToRead, SocketFlags.None);
         }
 
-        public void Send(byte[] buffer) {
+        public void Send(byte[] buffer)
+        {
             socket.Send(buffer);
         }
 
-        public void Close() { socket.Close(); }
+        public void Close()
+        {
+            socket.Close();
+        }
     }
 }

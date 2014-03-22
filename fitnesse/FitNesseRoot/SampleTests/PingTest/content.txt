@@ -1,7 +1,7 @@
 !contents -R2 -g -p -f -h
 
 !path C:\git\fitsharp\FitSample\bin\Debug\FitSample.dll
-#!define COMMAND_PATTERN {%m -r fit.Runner.FitServer,C:\git\fitsharp\FitSample\bin\Debug\fit.dll %p}
+#!define COMMAND_PATTERN {%m -v -r fit.Runner.FitServer,C:\git\fitsharp\FitSample\bin\Debug\fit.dll %p}
 #!define TEST_RUNNER {C:\git\fitsharp\source\Runner\bin\Debug\Runner.exe}
 !define COMMAND_PATTERN {%m %p}
 !define TEST_RUNNER {C:\git\fitsharp\source\NetRunner.Executable\bin\Debug\NetRunner.Executable.exe}

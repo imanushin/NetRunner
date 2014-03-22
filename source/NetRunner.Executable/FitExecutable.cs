@@ -17,7 +17,7 @@ namespace NetRunner.Executable
 
             Trace.WriteLine("Host: {0}; Port: {1}");
 
-            communicator.EstablishConnection(Protocol.FormatRequest(settings.SocketToken));
+            communicator.EstablishConnection(settings.SocketToken);
             /*
             var writer = new StoryTestStringWriter(service)
                 .ForTables(WriteTables)
@@ -39,6 +39,8 @@ namespace NetRunner.Executable
 
                 try
                 {
+                    var counts = new TestCounts();
+
                     /*init test context*/
 
                     Trace.WriteLine("test...");
@@ -52,7 +54,15 @@ namespace NetRunner.Executable
                         /*execute test*/
                     }
 
-                    communicator.SendDocument("TEST");
+                    communicator.SendDocument(@"<br/> TEST !!!!");
+
+                    counts.IncrementSuccessCount();
+                    counts.IncrementSuccessCount();
+                    counts.IncrementSuccessCount();
+                    counts.IncrementSuccessCount();
+
+                    communicator.SendCounts(counts);
+
                 }
                 catch (Exception e)
                 {

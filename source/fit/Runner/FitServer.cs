@@ -124,7 +124,7 @@ namespace fit.Runner
 
         private void WriteTables(string tables)
         {
-            reporter.WriteLine("\tTransmitting tables of length " + tables.Length);
+            reporter.WriteLine("\tTransmitting tables of length " + tables.Length + " with contents: " + Environment.NewLine + tables + Environment.NewLine);
             clientSocket.SendDocument(tables);
         }
 

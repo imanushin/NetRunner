@@ -20,18 +20,30 @@ namespace NetRunner.Executable
 
         public void SendDocument(string document)
         {
-            Write(Protocol.FormatDocument(document));
+            Write(FormatDocument(document));
+        }
+
+        public void SendCounts(TestCounts counts)
+        {
+            var builder = new StringBuilder();
+            builder.Append(FormatInteger(0));
+            builder.Append(FormatInteger(counts.SuccessCount));
+            builder.Append(FormatInteger(counts.FailCount));
+            builder.Append(FormatInteger(counts.IgnoreCount));
+            builder.Append(FormatInteger(counts.ExceptionCount));
+
+            Transmit(builder.ToString());
         }
 
         public void Transmit(string message)
         {
             Write(message);
         }
-        
+
         public void EstablishConnection(string request)
         {
             Trace.WriteLine("HTTP request: {0}");
-            Transmit(request);
+            Transmit(FormatRequest(request));
 
             Trace.WriteLine("Validating connection...");
             int statusSize = ReceiveInteger();
@@ -80,50 +92,31 @@ namespace NetRunner.Executable
             return new StringBuilder(charCount).Append(characters, 0, charCount).ToString();
         }
 
-        public void Close()
-        {
-            socket.Close();
-        }
-
         private int ReceiveInteger()
         {
             return Convert.ToInt32(ReadBytes(10));
         }
-        public void Dispose()
-        {
-            if (socket != null)
-                socket.Dispose();
-        }
 
-
-    }
-
-    internal static class Protocol
-    {
-        public static string FormatInteger(int encodeInteger)
+        private static string FormatInteger(int encodeInteger)
         {
             string numberPartOfString = "" + encodeInteger;
             return new String('0', 10 - numberPartOfString.Length) + numberPartOfString;
         }
 
-        public static string FormatDocument(string document)
+        private static string FormatDocument(string document)
         {
             return FormatInteger(Encoding.UTF8.GetBytes(document).Length) + document;
         }
 
-        public static string FormatRequest(string token)
+        private static string FormatRequest(string token)
         {
             return "GET /?responder=socketCatcher&ticket=" + token + " HTTP/1.1\r\n\r\n";
         }
 
-        public static string FormatRequest(string pageName, bool usingDownloadedPaths, string suiteFilter)
+        public void Dispose()
         {
-            string request = "GET /" + pageName + "?responder=fitClient";
-            if (usingDownloadedPaths)
-                request += "&includePaths=yes";
-            if (suiteFilter != null)
-                request += "&suiteFilter=" + suiteFilter;
-            return request + " HTTP/1.1\r\n\r\n";
+            if (socket != null)
+                socket.Dispose();
         }
     }
 }

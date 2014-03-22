@@ -7,62 +7,77 @@ using System;
 using fitSharp.Fit.Model;
 using fitSharp.IO;
 
-namespace fit.Runner {
-    public class FitSocket {
+namespace fit.Runner
+{
+    public class FitSocket
+    {
         private readonly ISocketModel socket;
         private readonly SocketStream socketStream;
         private readonly IProgressReporter reporter;
 
-        public FitSocket(ISocketModel socket, IProgressReporter reporter) {
+        public FitSocket(ISocketModel socket, IProgressReporter reporter)
+        {
             socketStream = new SocketStream(socket);
             this.reporter = reporter;
             this.socket = socket;
         }
 
-		public void EstablishConnection(string request)
-		{
-		    reporter.WriteLine("\tHTTP request: " + request);
-		    Transmit(request);
+        public void EstablishConnection(string request)
+        {
+            reporter.WriteLine("\tHTTP request: " + request);
+            Transmit(request);
 
-		    reporter.WriteLine("Validating connection...");
-		    int StatusSize = ReceiveInteger();
-			if (StatusSize == 0) {
-			    reporter.WriteLine("\t...ok\n");
-			}
-			else {
-				String errorMessage = socketStream.ReadBytes(StatusSize);
-			    reporter.WriteLine("\t...failed because: " + errorMessage);
-			    Console.WriteLine("An error occured while connecting to client.");
-				Console.WriteLine(errorMessage);
-				Environment.Exit(-1);
-			}
-		}
+            reporter.WriteLine("Validating connection...");
+            int StatusSize = ReceiveInteger();
+            if (StatusSize == 0)
+            {
+                reporter.WriteLine("\t...ok\n");
+            }
+            else
+            {
+                String errorMessage = socketStream.ReadBytes(StatusSize);
+                reporter.WriteLine("\t...failed because: " + errorMessage);
+                Console.WriteLine("An error occured while connecting to client.");
+                Console.WriteLine(errorMessage);
+                Environment.Exit(-1);
+            }
+        }
 
-        public void SendDocument(string document) {
+        public void SendDocument(string document)
+        {
             socketStream.Write(Protocol.FormatDocument(document));
         }
 
-        public void Transmit(string message) {
+        public void Transmit(string message)
+        {
             socketStream.Write(message);
-		}
-
-		public string ReceiveDocument() {
-			int documentLength = ReceiveInteger();
-			if (documentLength == 0)
-				return "";
-		    return socketStream.ReadBytes(documentLength);
-		}
-
-        public void SendCounts(TestCounts counts) {
-	        socketStream.Write(Protocol.FormatCounts(counts));
         }
 
-        public void Close() {
+        public string ReceiveDocument()
+        {
+            int documentLength = ReceiveInteger();
+            if (documentLength == 0)
+                return "";
+            return socketStream.ReadBytes(documentLength);
+        }
+
+        public void SendCounts(TestCounts counts)
+        {
+            string message = Protocol.FormatCounts(counts);
+
+            reporter.Write("Counts content: " + message);
+
+            socketStream.Write(message);
+        }
+
+        public void Close()
+        {
             socket.Close();
         }
 
-		private int ReceiveInteger() {
-			return Convert.ToInt32(socketStream.ReadBytes(10));
-		}
+        private int ReceiveInteger()
+        {
+            return Convert.ToInt32(socketStream.ReadBytes(10));
+        }
     }
 }
