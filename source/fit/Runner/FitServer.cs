@@ -5,10 +5,10 @@
 
 using System;
 using System.Collections.Generic;
+using fitSharp;
 using fitSharp.Fit.Fixtures;
 using fitSharp.Fit.Model;
 using fitSharp.IO;
-using fitSharp.Machine.Application;
 using fitSharp.Machine.Engine;
 
 namespace fit.Runner

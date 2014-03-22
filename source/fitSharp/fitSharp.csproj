@@ -39,6 +39,7 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Context.cs" />
     <Compile Include="Fit\Application\Configurable.cs" />
     <Compile Include="Fit\Application\ConfigurationList.cs" />
     <Compile Include="Fit\Application\FileExclusions.cs" />
@@ -111,10 +112,6 @@
     <Compile Include="Fit\Operators\InterpretFlow.cs" />
     <Compile Include="Fit\Fixtures\StoryTestStringWriter.cs" />
     <Compile Include="Fit\Engine\StoryTestWriter.cs" />
-    <Compile Include="Machine\Application\ArgumentParser.cs" />
-    <Compile Include="Machine\Application\Context.cs" />
-    <Compile Include="Machine\Application\Runnable.cs" />
-    <Compile Include="Machine\Application\SuiteConfiguration.cs" />
     <Compile Include="Machine\Engine\CreateDefault.cs" />
     <Compile Include="Machine\Engine\Culture.cs" />
     <Compile Include="Machine\Engine\CurrentDomain.cs" />
@@ -164,7 +161,6 @@
     <Compile Include="IO\SocketModel.cs" />
     <Compile Include="IO\SocketStream.cs" />
     <Compile Include="IO\TimeKeeper.cs" />
-    <Compile Include="Machine\Application\Settings.cs" />
     <Compile Include="Machine\Model\Cell.cs" />
     <Compile Include="Fit\Operators\CompareFloatingPoint.cs" />
     <Compile Include="Fit\Operators\ParseMemberName.cs" />
@@ -183,7 +179,6 @@
     <Compile Include="Fit\Operators\ParseDefault.cs" />
     <Compile Include="Fit\Operators\ParseNull.cs" />
     <Compile Include="Machine\Engine\Memory.cs" />
-    <Compile Include="Machine\Application\Shell.cs" />
     <Compile Include="Machine\Engine\ApplicationUnderTest.cs" />
     <Compile Include="Machine\Engine\BasicProcessor.cs" />
     <Compile Include="Machine\Engine\ParseEnum.cs" />
@@ -193,6 +188,7 @@
     <Compile Include="Machine\Model\StringObjectMemory.cs" />
     <Compile Include="Machine\Engine\Symbols.cs" />
     <Compile Include="Machine\Model\Traverse.cs" />
+    <Compile Include="Machine\Settings.cs" />
     <Compile Include="Parser\Characters.cs" />
     <Compile Include="Parser\CharacterType.cs" />
     <Compile Include="Parser\TextTables.cs" />
@@ -228,6 +224,7 @@
     <Compile Include="Parser\Substring.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Fit\Operators\CellOperator.cs" />
+    <Compile Include="Runnable.cs" />
     <Compile Include="Step.cs" />
   </ItemGroup>
   <ItemGroup />

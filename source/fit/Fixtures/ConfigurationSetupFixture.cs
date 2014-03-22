@@ -6,7 +6,7 @@
 using System.Collections;
 using fit.Model;
 using fitSharp.Fit.Engine;
-using fitSharp.Machine.Application;
+using fitSharp.Machine;
 using fitSharp.Machine.Engine;
 
 namespace fit.Fixtures {

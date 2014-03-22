@@ -5,7 +5,7 @@
 
 using System.Threading;
 using fitSharp.Fit.Engine;
-using fitSharp.Machine.Application;
+using fitSharp.Machine;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Exception;
 using fitSharp.Machine.Model;

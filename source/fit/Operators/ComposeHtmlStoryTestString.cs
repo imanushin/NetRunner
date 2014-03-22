@@ -7,7 +7,7 @@ using fit.Model;
 using fitSharp.Fit.Engine;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Operators;
-using fitSharp.Machine.Application;
+using fitSharp.Machine;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using fitSharp.Parser;

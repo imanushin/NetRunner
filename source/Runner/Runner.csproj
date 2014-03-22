@@ -37,8 +37,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArgumentParser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Shell.cs" />
+    <Compile Include="SuiteConfiguration.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\fitSharp\fitSharp.csproj">

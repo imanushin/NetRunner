@@ -10,7 +10,7 @@ using System.Linq;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Application;
 using fitSharp.IO;
-using fitSharp.Machine.Application;
+using fitSharp.Machine;
 using fitSharp.Machine.Engine;
 using Path = System.IO.Path;
 

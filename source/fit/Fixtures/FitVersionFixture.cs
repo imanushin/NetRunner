@@ -6,7 +6,7 @@
 using System;
 using fit.Model;
 using fitSharp.Fit.Engine;
-using fitSharp.Machine.Application;
+using fitSharp.Machine;
 
 namespace fit.Fixtures {
     [Obsolete("Use suite configuration file")]

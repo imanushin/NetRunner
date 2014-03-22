@@ -3,20 +3,12 @@
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
-using System.Diagnostics;
+using System.Collections.Generic;
 using fitSharp.IO;
+using fitSharp.Machine.Engine;
 
-namespace fitSharp.Runner
-{
-    internal static class Program
-    {
-        private static int Main(string[] arguments)
-        {
-            Debugger.Launch();
-
-            var shell = new Shell(new ConsoleReporter(), new FileSystemModel());
-
-            return shell.Run(arguments);
-        }
+namespace fitSharp {
+    public interface Runnable {
+        int Run(IList<string> commandLineArguments, Memory memory, ProgressReporter reporter);
     }
 }

@@ -8,9 +8,10 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Threading;
 using fitSharp.IO;
+using fitSharp.Machine;
 using fitSharp.Machine.Engine;
 
-namespace fitSharp.Machine.Application
+namespace fitSharp.Runner
 {
     public sealed class Shell : MarshalByRefObject
     {
@@ -38,7 +39,7 @@ namespace fitSharp.Machine.Application
                            ? RunInCurrentDomain()
                            : RunInNewDomain(memory.GetItem<AppDomainSetup>(), commandLineArguments);
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
                 progressReporter.Write(string.Format("{0}\n", e));
                 return 1;

@@ -4,12 +4,13 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System;
+using fitSharp;
 using fitSharp.Fit.Fixtures;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Runner;
 using fitSharp.Fit.Service;
 using fitSharp.IO;
-using fitSharp.Machine.Application;
+using fitSharp.Machine;
 using fitSharp.Machine.Engine;
 
 namespace fit.Runner
