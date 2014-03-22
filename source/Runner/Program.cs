@@ -7,12 +7,17 @@ using System.Diagnostics;
 using fitSharp.IO;
 using fitSharp.Machine.Application;
 
-namespace fitSharp.Runner {
-    class Program {
-        static int Main(string[] arguments) {
+namespace fitSharp.Runner
+{
+    internal static class Program
+    {
+        private static int Main(string[] arguments)
+        {
             Debugger.Launch();
 
-            return new Shell(new ConsoleReporter(), new FileSystemModel()).Run(arguments);
+            var shell = new Shell(new ConsoleReporter(), new FileSystemModel());
+
+            return shell.Run(arguments);
         }
     }
 }
