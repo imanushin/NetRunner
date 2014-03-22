@@ -6,35 +6,52 @@
 using System;
 using System.Text;
 
-namespace fitSharp.IO {
-    public interface ProgressReporter {
+namespace fitSharp.IO
+{
+    public interface IProgressReporter
+    {
         void Write(string theMessage);
     }
 
-    public static class ProgressReporterExtension {
-        public static void WriteLine(this ProgressReporter reporter, string message) {
+    public static class ProgressReporterExtension
+    {
+        public static void WriteLine(this IProgressReporter reporter, string message)
+        {
             reporter.Write(message);
             reporter.Write(Environment.NewLine);
         }
     }
 
-    public class ConsoleReporter: ProgressReporter {
-        public void Write(string theMessage) {
+    public class ConsoleReporter : IProgressReporter
+    {
+        public void Write(string theMessage)
+        {
             Console.Write(theMessage);
         }
     }
 
-    public class NullReporter: ProgressReporter {
-        public void Write(string theMessage) {}
+    public class NullReporter : IProgressReporter
+    {
+        public void Write(string theMessage)
+        {
+        }
     }
 
-    public class CollectingReporter: ProgressReporter {
+    public class CollectingReporter : IProgressReporter
+    {
         private readonly StringBuilder buffer = new StringBuilder();
 
-        public void Write(string message) {
+        public void Write(string message)
+        {
             buffer.Append(message);
         }
 
-        public string Output { get { return buffer.ToString(); } }
+        public string Output
+        {
+            get
+            {
+                return buffer.ToString();
+            }
+        }
     }
 }

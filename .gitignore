@@ -18,3 +18,9 @@ my*/
 document/FitnesseRoot/ErrorLogs/
 document/FitnesseRoot/RecentChanges/
 document/FitnesseRoot/files/testResults/
+
+/fitnesse/FitNesseRoot/ErrorLogs
+/fitnesse/FitNesseRoot/SampleTests/*/*.zip
+
+/fitnesse/FitNesseRoot/RecentChanges
+/fitnesse/FitNesseRoot/files/testResults

@@ -9,11 +9,11 @@ using fitSharp.IO;
 
 namespace fit.Runner {
     public class FitSocket {
-        private readonly SocketModel socket;
+        private readonly ISocketModel socket;
         private readonly SocketStream socketStream;
-        private readonly ProgressReporter reporter;
+        private readonly IProgressReporter reporter;
 
-        public FitSocket(SocketModel socket, ProgressReporter reporter) {
+        public FitSocket(ISocketModel socket, IProgressReporter reporter) {
             socketStream = new SocketStream(socket);
             this.reporter = reporter;
             this.socket = socket;

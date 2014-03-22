@@ -9,21 +9,35 @@ using System.Data;
 using fit.Operators;
 using fitSharp.Fit.Engine;
 
-namespace fit.Fixtures {
+namespace fit.Fixtures
+{
 
-    public class ArrayFixture: NamedCollectionFixtureBase {
-        public ArrayFixture(): base() {}
+    public class ArrayFixture : NamedCollectionFixtureBase
+    {
+        public ArrayFixture() : base()
+        {
+        }
 
-        public ArrayFixture(IEnumerable<object> theArray): base(theArray) {}
+        public ArrayFixture(IEnumerable<object> theArray) : base(theArray)
+        {
+        }
 
-        public ArrayFixture(IEnumerable theCollection): base(theCollection) {}
+        public ArrayFixture(IEnumerable theCollection) : base(theCollection)
+        {
+        }
 
-        public ArrayFixture(IEnumerator theEnumerator): base(theEnumerator) {}
+        public ArrayFixture(IEnumerator theEnumerator) : base(theEnumerator)
+        {
+        }
 
-        public ArrayFixture(DataTable theTable): base(theTable.Rows.GetEnumerator()) {}
+        public ArrayFixture(DataTable theTable) : base(theTable.Rows.GetEnumerator())
+        {
+        }
 
-        protected override ListMatchStrategy MatchStrategy {
-            get {
+        protected override ListMatchStrategy MatchStrategy
+        {
+            get
+            {
                 return new ArrayMatchStrategy(Processor, myHeaderRow);
             }
         }

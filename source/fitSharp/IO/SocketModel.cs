@@ -6,13 +6,7 @@
 using System.Net.Sockets;
 
 namespace fitSharp.IO {
-    public interface SocketModel {
-        int Receive(byte[] buffer, int offset, int bytesToRead);
-        void Send(byte[] buffer);
-        void Close();
-    }
-
-    public class SocketModelImpl: SocketModel {
+    public class SocketModelImpl: ISocketModel {
         private readonly Socket socket;
 
         public SocketModelImpl(string hostName, int port) {

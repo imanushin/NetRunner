@@ -1,8 +1,0 @@
-
-!3 !-fit:C:\git\fitsharp\source\Runner\bin\Debug\Runner.exe-!
-|'''Date: '''| 1:45:02 PM (MSK) on суббота, Март 22, 2014 |
-|'''Test Page: '''|.SampleTests.PingTest|
-|'''Command: '''| !-C:\git\fitsharp\source\Runner\bin\Debug\Runner.exe -r fit.Runner.FitServer,C:\git\fitsharp\FitSample\bin\Debug\fit.dll C:\git\fitsharp\FitSample\bin\Debug\FitSample.dll igorworkbook 26936 3863-! |
-|'''Exit code: '''| 0 |
-|'''Time elapsed: '''| 618.378 seconds |
-

@@ -7,8 +7,10 @@ using System.Collections.Generic;
 using fitSharp.IO;
 using fitSharp.Machine.Engine;
 
-namespace fitSharp {
-    public interface Runnable {
-        int Run(IList<string> commandLineArguments, Memory memory, ProgressReporter reporter);
+namespace fitSharp
+{
+    public interface IRunnable
+    {
+        int Run(IList<string> commandLineArguments, Memory memory, IProgressReporter reporter);
     }
 }

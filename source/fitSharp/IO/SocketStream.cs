@@ -7,9 +7,9 @@ using System.Text;
 
 namespace fitSharp.IO {
     public class SocketStream {
-        private readonly SocketModel socket;
+        private readonly ISocketModel socket;
 
-        public SocketStream(SocketModel socket) {
+        public SocketStream(ISocketModel socket) {
             this.socket = socket;
         }
 

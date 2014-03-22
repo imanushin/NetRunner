@@ -13,7 +13,7 @@ using fitSharp.Machine.Engine;
 
 namespace fit.Runner
 {
-    public sealed class FitServer : Runnable
+    public sealed class FitServer : IRunnable
     {
         private FitSocket clientSocket;
         private bool verbose;
@@ -21,7 +21,7 @@ namespace fit.Runner
         private int port;
         private string socketToken;
         private Memory memory;
-        private ProgressReporter reporter;
+        private IProgressReporter reporter;
         private readonly TestCounts totalCounts = new TestCounts();
 
         private const int assemblylist = 0;
@@ -30,7 +30,7 @@ namespace fit.Runner
         private const int SOCKET_TOKEN = 3;
         private const int DONE = 4;
 
-        public int Run(IList<string> commandLineArguments, Memory memory, ProgressReporter reporter)
+        public int Run(IList<string> commandLineArguments, Memory memory, IProgressReporter reporter)
         {
             this.memory = memory;
             Run(commandLineArguments);
@@ -103,7 +103,7 @@ namespace fit.Runner
         }
 
 
-        private ProgressReporter MakeReporter()
+        private IProgressReporter MakeReporter()
         {
             if (verbose)
                 return new ConsoleReporter();

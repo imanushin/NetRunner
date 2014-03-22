@@ -9,7 +9,7 @@ using fitSharp.Fit.Model;
 
 namespace fit.Runner
 {
-	public class Protocol
+	public static class Protocol
 	{
 		public static string FormatInteger(int encodeInteger)
 		{

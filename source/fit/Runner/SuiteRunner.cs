@@ -23,11 +23,11 @@ namespace fit.Runner
             get;
             private set;
         }
-        private readonly ProgressReporter myReporter;
+        private readonly IProgressReporter myReporter;
         private ResultWriter resultWriter;
         private readonly Memory memory;
 
-        public SuiteRunner(Memory memory, ProgressReporter theReporter)
+        public SuiteRunner(Memory memory, IProgressReporter theReporter)
         {
             TestCounts = new TestCounts();
             myReporter = theReporter;
@@ -180,7 +180,7 @@ namespace fit.Runner
 
         class ReportPage : StoryTestPageExecutor
         {
-            public ReportPage(ProgressReporter reporter)
+            public ReportPage(IProgressReporter reporter)
             {
                 this.reporter = reporter;
             }
@@ -204,7 +204,7 @@ namespace fit.Runner
                 }
             }
 
-            readonly ProgressReporter reporter;
+            readonly IProgressReporter reporter;
         }
     }
 }

@@ -18,15 +18,15 @@ namespace fit.Runner {
 
         private readonly FitSocket socket;
         private readonly CellProcessor service;
-        private readonly ProgressReporter reporter;
+        private readonly IProgressReporter reporter;
 
-	    private bool IMaybeProcessingSuiteSetup;
+	    private bool maybeProcessingSuiteSetup;
 
-        public SocketServer(FitSocket socket, CellProcessor service, ProgressReporter reporter, bool suiteSetUpIsAnonymous) {
+        public SocketServer(FitSocket socket, CellProcessor service, IProgressReporter reporter, bool suiteSetUpIsAnonymous) {
             this.service = service;
             this.reporter = reporter;
             this.socket = socket;
-            IMaybeProcessingSuiteSetup = suiteSetUpIsAnonymous;
+            maybeProcessingSuiteSetup = suiteSetUpIsAnonymous;
         }
 
 		public void ProcessTestDocuments(StoryTestWriter writer) {
@@ -35,7 +35,7 @@ namespace fit.Runner {
             while ((document = socket.ReceiveDocument()).Length > 0 && !suiteIsAbandoned) {
                 reporter.WriteLine("processing document of size: " + document.Length);
                 ProcessTestDocument(document, writer);
-		        IMaybeProcessingSuiteSetup = false;
+		        maybeProcessingSuiteSetup = false;
 			}
 		    reporter.WriteLine("\ncompletion signal received");
 		    socket.Close();
@@ -49,12 +49,12 @@ namespace fit.Runner {
                     .WithInput(document)
                     .OnAbandonSuite(() => { suiteIsAbandoned = true; });
 			    reporter.WriteLine(storyTest.Leader);
-			    if (suiteSetupIdentifier.IsStartOf(storyTest.Leader) || IMaybeProcessingSuiteSetup)
+			    if (suiteSetupIdentifier.IsStartOf(storyTest.Leader) || maybeProcessingSuiteSetup)
                     storyTest.Execute();
                 else
                     storyTest.Execute(new Service.Service(service));
 			}
-            catch (System.Exception e)
+            catch (Exception e)
             {
 			    var testStatus = new TestStatus();
 			    var parse = new CellBase(parseError, "div");

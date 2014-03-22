@@ -82,6 +82,7 @@
     <Compile Include="Fit\Engine\RunTestOperator.cs" />
     <Compile Include="Fit\Fixtures\StoryTest.cs" />
     <Compile Include="IO\HttpServer.cs" />
+    <Compile Include="IO\ISocketModel.cs" />
     <Compile Include="IO\PageSource.cs" />
     <Compile Include="IO\Path.cs" />
     <Compile Include="IO\RequestReplyServer.cs" />

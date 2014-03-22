@@ -15,16 +15,16 @@ namespace fitSharp.Runner
 {
     public sealed class Shell : MarshalByRefObject
     {
-        private Runnable runner;
+        private IRunnable runner;
 
         private readonly List<string> extraArguments = new List<string>();
-        private readonly ProgressReporter progressReporter;
+        private readonly IProgressReporter progressReporter;
         private readonly FolderModel folderModel;
         private readonly Memory memory = new TypeDictionary();
 
         int result;
 
-        public Shell(ProgressReporter progressReporter, FolderModel folderModel)
+        public Shell(IProgressReporter progressReporter, FolderModel folderModel)
         {
             this.progressReporter = progressReporter;
             this.folderModel = folderModel;
@@ -113,7 +113,7 @@ namespace fitSharp.Runner
             {
                 memory.GetItem<ApplicationUnderTest>().AddAssembly(tokens[1]);
             }
-            runner = new BasicProcessor().Create(tokens[0]).GetValue<Runnable>();
+            runner = new BasicProcessor().Create(tokens[0]).GetValue<IRunnable>();
             ExecuteInApartment();
             return result;
         }
