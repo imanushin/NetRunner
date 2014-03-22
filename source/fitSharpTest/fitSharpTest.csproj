@@ -39,7 +39,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\binary\tools\nunit\framework\nunit.framework.dll</HintPath>
     </Reference>
-    <Reference Include="System" />
+    <Reference Include="System">
+      <HintPath>..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.dll</HintPath>
+    </Reference>
     <Reference Include="System.Core" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
@@ -121,10 +123,6 @@
     <ProjectReference Include="..\fitSharp\fitSharp.csproj">
       <Project>{204FF2CD-475F-4C6E-A6B5-6779364B33F8}</Project>
       <Name>fitSharp</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Samples\Samples.csproj">
-      <Project>{A2546656-E446-4EF3-90DF-B958045F217C}</Project>
-      <Name>Samples</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

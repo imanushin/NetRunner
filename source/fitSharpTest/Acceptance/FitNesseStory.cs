@@ -5,17 +5,26 @@
 
 using System.Diagnostics;
 
-namespace fitSharp.Test.Acceptance {
-    public class FitNesseStory {
-        public void Run(string suite) {
-            var startInfo = new ProcessStartInfo("java", "-jar .\\binary\\tools\\fitnesse\\fitnesse.jar -o -d .\\document -r FitnesseRoot -c \"" + suite +  "?suite&format=text\"");
+namespace fitSharp.Test.Acceptance
+{
+    public class FitNesseStory
+    {
+        public void Run(string suite)
+        {
+            var startInfo = new ProcessStartInfo("java", "-jar .\\binary\\tools\\fitnesse\\fitnesse.jar -o -d .\\document -r FitnesseRoot -c \"" + suite + "?suite&format=text\"");
             startInfo.UseShellExecute = false;
             startInfo.RedirectStandardOutput = true;
             process = Process.Start(startInfo);
             process.WaitForExit();
         }
 
-        public string StandardOutput { get { return process.StandardOutput.ReadToEnd(); } }
+        public string StandardOutput
+        {
+            get
+            {
+                return process.StandardOutput.ReadToEnd();
+            }
+        }
 
         Process process;
     }
