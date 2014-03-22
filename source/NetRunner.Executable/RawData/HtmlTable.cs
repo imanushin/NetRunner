@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NetRunner.Executable.Common;
 
 namespace NetRunner.Executable.RawData
 {
@@ -10,10 +11,10 @@ namespace NetRunner.Executable.RawData
     {
         public HtmlTable(IEnumerable<HtmlRow> rows)
         {
-            Rows = rows.ToList().AsReadOnly();
+            Rows = rows.ToReadOnlyList();
         }
 
-        public IReadOnlyCollection<HtmlRow> Rows
+        public ReadOnlyList<HtmlRow> Rows
         {
             get;
             private set;

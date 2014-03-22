@@ -29,12 +29,10 @@ namespace NetRunner.Executable
 
         public static void ProcessTestDocuments(FitnesseCommunicator communicator)
         {
-            string document;
-
             bool suiteIsAbandoned = false;
             bool maybeProcessingSuiteSetup = true;
 
-            while ((document = communicator.ReceiveDocument()).Length > 0 && !suiteIsAbandoned)
+            for (string document = communicator.ReceiveDocument(); document.Any() && !suiteIsAbandoned; document = communicator.ReceiveDocument())
             {
                 Trace.WriteLine("Processing document of size: " + document.Length);
 
