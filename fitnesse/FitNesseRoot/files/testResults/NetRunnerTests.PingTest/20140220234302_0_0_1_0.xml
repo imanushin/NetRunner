@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<testResults>
+  <FitNesseVersion>v20140201</FitNesseVersion>
+  <rootPath>NetRunnerTests.PingTest</rootPath>
+    <result>
+    <counts>
+      <right>0</right>
+      <wrong>0</wrong>
+      <ignores>2</ignores>
+      <exceptions>0</exceptions>
+    </counts>
+    <runTimeInMillis>3101</runTimeInMillis>
+    <content>&lt;br/&gt;&lt;div class="contents"&gt;
+	&lt;b&gt;Contents:&lt;/b&gt;
+	&lt;ul class="toc1"/&gt;&lt;ul class="toc1"/&gt;
+&lt;/div&gt;
+&lt;br/&gt;&lt;br/&gt;&lt;span class="meta"&gt;variable defined: TEST_SYSTEM=slim&lt;/span&gt;
+&lt;br/&gt;&lt;span class="meta"&gt;classpath: C:\git\NetRunner\NetRunner\NetRunner.TestImplementationSample\bin\Debug\&lt;/span&gt;&lt;br/&gt;&lt;br/&gt;!define COMMAND_PATTERN! {%m %p}&lt;br/&gt;!define TEST_RUNNER! {C:\git\NetRunner\NetRunner\NetRunner.Executable\bin\Debug\NetRunner.Executable.exe}&lt;br/&gt;&lt;br/&gt;&lt;span class="meta"&gt;variable defined: COMMAND_PATTERN=%m -r fitSharp.Slim.Service.Runner %p&lt;/span&gt;
+&lt;br/&gt;&lt;span class="meta"&gt;variable defined: TEST_RUNNER=C:\git\fitsharp\source\Runner\bin\Debug\Runner.exe&lt;/span&gt;
+&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;&lt;table&gt;
+	&lt;tr&gt;
+		&lt;td&gt;&lt;b&gt;Check Site Availability&lt;/b&gt; &lt;span class="ignore"&gt;Test not run&lt;/span&gt;&lt;/td&gt;
+		&lt;td&gt;&lt;i&gt;&lt;a href="https://google.com"&gt;https://google.com&lt;/a&gt;&lt;/i&gt;&lt;/td&gt;
+	&lt;/tr&gt;
+&lt;/table&gt;
+&lt;br/&gt;&lt;table&gt;
+	&lt;tr&gt;
+		&lt;td&gt;&lt;b&gt;Check Site Availability&lt;/b&gt; &lt;span class="ignore"&gt;Test not run&lt;/span&gt;&lt;/td&gt;
+		&lt;td&gt;&lt;i&gt;&lt;a href="https://google.com"&gt;https://google.com&lt;/a&gt;&lt;/i&gt;&lt;/td&gt;
+	&lt;/tr&gt;
+&lt;/table&gt;
+&lt;br/&gt;</content>
+    <relativePageName>PingTest</relativePageName>
+    
+    
+    
+    <instructions>
+            <instructionResult>
+        <instruction>{id='decisionTable_0_0', instruction='make', instanceName='decisionTable_0', className='BCheckSiteAvailabilityB', args=[&lt;i&gt;&lt;a href="https://google.com"&gt;https://google.com&lt;/a&gt;&lt;/i&gt;]}</instruction>
+        <slimResult>ignore(Test not run)</slimResult>
+                <expectation>
+                    <status>ignore</status>
+                    <instructionId>decisionTable_0_0</instructionId>
+                    <col>0</col>
+                              <row>0</row>
+                    <type>ConstructionExpectation</type>
+                                        <evaluationMessage>Test not run</evaluationMessage>
+                  </expectation>
+        
+      </instructionResult>
+            <instructionResult>
+        <instruction>{id='decisionTable_1_0', instruction='make', instanceName='decisionTable_1', className='BCheckSiteAvailabilityB', args=[&lt;i&gt;&lt;a href="https://google.com"&gt;https://google.com&lt;/a&gt;&lt;/i&gt;]}</instruction>
+        <slimResult>ignore(Test not run)</slimResult>
+                <expectation>
+                    <status>ignore</status>
+                    <instructionId>decisionTable_1_0</instructionId>
+                    <col>0</col>
+                              <row>0</row>
+                    <type>ConstructionExpectation</type>
+                                        <evaluationMessage>Test not run</evaluationMessage>
+                  </expectation>
+        
+      </instructionResult>
+      
+    </instructions>
+    
+  </result>
+  
+    <finalCounts>
+    <right>0</right>
+    <wrong>0</wrong>
+    <ignores>1</ignores>
+    <exceptions>0</exceptions>
+  </finalCounts>
+  <totalRunTimeInMillis>10122</totalRunTimeInMillis>
+  
+</testResults>
+

@@ -1,2 +1,0 @@
-|sample domain adapter|
-|throw abandon suite|

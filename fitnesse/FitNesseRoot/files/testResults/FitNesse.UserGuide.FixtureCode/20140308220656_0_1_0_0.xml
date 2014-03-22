@@ -1,0 +1,600 @@
+<?xml version="1.0"?>
+<testResults>
+  <FitNesseVersion>v20140201</FitNesseVersion>
+  <rootPath>FitNesse.UserGuide.FixtureCode</rootPath>
+    <result>
+    <counts>
+      <right>12</right>
+      <wrong>1</wrong>
+      <ignores>0</ignores>
+      <exceptions>0</exceptions>
+    </counts>
+    <runTimeInMillis>383</runTimeInMillis>
+    <content>&lt;br/&gt;&lt;div class="collapsible invisible"&gt;&lt;ul&gt;&lt;li&gt;&lt;a href='#' class='expandall'&gt;Expand All&lt;/a&gt;&lt;/li&gt;&lt;li&gt;&lt;a href='#' class='collapseall'&gt;Collapse All&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;
+	&lt;p class="title"&gt;hidden&lt;/p&gt;
+	&lt;div&gt;&lt;span class="meta"&gt;variable defined: TEST_SYSTEM=slim&lt;/span&gt;
+&lt;br/&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;a href="FitNesse.UserGuide.OneMinuteDescription"&gt;A One-Minute Description&lt;/a&gt;&lt;br/&gt;&lt;a href="FitNesse.UserGuide.TwoMinuteExample"&gt;A Two-Minute Example&lt;/a&gt;&lt;br/&gt;&lt;h1&gt;Under The Covers : Fixture Code&lt;/h1&gt;
+Let's look at our division test table again:&lt;br/&gt;&lt;br/&gt;&lt;table&gt;
+	&lt;tr&gt;
+		&lt;td colspan="3"&gt;&lt;span class="pass"&gt;eg.Division&lt;/span&gt;&lt;/td&gt;
+	&lt;/tr&gt;
+	&lt;tr&gt;
+		&lt;td&gt;numerator&lt;/td&gt;
+		&lt;td&gt;denominator&lt;/td&gt;
+		&lt;td&gt;quotient?&lt;/td&gt;
+	&lt;/tr&gt;
+	&lt;tr&gt;
+		&lt;td&gt;10&lt;/td&gt;
+		&lt;td&gt;2&lt;/td&gt;
+		&lt;td&gt;&lt;span class="pass"&gt;5.0&lt;/span&gt;&lt;/td&gt;
+	&lt;/tr&gt;
+	&lt;tr&gt;
+		&lt;td&gt;12.6&lt;/td&gt;
+		&lt;td&gt;3&lt;/td&gt;
+		&lt;td&gt;&lt;span class="pass"&gt;4.2&lt;/span&gt;&lt;/td&gt;
+	&lt;/tr&gt;
+	&lt;tr&gt;
+		&lt;td&gt;100&lt;/td&gt;
+		&lt;td&gt;4&lt;/td&gt;
+		&lt;td&gt;[25.0] &lt;span class="fail"&gt;expected [33]&lt;/span&gt;&lt;/td&gt;
+	&lt;/tr&gt;
+&lt;/table&gt;
+&lt;br/&gt;What &lt;b&gt;really&lt;/b&gt; happens when we click that test button? (Try clicking it again.) What gets run?&lt;br/&gt;&lt;ul&gt;
+	&lt;li&gt;First, &lt;a href="FitNesse.UserGuide.FitNesse"&gt;FitNesse&lt;/a&gt; submits the test table to &lt;a href="FitNesse.UserGuide.SliM"&gt;Slim&lt;/a&gt;, the underlying test system (&lt;a href="FitNesse.UserGuide.FitNesse"&gt;FitNesse&lt;/a&gt; is a wiki GUI built on top of Slim).&lt;/li&gt;
+	&lt;li&gt;Slim looks for and runs the fixture code corresponding to the test table.&lt;/li&gt;
+	&lt;li&gt;By design, the fixture code calls some underlying application code to do the real work, and report results back to the fixture&lt;/li&gt;
+	&lt;li&gt;Fit gives Fitnesse back the results from running the fixture code&lt;/li&gt;
+	&lt;li&gt;&lt;a href="FitNesse.UserGuide.FitNesse"&gt;FitNesse&lt;/a&gt; figures out whether to turn table cells red or green (or yellow, if an exception was thrown) and displays the results page accordingly&lt;/li&gt;
+&lt;/ul&gt;
+&lt;br/&gt;&lt;h3&gt;What is Fixture Code?&lt;/h3&gt;
+The fixture is the Java (or some other supported language) class that Slim will use to process the contents of the table. In the top row of the table above, "eg" specifies a Java package (or other language namespace), and "Division" specifies the actual class to be called.&lt;br/&gt;&lt;br/&gt;Here is what the Java version of the Division class might look like:&lt;br/&gt;&lt;pre&gt;
+public class Division {
+  private double numerator, denominator;
+  public void setNumerator(double numerator) {this.numerator = numerator;}
+  public void setDenominator(double denominator} {this.denominator = denominator;}
+  public double quotient() {return numerator/denominator;}
+} &lt;/pre&gt;
+&lt;br/&gt;&lt;h3&gt;How Slim Uses Fixture Code to Process the Test Table&lt;/h3&gt;
+The Division table is an example of a &lt;a href="FitNesse.UserGuide.SliM.DecisionTable"&gt;Decision Table&lt;/a&gt;; just one of many different kinds of tables. Slim processes the rows of example data (&lt;b&gt;from left to right&lt;/b&gt;), it stores the values from the &lt;i&gt;numerator&lt;/i&gt; and &lt;i&gt;denominator&lt;/i&gt; columns in the corresponding fields in our Division class using the setter functions. For each row, it then calls the quotient() method on our Division class, which returns what we would expect it to: the numerator divided by the denominator. So the Decision Table directs Slim to call setNumerator(10) and setDenominator(2); and then to call quotient().  The value is returned to the Decision Table which colors the appropriate cell.&lt;br/&gt;&lt;br/&gt;Click the Test button again and see what happens to the column of expected outputs under the &lt;i&gt;quotient?&lt;/i&gt; header. For each cell of expected output, the Decision Table compares the value it expects to get back with what it actually gets. If the return value matches the value in the corresponding table cell, &lt;a href="FitNesse.UserGuide.FitNesse"&gt;FitNesse&lt;/a&gt; turns the cell green. Otherwise &lt;a href="FitNesse.UserGuide.FitNesse"&gt;FitNesse&lt;/a&gt; turns the cell red, and shows both the expected and actual values. (If Slim encounters an exception, or cannot find a fixture, field, or method, it turns the corresponding table cell yellow, and inserts a stack trace.)&lt;br/&gt;&lt;br/&gt;&lt;h3&gt;Wait a Minute. That's &lt;i&gt;Too&lt;/i&gt; Simple.&lt;/h3&gt;
+How right you are. In the real world, the fixture code would not be doing any of the real work (though a single division operation is not much work). The fixture code would delegate to real application code, which in turn would do the work. In general, fixture code should be &lt;b&gt;as thin as possible&lt;/b&gt;. It should be nothing but &lt;b&gt;piping and wiring&lt;/b&gt; between the &lt;a href="FitNesse.UserGuide.FitNesse"&gt;FitNesse&lt;/a&gt; table and the application code under test.&lt;br/&gt;&lt;br/&gt;So with that bit of wisdom in our minds, let's look at something a bit more realistic.&lt;br/&gt;&lt;h2&gt;Something a Bit More Realistic: A Trivia Game&lt;/h2&gt;
+As much as we might like to, we shall not immediately leap into an application to analyze the seismic data resulting from setting off dozens of sticks of dynamite on the floor of the Gulf of Mexico. Partly because so many fish would die, and partly because that's going too far in the complexity direction.&lt;br/&gt;&lt;br/&gt;Instead let's imagine that we are building a trivia game. The overall design of our trivia game is straightforward: players take turns rolling a single die, and move around a circular board. When they land on a square, they are asked a trivia question of some category. There will be requirements and test tables later on for answering questions incorrectly, for winning, and so on.&lt;br/&gt;&lt;br/&gt;For now let's imagine that we are addressing a specific first requirement or user story (call it what you like):&lt;br/&gt;&lt;h3&gt;"You can add players to the game, and you can ask the game how many players are playing."&lt;/h3&gt;
+Sounds pretty straightforward. Let's first set up a &lt;a href="FitNesse.UserGuide.ClassPath"&gt;ClassPath&lt;/a&gt; that points to where our trivia game project is. Without the &lt;a href="FitNesse.UserGuide.ClassPath"&gt;ClassPath&lt;/a&gt;, &lt;a href="FitNesse.UserGuide.FitNesse"&gt;FitNesse&lt;/a&gt; would not be able to find our fixture code:&lt;br/&gt;&lt;br/&gt;&lt;span class="meta"&gt;classpath: C:\workspace\TriviaGameFitNesseExample\&lt;/span&gt;&lt;br/&gt;&lt;br/&gt;How about this for a test table?&lt;br/&gt;&lt;table&gt;
+	&lt;tr&gt;
+		&lt;td colspan="3"&gt;&lt;span class="pass"&gt;eg.triviaGameExample.fitnesseFixtures.AddRemovePlayerFixture&lt;/span&gt;&lt;/td&gt;
+	&lt;/tr&gt;
+	&lt;tr&gt;
+		&lt;td&gt;playerName&lt;/td&gt;
+		&lt;td&gt;addPlayer?&lt;/td&gt;
+		&lt;td&gt;countPlayers?&lt;/td&gt;
+	&lt;/tr&gt;
+	&lt;tr&gt;
+		&lt;td&gt;Al&lt;/td&gt;
+		&lt;td&gt;&lt;span class="pass"&gt;true&lt;/span&gt;&lt;/td&gt;
+		&lt;td&gt;&lt;span class="pass"&gt;1&lt;/span&gt;&lt;/td&gt;
+	&lt;/tr&gt;
+	&lt;tr&gt;
+		&lt;td&gt;Bertha&lt;/td&gt;
+		&lt;td&gt;&lt;span class="pass"&gt;true&lt;/span&gt;&lt;/td&gt;
+		&lt;td&gt;&lt;span class="pass"&gt;2&lt;/span&gt;&lt;/td&gt;
+	&lt;/tr&gt;
+&lt;/table&gt;
+&lt;br/&gt;It says that if we add a player named Al to our game successfully, the total number of players should be 1, and if we then add a player named Bertha, our total number of players should be 2.&lt;br/&gt;&lt;h3&gt;The Code for AddRemovePlayerFixture&lt;/h3&gt;
+What might the fixture code for that look like (so far)? How about this: &lt;pre&gt;
+import fit.ColumnFixture;
+
+public class AddRemovePlayerFixture {
+  private String playerName;
+  private Game theGame;
+
+  public void setPlayerName(String playerName) {
+    this.playerName = playerName;
+  }
+
+  public boolean addPlayer() {
+    theGame = StaticGame.theGame;
+    Player thePlayer = theGame.addPlayer(playerName);
+    return theGame.playerIsPlaying(thePlayer);
+  }
+
+  public int countPlayers() {
+    return theGame.getNumberOfPlayers();
+  }
+} &lt;/pre&gt;
+ Yes, I think we have arrived at a more realistic level of complexity. What does this code mean? Well, we have a setter named &lt;i&gt;setPlayerName&lt;/i&gt;, as required, and we have methods named &lt;i&gt;addPlayer()&lt;/i&gt; and &lt;i&gt;countPlayers()&lt;/i&gt;. Straightforward enough.&lt;br/&gt;&lt;br/&gt;But &lt;b&gt;what is that private Game field, and what are those methods calling, and why&lt;/b&gt;?&lt;br/&gt;&lt;br/&gt;&lt;h2&gt;Piping and Wiring: Delegating to Real Code&lt;/h2&gt;
+Our fixture's &lt;i&gt;addPlayer()&lt;/i&gt; method is indeed thin: it merely calls an &lt;i&gt;addPlayer()&lt;/i&gt; method on a Game class, which does the real work. Here is that Game class, such as it currently is: &lt;pre&gt;
+public class Game {
+  private ArrayList players;
+
+  public Game() {
+    players = new ArrayList();
+  }
+
+  public Player addPlayer(String aPlayerName) {
+    Player aPlayer = new Player(aPlayerName);
+    players.add(aPlayer);
+    return aPlayer;
+  }
+
+  public boolean playerIsPlaying(Player aPlayer) {
+    return players.contains(aPlayer);
+  }
+
+  public int getNumberOfPlayers() {
+    return players.size();
+  }
+} &lt;/pre&gt;
+&lt;br/&gt;Game adds our players to an ArrayList, and returns the new Player object. The &lt;i&gt;playerIsPlaying()&lt;/i&gt; method reports whether a player is playing, and &lt;i&gt;getNumberOfPlayers(&lt;/i&gt;) returns the number of players in the collection. Not much of a trivia game yet, but it meets our one requirement: we can add players and count them.&lt;br/&gt;&lt;br/&gt;Notice that our fixture code's &lt;i&gt;addPlayer()&lt;/i&gt; method above calls &lt;i&gt;playerIsPlaying()&lt;/i&gt; to determine whether a player was successfully added: a fairly meaningful return value. Notice that our fixture's &lt;i&gt;countPlayers()&lt;/i&gt; is even thinner: it returns the result from a single call to &lt;i&gt;getNumberOfPlayers()&lt;/i&gt; on Game.&lt;br/&gt;&lt;br/&gt;But what is that call  to StaticGame for?&lt;br/&gt;&lt;h3&gt;What That Call To StaticGame Is For&lt;/h3&gt;
+Each row of our table above involves a separate call to our &lt;i&gt;AddRemovePlayerFixture&lt;/i&gt; class. Since we are adding players to the same game, we need to ensure that we are talking to the same Game object each time.&lt;br/&gt;&lt;br/&gt;Furthermore, we will have several test pages for our suite of tests for the trivia game. Each of those test pages will use more than one table to set up and test a condition in a Game instance. We need it to be the same Game instance being tested by all the test tables on a page. So we need a Singleton Game instance for the tables and their corresponding fixture classes to share. Here is the code for StaticGame: &lt;pre&gt;
+public abstract class StaticGame {
+  public static Game theGame = new Game();
+} &lt;/pre&gt;
+&lt;br/&gt;It just a static variable that holds an instance of Game. And for safety's sake, it is abstract: you cannot instantiate StaticGame.&lt;br/&gt;&lt;br/&gt;&lt;h2&gt;Enabling Multiple Test Tables to Share a Common Object&lt;/h2&gt;
+OK. Let's justify that StaticGame thing a bit more thoroughly. Say we have another requirement that goes like this:&lt;br/&gt;&lt;h3&gt;"Once the game has started, players cannot be added or removed."&lt;/h3&gt;
+&lt;br/&gt;For this test, we'll ask the game to take a fake turn by specifying that the player whose turn it is "rolls" a 6. That should start the game. We'll check the result of that by checking to see which player it was who actually took the turn (we expect it to be Al), and whether indeed the game has started. Note that this fixture, in order to work properly, will need to talk to the same Game object that our AddRemovePlayerFixture talked to above. That's what StaticGame does for us.&lt;br/&gt;&lt;br/&gt;&lt;table&gt;
+	&lt;tr&gt;
+		&lt;td colspan="3"&gt;&lt;span class="pass"&gt;eg.triviaGameExample.fitnesseFixtures.GameTurnFixture&lt;/span&gt;&lt;/td&gt;
+	&lt;/tr&gt;
+	&lt;tr&gt;
+		&lt;td&gt;roll&lt;/td&gt;
+		&lt;td&gt;player?&lt;/td&gt;
+		&lt;td&gt;gameHasStarted?&lt;/td&gt;
+	&lt;/tr&gt;
+	&lt;tr&gt;
+		&lt;td&gt;6&lt;/td&gt;
+		&lt;td&gt;&lt;span class="pass"&gt;Al&lt;/span&gt;&lt;/td&gt;
+		&lt;td&gt;&lt;span class="pass"&gt;true&lt;/span&gt;&lt;/td&gt;
+	&lt;/tr&gt;
+&lt;/table&gt;
+&lt;br/&gt;Now that the game has started, we'll try to add a new player to the game, and this should fail (we should get back false from addPlayer()). And we should still have only two players in the game:&lt;br/&gt;&lt;br/&gt;&lt;table&gt;
+	&lt;tr&gt;
+		&lt;td colspan="3"&gt;&lt;span class="pass"&gt;eg.triviaGameExample.fitnesseFixtures.AddRemovePlayerFixture&lt;/span&gt;&lt;/td&gt;
+	&lt;/tr&gt;
+	&lt;tr&gt;
+		&lt;td&gt;playerName&lt;/td&gt;
+		&lt;td&gt;addPlayer?&lt;/td&gt;
+		&lt;td&gt;countPlayers?&lt;/td&gt;
+	&lt;/tr&gt;
+	&lt;tr&gt;
+		&lt;td&gt;Joe&lt;/td&gt;
+		&lt;td&gt;&lt;span class="pass"&gt;false&lt;/span&gt;&lt;/td&gt;
+		&lt;td&gt;&lt;span class="pass"&gt;2&lt;/span&gt;&lt;/td&gt;
+	&lt;/tr&gt;
+&lt;/table&gt;
+&lt;br/&gt;Finally, we'll try to remove a player from the game, and this too should fail:&lt;br/&gt;&lt;br/&gt;&lt;table&gt;
+	&lt;tr&gt;
+		&lt;td colspan="3"&gt;&lt;span class="pass"&gt;eg.triviaGameExample.fitnesseFixtures.AddRemovePlayerFixture&lt;/span&gt;&lt;/td&gt;
+	&lt;/tr&gt;
+	&lt;tr&gt;
+		&lt;td&gt;playerName&lt;/td&gt;
+		&lt;td&gt;removePlayer?&lt;/td&gt;
+		&lt;td&gt;countPlayers?&lt;/td&gt;
+	&lt;/tr&gt;
+	&lt;tr&gt;
+		&lt;td&gt;Al&lt;/td&gt;
+		&lt;td&gt;&lt;span class="pass"&gt;false&lt;/span&gt;&lt;/td&gt;
+		&lt;td&gt;&lt;span class="pass"&gt;2&lt;/span&gt;&lt;/td&gt;
+	&lt;/tr&gt;
+&lt;/table&gt;
+&lt;br/&gt;This shows how you can use a sequence of tables to verify a requirement by setting up and testing different states in your application code.&lt;br/&gt;&lt;br/&gt;Click the Test button to see how it all turns out.&lt;br/&gt;&lt;h3&gt;New Code for removePlayer()&lt;/h3&gt;
+Our removePlayer() on AddRemovePlayerFixture works much as addPlayer() does: &lt;pre&gt;
+public boolean removePlayer() {
+  theGame = StaticGame.getInstance();
+  thePlayer = theGame.getPlayerNamed(playerName);
+  theGame.removePlayer(thePlayer);
+  return (playerWasRemoved(thePlayer));
+}
+
+private boolean playerWasRemoved(Player aPlayer) {
+  return (!theGame.playerIsPlaying(aPlayer));
+} &lt;/pre&gt;
+&lt;br/&gt;It too shares the Game instance supplied by StaticGame. And you can see that our GameTurnFixture methods do the same: &lt;pre&gt;
+public class GameTurnFixture {
+  private int roll;
+  private Game theGame;
+
+  public String player() {
+    theGame = StaticGame.theGame;
+    return theGame.takeTurn(roll);
+  }
+
+  public void execute() {
+    StaticGame.theGame.takeTurn(roll);
+  }
+
+  public boolean gameHasStarted() {
+    theGame = StaticGame.theGame;
+    return theGame.gameHasStarted();
+  }
+
+  public void setRoll(int roll) {
+    this.roll = roll;
+  }
+} &lt;/pre&gt;
+&lt;br/&gt;So, as AddRemovePlayerFixture and GameTurnFixture are repeatedly called, they make changes to, and check the state of, a single Game object.&lt;br/&gt;&lt;br/&gt;This is a common pattern. One way or another, Fitnesse test tables on a single page often need to share a common object. We grant you that there is more than one way to skin this particular cat. This is the way we chose to skin it. It will show up in examples ahead of us.&lt;br/&gt;&lt;br/&gt;Note the &lt;i&gt;execute&lt;/i&gt; method of &lt;span class="code"&gt;GameTurnFixture&lt;/span&gt;.  This will be called after all the setters have been called, and just before the output functions are called.&lt;br/&gt;&lt;br/&gt;&lt;h2&gt;Summary&lt;/h2&gt;
+&lt;ul&gt;
+	&lt;li&gt;A fixture is the class that &lt;a href="FitNesse.UserGuide.FitNesse"&gt;FitNesse&lt;/a&gt; and Slim use to process a particular test table when the Test button is clicked. For each row of data in a test table, Slim sets its inputs using stter methods, and then calls the specified output methods. &lt;a href="FitNesse.UserGuide.FitNesse"&gt;FitNesse&lt;/a&gt; uses the return values to determine whether to turn output table cells green or red.&lt;/li&gt;
+	&lt;li&gt;You need to use a &lt;a href="FitNesse.UserGuide.ClassPath"&gt;ClassPath&lt;/a&gt; to specify to Slim where your fixture code resides.&lt;/li&gt;
+	&lt;li&gt;Fixture code should be as thin as possible: its methods should merely delegate to, and return values from, methods on application code. To process our player-adding test tables above when we click the Test button, Slim uses our AddRemovePlayerFixture Java class to pass data between the table and underlying Java application classes (Game and Player).&lt;/li&gt;
+	&lt;li&gt;Sometimes fixtures get involved in pulling together test data for input, and formatting returned data for display, but fixtures should contain no business logic.&lt;/li&gt;
+	&lt;li&gt;Often the test tables on a page need to share an object. We've illustrated the use of a static variable to solve this problem. Your mileage may vary.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;br/&gt;&lt;h2&gt;Learning More&lt;/h2&gt;
+To learn more about the different styles of test tables and the fixture code used to process them, see &lt;a href="FitNesse.UserGuide.SliM"&gt;Slim&lt;/a&gt;.&lt;br/&gt;</content>
+    <relativePageName>FixtureCode</relativePageName>
+    
+    
+    
+    <instructions>
+            <instructionResult>
+        <instruction>{id='decisionTable_0_0', instruction='make', instanceName='decisionTable_0', className='eg.Division', args=[]}</instruction>
+        <slimResult>pass(eg.Division)</slimResult>
+                <expectation>
+                    <status>pass</status>
+                    <instructionId>decisionTable_0_0</instructionId>
+                    <col>0</col>
+                              <row>0</row>
+                    <type>ConstructionExpectation</type>
+                                        <evaluationMessage>eg.Division</evaluationMessage>
+                  </expectation>
+        
+      </instructionResult>
+            <instructionResult>
+        <instruction>{id='decisionTable_0_4', instruction='call', instanceName='decisionTable_0', methodName='setNumerator', args=[10]}</instruction>
+        <slimResult></slimResult>
+                <expectation>
+                    <instructionId>decisionTable_0_4</instructionId>
+                    <col>0</col>
+                              <row>2</row>
+                    <type>VoidReturnExpectation</type>
+                                      </expectation>
+        
+      </instructionResult>
+            <instructionResult>
+        <instruction>{id='decisionTable_0_5', instruction='call', instanceName='decisionTable_0', methodName='setDenominator', args=[2]}</instruction>
+        <slimResult></slimResult>
+                <expectation>
+                    <instructionId>decisionTable_0_5</instructionId>
+                    <col>1</col>
+                              <row>2</row>
+                    <type>VoidReturnExpectation</type>
+                                      </expectation>
+        
+      </instructionResult>
+            <instructionResult>
+        <instruction>{id='decisionTable_0_7', instruction='call', instanceName='decisionTable_0', methodName='quotient', args=[]}</instruction>
+        <slimResult>pass(5.0)</slimResult>
+                <expectation>
+                    <status>pass</status>
+                    <instructionId>decisionTable_0_7</instructionId>
+                    <col>2</col>
+                              <row>2</row>
+                    <type>ReturnedValueExpectation</type>
+                                        <evaluationMessage>5.0</evaluationMessage>
+                  </expectation>
+        
+      </instructionResult>
+            <instructionResult>
+        <instruction>{id='decisionTable_0_9', instruction='call', instanceName='decisionTable_0', methodName='setNumerator', args=[12.6]}</instruction>
+        <slimResult></slimResult>
+                <expectation>
+                    <instructionId>decisionTable_0_9</instructionId>
+                    <col>0</col>
+                              <row>3</row>
+                    <type>VoidReturnExpectation</type>
+                                      </expectation>
+        
+      </instructionResult>
+            <instructionResult>
+        <instruction>{id='decisionTable_0_10', instruction='call', instanceName='decisionTable_0', methodName='setDenominator', args=[3]}</instruction>
+        <slimResult></slimResult>
+                <expectation>
+                    <instructionId>decisionTable_0_10</instructionId>
+                    <col>1</col>
+                              <row>3</row>
+                    <type>VoidReturnExpectation</type>
+                                      </expectation>
+        
+      </instructionResult>
+            <instructionResult>
+        <instruction>{id='decisionTable_0_12', instruction='call', instanceName='decisionTable_0', methodName='quotient', args=[]}</instruction>
+        <slimResult>pass(4.2)</slimResult>
+                <expectation>
+                    <status>pass</status>
+                    <instructionId>decisionTable_0_12</instructionId>
+                    <col>2</col>
+                              <row>3</row>
+                    <type>ReturnedValueExpectation</type>
+                                        <evaluationMessage>4.2</evaluationMessage>
+                  </expectation>
+        
+      </instructionResult>
+            <instructionResult>
+        <instruction>{id='decisionTable_0_14', instruction='call', instanceName='decisionTable_0', methodName='setNumerator', args=[100]}</instruction>
+        <slimResult></slimResult>
+                <expectation>
+                    <instructionId>decisionTable_0_14</instructionId>
+                    <col>0</col>
+                              <row>4</row>
+                    <type>VoidReturnExpectation</type>
+                                      </expectation>
+        
+      </instructionResult>
+            <instructionResult>
+        <instruction>{id='decisionTable_0_15', instruction='call', instanceName='decisionTable_0', methodName='setDenominator', args=[4]}</instruction>
+        <slimResult></slimResult>
+                <expectation>
+                    <instructionId>decisionTable_0_15</instructionId>
+                    <col>1</col>
+                              <row>4</row>
+                    <type>VoidReturnExpectation</type>
+                                      </expectation>
+        
+      </instructionResult>
+            <instructionResult>
+        <instruction>{id='decisionTable_0_17', instruction='call', instanceName='decisionTable_0', methodName='quotient', args=[]}</instruction>
+        <slimResult>fail(a=25.0;e=33)</slimResult>
+                <expectation>
+                    <status>fail</status>
+                    <instructionId>decisionTable_0_17</instructionId>
+                    <col>2</col>
+                              <row>4</row>
+                    <type>ReturnedValueExpectation</type>
+                    <actual>25.0</actual>
+                              <expected>33</expected>
+                            </expectation>
+        
+      </instructionResult>
+            <instructionResult>
+        <instruction>{id='decisionTable_1_0', instruction='make', instanceName='decisionTable_1', className='eg.triviaGameExample.fitnesseFixtures.AddRemovePlayerFixture', args=[]}</instruction>
+        <slimResult>pass(eg.triviaGameExample.fitnesseFixtures.AddRemovePlayerFixture)</slimResult>
+                <expectation>
+                    <status>pass</status>
+                    <instructionId>decisionTable_1_0</instructionId>
+                    <col>0</col>
+                              <row>0</row>
+                    <type>ConstructionExpectation</type>
+                                        <evaluationMessage>eg.triviaGameExample.fitnesseFixtures.AddRemovePlayerFixture</evaluationMessage>
+                  </expectation>
+        
+      </instructionResult>
+            <instructionResult>
+        <instruction>{id='decisionTable_1_4', instruction='call', instanceName='decisionTable_1', methodName='setPlayerName', args=[Al]}</instruction>
+        <slimResult></slimResult>
+                <expectation>
+                    <instructionId>decisionTable_1_4</instructionId>
+                    <col>0</col>
+                              <row>2</row>
+                    <type>VoidReturnExpectation</type>
+                                      </expectation>
+        
+      </instructionResult>
+            <instructionResult>
+        <instruction>{id='decisionTable_1_6', instruction='call', instanceName='decisionTable_1', methodName='addPlayer', args=[]}</instruction>
+        <slimResult>pass(true)</slimResult>
+                <expectation>
+                    <status>pass</status>
+                    <instructionId>decisionTable_1_6</instructionId>
+                    <col>1</col>
+                              <row>2</row>
+                    <type>ReturnedValueExpectation</type>
+                                        <evaluationMessage>true</evaluationMessage>
+                  </expectation>
+        
+      </instructionResult>
+            <instructionResult>
+        <instruction>{id='decisionTable_1_7', instruction='call', instanceName='decisionTable_1', methodName='countPlayers', args=[]}</instruction>
+        <slimResult>pass(1)</slimResult>
+                <expectation>
+                    <status>pass</status>
+                    <instructionId>decisionTable_1_7</instructionId>
+                    <col>2</col>
+                              <row>2</row>
+                    <type>ReturnedValueExpectation</type>
+                                        <evaluationMessage>1</evaluationMessage>
+                  </expectation>
+        
+      </instructionResult>
+            <instructionResult>
+        <instruction>{id='decisionTable_1_9', instruction='call', instanceName='decisionTable_1', methodName='setPlayerName', args=[Bertha]}</instruction>
+        <slimResult></slimResult>
+                <expectation>
+                    <instructionId>decisionTable_1_9</instructionId>
+                    <col>0</col>
+                              <row>3</row>
+                    <type>VoidReturnExpectation</type>
+                                      </expectation>
+        
+      </instructionResult>
+            <instructionResult>
+        <instruction>{id='decisionTable_1_11', instruction='call', instanceName='decisionTable_1', methodName='addPlayer', args=[]}</instruction>
+        <slimResult>pass(true)</slimResult>
+                <expectation>
+                    <status>pass</status>
+                    <instructionId>decisionTable_1_11</instructionId>
+                    <col>1</col>
+                              <row>3</row>
+                    <type>ReturnedValueExpectation</type>
+                                        <evaluationMessage>true</evaluationMessage>
+                  </expectation>
+        
+      </instructionResult>
+            <instructionResult>
+        <instruction>{id='decisionTable_1_12', instruction='call', instanceName='decisionTable_1', methodName='countPlayers', args=[]}</instruction>
+        <slimResult>pass(2)</slimResult>
+                <expectation>
+                    <status>pass</status>
+                    <instructionId>decisionTable_1_12</instructionId>
+                    <col>2</col>
+                              <row>3</row>
+                    <type>ReturnedValueExpectation</type>
+                                        <evaluationMessage>2</evaluationMessage>
+                  </expectation>
+        
+      </instructionResult>
+            <instructionResult>
+        <instruction>{id='decisionTable_2_0', instruction='make', instanceName='decisionTable_2', className='eg.triviaGameExample.fitnesseFixtures.GameTurnFixture', args=[]}</instruction>
+        <slimResult>pass(eg.triviaGameExample.fitnesseFixtures.GameTurnFixture)</slimResult>
+                <expectation>
+                    <status>pass</status>
+                    <instructionId>decisionTable_2_0</instructionId>
+                    <col>0</col>
+                              <row>0</row>
+                    <type>ConstructionExpectation</type>
+                                        <evaluationMessage>eg.triviaGameExample.fitnesseFixtures.GameTurnFixture</evaluationMessage>
+                  </expectation>
+        
+      </instructionResult>
+            <instructionResult>
+        <instruction>{id='decisionTable_2_4', instruction='call', instanceName='decisionTable_2', methodName='setRoll', args=[6]}</instruction>
+        <slimResult></slimResult>
+                <expectation>
+                    <instructionId>decisionTable_2_4</instructionId>
+                    <col>0</col>
+                              <row>2</row>
+                    <type>VoidReturnExpectation</type>
+                                      </expectation>
+        
+      </instructionResult>
+            <instructionResult>
+        <instruction>{id='decisionTable_2_6', instruction='call', instanceName='decisionTable_2', methodName='player', args=[]}</instruction>
+        <slimResult>pass(Al)</slimResult>
+                <expectation>
+                    <status>pass</status>
+                    <instructionId>decisionTable_2_6</instructionId>
+                    <col>1</col>
+                              <row>2</row>
+                    <type>ReturnedValueExpectation</type>
+                                        <evaluationMessage>Al</evaluationMessage>
+                  </expectation>
+        
+      </instructionResult>
+            <instructionResult>
+        <instruction>{id='decisionTable_2_7', instruction='call', instanceName='decisionTable_2', methodName='gameHasStarted', args=[]}</instruction>
+        <slimResult>pass(true)</slimResult>
+                <expectation>
+                    <status>pass</status>
+                    <instructionId>decisionTable_2_7</instructionId>
+                    <col>2</col>
+                              <row>2</row>
+                    <type>ReturnedValueExpectation</type>
+                                        <evaluationMessage>true</evaluationMessage>
+                  </expectation>
+        
+      </instructionResult>
+            <instructionResult>
+        <instruction>{id='decisionTable_3_0', instruction='make', instanceName='decisionTable_3', className='eg.triviaGameExample.fitnesseFixtures.AddRemovePlayerFixture', args=[]}</instruction>
+        <slimResult>pass(eg.triviaGameExample.fitnesseFixtures.AddRemovePlayerFixture)</slimResult>
+                <expectation>
+                    <status>pass</status>
+                    <instructionId>decisionTable_3_0</instructionId>
+                    <col>0</col>
+                              <row>0</row>
+                    <type>ConstructionExpectation</type>
+                                        <evaluationMessage>eg.triviaGameExample.fitnesseFixtures.AddRemovePlayerFixture</evaluationMessage>
+                  </expectation>
+        
+      </instructionResult>
+            <instructionResult>
+        <instruction>{id='decisionTable_3_4', instruction='call', instanceName='decisionTable_3', methodName='setPlayerName', args=[Joe]}</instruction>
+        <slimResult></slimResult>
+                <expectation>
+                    <instructionId>decisionTable_3_4</instructionId>
+                    <col>0</col>
+                              <row>2</row>
+                    <type>VoidReturnExpectation</type>
+                                      </expectation>
+        
+      </instructionResult>
+            <instructionResult>
+        <instruction>{id='decisionTable_3_6', instruction='call', instanceName='decisionTable_3', methodName='addPlayer', args=[]}</instruction>
+        <slimResult>pass(false)</slimResult>
+                <expectation>
+                    <status>pass</status>
+                    <instructionId>decisionTable_3_6</instructionId>
+                    <col>1</col>
+                              <row>2</row>
+                    <type>ReturnedValueExpectation</type>
+                                        <evaluationMessage>false</evaluationMessage>
+                  </expectation>
+        
+      </instructionResult>
+            <instructionResult>
+        <instruction>{id='decisionTable_3_7', instruction='call', instanceName='decisionTable_3', methodName='countPlayers', args=[]}</instruction>
+        <slimResult>pass(2)</slimResult>
+                <expectation>
+                    <status>pass</status>
+                    <instructionId>decisionTable_3_7</instructionId>
+                    <col>2</col>
+                              <row>2</row>
+                    <type>ReturnedValueExpectation</type>
+                                        <evaluationMessage>2</evaluationMessage>
+                  </expectation>
+        
+      </instructionResult>
+            <instructionResult>
+        <instruction>{id='decisionTable_4_0', instruction='make', instanceName='decisionTable_4', className='eg.triviaGameExample.fitnesseFixtures.AddRemovePlayerFixture', args=[]}</instruction>
+        <slimResult>pass(eg.triviaGameExample.fitnesseFixtures.AddRemovePlayerFixture)</slimResult>
+                <expectation>
+                    <status>pass</status>
+                    <instructionId>decisionTable_4_0</instructionId>
+                    <col>0</col>
+                              <row>0</row>
+                    <type>ConstructionExpectation</type>
+                                        <evaluationMessage>eg.triviaGameExample.fitnesseFixtures.AddRemovePlayerFixture</evaluationMessage>
+                  </expectation>
+        
+      </instructionResult>
+            <instructionResult>
+        <instruction>{id='decisionTable_4_4', instruction='call', instanceName='decisionTable_4', methodName='setPlayerName', args=[Al]}</instruction>
+        <slimResult></slimResult>
+                <expectation>
+                    <instructionId>decisionTable_4_4</instructionId>
+                    <col>0</col>
+                              <row>2</row>
+                    <type>VoidReturnExpectation</type>
+                                      </expectation>
+        
+      </instructionResult>
+            <instructionResult>
+        <instruction>{id='decisionTable_4_6', instruction='call', instanceName='decisionTable_4', methodName='removePlayer', args=[]}</instruction>
+        <slimResult>pass(false)</slimResult>
+                <expectation>
+                    <status>pass</status>
+                    <instructionId>decisionTable_4_6</instructionId>
+                    <col>1</col>
+                              <row>2</row>
+                    <type>ReturnedValueExpectation</type>
+                                        <evaluationMessage>false</evaluationMessage>
+                  </expectation>
+        
+      </instructionResult>
+            <instructionResult>
+        <instruction>{id='decisionTable_4_7', instruction='call', instanceName='decisionTable_4', methodName='countPlayers', args=[]}</instruction>
+        <slimResult>pass(2)</slimResult>
+                <expectation>
+                    <status>pass</status>
+                    <instructionId>decisionTable_4_7</instructionId>
+                    <col>2</col>
+                              <row>2</row>
+                    <type>ReturnedValueExpectation</type>
+                                        <evaluationMessage>2</evaluationMessage>
+                  </expectation>
+        
+      </instructionResult>
+      
+    </instructions>
+    
+  </result>
+  
+    <finalCounts>
+    <right>0</right>
+    <wrong>1</wrong>
+    <ignores>0</ignores>
+    <exceptions>0</exceptions>
+  </finalCounts>
+  <totalRunTimeInMillis>1178</totalRunTimeInMillis>
+  
+</testResults>
+
