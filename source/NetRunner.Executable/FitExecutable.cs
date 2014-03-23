@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NetRunner.Executable.Invokation;
 using NetRunner.Executable.RawData;
 
 namespace NetRunner.Executable
@@ -59,9 +60,9 @@ namespace NetRunner.Executable
 
                     foreach (var table in parsedDocument.Tables)
                     {
-                        counts.IncrementSuccessCount();
+                        var result = RootInvoker.InvokeTable(table, counts);
 
-                        communicator.SendDocument(table.GetClonedNode().OuterHtml + "<br/>");
+                        communicator.SendDocument(result + table.TextAfterTable);
                     }
 
                     communicator.SendCounts(counts);

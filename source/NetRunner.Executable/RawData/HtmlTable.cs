@@ -12,13 +12,19 @@ namespace NetRunner.Executable.RawData
     {
         private readonly HtmlNode tableNode;
 
-        public HtmlTable(IEnumerable<HtmlRow> rows, HtmlNode tableNode)
+        public HtmlTable(IEnumerable<HtmlRow> rows, HtmlNode tableNode, string textAfterTable)
         {
+            TextAfterTable = textAfterTable;
             this.tableNode = tableNode;
             Rows = rows.ToReadOnlyList();
         }
-
         public ReadOnlyList<HtmlRow> Rows
+        {
+            get;
+            private set;
+        }
+
+        public string TextAfterTable
         {
             get;
             private set;
@@ -31,7 +37,8 @@ namespace NetRunner.Executable.RawData
 
         protected override IEnumerable<object> GetInnerObjects()
         {
-            return Rows;
+            yield return Rows;
+            yield return TextAfterTable;
         }
     }
 }

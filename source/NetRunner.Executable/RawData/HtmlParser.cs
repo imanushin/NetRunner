@@ -17,9 +17,18 @@ namespace NetRunner.Executable.RawData
 
             var allChildNodes = document.DocumentNode.ChildNodes.ToArray();
 
-            var tables = allChildNodes.Where(cn => string.Equals(cn.Name, "table", StringComparison.OrdinalIgnoreCase)).ToArray();
+            var tables = allChildNodes.Where(IsTableNode).ToArray();
 
-            var parsedTables = tables.Select(ParseTable).ToReadOnlyList();
+            var parsedTables = tables
+                .Select(t => (
+                ParseTable(t,
+                    string.Join(Environment.NewLine,
+                        allChildNodes
+                        .SkipWhile(n => n != t)
+                        .Skip(1)
+                        .TakeWhile(n => !IsTableNode(n))
+                        .Select(n => n.OuterHtml)))))
+                .ToReadOnlyList();
 
             var firstTable = tables.First();
 
@@ -30,13 +39,18 @@ namespace NetRunner.Executable.RawData
             return new FitnesseHtmlDocument(textBeforeFirst, parsedTables);
         }
 
-        private static HtmlTable ParseTable(HtmlNode tableNode)
+        private static bool IsTableNode(HtmlNode cn)
+        {
+            return string.Equals(cn.Name, "table", StringComparison.OrdinalIgnoreCase);
+        }
+
+        private static HtmlTable ParseTable(HtmlNode tableNode, string textAfterTable)
         {
             var allRows = tableNode.ChildNodes.Where(cn => string.Equals(cn.Name, "tr", StringComparison.OrdinalIgnoreCase));
 
             var parsedRows = allRows.Select(ParseRow).ToArray();
 
-            return new HtmlTable(parsedRows, tableNode);
+            return new HtmlTable(parsedRows, tableNode, textAfterTable);
         }
 
         private static HtmlRow ParseRow(HtmlNode rowNode)

@@ -7,7 +7,7 @@ using NetRunner.Executable.Common;
 
 namespace NetRunner.Executable.RawData
 {
-    internal sealed class HtmlRow
+    internal sealed class HtmlRow : BaseReadOnlyObject
     {
         public HtmlRow(IEnumerable<string> cellsEntries)
         {
@@ -18,6 +18,11 @@ namespace NetRunner.Executable.RawData
         {
             get;
             private set;
+        }
+
+        protected override IEnumerable<object> GetInnerObjects()
+        {
+            return Cells;
         }
     }
 }

@@ -50,6 +50,7 @@
     <Compile Include="Common\ReadOnlyList.cs" />
     <Compile Include="FitExecutable.cs" />
     <Compile Include="FitnesseCommunicator.cs" />
+    <Compile Include="Invokation\RootInvoker.cs" />
     <Compile Include="RawData\FitnesseHtmlDocument.cs" />
     <Compile Include="RawData\HtmlParser.cs" />
     <Compile Include="Program.cs" />
