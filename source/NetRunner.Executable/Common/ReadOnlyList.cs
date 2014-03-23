@@ -42,7 +42,7 @@ namespace NetRunner.Executable.Common
 
         protected override string GetString()
         {
-            return string.Format("{0}: {1}", GetType().Name, string.Join(", ", innerValues));
+            return string.Format("ReadOnlyList<{0}>: {1}", typeof(TValue).Name, string.Join(", ", innerValues));
         }
     }
 }

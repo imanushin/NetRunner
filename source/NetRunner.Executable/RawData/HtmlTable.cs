@@ -3,14 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HtmlAgilityPack;
 using NetRunner.Executable.Common;
 
 namespace NetRunner.Executable.RawData
 {
-    internal sealed class HtmlTable
+    internal sealed class HtmlTable : BaseReadOnlyObject
     {
-        public HtmlTable(IEnumerable<HtmlRow> rows)
+        private readonly HtmlNode tableNode;
+
+        public HtmlTable(IEnumerable<HtmlRow> rows, HtmlNode tableNode)
         {
+            this.tableNode = tableNode;
             Rows = rows.ToReadOnlyList();
         }
 
@@ -18,6 +22,16 @@ namespace NetRunner.Executable.RawData
         {
             get;
             private set;
+        }
+
+        public HtmlNode GetClonedNode()
+        {
+            return tableNode.Clone();
+        }
+
+        protected override IEnumerable<object> GetInnerObjects()
+        {
+            return Rows;
         }
     }
 }

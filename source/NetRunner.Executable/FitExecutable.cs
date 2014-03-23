@@ -40,7 +40,9 @@ namespace NetRunner.Executable
                 {
                     var counts = new TestCounts();
 
-                    var tables = HtmlParser.Parse(document);
+                    var parsedDocument = HtmlParser.Parse(document);
+
+                    communicator.SendDocument(parsedDocument.TextBeforeFirstTable);
 
                     /*init test context*/
 
@@ -55,11 +57,11 @@ namespace NetRunner.Executable
                         /*execute test*/
                     }
 
-                    communicator.SendDocument(@"<br/> TEST !!!!");
-
-                    foreach (var table in tables)
+                    foreach (var table in parsedDocument.Tables)
                     {
-                        counts.IncrementSuccessCount();    
+                        counts.IncrementSuccessCount();
+
+                        communicator.SendDocument(table.GetClonedNode().OuterHtml + "<br/>");
                     }
 
                     communicator.SendCounts(counts);
