@@ -9,12 +9,12 @@ namespace NetRunner.Executable.RawData
 {
     internal sealed class HtmlRow : BaseReadOnlyObject
     {
-        public HtmlRow(IEnumerable<string> cellsEntries)
+        public HtmlRow(IEnumerable<HtmlCell> cellsEntries)
         {
             Cells = cellsEntries.ToReadOnlyList();
         }
 
-        public ReadOnlyList<string> Cells
+        public ReadOnlyList<HtmlCell> Cells
         {
             get;
             private set;

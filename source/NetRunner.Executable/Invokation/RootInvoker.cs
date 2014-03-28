@@ -11,6 +11,8 @@ namespace NetRunner.Executable.Invokation
     {
         public static string InvokeTable(HtmlTable table, TestCounts currentStatistic)
         {
+            var functionToInvoke = TableParser.ParseTable(table);
+
             currentStatistic.IncrementSuccessCount();
 
             return table.GetClonedNode().OuterHtml;

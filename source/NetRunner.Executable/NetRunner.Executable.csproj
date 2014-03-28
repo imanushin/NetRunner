@@ -48,10 +48,15 @@
     <Compile Include="Common\BaseReadOnlyObject.cs" />
     <Compile Include="Common\CollectionExtensions.cs" />
     <Compile Include="Common\ReadOnlyList.cs" />
+    <Compile Include="Common\Validate.cs" />
     <Compile Include="FitExecutable.cs" />
     <Compile Include="FitnesseCommunicator.cs" />
+    <Compile Include="Invokation\AbstractTestFunction.cs" />
     <Compile Include="Invokation\RootInvoker.cs" />
+    <Compile Include="Invokation\SimpleTestFunction.cs" />
+    <Compile Include="Invokation\TableParser.cs" />
     <Compile Include="RawData\FitnesseHtmlDocument.cs" />
+    <Compile Include="RawData\HtmlCell.cs" />
     <Compile Include="RawData\HtmlParser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -61,6 +66,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NetRunner.ExternalLibrary\NetRunner.ExternalLibrary.csproj">
+      <Project>{19d01e12-2663-4bd7-8d71-425bd4f1643c}</Project>
+      <Name>NetRunner.ExternalLibrary</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

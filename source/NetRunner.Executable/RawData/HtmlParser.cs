@@ -55,11 +55,9 @@ namespace NetRunner.Executable.RawData
 
         private static HtmlRow ParseRow(HtmlNode rowNode)
         {
-            var allCells = rowNode.ChildNodes.Where(cn => string.Equals(cn.Name, "tr", StringComparison.OrdinalIgnoreCase));
+            var allCells = rowNode.ChildNodes.Where(cn => string.Equals(cn.Name, "td", StringComparison.OrdinalIgnoreCase));
 
-            var cellsEntries = allCells.Select(cell => cell.InnerText).ToArray();
-
-            return new HtmlRow(cellsEntries);
+            return new HtmlRow(allCells.Select(cell => new HtmlCell(cell)));
         }
     }
 }
