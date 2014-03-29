@@ -25,11 +25,16 @@ namespace NetRunner.Executable
                 .ForTables(WriteTables)
                 .ForCounts(WriteCounts);*/
 
-            ProcessTestDocuments(communicator);
+            ProcessTestDocuments(communicator, settings.Assemblylist);
         }
 
-        public static void ProcessTestDocuments(FitnesseCommunicator communicator)
+        public static void ProcessTestDocuments(FitnesseCommunicator communicator, string assemblylist)
         {
+            var loader = new ReflectionLoader(assemblylist.Split(new[]
+            {
+                ','
+            }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim()));
+
             bool suiteIsAbandoned = false;
             bool maybeProcessingSuiteSetup = true;
 
@@ -60,7 +65,7 @@ namespace NetRunner.Executable
 
                     foreach (var table in parsedDocument.Tables)
                     {
-                        var result = RootInvoker.InvokeTable(table, counts);
+                        var result = RootInvoker.InvokeTable(table, counts, loader);
 
                         communicator.SendDocument(result + table.TextAfterTable);
                     }

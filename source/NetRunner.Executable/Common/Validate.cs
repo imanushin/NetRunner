@@ -16,6 +16,20 @@ namespace NetRunner.Executable.Common
         }
 
         [StringFormatMethod("messageFormat")]
+        [ContractAnnotation("targetObject:null => halt")]
+        public static void IsNotNull(object targetObject, string messageFormat, params object[] args)
+        {
+            Condition(!ReferenceEquals(null, targetObject), messageFormat, args);
+        }
+
+        [StringFormatMethod("messageFormat")]
+        public static void CollectionHasElements<TValue>(IEnumerable<TValue> elements, string messageFormat, params object[] args)
+        {
+            IsNotNull(elements, messageFormat, args);
+            Condition(elements.Any(), messageFormat, args);
+        }
+
+        [StringFormatMethod("messageFormat")]
         [ContractAnnotation("condition:false => halt")]
         public static void Condition(bool condition, string messageFormat, params object[] args)
         {
@@ -32,12 +46,36 @@ namespace NetRunner.Executable.Common
         }
 
         [StringFormatMethod("messageFormat")]
+        [ContractAnnotation("argument:null => halt")]
         public static void ArgumentIsNotNull(object argument, [InvokerParameterNameAttribute()] string argumentName)
         {
             if (argument == null)
                 throw new ArgumentNullException(argumentName);
         }
 
+        [StringFormatMethod("messageFormat")]
+        [ContractAnnotation("argument:null => halt")]
+        public static void ArgumentStringIsMeanful(string argument, [InvokerParameterNameAttribute()] string argumentName)
+        {
+            ArgumentIsNotNull(argument, argumentName);
+            ArgumentCondition(!string.IsNullOrWhiteSpace(argument), argumentName, "String argument {0} should not be empty", argumentName);
+        }
+
+        [StringFormatMethod("messageFormat")]
+        [ContractAnnotation("argument:null => halt")]
+        public static void ArgumentIntGreaterOrEqualZero(int argument, [InvokerParameterNameAttribute()] string argumentName)
+        {
+            ArgumentCondition(argument >= 0, argumentName, "Argument {0} has value {1} which is less than zero", argumentName, argument);
+        }
+
+        [StringFormatMethod("messageFormat")]
+        [ContractAnnotation("argument:null => halt")]
+        public static void ArgumentIntLessThan(int argument, int limitValue, [InvokerParameterNameAttribute()] string argumentName)
+        {
+            ArgumentCondition(argument < limitValue, argumentName, "Argument {0} should be less than {2}. Current value: {1}", argumentName, argument, limitValue);
+        }
+
+        [StringFormatMethod("messageFormat")]
         public static void CollectionArgumentHasElements<TValue>(IEnumerable<TValue> elements, [InvokerParameterNameAttribute] string argumentName)
         {
             ArgumentIsNotNull(elements, argumentName);

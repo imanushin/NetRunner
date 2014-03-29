@@ -23,10 +23,5 @@ namespace NetRunner.Executable.Invokation
 
             return new SimpleTestFunction(functionName, arguments);
         }
-
-        private static string GetBoldName(HtmlRow row)
-        {
-            return string.Empty;
-        }
     }
 }

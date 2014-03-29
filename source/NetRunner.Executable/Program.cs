@@ -19,6 +19,8 @@ namespace NetRunner.Executable
         {
             try
             {
+                Trace.Listeners.Add(new ConsoleTraceListener());
+
                 Debugger.Launch();
 
                 var settings = ParseArguments(args);

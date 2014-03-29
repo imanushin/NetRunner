@@ -9,6 +9,14 @@ namespace NetRunner.Executable.Invokation
 {
     internal abstract class AbstractTestFunction : BaseReadOnlyObject
     {
+        public abstract FunctionRunResult Invoke(ReflectionLoader loader);
 
+        public enum FunctionRunResult
+        {
+            Fail = 0,
+            Success,
+            Ignore,
+            Exception
+        }
     }
 }
