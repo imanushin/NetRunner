@@ -14,7 +14,12 @@ namespace NetRunner.Executable.Invokation
     internal sealed class ReflectionLoader
     {
         private static readonly Type testContainer = typeof(BaseTestContainer);
-        private ReadOnlyList<TestFunctionReference> functions;
+        private readonly ReadOnlyList<TestFunctionReference> functions;
+
+        private static readonly string[] ignoredFunctions =
+        {
+            "ToString", "GetHashCode", "Equals", "GetType"
+        };
 
         public ReflectionLoader(IEnumerable<string> assemblyPathes)
         {
@@ -31,7 +36,7 @@ namespace NetRunner.Executable.Invokation
 
             AppDomain.CurrentDomain.AssemblyResolve += (sender, args) => LoadFrom(assemblyFolders, args);
 
-            Trace.TraceInformation("Additional folder for assembly loading: {0}", assemblyFolders);
+            Trace.TraceInformation("Additional folder for assembly loading: {0}", assemblyFolders.JoinToStringLazy("; "));
 
             var testTypes = FindTestTypes(loadedAssemblies);
 
@@ -57,7 +62,8 @@ namespace NetRunner.Executable.Invokation
             {
                 var targetType = container.GetType();
 
-                var availableTests = targetType.GetMethods(BindingFlags.Public | BindingFlags.Instance);
+                var availableTests = targetType.GetMethods(BindingFlags.Public | BindingFlags.Instance)
+                    .Where(f => !ignoredFunctions.Contains(f.Name));
 
                 functions.AddRange(availableTests.Select(t => new TestFunctionReference(t, container)));
             }
@@ -118,13 +124,28 @@ namespace NetRunner.Executable.Invokation
 
             foreach (Assembly assembly in loadedAssemblies)
             {
-                var types = assembly.GetTypes()
-                    .Where(t => !(t.IsGenericType || t.IsAbstract || t.IsValueType))
-                    .Where(t => t.IsSubclassOf(testContainer)).ToReadOnlyList();
+                try
+                {
+                    var types = assembly.GetTypes()
+                        .Where(t => !(t.IsGenericType || t.IsAbstract || t.IsValueType))
+                        .Where(t => t.IsSubclassOf(testContainer)).ToReadOnlyList();
 
-                Trace.TraceInformation("Test containers from assembly {1}: {0}", types, assembly);
+                    Trace.TraceInformation("Test containers from assembly {1}: {0}", types, assembly);
 
-                testContainers.AddRange(types);
+                    testContainers.AddRange(types);
+                }
+                catch (ReflectionTypeLoadException ex)
+                {
+                    Trace.TraceError(
+                        "Unable to retrieve types from assembly {0} because of error {1}. Inner exceptions: {2}", 
+                        assembly, 
+                        ex.Message, 
+                        string.Join(Environment.NewLine, ex.LoaderExceptions.Cast<Exception>()));
+                }
+                catch (Exception ex)
+                {
+                    Trace.TraceError("Unable to retrieve types from assembly {0} because of error {1}", assembly, ex);
+                }
             }
 
             var result = testContainers.Distinct().ToReadOnlyList();

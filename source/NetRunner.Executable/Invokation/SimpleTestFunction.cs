@@ -36,11 +36,14 @@ namespace NetRunner.Executable.Invokation
             yield return Arguments;
         }
 
-        public override FunctionRunResult Invoke(ReflectionLoader loader)
+        public override FunctionExecutionResult Invoke(ReflectionLoader loader)
         {
             try
             {
                 var functionsAvailable = loader.FindFunctions(FunctionName, Arguments.Count);
+
+                if (!functionsAvailable.Any())
+                    return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Exception, string.Format("Unable to find function {0}. See above listing of all functions available.", this));
 
                 Validate.CollectionHasElements(functionsAvailable, "Unable to find function '{0}'", this);
 
@@ -56,17 +59,22 @@ namespace NetRunner.Executable.Invokation
 
                 var result = firstFoundFunction.Invoke(actualTypes);
 
-                if(Equals(false, result))
-                    return FunctionRunResult.Fail;
+                if (Equals(false, result))
+                    return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Fail, string.Empty);
 
-                return FunctionRunResult.Success;
+                return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Success, string.Empty);
             }
             catch (Exception ex)
             {
-                Trace.TraceError("Unable to executio function {0} because of error {1}", this, ex);
+                Trace.TraceError("Unable to execute function {0} because of error {1}", this, ex);
 
-                return FunctionRunResult.Exception;
+                return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Exception, ex.ToString());
             }
+        }
+
+        protected override string GetString()
+        {
+            return string.Format("{0}: name - '{1}', arguments: {2}", GetType().Name, FunctionName, Arguments.JoinToStringLazy(";"));
         }
     }
 }

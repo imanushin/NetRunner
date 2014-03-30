@@ -20,8 +20,9 @@ namespace NetRunner.Executable
             try
             {
                 Trace.Listeners.Add(new ConsoleTraceListener());
+                Trace.AutoFlush = true;
 
-                Debugger.Launch();
+                //Debugger.Launch();
 
                 var settings = ParseArguments(args);
 
@@ -41,7 +42,6 @@ namespace NetRunner.Executable
         {
             try
             {
-
                 string assemblies = args[0];
                 string hostValue = args[1];
                 int portValue = int.Parse(args[2]);

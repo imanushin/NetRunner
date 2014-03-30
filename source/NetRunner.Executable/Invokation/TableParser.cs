@@ -21,6 +21,9 @@ namespace NetRunner.Executable.Invokation
             string functionName = string.Concat(row.Cells.Where(c => c.IsBold).Select(c => c.CleanedContent));
             string[] arguments = row.Cells.Where(c => !c.IsBold).Select(c => c.CleanedContent).ToArray();
 
+            if (string.IsNullOrWhiteSpace(functionName))
+                return null;
+
             return new SimpleTestFunction(functionName, arguments);
         }
     }

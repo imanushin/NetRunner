@@ -52,6 +52,7 @@
     <Compile Include="FitExecutable.cs" />
     <Compile Include="FitnesseCommunicator.cs" />
     <Compile Include="Invokation\AbstractTestFunction.cs" />
+    <Compile Include="Invokation\FunctionExecutionResult.cs" />
     <Compile Include="Invokation\ReflectionLoader.cs" />
     <Compile Include="Invokation\RootInvoker.cs" />
     <Compile Include="Invokation\SimpleTestFunction.cs" />
