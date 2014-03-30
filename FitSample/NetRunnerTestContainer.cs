@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -13,17 +14,17 @@ namespace FitSample
     {
         public bool PingSite(string url)
         {
-            try
-            {
-                var request = WebRequest.CreateHttp(url);
+            var request = WebRequest.CreateHttp(url);
 
-                var responce = request.GetResponse();
-
-                return responce.ContentLength > 0;
-            }
-            catch (Exception ex)
+            using (var responce = request.GetResponse())
             {
-                return false;
+                using (var stream = responce.GetResponseStream())
+                {
+                    using (var reader = new StreamReader(stream))
+                    {
+                        return !string.IsNullOrWhiteSpace(reader.ReadToEnd());
+                    }
+                }
             }
         }
     }

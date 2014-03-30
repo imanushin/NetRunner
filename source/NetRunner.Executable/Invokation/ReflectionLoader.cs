@@ -65,7 +65,13 @@ namespace NetRunner.Executable.Invokation
                 var availableTests = targetType.GetMethods(BindingFlags.Public | BindingFlags.Instance)
                     .Where(f => !ignoredFunctions.Contains(f.Name));
 
-                functions.AddRange(availableTests.Select(t => new TestFunctionReference(t, container)));
+                BaseTestContainer localContainer = container;
+
+                var availableFunctions = availableTests.Select(t => new TestFunctionReference(t, localContainer)).ToReadOnlyList();
+
+                Trace.TraceInformation("Type {0} contains following public functions: {1}", targetType.Name, availableFunctions);
+
+                functions.AddRange(availableFunctions);
             }
 
             return functions.ToReadOnlyList();
@@ -137,9 +143,9 @@ namespace NetRunner.Executable.Invokation
                 catch (ReflectionTypeLoadException ex)
                 {
                     Trace.TraceError(
-                        "Unable to retrieve types from assembly {0} because of error {1}. Inner exceptions: {2}", 
-                        assembly, 
-                        ex.Message, 
+                        "Unable to retrieve types from assembly {0} because of error {1}. Inner exceptions: {2}",
+                        assembly,
+                        ex.Message,
                         string.Join(Environment.NewLine, ex.LoaderExceptions.Cast<Exception>()));
                 }
                 catch (Exception ex)

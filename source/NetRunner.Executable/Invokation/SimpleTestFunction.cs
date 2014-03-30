@@ -44,9 +44,7 @@ namespace NetRunner.Executable.Invokation
 
                 if (!functionsAvailable.Any())
                     return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Exception, string.Format("Unable to find function {0}. See above listing of all functions available.", this));
-
-                Validate.CollectionHasElements(functionsAvailable, "Unable to find function '{0}'", this);
-
+                
                 var firstFoundFunction = functionsAvailable.First();
 
                 var expectedTypes = firstFoundFunction.ArgumentTypes;

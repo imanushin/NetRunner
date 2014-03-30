@@ -42,7 +42,7 @@ namespace NetRunner.Executable.Common
 
         protected override string GetString()
         {
-            return string.Format("ReadOnlyList<{0}>: {1}", typeof(TValue).Name, string.Join(", ", innerValues));
+            return JoinToStringLazy(", ").ToString();
         }
 
         public object JoinToStringLazy(string separator)
