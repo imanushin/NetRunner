@@ -10,21 +10,14 @@ namespace NetRunner.Executable.Invokation
 {
     internal sealed class SimpleTestFunction : AbstractTestFunction
     {
-        public SimpleTestFunction(string functionName, IEnumerable<string> arguments)
+        public SimpleTestFunction(FunctionHeader header)
         {
-            Validate.ArgumentStringIsMeanful(functionName, "functionName");
+            Validate.ArgumentIsNotNull(header, "header");
 
-            FunctionName = functionName.Replace(" ", string.Empty);
-            Arguments = arguments.ToReadOnlyList();
+            Function = header;
         }
 
-        public string FunctionName
-        {
-            get;
-            private set;
-        }
-
-        public ReadOnlyList<string> Arguments
+        public FunctionHeader Function
         {
             get;
             private set;
@@ -32,19 +25,18 @@ namespace NetRunner.Executable.Invokation
 
         protected override IEnumerable<object> GetInnerObjects()
         {
-            yield return FunctionName;
-            yield return Arguments;
+            yield return Function;
         }
 
         public override FunctionExecutionResult Invoke(ReflectionLoader loader)
         {
             try
             {
-                var functionsAvailable = loader.FindFunctions(FunctionName, Arguments.Count);
+                var functionsAvailable = loader.FindFunctions(Function.FunctionName, Function.Arguments.Count);
 
                 if (!functionsAvailable.Any())
                     return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Exception, string.Format("Unable to find function {0}. See above listing of all functions available.", this));
-                
+
                 var firstFoundFunction = functionsAvailable.First();
 
                 var expectedTypes = firstFoundFunction.ArgumentTypes;
@@ -52,7 +44,7 @@ namespace NetRunner.Executable.Invokation
 
                 for (int i = 0; i < expectedTypes.Count; i++)
                 {
-                    actualTypes[i] = Convert.ChangeType(Arguments[i], expectedTypes[i]);
+                    actualTypes[i] = Convert.ChangeType(Function.Arguments[i], expectedTypes[i]);
                 }
 
                 var result = firstFoundFunction.Invoke(actualTypes);
@@ -72,7 +64,7 @@ namespace NetRunner.Executable.Invokation
 
         protected override string GetString()
         {
-            return string.Format("{0}: name - '{1}', arguments: {2}", GetType().Name, FunctionName, Arguments.JoinToStringLazy(";"));
+            return GetType().Name + ": " + Function;
         }
     }
 }

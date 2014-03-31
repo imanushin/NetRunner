@@ -75,5 +75,10 @@ namespace NetRunner.Executable.Common
                 return innerValues[index];
             }
         }
+
+        public TValue Second()
+        {
+            return this[1];
+        }
     }
 }

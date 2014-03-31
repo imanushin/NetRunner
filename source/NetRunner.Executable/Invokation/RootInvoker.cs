@@ -18,14 +18,11 @@ namespace NetRunner.Executable.Invokation
             {
                 var functionToInvoke = TableParser.ParseTable(table);
 
-                if (functionToInvoke == null) //table does not contain function declaration
-                {
-                    result = new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Ignore, "First row should contain bold cells (use syntax like |'''test function name'''|). These cells will be unioned to the function name.");
-                }
-                else
-                {
-                    result = functionToInvoke.Invoke(loader);
-                }
+                Trace.TraceInformation("Execute function {0}", functionToInvoke);
+
+                result = functionToInvoke.Invoke(loader);
+
+                Trace.TraceInformation("Execution result: {0}", result);
             }
             catch (Exception ex)
             {

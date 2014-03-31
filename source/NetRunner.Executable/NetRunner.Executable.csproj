@@ -52,9 +52,13 @@
     <Compile Include="FitExecutable.cs" />
     <Compile Include="FitnesseCommunicator.cs" />
     <Compile Include="Invokation\AbstractTestFunction.cs" />
+    <Compile Include="Invokation\CollectionArgumentedFunction.cs" />
+    <Compile Include="Invokation\EmptyTestFunction.cs" />
     <Compile Include="Invokation\FunctionExecutionResult.cs" />
+    <Compile Include="Invokation\FunctionHeader.cs" />
     <Compile Include="Invokation\ReflectionLoader.cs" />
     <Compile Include="Invokation\RootInvoker.cs" />
+    <Compile Include="Invokation\TestFunctionsSequence.cs" />
     <Compile Include="Invokation\SimpleTestFunction.cs" />
     <Compile Include="Invokation\TableParser.cs" />
     <Compile Include="Invokation\TestExecutionLog.cs" />
