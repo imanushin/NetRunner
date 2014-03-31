@@ -57,6 +57,7 @@
     <Compile Include="Invokation\RootInvoker.cs" />
     <Compile Include="Invokation\SimpleTestFunction.cs" />
     <Compile Include="Invokation\TableParser.cs" />
+    <Compile Include="Invokation\TestExecutionLog.cs" />
     <Compile Include="Invokation\TestFunctionReference.cs" />
     <Compile Include="RawData\FitnesseHtmlDocument.cs" />
     <Compile Include="RawData\HtmlCell.cs" />

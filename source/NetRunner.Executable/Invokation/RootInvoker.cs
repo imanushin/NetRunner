@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HtmlAgilityPack;
 using NetRunner.Executable.RawData;
 
 namespace NetRunner.Executable.Invokation
@@ -56,7 +57,43 @@ namespace NetRunner.Executable.Invokation
                     throw new InvalidOperationException(string.Format("Unknown result: {0}", result));
             }
 
-            return table.GetClonedNode().OuterHtml;
+            var additionalText = new StringBuilder();
+
+            if (!string.IsNullOrWhiteSpace(result.AdditionalHtmlText))
+            {
+                additionalText.AppendLine(result.AdditionalHtmlText);
+                additionalText.AppendLine("<br/>");
+            }
+
+            var traceData = TestExecutionLog.ExtractLogged();
+
+            if (!string.IsNullOrWhiteSpace(traceData))
+            {
+                additionalText.AppendLine(traceData);
+            }
+
+            var resultTable = table.GetClonedNode();
+
+            var additionalLines = additionalText.ToString();
+
+            if (!string.IsNullOrWhiteSpace(additionalLines))
+            {
+                var node = resultTable.OwnerDocument.CreateElement("tr");
+
+                var cellContainer = resultTable.OwnerDocument.CreateElement("td");
+
+                var expandableDiv = resultTable.OwnerDocument.CreateElement("div");
+
+                expandableDiv.InnerHtml = additionalLines;
+
+                cellContainer.AppendChild(expandableDiv);
+
+                node.AppendChild(cellContainer);
+
+                resultTable.AppendChild(node);
+            }
+
+            return resultTable.OuterHtml;
         }
     }
 }

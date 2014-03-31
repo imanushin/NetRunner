@@ -12,3 +12,4 @@
 
 | '''ping site''' | ''https://google.com'' |
 
+| '''ping site''' | ''https://google.com123'' |
