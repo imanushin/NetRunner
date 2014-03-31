@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -26,6 +27,15 @@ namespace FitSample
                     }
                 }
             }
+        }
+
+        public IEnumerable ListFilesIn(string path)
+        {
+            return Directory.EnumerateFiles(path).Select(f => new
+            {
+                Name = Path.GetFileNameWithoutExtension(f),
+                Extension = Path.GetExtension(f)
+            });
         }
     }
 }

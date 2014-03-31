@@ -8,9 +8,11 @@
 
 |!-FitSample.SampleFixture-!|
 
-| '''ping site''' | ''!-https://google.com-!'' |
-
 | '''ping site''' | ''https://google.com'' |
+
+| '''list files in''' | ''.\'' |
+| '''Name''' |'''Extension'''|
+
 
 | '''ping site''' | ''https://google.com123'' |
 
@@ -20,3 +22,4 @@
 
 | '''ping site''' | ''!-https://google.com-!'' |
 | '''ping site''' | ''https://google.com123123'' |
+

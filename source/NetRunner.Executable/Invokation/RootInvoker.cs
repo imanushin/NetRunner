@@ -16,7 +16,7 @@ namespace NetRunner.Executable.Invokation
             FunctionExecutionResult result;
             try
             {
-                var functionToInvoke = TableParser.ParseTable(table);
+                var functionToInvoke = TableParser.ParseTable(table, loader);
 
                 Trace.TraceInformation("Execute function {0}", functionToInvoke);
 

@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NetRunner.Executable.Common;
 using NetRunner.ExternalLibrary;
+using NetRunner.ExternalLibrary.Properties;
 
 namespace NetRunner.Executable.Invokation
 {
@@ -47,11 +48,10 @@ namespace NetRunner.Executable.Invokation
             Trace.TraceInformation("All available functions: {0}", functions.JoinToStringLazy(Environment.NewLine));
         }
 
-        public ReadOnlyList<TestFunctionReference> FindFunctions(string name, int argumentCount)
+        [CanBeNull]
+        public TestFunctionReference FindFunction(string name, int argumentCount)
         {
-            return functions
-                .Where(f => f.ArgumentTypes.Count == argumentCount && string.Equals(f.Name, name, StringComparison.OrdinalIgnoreCase))
-                .ToReadOnlyList();
+            return functions.FirstOrDefault(f => f.ArgumentTypes.Count == argumentCount && string.Equals(f.Name, name, StringComparison.OrdinalIgnoreCase));
         }
 
         private static ReadOnlyList<TestFunctionReference> FindFunctionsAvailable(ReadOnlyList<BaseTestContainer> testContainers)

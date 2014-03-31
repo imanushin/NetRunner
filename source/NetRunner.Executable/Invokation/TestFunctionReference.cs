@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -38,6 +39,14 @@ namespace NetRunner.Executable.Invokation
         {
             get;
             private set;
+        }
+
+        public bool HasStrongResult
+        {
+            get
+            {
+                return method.ReturnType.IsAssignableFrom(typeof(IEnumerable));
+            }
         }
 
         protected override IEnumerable<object> GetInnerObjects()

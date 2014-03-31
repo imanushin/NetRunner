@@ -12,34 +12,36 @@ namespace NetRunner.Executable.Invokation
 {
     internal static class TableParser
     {
-        public static AbstractTestFunction ParseTable(HtmlTable table)
+        public static AbstractTestFunction ParseTable(HtmlTable table, ReflectionLoader loader)
         {
             Validate.CollectionArgumentHasElements(table.Rows, "table");
 
+            var header = ParseHeader(table.Rows.First());
+
+            if (header == null)
+                return EmptyTestFunction.Instance;
+
             if (table.Rows.Count == 1)
             {
-                HtmlRow row = table.Rows.First();
-
-                return ParseSimpleTestFunction(row);
+                return new SimpleTestFunction(header);
             }
 
-            if (table.Rows.All(r => r.Cells.Any(c => c.IsBold)))
+            var functionToExecute = loader.FindFunction(header.FunctionName, header.Arguments.Count);
+
+            Validate.IsNotNull(functionToExecute, "Unable to find function {0}", header.FunctionName);
+
+            if (!functionToExecute.HasStrongResult)
             {
                 var parsedRows = table.Rows.Select(ParseSimpleTestFunction).ToReadOnlyList();
 
                 return new TestFunctionsSequence(parsedRows);
             }
 
-            return ParseTableValuedFunction(table);
+            return ParseTableValuedFunction(table, header);
         }
 
-        private static AbstractTestFunction ParseTableValuedFunction(HtmlTable table)
+        private static AbstractTestFunction ParseTableValuedFunction(HtmlTable table, FunctionHeader header)
         {
-            var header = ParseHeader(table.Rows.First());
-
-            if (header == null)
-                return EmptyTestFunction.Instance;
-
             Validate.Condition(
                 table.Rows.Second().Cells.All(c => c.IsBold),
                 "All elements on second row (named 'headers') should be bold. These values are used in the function {0} to match internal field name and table column name.",
