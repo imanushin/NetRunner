@@ -21,26 +21,26 @@ namespace NetRunner.Executable.Invokation
             if (header == null)
                 return EmptyTestFunction.Instance;
 
+            var functionToExecute = loader.FindFunction(header.FunctionName, header.Arguments.Count);
+
             if (table.Rows.Count == 1)
             {
-                return new SimpleTestFunction(header);
+                return new SimpleTestFunction(header, functionToExecute);
             }
-
-            var functionToExecute = loader.FindFunction(header.FunctionName, header.Arguments.Count);
 
             Validate.IsNotNull(functionToExecute, "Unable to find function {0}", header.FunctionName);
 
             if (!functionToExecute.HasStrongResult)
             {
-                var parsedRows = table.Rows.Select(ParseSimpleTestFunction).ToReadOnlyList();
+                var parsedRows = table.Rows.Select(row => ParseSimpleTestFunction(row, loader)).ToReadOnlyList();
 
                 return new TestFunctionsSequence(parsedRows);
             }
 
-            return ParseTableValuedFunction(table, header);
+            return ParseTableValuedFunction(table, header, functionToExecute);
         }
 
-        private static AbstractTestFunction ParseTableValuedFunction(HtmlTable table, FunctionHeader header)
+        private static AbstractTestFunction ParseTableValuedFunction(HtmlTable table, FunctionHeader header, TestFunctionReference functionToExecute)
         {
             Validate.Condition(
                 table.Rows.Second().Cells.All(c => c.IsBold),
@@ -69,17 +69,21 @@ namespace NetRunner.Executable.Invokation
                 values.Add(htmlRow.Cells.Select(c => c.CleanedContent).ToReadOnlyList());
             }
 
-            return new CollectionArgumentedFunction(headers, values, header);
+            return new CollectionArgumentedFunction(headers, values, header,functionToExecute);
         }
 
-        private static AbstractTestFunction ParseSimpleTestFunction(HtmlRow row)
+        private static AbstractTestFunction ParseSimpleTestFunction(HtmlRow row, ReflectionLoader loader)
         {
             var header = ParseHeader(row);
 
             if (header == null)
                 return EmptyTestFunction.Instance;
 
-            return new SimpleTestFunction(header);
+            var functionReference = loader.FindFunction(header.FunctionName, header.Arguments.Count);
+
+            Validate.IsNotNull(functionReference, "Unable to find function {0}", header.FunctionName);
+
+            return new SimpleTestFunction(header, functionReference);
         }
 
         [CanBeNull]

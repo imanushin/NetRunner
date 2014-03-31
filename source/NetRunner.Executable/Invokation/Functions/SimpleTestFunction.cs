@@ -7,11 +7,18 @@ namespace NetRunner.Executable.Invokation.Functions
 {
     internal sealed class SimpleTestFunction : AbstractTestFunction
     {
-        public SimpleTestFunction(FunctionHeader header)
+        public SimpleTestFunction(FunctionHeader header, TestFunctionReference functionToExecute)
         {
             Validate.ArgumentIsNotNull(header, "header");
 
             Function = header;
+            FunctionReference = functionToExecute;
+        }
+
+        public TestFunctionReference FunctionReference
+        {
+            get;
+            private set;
         }
 
         public FunctionHeader Function
@@ -29,12 +36,7 @@ namespace NetRunner.Executable.Invokation.Functions
         {
             try
             {
-                var firstFoundFunction = loader.FindFunction(Function.FunctionName, Function.Arguments.Count);
-
-                if (firstFoundFunction == null)
-                    return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Exception, string.Format("Unable to find function {0}. See above listing of all functions available.", this));
-
-                var expectedTypes = firstFoundFunction.ArgumentTypes;
+                var expectedTypes = FunctionReference.ArgumentTypes;
                 var actualTypes = new object[expectedTypes.Count];
 
                 for (int i = 0; i < expectedTypes.Count; i++)
@@ -42,7 +44,7 @@ namespace NetRunner.Executable.Invokation.Functions
                     actualTypes[i] = Convert.ChangeType(Function.Arguments[i], expectedTypes[i]);
                 }
 
-                var result = firstFoundFunction.Invoke(actualTypes);
+                var result = FunctionReference.Invoke(actualTypes);
 
                 if (Equals(false, result))
                     return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Fail, string.Empty);

@@ -6,15 +6,23 @@ namespace NetRunner.Executable.Invokation.Functions
 {
     internal sealed class CollectionArgumentedFunction : AbstractTestFunction
     {
-        public CollectionArgumentedFunction(ReadOnlyList<string> columnNames, IEnumerable<ReadOnlyList<string>> rows, FunctionHeader function)
+        public CollectionArgumentedFunction(ReadOnlyList<string> columnNames, IEnumerable<ReadOnlyList<string>> rows, FunctionHeader function, TestFunctionReference functionToExecute)
         {
             Validate.ArgumentIsNotNull(function, "function");
             Validate.ArgumentIsNotNull(rows, "rows");
+            Validate.ArgumentIsNotNull(functionToExecute, "functionToExecute");
             Validate.CollectionArgumentHasElements(columnNames, "columnNames");
 
             Function = function;
             ColumnNames = columnNames;
             Rows = rows.ToReadOnlyList();
+            FunctionReference = functionToExecute;
+        }
+
+        public TestFunctionReference FunctionReference
+        {
+            get;
+            private set;
         }
 
         public FunctionHeader Function
@@ -40,6 +48,7 @@ namespace NetRunner.Executable.Invokation.Functions
             yield return Function;
             yield return ColumnNames;
             yield return Rows;
+            yield return FunctionReference;
         }
 
         public override FunctionExecutionResult Invoke(ReflectionLoader loader)
