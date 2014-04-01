@@ -20,7 +20,8 @@ namespace NetRunner.Executable.Invokation
             TestContainer = testContainer;
 
             Name = method.Name;
-            ArgumentTypes = method.GetParameters().Select(p => p.ParameterType).ToReadOnlyList();
+            ArgumentTypes = method.GetParameters().ToReadOnlyList();
+            ResultType = method.ReturnType;
         }
 
         public BaseTestContainer TestContainer
@@ -35,7 +36,13 @@ namespace NetRunner.Executable.Invokation
             private set;
         }
 
-        public ReadOnlyList<Type> ArgumentTypes
+        public ReadOnlyList<ParameterInfo> ArgumentTypes
+        {
+            get;
+            private set;
+        }
+
+        public Type ResultType
         {
             get;
             private set;
@@ -54,11 +61,12 @@ namespace NetRunner.Executable.Invokation
             yield return Name;
             yield return ArgumentTypes;
             yield return TestContainer;
+            yield return ResultType;
         }
 
         protected override string GetString()
         {
-            return string.Format("Method: {0}; target object type: {1}; Argument types: {2}", Name, TestContainer.GetType().Name, ArgumentTypes);
+            return string.Format("Method: {0}; target object type: {1}; Parameters: {2}; Result type: {3}", Name, TestContainer.GetType().Name, ArgumentTypes, ResultType);
         }
 
         public object Invoke(object[] parameters)

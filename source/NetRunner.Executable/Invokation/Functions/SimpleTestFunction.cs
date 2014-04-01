@@ -36,15 +36,7 @@ namespace NetRunner.Executable.Invokation.Functions
         {
             try
             {
-                var expectedTypes = FunctionReference.ArgumentTypes;
-                var actualTypes = new object[expectedTypes.Count];
-
-                for (int i = 0; i < expectedTypes.Count; i++)
-                {
-                    actualTypes[i] = Convert.ChangeType(Function.Arguments[i], expectedTypes[i]);
-                }
-
-                var result = FunctionReference.Invoke(actualTypes);
+                var result = InvokeFunction(loader, FunctionReference, Function);
 
                 if (Equals(false, result))
                     return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Fail, string.Empty);

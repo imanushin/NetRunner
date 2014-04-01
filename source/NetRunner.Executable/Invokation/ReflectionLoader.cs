@@ -188,5 +188,10 @@ namespace NetRunner.Executable.Invokation
             }
             return loadedAssemblies;
         }
+
+        public bool TryReadPropery(object targetObject, string propertyName, [CanBeNull] out object resultValue)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
