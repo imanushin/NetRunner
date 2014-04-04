@@ -92,6 +92,8 @@ namespace NetRunner.Executable.Invokation.Functions
 
             var convertExceptions = new List<ConversionException>();
 
+            var outString = new StringBuilder();
+
             for (int rowIndex = 0; rowIndex < orderedResult.Length && rowIndex < Rows.Count; rowIndex++)
             {
                 var resultObject = orderedResult[rowIndex];
@@ -100,7 +102,7 @@ namespace NetRunner.Executable.Invokation.Functions
                 {
                     try
                     {
-                        allRight &= CompareItems(resultObject, Rows[rowIndex][columnIndex], ColumnNames[rowIndex], loader);
+                        allRight &= CompareItems(resultObject, Rows[rowIndex][columnIndex], ColumnNames[rowIndex], loader, outString);
                     }
                     catch (ConversionException ex)
                     {
@@ -116,13 +118,13 @@ namespace NetRunner.Executable.Invokation.Functions
 
             if (convertExceptions.Any())
                 resultType = FunctionExecutionResult.FunctionRunResult.Exception;
-            
-            var exceptionString = string.Join(Environment.NewLine, convertExceptions.Select(ce=>ce.GetCleanedString()));
+
+            var exceptionString = outString + string.Join(Environment.NewLine, convertExceptions.Select(ce => ce.GetCleanedString()));
 
             return new FunctionExecutionResult(resultType, exceptionString);
         }
 
-        private bool CompareItems(object resultObject, string expectedResult, string propertyName, ReflectionLoader loader)
+        private bool CompareItems(object resultObject, string expectedResult, string propertyName, ReflectionLoader loader, StringBuilder outString)
         {
             object resultValue;
 
