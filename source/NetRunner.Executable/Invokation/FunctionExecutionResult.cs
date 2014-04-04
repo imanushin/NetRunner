@@ -1,18 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NetRunner.Executable.Common;
+using NetRunner.Executable.Invokation.Functions;
+using NetRunner.ExternalLibrary.Properties;
 
 namespace NetRunner.Executable.Invokation
 {
+    [ImmutableObject(true)]
     internal sealed class FunctionExecutionResult : BaseReadOnlyObject
     {
-        public FunctionExecutionResult(FunctionRunResult resultType, string additionalHtmlText)
+        public FunctionExecutionResult(FunctionRunResult resultType, IEnumerable<AbstractTableChange> tableChanges)
         {
             ResultType = resultType;
-            AdditionalHtmlText = additionalHtmlText;
+            TableChanges = tableChanges.ToReadOnlyList();
         }
 
         public FunctionRunResult ResultType
@@ -21,7 +25,7 @@ namespace NetRunner.Executable.Invokation
             private set;
         }
 
-        public string AdditionalHtmlText
+        public ReadOnlyList<AbstractTableChange> TableChanges
         {
             get;
             private set;
@@ -30,12 +34,12 @@ namespace NetRunner.Executable.Invokation
         protected override IEnumerable<object> GetInnerObjects()
         {
             yield return ResultType;
-            yield return AdditionalHtmlText;
+            yield return TableChanges;
         }
 
         protected override string GetString()
         {
-            return string.Format("Type: {0}; Additional info: {1}", ResultType, AdditionalHtmlText);
+            return string.Format("Type: {0}; Table changes: {1}", ResultType, TableChanges);
         }
 
         public enum FunctionRunResult

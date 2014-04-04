@@ -51,8 +51,13 @@
     <Compile Include="Common\Validate.cs" />
     <Compile Include="FitExecutable.cs" />
     <Compile Include="FitnesseCommunicator.cs" />
+    <Compile Include="Invokation\Functions\AbstractCellChange.cs" />
+    <Compile Include="Invokation\Functions\AbstractTableChange.cs" />
     <Compile Include="Invokation\ConversionException.cs" />
     <Compile Include="Invokation\Functions\AbstractTestFunction.cs" />
+    <Compile Include="Invokation\Functions\AddExceptionLine.cs" />
+    <Compile Include="Invokation\Functions\AddTraceLine.cs" />
+    <Compile Include="Invokation\Functions\ChangeCellColor.cs" />
     <Compile Include="Invokation\Functions\CollectionArgumentedFunction.cs" />
     <Compile Include="Invokation\Functions\EmptyTestFunction.cs" />
     <Compile Include="Invokation\FunctionExecutionResult.cs" />

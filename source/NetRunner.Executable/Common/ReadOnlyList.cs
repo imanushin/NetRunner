@@ -1,21 +1,26 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NetRunner.Executable.Invokation.Functions;
 
 namespace NetRunner.Executable.Common
 {
+    [ImmutableObject(true)]
+    [Pure]
     internal sealed class ReadOnlyList<TValue> : BaseReadOnlyObject, IReadOnlyCollection<TValue>
     {
         private readonly TValue[] innerValues;
+        public static readonly IEnumerable<TValue> Empty = new ReadOnlyList<TValue>(new TValue[0]);
 
         public ReadOnlyList(IEnumerable<TValue> values)
         {
             innerValues = values.ToArray();
         }
-
 
         public IEnumerator<TValue> GetEnumerator()
         {

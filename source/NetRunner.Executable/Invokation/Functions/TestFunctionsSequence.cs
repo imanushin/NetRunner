@@ -27,19 +27,15 @@ namespace NetRunner.Executable.Invokation.Functions
 
         public override FunctionExecutionResult Invoke(ReflectionLoader loader)
         {
-            var commonLine = new StringBuilder();
-
             var results = new List<FunctionExecutionResult.FunctionRunResult>();
+            var changes = new List<AbstractTableChange>();
 
             foreach (var innerFunction in InnerFunctions)
             {
                 var localResult = innerFunction.Invoke(loader);
 
-                if (!string.IsNullOrWhiteSpace(localResult.AdditionalHtmlText))
-                {
-                    commonLine.AppendFormat("{0}:{1}", innerFunction, Environment.NewLine);
-                }
-
+                changes.AddRange(localResult.TableChanges);
+                
                 results.Add(localResult.ResultType);
             }
 
@@ -58,7 +54,7 @@ namespace NetRunner.Executable.Invokation.Functions
                 finalResult = FunctionExecutionResult.FunctionRunResult.Success;
             }
 
-            return new FunctionExecutionResult(finalResult, commonLine.ToString());
+            return new FunctionExecutionResult(finalResult, changes);
         }
     }
 }

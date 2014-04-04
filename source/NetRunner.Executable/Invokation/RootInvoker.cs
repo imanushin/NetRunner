@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
+using NetRunner.Executable.Invokation.Functions;
 using NetRunner.Executable.RawData;
 
 namespace NetRunner.Executable.Invokation
@@ -28,7 +29,7 @@ namespace NetRunner.Executable.Invokation
             {
                 Trace.TraceError("Unable to execute function because of error: {0}", ex);
 
-                result = new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Exception, "Internal execution error: " + ex.ToString());
+                result = new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Exception, new[]{new AddExceptionLine("Internal execution error: ", ex)});
             }
 
             return FormatResult(table, result, currentStatistic);
@@ -54,40 +55,20 @@ namespace NetRunner.Executable.Invokation
                     throw new InvalidOperationException(string.Format("Unknown result: {0}", result));
             }
 
-            var additionalText = new StringBuilder();
-
-            if (!string.IsNullOrWhiteSpace(result.AdditionalHtmlText))
-            {
-                additionalText.AppendLine(result.AdditionalHtmlText);
-                additionalText.AppendLine("<br/>");
-            }
+            var tableChanges = result.TableChanges.ToList();
 
             var traceData = TestExecutionLog.ExtractLogged();
 
             if (!string.IsNullOrWhiteSpace(traceData))
             {
-                additionalText.AppendLine(traceData);
+                tableChanges.Add(new AddTraceLine(traceData));
             }
 
             var resultTable = table.GetClonedNode();
 
-            var additionalLines = additionalText.ToString();
-
-            if (!string.IsNullOrWhiteSpace(additionalLines))
+            foreach (var tableChange in tableChanges)
             {
-                var node = resultTable.OwnerDocument.CreateElement("tr");
-
-                var cellContainer = resultTable.OwnerDocument.CreateElement("td");
-
-                var expandableDiv = resultTable.OwnerDocument.CreateElement("div");
-
-                expandableDiv.InnerHtml = additionalLines;
-
-                cellContainer.AppendChild(expandableDiv);
-
-                node.AppendChild(cellContainer);
-
-                resultTable.AppendChild(node);
+                tableChange.PatchHtmlTable(resultTable);
             }
 
             return resultTable.OuterHtml;
