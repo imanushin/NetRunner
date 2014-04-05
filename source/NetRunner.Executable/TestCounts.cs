@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace NetRunner.Executable
+﻿namespace NetRunner.Executable
 {
     public sealed class TestCounts
     {
@@ -49,12 +45,5 @@ namespace NetRunner.Executable
         {
             IgnoreCount++;
         }
-
-        public static string FormatInteger(int encodeInteger)
-        {
-            string numberPartOfString = "" + encodeInteger;
-            return new String('0', 10 - numberPartOfString.Length) + numberPartOfString;
-        }
-
     }
 }

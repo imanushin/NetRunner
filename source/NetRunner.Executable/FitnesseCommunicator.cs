@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.Net.Sockets;
 using System.Text;
+using NetRunner.Executable.Common;
 
 namespace NetRunner.Executable
 {
     internal sealed class FitnesseCommunicator : IDisposable
     {
+        public const int IntengerFitnessSize = 10;
         private readonly Socket socket;
         private bool isDisposed;
 
@@ -28,24 +31,19 @@ namespace NetRunner.Executable
         public void SendCounts(TestCounts counts)
         {
             var builder = new StringBuilder();
-            builder.Append(FormatInteger(0));
-            builder.Append(FormatInteger(counts.SuccessCount));
-            builder.Append(FormatInteger(counts.FailCount));
-            builder.Append(FormatInteger(counts.IgnoreCount));
-            builder.Append(FormatInteger(counts.ExceptionCount));
+            builder.Append(0.ToFinnessIntegerString());
+            builder.Append(counts.SuccessCount.ToFinnessIntegerString());
+            builder.Append(counts.FailCount.ToFinnessIntegerString());
+            builder.Append(counts.IgnoreCount.ToFinnessIntegerString());
+            builder.Append(counts.ExceptionCount.ToFinnessIntegerString());
 
-            Transmit(builder.ToString());
-        }
-
-        public void Transmit(string message)
-        {
-            Write(message);
+            Write(builder.ToString());
         }
 
         private void EstablishConnection(string request)
         {
             Trace.WriteLine("HTTP request: {0}");
-            Transmit(FormatRequest(request));
+            Write(FormatRequest(request));
 
             Trace.WriteLine("Validating connection...");
             int statusSize = ReceiveInteger();
@@ -96,18 +94,12 @@ namespace NetRunner.Executable
 
         private int ReceiveInteger()
         {
-            return Convert.ToInt32(ReadBytes(10));
-        }
-
-        private static string FormatInteger(int encodeInteger)
-        {
-            string numberPartOfString = "" + encodeInteger;
-            return new String('0', 10 - numberPartOfString.Length) + numberPartOfString;
+            return Convert.ToInt32(ReadBytes(IntengerFitnessSize));
         }
 
         private static string FormatDocument(string document)
         {
-            return FormatInteger(Encoding.UTF8.GetBytes(document).Length) + document;
+            return Encoding.UTF8.GetBytes(document).Length.ToFinnessIntegerString() + document;
         }
 
         private static string FormatRequest(string token)

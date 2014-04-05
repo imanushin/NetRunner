@@ -30,6 +30,7 @@ namespace NetRunner.Executable
             bool suiteIsAbandoned = false;
             bool maybeProcessingSuiteSetup = true;
 
+            Debugger.Launch();
             for (string document = communicator.ReceiveDocument(); document.Any() && !suiteIsAbandoned; document = communicator.ReceiveDocument())
             {
                 Trace.WriteLine("Processing document of size: " + document.Length);
