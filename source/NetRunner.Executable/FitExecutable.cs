@@ -15,15 +15,7 @@ namespace NetRunner.Executable
 
         internal static void Execute(ApplicationSettings settings)
         {
-            var communicator = new FitnesseCommunicator(settings.Host, settings.Port);
-
-            Trace.WriteLine("Host: {0}; Port: {1}");
-
-            communicator.EstablishConnection(settings.SocketToken);
-            /*
-            var writer = new StoryTestStringWriter(service)
-                .ForTables(WriteTables)
-                .ForCounts(WriteCounts);*/
+            var communicator = new FitnesseCommunicator(settings.Host, settings.Port, settings.SocketToken);
 
             ProcessTestDocuments(communicator, settings.Assemblylist);
         }

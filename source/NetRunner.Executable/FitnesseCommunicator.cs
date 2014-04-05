@@ -1,21 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace NetRunner.Executable
 {
     internal sealed class FitnesseCommunicator : IDisposable
     {
         private readonly Socket socket;
+        private bool isDisposed;
 
-        public FitnesseCommunicator(string hostName, int port)
+        public FitnesseCommunicator(string hostName, int port, string token)
         {
             socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             socket.Connect(hostName, port);
+
+            Trace.WriteLine("FitnesseCommunicator open socket to host: {0}, port: {1}");
+
+            EstablishConnection(token);
         }
 
         public void SendDocument(string document)
@@ -40,7 +42,7 @@ namespace NetRunner.Executable
             Write(message);
         }
 
-        public void EstablishConnection(string request)
+        private void EstablishConnection(string request)
         {
             Trace.WriteLine("HTTP request: {0}");
             Transmit(FormatRequest(request));
@@ -113,10 +115,19 @@ namespace NetRunner.Executable
             return "GET /?responder=socketCatcher&ticket=" + token + " HTTP/1.1\r\n\r\n";
         }
 
+        ~FitnesseCommunicator()
+        {
+            Dispose();
+        }
+
         public void Dispose()
         {
-            if (socket != null)
+            if (socket != null && !isDisposed)
+            {
                 socket.Dispose();
+                isDisposed = true;
+            }
+                
         }
     }
 }
