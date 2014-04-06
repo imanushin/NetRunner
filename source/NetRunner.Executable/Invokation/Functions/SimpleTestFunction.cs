@@ -39,15 +39,17 @@ namespace NetRunner.Executable.Invokation.Functions
                 var result = InvokeFunction(loader, FunctionReference, Function);
 
                 if (Equals(false, result))
-                    return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Fail, ReadOnlyList<AbstractTableChange>.Empty);
+                {
+                    return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Fail, new[] { new MarkRowAsError(Function.RowGlobalIndex) });
+                }
 
                 return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Success, ReadOnlyList<AbstractTableChange>.Empty);
             }
             catch (Exception ex)
             {
-//                TestExecutionLog.Trace("Unable to execute function {0} because of error {1}", this, ex);
+                //                TestExecutionLog.Trace("Unable to execute function {0} because of error {1}", this, ex);
 
-                return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Exception, new[]{new AddExceptionLine(ex) });
+                return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Exception, new[] { new AddExceptionLine(ex) });
             }
         }
 

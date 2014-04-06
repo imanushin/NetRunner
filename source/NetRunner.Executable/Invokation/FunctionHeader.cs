@@ -9,13 +9,23 @@ namespace NetRunner.Executable.Invokation
 {
     internal sealed class FunctionHeader  : BaseReadOnlyObject
     {
-        public FunctionHeader(string functionName, IReadOnlyCollection<string> arguments)
+        public FunctionHeader(string functionName, IReadOnlyCollection<string> arguments, int rowGlobalIndex)
         {
+            RowGlobalIndex = rowGlobalIndex;
             Validate.ArgumentStringIsMeanful(functionName, "functionName");
             Validate.CollectionArgumentHasElements(arguments, "arguments");
 
             FunctionName = functionName.Replace(" ", string.Empty);
             Arguments = arguments.ToReadOnlyList();
+        }
+
+        /// <summary>
+        /// Reference to function row in original html file
+        /// </summary>
+        public int RowGlobalIndex
+        {
+            get;
+            private set;
         }
 
         public string FunctionName

@@ -29,6 +29,18 @@ namespace FitSample
             }
         }
 
+        public bool PingSiteWithoutExceptions(string url)
+        {
+            try
+            {
+                return PingSite(url);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         public IEnumerable ListFilesIn(string path)
         {
             return Directory.EnumerateFiles(path).Select(f => new

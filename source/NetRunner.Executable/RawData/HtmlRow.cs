@@ -9,9 +9,18 @@ namespace NetRunner.Executable.RawData
 {
     internal sealed class HtmlRow : BaseReadOnlyObject
     {
-        public HtmlRow(IEnumerable<HtmlCell> cellsEntries)
+        internal const string GlobalAttributeIndexName = "GlobalRowIndex";
+
+        public HtmlRow(IEnumerable<HtmlCell> cellsEntries, int rowGlobalIndex)
         {
             Cells = cellsEntries.ToReadOnlyList();
+            RowGlobalIndex = rowGlobalIndex;
+        }
+
+        public int RowGlobalIndex
+        {
+            get;
+            private set;
         }
 
         public ReadOnlyList<HtmlCell> Cells
@@ -22,7 +31,8 @@ namespace NetRunner.Executable.RawData
 
         protected override IEnumerable<object> GetInnerObjects()
         {
-            return Cells;
+            yield return RowGlobalIndex;
+            yield return Cells;
         }
     }
 }

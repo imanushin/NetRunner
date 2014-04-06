@@ -15,7 +15,7 @@ namespace NetRunner.Executable.Invokation
         public static AbstractTestFunction ParseTable(HtmlTable table, ReflectionLoader loader)
         {
             Validate.CollectionArgumentHasElements(table.Rows, "table");
-
+            
             var header = ParseHeader(table.Rows.First());
 
             if (header == null)
@@ -95,7 +95,7 @@ namespace NetRunner.Executable.Invokation
             if (string.IsNullOrWhiteSpace(functionName))
                 return null;
 
-            return new FunctionHeader(functionName, arguments);
+            return new FunctionHeader(functionName, arguments, row.RowGlobalIndex);
         }
 
     }

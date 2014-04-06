@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using HtmlAgilityPack;
@@ -9,6 +10,14 @@ namespace NetRunner.Executable.RawData
 {
     internal static class HtmlParser
     {
+        private static int rowGlobalIndex = 0;
+
+        internal const string FailCssClass = "fail";
+        internal const string ErrorCssClass = "error";
+        internal const string PassCssClass = "pass";
+        internal const string IgnoreCssClass = "ignore";
+        internal const string ClassAttributeName = "class";
+
         public static FitnesseHtmlDocument Parse(string htmlDocument)
         {
             var document = new HtmlDocument();
@@ -22,7 +31,7 @@ namespace NetRunner.Executable.RawData
             var parsedTables = tables
                 .Select(t => (
                 ParseTable(t,
-                    string.Join(Environment.NewLine,
+                    String.Join(Environment.NewLine,
                         allChildNodes
                         .SkipWhile(n => n != t)
                         .Skip(1)
@@ -34,19 +43,19 @@ namespace NetRunner.Executable.RawData
 
             var nodesBeforeFirst = allChildNodes.TakeWhile(n => n != firstTable).ToArray();
 
-            var textBeforeFirst = string.Join(Environment.NewLine, nodesBeforeFirst.Select(n => n.OuterHtml));
+            var textBeforeFirst = String.Join(Environment.NewLine, nodesBeforeFirst.Select(n => n.OuterHtml));
 
             return new FitnesseHtmlDocument(textBeforeFirst, parsedTables);
         }
 
         private static bool IsTableNode(HtmlNode cn)
         {
-            return string.Equals(cn.Name, "table", StringComparison.OrdinalIgnoreCase);
+            return String.Equals(cn.Name, "table", StringComparison.OrdinalIgnoreCase);
         }
 
         private static HtmlTable ParseTable(HtmlNode tableNode, string textAfterTable)
         {
-            var allRows = tableNode.ChildNodes.Where(cn => string.Equals(cn.Name, "tr", StringComparison.OrdinalIgnoreCase));
+            var allRows = tableNode.ChildNodes.Where(cn => String.Equals(cn.Name, "tr", StringComparison.OrdinalIgnoreCase));
 
             var parsedRows = allRows.Select(ParseRow).ToArray();
 
@@ -55,9 +64,14 @@ namespace NetRunner.Executable.RawData
 
         private static HtmlRow ParseRow(HtmlNode rowNode)
         {
-            var allCells = rowNode.ChildNodes.Where(cn => string.Equals(cn.Name, "td", StringComparison.OrdinalIgnoreCase));
+            var allCells = rowNode.ChildNodes.Where(cn => String.Equals(cn.Name, "td", StringComparison.OrdinalIgnoreCase));
 
-            return new HtmlRow(allCells.Select(cell => new HtmlCell(cell)));
+            var newIndex = rowGlobalIndex++;
+
+            rowNode.Attributes.Append(HtmlRow.GlobalAttributeIndexName, newIndex.ToString(CultureInfo.InvariantCulture));
+
+            return new HtmlRow(allCells.Select(cell => new HtmlCell(cell)), newIndex);
         }
+
     }
 }

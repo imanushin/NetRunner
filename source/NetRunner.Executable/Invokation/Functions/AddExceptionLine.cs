@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
 using NetRunner.Executable.Common;
+using NetRunner.Executable.RawData;
 
 namespace NetRunner.Executable.Invokation.Functions
 {
@@ -22,6 +23,8 @@ namespace NetRunner.Executable.Invokation.Functions
         {
             this.header = header;
             this.exceptions = exceptions.ToReadOnlyList();
+
+            Validate.CollectionArgumentHasElements(this.exceptions, "exceptions");
         }
 
         public AddExceptionLine(Exception exception)
@@ -42,7 +45,7 @@ namespace NetRunner.Executable.Invokation.Functions
 
         public override void PatchHtmlTable(HtmlNode node)
         {
-            AddExpandableRow(node, header,string.Join("<br/>", exceptions), "error");
+            AddExpandableRow(node, header, string.Join("<br/>", exceptions), HtmlParser.ErrorCssClass);
         }
     }
 }
