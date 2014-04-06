@@ -15,9 +15,10 @@ namespace NetRunner.Executable
 
         internal static void Execute(ApplicationSettings settings)
         {
-            var communicator = new FitnesseCommunicator(settings.Host, settings.Port, settings.SocketToken);
-
-            ProcessTestDocuments(communicator, settings.Assemblylist);
+            using (var communicator = new FitnesseCommunicator(settings.Host, settings.Port, settings.SocketToken))
+            {
+               ProcessTestDocuments(communicator, settings.Assemblylist);    
+            }
         }
 
         public static void ProcessTestDocuments(FitnesseCommunicator communicator, string assemblylist)
@@ -67,12 +68,6 @@ namespace NetRunner.Executable
                 catch (Exception e)
                 {
                     Trace.TraceError("Test execution exception: {0}", e);
-                    /*var testStatus = new TestStatus();
-                    var parse = new CellBase(parseError, "div");
-                    parse.SetAttribute(CellAttribute.Body, parseError);
-                    testStatus.MarkException(parse, e);
-                    writer.WriteTable(new CellTree(parse));
-                    writer.WriteTest(new CellTree().AddBranchValue(parse), testStatus.Counts);*/
                 }
 
                 maybeProcessingSuiteSetup = false;
