@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Linq;
 using HtmlAgilityPack;
 using NetRunner.Executable.Common;
+using NetRunner.Executable.RawData;
 
 namespace NetRunner.Executable.Invokation.Functions
 {
@@ -16,7 +17,7 @@ namespace NetRunner.Executable.Invokation.Functions
 
             var node = document.CreateElement("tr");
 
-            var cellContainer = document.CreateElement("td");
+            var cellContainer = document.CreateElement(HtmlParser.TableCellNodeName);
             cellContainer.Attributes.Add("colspan", "999");
 
             var expandableDiv = document.CreateElement("div");

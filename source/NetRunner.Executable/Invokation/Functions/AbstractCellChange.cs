@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
 using NetRunner.Executable.Common;
+using NetRunner.Executable.RawData;
 
 namespace NetRunner.Executable.Invokation.Functions
 {
@@ -27,7 +28,7 @@ namespace NetRunner.Executable.Invokation.Functions
 
             Validate.IsNotNull(rowNode, "Unable to find row with position {0}. Count of rows: {1}", row, allRows.Count);
 
-            var allColumns = node.ChildNodes.Where(n => string.Equals(n.Name, "td", StringComparison.OrdinalIgnoreCase)).ToReadOnlyList();
+            var allColumns = node.ChildNodes.Where(n => string.Equals(n.Name, HtmlParser.TableCellNodeName, StringComparison.OrdinalIgnoreCase)).ToReadOnlyList();
 
             var targetCell = allColumns.Skip(column).FirstOrDefault();
 

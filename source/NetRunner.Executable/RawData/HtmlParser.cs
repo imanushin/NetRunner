@@ -17,6 +17,8 @@ namespace NetRunner.Executable.RawData
         internal const string PassCssClass = "pass";
         internal const string IgnoreCssClass = "ignore";
         internal const string ClassAttributeName = "class";
+        
+        internal const string TableCellNodeName = "td";
 
         public static FitnesseHtmlDocument Parse(string htmlDocument)
         {
@@ -64,7 +66,7 @@ namespace NetRunner.Executable.RawData
 
         private static HtmlRow ParseRow(HtmlNode rowNode)
         {
-            var allCells = rowNode.ChildNodes.Where(cn => String.Equals(cn.Name, "td", StringComparison.OrdinalIgnoreCase));
+            var allCells = rowNode.ChildNodes.Where(cn => String.Equals(cn.Name, TableCellNodeName, StringComparison.OrdinalIgnoreCase));
 
             var newIndex = rowGlobalIndex++;
 
@@ -72,6 +74,5 @@ namespace NetRunner.Executable.RawData
 
             return new HtmlRow(allCells.Select(cell => new HtmlCell(cell)), newIndex);
         }
-
     }
 }

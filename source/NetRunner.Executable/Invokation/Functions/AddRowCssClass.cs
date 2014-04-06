@@ -8,13 +8,17 @@ using NetRunner.Executable.RawData;
 
 namespace NetRunner.Executable.Invokation.Functions
 {
-    internal sealed class MarkRowAsError : AbstractTableChange
+    internal sealed class AddRowCssClass : AbstractTableChange
     {
         private readonly int rowGlobalIndex;
+        private readonly string targetCssClass;
 
-        public MarkRowAsError(int rowGlobalIndex)
+        public AddRowCssClass(int rowGlobalIndex, string targetCssClass)
         {
+            Validate.ArgumentStringIsMeanful(targetCssClass, "targetCssClass");
+
             this.rowGlobalIndex = rowGlobalIndex;
+            this.targetCssClass = targetCssClass;
         }
 
         protected override IEnumerable<object> GetInnerObjects()
@@ -36,19 +40,20 @@ namespace NetRunner.Executable.Invokation.Functions
 
             var document = table.OwnerDocument;
 
-            foreach (HtmlNode cellNode in targetRow.ChildNodes.Where(n => string.Equals(n.Name, "td", StringComparison.OrdinalIgnoreCase)))
+            //Highlight multiple cells, because fitnesse is unable to navigate of tr items
+            foreach (HtmlNode cellNode in targetRow.ChildNodes.Where(n => string.Equals(n.Name, HtmlParser.TableCellNodeName, StringComparison.OrdinalIgnoreCase)))
             {
                 var oldAttributes = cellNode.Attributes.AttributesWithName(HtmlParser.ClassAttributeName).FirstOrDefault();
 
                 if (oldAttributes == null)
                 {
-                    var newAttribute = document.CreateAttribute(HtmlParser.ClassAttributeName, HtmlParser.FailCssClass);
+                    var newAttribute = document.CreateAttribute(HtmlParser.ClassAttributeName, targetCssClass);
 
                     cellNode.Attributes.Add(newAttribute);
                 }
                 else
                 {
-                    oldAttributes.Value = oldAttributes.Value + "," + HtmlParser.FailCssClass;
+                    oldAttributes.Value = oldAttributes.Value + "," + targetCssClass;
                 }
             }
         }

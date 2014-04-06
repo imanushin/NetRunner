@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using HtmlAgilityPack;
 using NetRunner.Executable.Common;
+using NetRunner.Executable.RawData;
 
 namespace NetRunner.Executable.Invokation.Functions
 {
@@ -40,10 +42,10 @@ namespace NetRunner.Executable.Invokation.Functions
 
                 if (Equals(false, result))
                 {
-                    return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Fail, new[] { new MarkRowAsError(Function.RowGlobalIndex) });
+                    return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Fail, new[] { new AddRowCssClass(Function.RowGlobalIndex, HtmlParser.FailCssClass) });
                 }
 
-                return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Success, ReadOnlyList<AbstractTableChange>.Empty);
+                return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Success, new[] { new AddRowCssClass(Function.RowGlobalIndex, HtmlParser.PassCssClass) });
             }
             catch (Exception ex)
             {
