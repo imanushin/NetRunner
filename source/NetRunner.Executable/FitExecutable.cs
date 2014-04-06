@@ -15,9 +15,10 @@ namespace NetRunner.Executable
 
         internal static void Execute(ApplicationSettings settings)
         {
-            var communicator = new FitnesseCommunicator(settings.Host, settings.Port, settings.SocketToken);
-
-            ProcessTestDocuments(communicator, settings.Assemblylist);
+            using (var communicator = new FitnesseCommunicator(settings.Host, settings.Port, settings.SocketToken))
+            {
+               ProcessTestDocuments(communicator, settings.Assemblylist);    
+            }
         }
 
         public static void ProcessTestDocuments(FitnesseCommunicator communicator, string assemblylist)
