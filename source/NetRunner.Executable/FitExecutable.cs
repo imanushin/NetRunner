@@ -68,12 +68,6 @@ namespace NetRunner.Executable
                 catch (Exception e)
                 {
                     Trace.TraceError("Test execution exception: {0}", e);
-                    /*var testStatus = new TestStatus();
-                    var parse = new CellBase(parseError, "div");
-                    parse.SetAttribute(CellAttribute.Body, parseError);
-                    testStatus.MarkException(parse, e);
-                    writer.WriteTable(new CellTree(parse));
-                    writer.WriteTest(new CellTree().AddBranchValue(parse), testStatus.Counts);*/
                 }
 
                 maybeProcessingSuiteSetup = false;
