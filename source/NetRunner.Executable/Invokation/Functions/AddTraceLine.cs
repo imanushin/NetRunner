@@ -23,9 +23,7 @@ namespace NetRunner.Executable.Invokation.Functions
 
         public override void PatchHtmlTable(HtmlNode table)
         {
-            var expandableDiv = AddExpandableRow(table, "Trace captured");
-
-            expandableDiv.InnerHtml = text;
+            AddExpandableRow(table, "Trace captured", text);
         }
     }
 }

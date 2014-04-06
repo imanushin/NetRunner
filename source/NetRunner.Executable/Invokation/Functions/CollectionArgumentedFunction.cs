@@ -117,9 +117,10 @@ namespace NetRunner.Executable.Invokation.Functions
                 resultType = FunctionExecutionResult.FunctionRunResult.Fail;
 
             if (convertExceptions.Any())
+            {
                 resultType = FunctionExecutionResult.FunctionRunResult.Exception;
-
-            tableChanges.Add(new AddExceptionLine(convertExceptions));
+                tableChanges.Add(new AddExceptionLine(convertExceptions));
+            }
 
             return new FunctionExecutionResult(resultType, tableChanges);
         }

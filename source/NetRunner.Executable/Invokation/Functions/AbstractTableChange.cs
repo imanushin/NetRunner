@@ -10,34 +10,42 @@ namespace NetRunner.Executable.Invokation.Functions
     {
         public abstract void PatchHtmlTable(HtmlNode table);
 
-        protected static HtmlNode AddExpandableRow(HtmlNode table, string header, HtmlAttribute customAttribute = null)
+        protected static void AddExpandableRow(HtmlNode table, string header, string text, string nodeClass = null)
         {
             var document = table.OwnerDocument;
 
             var node = document.CreateElement("tr");
 
-            if (customAttribute != null)
-                node.Attributes.Append(customAttribute);
-
             var cellContainer = document.CreateElement("td");
-
-            var spanSttribute = document.CreateAttribute("colspan");
-
-            spanSttribute.Value = table
-                .ChildNodes.First(n => string.Equals(n.Name, "tr", StringComparison.OrdinalIgnoreCase))
-                .ChildNodes.Count(n => string.Equals(n.Name, "td", StringComparison.OrdinalIgnoreCase)).ToString(CultureInfo.InvariantCulture);
-
-            cellContainer.Attributes.Append(spanSttribute);
+            cellContainer.Attributes.Add("colspan", "999");
 
             var expandableDiv = document.CreateElement("div");
+
+            AddClassAttribute(nodeClass, node);
+            AddClassAttribute("collapsible closed", expandableDiv);
+
+            var titleNode = document.CreateElement("p");
+            titleNode.InnerHtml = header;
+            AddClassAttribute("title", titleNode);
+            expandableDiv.AppendChild(titleNode);
+
+            var textNode = document.CreateElement("div");
+            textNode.InnerHtml = text;
+            expandableDiv.AppendChild(textNode);
 
             cellContainer.AppendChild(expandableDiv);
 
             node.AppendChild(cellContainer);
 
             table.AppendChild(node);
+        }
 
-            return expandableDiv;
+        private static void AddClassAttribute(string nodeClass, HtmlNode node)
+        {
+            if (!string.IsNullOrWhiteSpace(nodeClass))
+            {
+                node.Attributes.Add("class", nodeClass);
+            }
         }
     }
 }

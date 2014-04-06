@@ -42,13 +42,7 @@ namespace NetRunner.Executable.Invokation.Functions
 
         public override void PatchHtmlTable(HtmlNode node)
         {
-            var redColoredAttribute = node.OwnerDocument.CreateAttribute("bgcolor");
-
-            redColoredAttribute.Value = "#FFAAAA";
-
-            var dataContainer = AddExpandableRow(node, header, redColoredAttribute);
-
-            dataContainer.InnerHtml = string.Join(Environment.NewLine, exceptions);
+            AddExpandableRow(node, header,string.Join("<br/>", exceptions), "error");
         }
     }
 }

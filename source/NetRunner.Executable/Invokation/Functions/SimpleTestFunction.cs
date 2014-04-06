@@ -45,7 +45,7 @@ namespace NetRunner.Executable.Invokation.Functions
             }
             catch (Exception ex)
             {
-                TestExecutionLog.Trace("Unable to execute function {0} because of error {1}", this, ex);
+//                TestExecutionLog.Trace("Unable to execute function {0} because of error {1}", this, ex);
 
                 return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Exception, new[]{new AddExceptionLine(ex) });
             }
