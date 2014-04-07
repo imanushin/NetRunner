@@ -42,10 +42,10 @@ namespace NetRunner.Executable.Invokation.Functions
 
                 if (Equals(false, result))
                 {
-                    return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Fail, new[] { new AddRowCssClass(Function.RowGlobalIndex, HtmlParser.FailCssClass) });
+                    return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Fail, new[] { new AddRowCssClass(Function.RowReference, HtmlParser.FailCssClass) });
                 }
 
-                return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Success, new[] { new AddRowCssClass(Function.RowGlobalIndex, HtmlParser.PassCssClass) });
+                return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Success, new[] { new AddRowCssClass(Function.RowReference, HtmlParser.PassCssClass) });
             }
             catch (Exception ex)
             {

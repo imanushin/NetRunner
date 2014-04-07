@@ -10,33 +10,25 @@ namespace NetRunner.Executable.Invokation.Functions
 {
     internal sealed class AddRowCssClass : AbstractTableChange
     {
-        private readonly int rowGlobalIndex;
+        private readonly HtmlRowReference rowReference;
         private readonly string targetCssClass;
 
-        public AddRowCssClass(int rowGlobalIndex, string targetCssClass)
+        public AddRowCssClass(HtmlRowReference rowReference, string targetCssClass)
         {
             Validate.ArgumentStringIsMeanful(targetCssClass, "targetCssClass");
 
-            this.rowGlobalIndex = rowGlobalIndex;
+            this.rowReference = rowReference;
             this.targetCssClass = targetCssClass;
         }
 
         protected override IEnumerable<object> GetInnerObjects()
         {
-            yield return rowGlobalIndex;
+            yield return rowReference;
         }
 
         public override void PatchHtmlTable(HtmlNode table)
         {
-            var stringIndex = rowGlobalIndex.ToString(CultureInfo.InvariantCulture);
-
-            var targetRow = table.ChildNodes.FirstOrDefault(
-                row =>
-                    row.Attributes
-                    .AttributesWithName(HtmlRow.GlobalAttributeIndexName)
-                    .Any(a => string.Equals(a.Value, stringIndex, StringComparison.Ordinal)));
-
-            Validate.IsNotNull(targetRow, "Unable to find row with index {0} in current table", rowGlobalIndex);
+            var targetRow = rowReference.GetRow(table);
 
             var document = table.OwnerDocument;
 

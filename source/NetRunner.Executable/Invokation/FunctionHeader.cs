@@ -9,9 +9,9 @@ namespace NetRunner.Executable.Invokation
 {
     internal sealed class FunctionHeader  : BaseReadOnlyObject
     {
-        public FunctionHeader(string functionName, IReadOnlyCollection<string> arguments, int rowGlobalIndex)
+        public FunctionHeader(string functionName, IReadOnlyCollection<string> arguments, HtmlRowReference rowReference)
         {
-            RowGlobalIndex = rowGlobalIndex;
+            RowReference = rowReference;
             Validate.ArgumentStringIsMeanful(functionName, "functionName");
             Validate.CollectionArgumentHasElements(arguments, "arguments");
 
@@ -19,10 +19,7 @@ namespace NetRunner.Executable.Invokation
             Arguments = arguments.ToReadOnlyList();
         }
 
-        /// <summary>
-        /// Reference to function row in original html file
-        /// </summary>
-        public int RowGlobalIndex
+        public HtmlRowReference RowReference
         {
             get;
             private set;

@@ -22,7 +22,7 @@ namespace NetRunner.Executable.Invokation.Functions
 
         public override void PatchHtmlTable(HtmlNode node)
         {
-            var allRows = node.ChildNodes.Where(n => string.Equals(n.Name, "tr", StringComparison.OrdinalIgnoreCase)).ToReadOnlyList();
+            var allRows = node.ChildNodes.Where(n => string.Equals(n.Name, HtmlParser.TableRowNodeName, StringComparison.OrdinalIgnoreCase)).ToReadOnlyList();
 
             var rowNode = allRows.Skip(row).FirstOrDefault();
 

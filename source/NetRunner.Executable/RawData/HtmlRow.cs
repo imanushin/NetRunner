@@ -4,20 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NetRunner.Executable.Common;
+using NetRunner.Executable.Invokation;
 
 namespace NetRunner.Executable.RawData
 {
     internal sealed class HtmlRow : BaseReadOnlyObject
     {
-        internal const string GlobalAttributeIndexName = "GlobalRowIndex";
-
-        public HtmlRow(IEnumerable<HtmlCell> cellsEntries, int rowGlobalIndex)
+        public HtmlRow(IEnumerable<HtmlCell> cellsEntries, HtmlRowReference rowReference)
         {
             Cells = cellsEntries.ToReadOnlyList();
-            RowGlobalIndex = rowGlobalIndex;
+            RowReference = rowReference;
         }
 
-        public int RowGlobalIndex
+        public HtmlRowReference RowReference
         {
             get;
             private set;
@@ -31,7 +30,7 @@ namespace NetRunner.Executable.RawData
 
         protected override IEnumerable<object> GetInnerObjects()
         {
-            yield return RowGlobalIndex;
+            yield return RowReference;
             yield return Cells;
         }
     }

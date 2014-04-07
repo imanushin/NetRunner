@@ -5,13 +5,12 @@ using System.IO;
 using System.Linq;
 using HtmlAgilityPack;
 using NetRunner.Executable.Common;
+using NetRunner.Executable.Invokation;
 
 namespace NetRunner.Executable.RawData
 {
     internal static class HtmlParser
     {
-        private static int rowGlobalIndex = 0;
-
         internal const string FailCssClass = "fail";
         internal const string ErrorCssClass = "error";
         internal const string PassCssClass = "pass";
@@ -19,6 +18,8 @@ namespace NetRunner.Executable.RawData
         internal const string ClassAttributeName = "class";
         
         internal const string TableCellNodeName = "td";
+        internal const string TableRowNodeName = "tr";
+        internal const string TableNodeName = "table";
 
         public static FitnesseHtmlDocument Parse(string htmlDocument)
         {
@@ -52,12 +53,12 @@ namespace NetRunner.Executable.RawData
 
         private static bool IsTableNode(HtmlNode cn)
         {
-            return String.Equals(cn.Name, "table", StringComparison.OrdinalIgnoreCase);
+            return String.Equals(cn.Name, TableNodeName, StringComparison.OrdinalIgnoreCase);
         }
 
         private static HtmlTable ParseTable(HtmlNode tableNode, string textAfterTable)
         {
-            var allRows = tableNode.ChildNodes.Where(cn => String.Equals(cn.Name, "tr", StringComparison.OrdinalIgnoreCase));
+            var allRows = tableNode.ChildNodes.Where(cn => String.Equals(cn.Name, TableRowNodeName, StringComparison.OrdinalIgnoreCase));
 
             var parsedRows = allRows.Select(ParseRow).ToArray();
 
@@ -68,11 +69,8 @@ namespace NetRunner.Executable.RawData
         {
             var allCells = rowNode.ChildNodes.Where(cn => String.Equals(cn.Name, TableCellNodeName, StringComparison.OrdinalIgnoreCase));
 
-            var newIndex = rowGlobalIndex++;
 
-            rowNode.Attributes.Append(HtmlRow.GlobalAttributeIndexName, newIndex.ToString(CultureInfo.InvariantCulture));
-
-            return new HtmlRow(allCells.Select(cell => new HtmlCell(cell)), newIndex);
+            return new HtmlRow(allCells.Select(cell => new HtmlCell(cell)), HtmlRowReference.MarkRowAndGenerateReference(rowNode));
         }
     }
 }

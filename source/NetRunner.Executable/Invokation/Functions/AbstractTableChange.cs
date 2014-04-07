@@ -15,7 +15,7 @@ namespace NetRunner.Executable.Invokation.Functions
         {
             var document = table.OwnerDocument;
 
-            var node = document.CreateElement("tr");
+            var node = document.CreateElement(HtmlParser.TableRowNodeName);
 
             var cellContainer = document.CreateElement(HtmlParser.TableCellNodeName);
             cellContainer.Attributes.Add("colspan", "999");
