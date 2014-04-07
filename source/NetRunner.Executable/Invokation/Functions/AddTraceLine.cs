@@ -7,23 +7,26 @@ using HtmlAgilityPack;
 
 namespace NetRunner.Executable.Invokation.Functions
 {
-    internal sealed class AddTraceLine: AbstractTableChange
+    internal sealed class AddTraceLine : AbstractTableChange
     {
         private readonly string text;
+        private readonly HtmlRowReference rowReference;
 
-        public AddTraceLine(string text)
+        public AddTraceLine(string text, HtmlRowReference rowReference)
         {
             this.text = text;
+            this.rowReference = rowReference;
         }
 
         protected override IEnumerable<object> GetInnerObjects()
         {
+            yield return rowReference;
             yield return text;
         }
 
         public override void PatchHtmlTable(HtmlNode table)
         {
-            AddExpandableRow(table, "Trace captured", text);
+            AddExpandableRow(table, rowReference, "Trace captured", text);
         }
     }
 }

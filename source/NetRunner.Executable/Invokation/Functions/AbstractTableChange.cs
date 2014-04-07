@@ -11,7 +11,7 @@ namespace NetRunner.Executable.Invokation.Functions
     {
         public abstract void PatchHtmlTable(HtmlNode table);
 
-        protected static void AddExpandableRow(HtmlNode table, string header, string text, string nodeClass = null)
+        protected static void AddExpandableRow(HtmlNode table, HtmlRowReference previousRowReference, string header, string text, string nodeClass = null)
         {
             var document = table.OwnerDocument;
 
@@ -38,14 +38,18 @@ namespace NetRunner.Executable.Invokation.Functions
 
             node.AppendChild(cellContainer);
 
-            table.AppendChild(node);
+            var previousRow = previousRowReference.GetRow(table);
+
+            var previousRowIndex = table.ChildNodes.GetNodeIndex(previousRow);
+
+            table.ChildNodes.Insert(previousRowIndex + 1, node);
         }
 
         private static void AddClassAttribute(string nodeClass, HtmlNode node)
         {
             if (!string.IsNullOrWhiteSpace(nodeClass))
             {
-                node.Attributes.Add("class", nodeClass);
+                node.Attributes.Add(HtmlParser.ClassAttributeName, nodeClass);
             }
         }
     }

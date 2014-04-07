@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
+using NetRunner.Executable.Common;
 using NetRunner.Executable.Invokation.Functions;
 using NetRunner.Executable.RawData;
 
@@ -29,7 +30,16 @@ namespace NetRunner.Executable.Invokation
             {
                 Trace.TraceError("Unable to execute function because of error: {0}", ex);
 
-                result = new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Exception, new[]{new AddExceptionLine("Internal execution error: ", ex)});
+                var firstRow = table.Rows.FirstOrDefault();
+
+                var changes = new List<AbstractTableChange>();
+
+                if (firstRow != null)
+                {
+                    changes.Add(new AddExceptionLine("Internal execution error: ", ex, firstRow.RowReference));
+                }
+
+                result = new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Exception, changes);
             }
 
             return FormatResult(table, result, currentStatistic);
@@ -61,7 +71,11 @@ namespace NetRunner.Executable.Invokation
 
             if (!string.IsNullOrWhiteSpace(traceData))
             {
-                tableChanges.Add(new AddTraceLine(traceData));
+                var lastRow = table.Rows.LastOrDefault();
+
+                Validate.IsNotNull(lastRow, "Internal error: target table does not contain any rows. Execution should be skipped.");
+
+                tableChanges.Add(new AddTraceLine(traceData, lastRow.RowReference));
             }
 
             var resultTable = table.GetClonedNode();
