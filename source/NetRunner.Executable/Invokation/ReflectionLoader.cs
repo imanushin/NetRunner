@@ -191,7 +191,20 @@ namespace NetRunner.Executable.Invokation
 
         public bool TryReadPropery(object targetObject, string propertyName, [CanBeNull] out object resultValue)
         {
-            throw new NotImplementedException();
+            var targetType = targetObject.GetType();
+
+            var property = targetType.GetProperties().FirstOrDefault(p => string.Equals(p.Name, propertyName, StringComparison.OrdinalIgnoreCase));
+
+            if (property == null)
+            {
+                Trace.TraceError("Unable to find property with name {0} for type {1} ({2})", propertyName, targetType, targetObject);
+                resultValue = null;
+                return false;
+            }
+
+            resultValue = property.GetValue(targetObject);
+
+            return true;
         }
     }
 }

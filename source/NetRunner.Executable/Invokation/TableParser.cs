@@ -15,7 +15,7 @@ namespace NetRunner.Executable.Invokation
         public static AbstractTestFunction ParseTable(HtmlTable table, ReflectionLoader loader)
         {
             Validate.CollectionArgumentHasElements(table.Rows, "table");
-            
+
             var header = ParseHeader(table.Rows.First());
 
             if (header == null)
@@ -53,23 +53,8 @@ namespace NetRunner.Executable.Invokation
                 header.FunctionName);
 
             var headers = table.Rows.Second().Cells.Select(c => c.CleanedContent).ToReadOnlyList();
-
-            var values = new List<ReadOnlyList<string>>();
-
-            foreach (HtmlRow htmlRow in table.Rows.Skip(2))
-            {
-                Validate.Condition(
-                    headers.Count == htmlRow.Cells.Count,
-                    "Row {0} contain less values ({1}) than header row ({2}).", htmlRow, htmlRow.Cells.Count, headers.Count);
-
-                Validate.Condition(
-                    htmlRow.Cells.All(c => !c.IsBold),
-                    "Some of cells of row '{0}' are bold. All rows except first two should have non-bold entry, because bold type means metadata, non-bold type means test value", htmlRow);
-
-                values.Add(htmlRow.Cells.Select(c => c.CleanedContent).ToReadOnlyList());
-            }
-
-            return new CollectionArgumentedFunction(headers, values, header,functionToExecute);
+            
+            return new CollectionArgumentedFunction(headers, table.Rows.Skip(2), header, functionToExecute);
         }
 
         private static AbstractTestFunction ParseSimpleTestFunction(HtmlRow row, ReflectionLoader loader)

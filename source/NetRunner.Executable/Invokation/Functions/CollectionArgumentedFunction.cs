@@ -4,13 +4,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NetRunner.Executable.Common;
+using NetRunner.Executable.RawData;
 using NetRunner.ExternalLibrary;
 
 namespace NetRunner.Executable.Invokation.Functions
 {
     internal sealed class CollectionArgumentedFunction : AbstractTestFunction
     {
-        public CollectionArgumentedFunction(ReadOnlyList<string> columnNames, IEnumerable<ReadOnlyList<string>> rows, FunctionHeader function, TestFunctionReference functionToExecute)
+        public CollectionArgumentedFunction(ReadOnlyList<string> columnNames, IEnumerable<HtmlRow> rows, FunctionHeader function, TestFunctionReference functionToExecute)
         {
             Validate.ArgumentIsNotNull(function, "function");
             Validate.ArgumentIsNotNull(rows, "rows");
@@ -41,7 +42,7 @@ namespace NetRunner.Executable.Invokation.Functions
             private set;
         }
 
-        public ReadOnlyList<ReadOnlyList<string>> Rows
+        public ReadOnlyList<HtmlRow> Rows
         {
             get;
             private set;
@@ -85,30 +86,63 @@ namespace NetRunner.Executable.Invokation.Functions
 
             var orderedResult = result.Cast<object>().ToArray();
 
-            var missingLines = new List<ReadOnlyList<string>>();
-            var surplusLines = new List<ReadOnlyList<string>>();
-
             var allRight = true;
 
-            var convertExceptions = new List<ConversionException>();
-
             var tableChanges = new List<AbstractTableChange>();
+
+            bool isInputDataCorrect = CheckInputData(tableChanges);
 
             for (int rowIndex = 0; rowIndex < orderedResult.Length && rowIndex < Rows.Count; rowIndex++)
             {
                 var resultObject = orderedResult[rowIndex];
 
+                var currentRow = Rows[rowIndex];
+
                 for (int columnIndex = 0; columnIndex < ColumnNames.Count; columnIndex++)
                 {
                     try
                     {
-                        allRight &= CompareItems(resultObject, Rows[rowIndex][columnIndex], ColumnNames[rowIndex], loader, tableChanges);
+                        var expectedResult = currentRow.Cells[columnIndex].CleanedContent;
+
+                        var currentIsOk = CompareItems(resultObject, expectedResult, ColumnNames[rowIndex], loader, tableChanges);
+
+                        var cellChange = new ChangeCellCssClass(currentRow.RowReference, columnIndex, currentIsOk ? HtmlParser.PassCssClass : HtmlParser.FailCssClass);
+
+                        tableChanges.Add(cellChange);
+
+                        allRight &= currentIsOk;
                     }
                     catch (ConversionException ex)
                     {
-                        convertExceptions.Add(ex);
+                        tableChanges.Add(new ChangeCellCssClass(currentRow.RowReference, columnIndex, HtmlParser.ErrorCssClass));
+
+                        tableChanges.Add(new AddCellExpandableInfo(currentRow.RowReference, columnIndex, "Unable to parse cell", ex.ToString()));
+
+                        allRight = false;
                     }
                 }
+            }
+
+            for (int rowIndex = orderedResult.Length; rowIndex < Rows.Count; rowIndex++)
+            {
+                var currentRow = Rows[rowIndex];
+
+                var cells = currentRow.Cells.Select(c => c.CleanedContent + "<br/> missing").ToReadOnlyList();
+
+                tableChanges.Add(new AppendRowWithCells(HtmlParser.FailCssClass, cells));
+
+                allRight = false;
+            }
+
+            for (int rowIndex = Rows.Count; rowIndex < orderedResult.Length; rowIndex++)
+            {
+                var resultObject = orderedResult[rowIndex];
+
+                var cells = ColumnNames.Select(name => ReadProperty(name, resultObject, loader) + "<br/> <i>surplus</i>").ToReadOnlyList();
+
+                tableChanges.Add(new AppendRowWithCells(HtmlParser.FailCssClass, cells));
+
+                allRight = false;
             }
 
             var resultType = FunctionExecutionResult.FunctionRunResult.Success;
@@ -116,13 +150,36 @@ namespace NetRunner.Executable.Invokation.Functions
             if (!allRight)
                 resultType = FunctionExecutionResult.FunctionRunResult.Fail;
 
-            if (convertExceptions.Any())
+            return new FunctionExecutionResult(resultType, tableChanges);
+        }
+
+        private string ReadProperty(string propertyName, object resultObject, ReflectionLoader loader)
+        {
+            object resultValue;
+
+            if (!loader.TryReadPropery(resultObject, propertyName, out resultValue))
+                return string.Format("Unable to read property {0}", propertyName);
+
+            return resultValue.ToString();
+        }
+
+        private bool CheckInputData(List<AbstractTableChange> tableChanges)
+        {
+            //ToDo: fill table changes
+            bool allIsOk = true;
+
+            foreach (HtmlRow htmlRow in Rows)
             {
-                resultType = FunctionExecutionResult.FunctionRunResult.Exception;
-                tableChanges.Add(new AddExceptionLine(convertExceptions, Function.RowReference));
+                Validate.Condition(
+                    ColumnNames.Count == htmlRow.Cells.Count,
+                    "Row {0} contain less values ({1}) than header row ({2}).", htmlRow, htmlRow.Cells.Count, ColumnNames.Count);
+
+                Validate.Condition(
+                    htmlRow.Cells.All(c => !c.IsBold),
+                    "Some of cells of row '{0}' are bold. All rows except first two should have non-bold entry, because bold type means metadata, non-bold type means test value", htmlRow);
             }
 
-            return new FunctionExecutionResult(resultType, tableChanges);
+            return allIsOk;
         }
 
         private bool CompareItems(object resultObject, string expectedResult, string propertyName, ReflectionLoader loader, List<AbstractTableChange> cellChanges)

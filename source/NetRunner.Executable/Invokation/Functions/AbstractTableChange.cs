@@ -17,12 +17,31 @@ namespace NetRunner.Executable.Invokation.Functions
 
             var node = document.CreateElement(HtmlParser.TableRowNodeName);
 
+            AddClassAttribute(nodeClass, node);
+
             var cellContainer = document.CreateElement(HtmlParser.TableCellNodeName);
+
             cellContainer.Attributes.Add("colspan", "999");
+
+            AddExpandableDivToCell(header, text, cellContainer);
+
+            node.AppendChild(cellContainer);
+
+            var previousRow = previousRowReference.GetRow(table);
+
+            var previousRowIndex = table.ChildNodes.GetNodeIndex(previousRow);
+
+            table.ChildNodes.Insert(previousRowIndex + 1, node);
+        }
+
+        protected static void AddExpandableDivToCell(string header, string text, HtmlNode cellContainer)
+        {
+            //ToDo: check if such div has already existed
+
+            var document = cellContainer.OwnerDocument;
 
             var expandableDiv = document.CreateElement("div");
 
-            AddClassAttribute(nodeClass, node);
             AddClassAttribute("collapsible closed", expandableDiv);
 
             var titleNode = document.CreateElement("p");
@@ -35,14 +54,6 @@ namespace NetRunner.Executable.Invokation.Functions
             expandableDiv.AppendChild(textNode);
 
             cellContainer.AppendChild(expandableDiv);
-
-            node.AppendChild(cellContainer);
-
-            var previousRow = previousRowReference.GetRow(table);
-
-            var previousRowIndex = table.ChildNodes.GetNodeIndex(previousRow);
-
-            table.ChildNodes.Insert(previousRowIndex + 1, node);
         }
 
         private static void AddClassAttribute(string nodeClass, HtmlNode node)

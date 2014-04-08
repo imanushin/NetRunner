@@ -11,10 +11,10 @@ namespace NetRunner.Executable.Invokation.Functions
 {
     internal abstract class AbstractCellChange : AbstractTableChange
     {
-        private readonly int row;
+        private readonly HtmlRowReference row;
         private readonly int column;
 
-        protected AbstractCellChange(int row, int column)
+        protected AbstractCellChange(HtmlRowReference row, int column)
         {
             this.row = row;
             this.column = column;
@@ -22,13 +22,9 @@ namespace NetRunner.Executable.Invokation.Functions
 
         public override void PatchHtmlTable(HtmlNode node)
         {
-            var allRows = node.ChildNodes.Where(n => string.Equals(n.Name, HtmlParser.TableRowNodeName, StringComparison.OrdinalIgnoreCase)).ToReadOnlyList();
+            var rowNode = row.GetRow(node);
 
-            var rowNode = allRows.Skip(row).FirstOrDefault();
-
-            Validate.IsNotNull(rowNode, "Unable to find row with position {0}. Count of rows: {1}", row, allRows.Count);
-
-            var allColumns = node.ChildNodes.Where(n => string.Equals(n.Name, HtmlParser.TableCellNodeName, StringComparison.OrdinalIgnoreCase)).ToReadOnlyList();
+            var allColumns = rowNode.ChildNodes.Where(n => string.Equals(n.Name, HtmlParser.TableCellNodeName, StringComparison.OrdinalIgnoreCase)).ToReadOnlyList();
 
             var targetCell = allColumns.Skip(column).FirstOrDefault();
 
