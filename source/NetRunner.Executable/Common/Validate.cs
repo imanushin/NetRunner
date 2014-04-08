@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HtmlAgilityPack;
 using NetRunner.ExternalLibrary.Properties;
 
 namespace NetRunner.Executable.Common
@@ -59,6 +60,15 @@ namespace NetRunner.Executable.Common
         {
             ArgumentIsNotNull(argument, argumentName);
             ArgumentCondition(!string.IsNullOrWhiteSpace(argument), argumentName, "String argument {0} should not be empty", argumentName);
+        }
+
+        [StringFormatMethod("messageFormat")]
+        [ContractAnnotation("argument:null => halt")]
+        public static void ArgumentTagHasName(HtmlNode argument, string targetName, [InvokerParameterNameAttribute()] string argumentName)
+        {
+            ArgumentIsNotNull(argument, argumentName);
+            ArgumentStringIsMeanful(targetName, "targetName");
+            ArgumentCondition(string.Equals(argument.Name, targetName, StringComparison.OrdinalIgnoreCase), argumentName, "Tag '{0}' should have name '{1}'", argument.Name, targetName);
         }
 
         [StringFormatMethod("messageFormat")]

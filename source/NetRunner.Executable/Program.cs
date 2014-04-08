@@ -22,6 +22,8 @@ namespace NetRunner.Executable
                 Trace.Listeners.Add(new ConsoleTraceListener());
                 Trace.AutoFlush = true;
 
+                Debugger.Launch();
+
                 var settings = ParseArguments(args);
 
                 FitExecutable.Execute(settings);

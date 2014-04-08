@@ -36,12 +36,7 @@ namespace NetRunner.Executable.Invokation
 
         public static HtmlRowReference MarkRowAndGenerateReference(HtmlNode tableRow)
         {
-            Validate.ArgumentCondition(
-                string.Equals(tableRow.Name, HtmlParser.TableRowNodeName, StringComparison.OrdinalIgnoreCase),
-                "tableRow",
-                "Input html node should have tag '{0}' instead of '{1}'",
-                HtmlParser.TableRowNodeName,
-                tableRow.Name);
+            Validate.ArgumentTagHasName(tableRow, HtmlParser.TableRowNodeName, "tableRow");
 
             var attribute = tableRow.Attributes.AttributesWithName(globalAttributeIndexName).FirstOrDefault();
 
@@ -68,12 +63,7 @@ namespace NetRunner.Executable.Invokation
         [NotNull, Pure]
         public HtmlNode GetRow(HtmlNode table)
         {
-            Validate.ArgumentCondition(
-                string.Equals(table.Name, HtmlParser.TableNodeName, StringComparison.OrdinalIgnoreCase),
-                "table",
-                "Input node should be '{0}' instead of '{1}'",
-                HtmlParser.TableNodeName,
-                table.Name);
+            Validate.ArgumentTagHasName(table, HtmlParser.TableNodeName, "table");
 
             var stringIndex = RowGlobalIndex.ToString(CultureInfo.InvariantCulture);
 
