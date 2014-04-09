@@ -13,7 +13,6 @@ namespace NetRunner.Executable
         private const int host = 1;
         private const int port = 2;
         private const int socketToken = 3;
-        private const int done = 4;
 
         private static int Main(string[] args)
         {
@@ -42,10 +41,10 @@ namespace NetRunner.Executable
         {
             try
             {
-                string assemblies = args[0];
-                string hostValue = args[1];
-                int portValue = int.Parse(args[2]);
-                string socketTokenValue = args[3];
+                string assemblies = args[assemblylist];
+                string hostValue = args[host];
+                int portValue = int.Parse(args[port]);
+                string socketTokenValue = args[socketToken];
 
                 return new ApplicationSettings(assemblies, hostValue, portValue, socketTokenValue);
             }
