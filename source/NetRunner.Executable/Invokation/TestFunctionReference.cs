@@ -14,17 +14,17 @@ namespace NetRunner.Executable.Invokation
     {
         private readonly MethodInfo method;
 
-        public TestFunctionReference(MethodInfo method, BaseTestContainer testContainer)
+        public TestFunctionReference(MethodInfo method, FunctionContainer targetObject)
         {
             this.method = method;
-            TestContainer = testContainer;
+            TargetObject = targetObject;
 
             Name = method.Name;
             ArgumentTypes = method.GetParameters().ToReadOnlyList();
             ResultType = method.ReturnType;
         }
 
-        public BaseTestContainer TestContainer
+        public FunctionContainer TargetObject
         {
             get;
             private set;
@@ -60,18 +60,18 @@ namespace NetRunner.Executable.Invokation
         {
             yield return Name;
             yield return ArgumentTypes;
-            yield return TestContainer;
+            yield return TargetObject;
             yield return ResultType;
         }
 
         protected override string GetString()
         {
-            return string.Format("Method: {0}; target object type: {1}; Parameters: {2}; Result type: {3}", Name, TestContainer.GetType().Name, ArgumentTypes, ResultType);
+            return string.Format("Method: {0}; target object type: {1}; Parameters: {2}; Result type: {3}", Name, TargetObject.GetType().Name, ArgumentTypes, ResultType);
         }
 
         public object Invoke(object[] parameters)
         {
-            return method.Invoke(TestContainer, parameters);
+            return method.Invoke(TargetObject, parameters);
         }
     }
 }

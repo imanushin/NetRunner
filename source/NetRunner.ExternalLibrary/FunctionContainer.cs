@@ -5,7 +5,7 @@ using System.Text;
 
 namespace NetRunner.ExternalLibrary
 {
-    public abstract class BaseTableResult
+    public abstract class FunctionContainer
     {
     }
 }

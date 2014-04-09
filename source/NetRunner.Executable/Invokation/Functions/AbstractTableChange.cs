@@ -4,6 +4,7 @@ using System.Linq;
 using HtmlAgilityPack;
 using NetRunner.Executable.Common;
 using NetRunner.Executable.RawData;
+using NetRunner.ExternalLibrary.Properties;
 
 namespace NetRunner.Executable.Invokation.Functions
 {

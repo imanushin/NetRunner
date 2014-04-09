@@ -7,7 +7,7 @@ using NetRunner.ExternalLibrary.Properties;
 namespace NetRunner.ExternalLibrary
 {
     [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
-    public abstract class BaseTestContainer
+    public abstract class BaseTestContainer : FunctionContainer
     {
     }
 }

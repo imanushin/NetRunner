@@ -6,6 +6,7 @@ using System.Text;
 using NetRunner.Executable.Common;
 using NetRunner.Executable.RawData;
 using NetRunner.ExternalLibrary;
+using NetRunner.ExternalLibrary.Properties;
 
 namespace NetRunner.Executable.Invokation.Functions
 {
@@ -65,7 +66,7 @@ namespace NetRunner.Executable.Invokation.Functions
                 return InvokeCollection(loader);
             }
 
-            if (resultType.IsAssignableFrom(typeof(BaseTableResult)))
+            if (resultType.IsAssignableFrom(typeof(BaseTableArgument)))
             {
                 return InvokeTable(loader);
             }
@@ -75,12 +76,90 @@ namespace NetRunner.Executable.Invokation.Functions
 
         private FunctionExecutionResult InvokeTable(ReflectionLoader loader)
         {
-            throw new NotImplementedException();
+            var changes = new List<AbstractTableChange>();
+
+            bool exceptionsOccurred = false;
+            bool allIsOk = true;
+
+            var result = InvokeFunction(loader, FunctionReference, Function.Arguments);
+
+            var tableResult = result as BaseTableArgument;
+
+            var functionExecutionResult = CheckTableFunctionResult(result, tableResult, changes);
+
+            if (functionExecutionResult != null)
+                return functionExecutionResult;
+
+            foreach (var row in Rows)
+            {
+                var functionToExecute = loader.FindFunction(ColumnNames, tableResult);
+
+                if (functionToExecute == null)
+                {
+                    changes.Add(new ExecutionFailedMessage(
+                        row.RowReference,
+                        string.Format("Unable to find function with these parameters: {0}", ColumnNames),
+                        "Unable to find function"));
+
+                    changes.Add(new AddRowCssClass(row.RowReference, HtmlParser.FailCssClass));
+
+                    allIsOk = false;
+                }
+
+                var rowResult = InvokeFunction(loader, functionToExecute, row.Cells.Select(c => c.CleanedContent).ToReadOnlyList());
+
+                if (Equals(false, rowResult))
+                {
+                    changes.Add(new AddRowCssClass(row.RowReference, HtmlParser.ErrorCssClass));
+
+                    allIsOk = false;
+                }
+                else if (Equals(true, rowResult))
+                {
+                    changes.Add(new AddRowCssClass(row.RowReference, HtmlParser.PassCssClass));
+                }
+            }
+
+            var resultType = exceptionsOccurred
+                ? FunctionExecutionResult.FunctionRunResult.Exception
+                : (allIsOk
+                    ? FunctionExecutionResult.FunctionRunResult.Success
+                    : FunctionExecutionResult.FunctionRunResult.Fail);
+
+            return new FunctionExecutionResult(resultType, changes);
+        }
+
+        [CanBeNull]
+        private FunctionExecutionResult CheckTableFunctionResult(object result, BaseTableArgument tableResult, List<AbstractTableChange> changes)
+        {
+            if (tableResult == null)
+            {
+                if (ReferenceEquals(null, result))
+                {
+                    changes.Add(new ExecutionFailedMessage(
+                        Function.RowReference,
+                        string.Format("Unable to check table: function {0} return null", Function.FunctionName),
+                        "Unable to build table"));
+                }
+                else
+                {
+                    changes.Add(new ExecutionFailedMessage(
+                        Function.RowReference,
+                        string.Format("Unable to check table: function {0} return object {1} instead of {2}", Function.FunctionName, result.GetType(), typeof(BaseTableArgument)),
+                        "Unable to build table"));
+                }
+
+                changes.Add(new AddRowCssClass(Function.RowReference, HtmlParser.FailCssClass));
+
+                return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Fail, changes);
+            }
+
+            return null;
         }
 
         private FunctionExecutionResult InvokeCollection(ReflectionLoader loader)
         {
-            var result = (IEnumerable)InvokeFunction(loader, FunctionReference, Function);
+            var result = (IEnumerable)InvokeFunction(loader, FunctionReference, Function.Arguments);
 
             result = result ?? new object[0];
 
@@ -160,7 +239,7 @@ namespace NetRunner.Executable.Invokation.Functions
             if (!loader.TryReadPropery(resultObject, propertyName, out resultValue))
                 return string.Format("Unable to read property {0}", propertyName);
 
-            return resultValue.ToString();
+            return (resultValue ?? string.Empty).ToString();
         }
 
         private bool CheckInputData(List<AbstractTableChange> tableChanges)

@@ -16,7 +16,8 @@ namespace NetRunner.Executable.RawData
         internal const string PassCssClass = "pass";
         internal const string IgnoreCssClass = "ignore";
         internal const string ClassAttributeName = "class";
-        
+
+        internal const string BoldNodeName = "b";
         internal const string TableCellNodeName = "td";
         internal const string TableRowNodeName = "tr";
         internal const string TableNodeName = "table";

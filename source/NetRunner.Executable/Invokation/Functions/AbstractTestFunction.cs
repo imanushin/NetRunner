@@ -1,4 +1,5 @@
 ﻿using NetRunner.Executable.Common;
+using NetRunner.Executable.RawData;
 
 namespace NetRunner.Executable.Invokation.Functions
 {
@@ -6,14 +7,15 @@ namespace NetRunner.Executable.Invokation.Functions
     {
         public abstract FunctionExecutionResult Invoke(ReflectionLoader loader);
 
-        protected object InvokeFunction(ReflectionLoader loader, TestFunctionReference functionReference, FunctionHeader userData)
+        protected object InvokeFunction(ReflectionLoader loader, TestFunctionReference functionReference, ReadOnlyList<string> inputArguments
+            )
         {
             var expectedTypes = functionReference.ArgumentTypes;
             var actualTypes = new object[expectedTypes.Count];
 
             for (int i = 0; i < expectedTypes.Count; i++)
             {
-                actualTypes[i] = ParametersConverter.ConvertParameter(userData.Arguments[i], expectedTypes[i].ParameterType, loader);
+                actualTypes[i] = ParametersConverter.ConvertParameter(inputArguments[i], expectedTypes[i].ParameterType, loader);
             }
 
             return functionReference.Invoke(actualTypes);

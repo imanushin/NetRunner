@@ -49,6 +49,24 @@ namespace NetRunner.Executable.Invokation
         }
 
         [CanBeNull]
+        public TestFunctionReference FindFunction(ReadOnlyList<string> argumentNames, BaseTableArgument targetObject)
+        {
+            var targetType = targetObject.GetType();
+
+            var allMethods = targetType.GetMethods();
+
+            var methodCandidates =
+                allMethods.Where(m => m.GetParameters().Select(p => p.Name).SequenceEqual(argumentNames, null));
+
+            var firstCandidate = methodCandidates.FirstOrDefault();
+
+            if (firstCandidate == null)
+                return null;
+
+            return new TestFunctionReference(firstCandidate, targetObject);
+        }
+
+        [CanBeNull]
         public TestFunctionReference FindFunction(string name, int argumentCount)
         {
             return functions.FirstOrDefault(f => f.ArgumentTypes.Count == argumentCount && string.Equals(f.Name, name, StringComparison.OrdinalIgnoreCase));

@@ -38,7 +38,7 @@ namespace NetRunner.Executable.Invokation.Functions
         {
             try
             {
-                var result = InvokeFunction(loader, FunctionReference, Function);
+                var result = InvokeFunction(loader, FunctionReference, Function.Arguments);
 
                 if (Equals(false, result))
                 {

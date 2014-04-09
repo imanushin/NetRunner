@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HtmlAgilityPack;
+using NetRunner.Executable.RawData;
+using NetRunner.ExternalLibrary.Properties;
 
 namespace NetRunner.Executable.Common
 {
@@ -16,6 +19,30 @@ namespace NetRunner.Executable.Common
                 return list;
 
             return new ReadOnlyList<TValue>(items);
+        }
+
+        [NotNull]
+        public static HtmlNode FirstCell(this IEnumerable<HtmlNode> items)
+        {
+            Validate.CollectionArgumentHasElements(items, "items");
+
+            var result = items
+                .FirstOrDefault(item => string.Equals(item.Name, HtmlParser.TableCellNodeName, StringComparison.OrdinalIgnoreCase));
+
+            Validate.IsNotNull(result, "Current row does not contain any cell");
+
+            return result;
+        }
+
+        [CanBeNull]
+        public static HtmlNode FirstBoldCellOrNull(this IEnumerable<HtmlNode> items)
+        {
+            Validate.CollectionArgumentHasElements(items, "items");
+
+            return items
+                .Where(item => string.Equals(item.Name, HtmlParser.TableCellNodeName, StringComparison.OrdinalIgnoreCase))
+                .Where(item => item.HasChildNodes)
+                .FirstOrDefault(item => string.Equals(item.ChildNodes.First().Name, HtmlParser.BoldNodeName, StringComparison.OrdinalIgnoreCase));
         }
     }
 }

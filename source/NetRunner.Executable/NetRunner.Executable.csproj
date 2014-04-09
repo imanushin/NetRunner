@@ -66,6 +66,7 @@
     <Compile Include="Invokation\FunctionExecutionResult.cs" />
     <Compile Include="Invokation\FunctionHeader.cs" />
     <Compile Include="Invokation\Functions\AddRowCssClass.cs" />
+    <Compile Include="Invokation\Functions\ExecutionFailedMessage.cs" />
     <Compile Include="Invokation\HtmlRowReference.cs" />
     <Compile Include="Invokation\ParametersConverter.cs" />
     <Compile Include="Invokation\ReflectionLoader.cs" />

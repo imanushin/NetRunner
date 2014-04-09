@@ -49,5 +49,10 @@ namespace FitSample
                 Extension = Path.GetExtension(f)
             });
         }
+
+        public CreateFolderArgument OrganizeDirectory(string baseDirectoryPath)
+        {
+            return new CreateFolderArgument(baseDirectoryPath);
+        }
     }
 }
