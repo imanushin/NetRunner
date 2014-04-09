@@ -4,10 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NetRunner.ExternalLibrary;
 
 namespace FitSample
 {
-    internal sealed class CreateFolderArgument
+    internal sealed class CreateFolderArgument : BaseTableArgument
     {
         private readonly string baseDirectoryPath;
 
@@ -21,18 +22,5 @@ namespace FitSample
             Directory.CreateDirectory(Path.Combine(baseDirectoryPath, folderName));
         }
 
-        public bool RemoveFolder(string folderName)
-        {
-            var targetFolder = Path.Combine(baseDirectoryPath, folderName);
-
-            if (Directory.Exists(targetFolder))
-            {
-                Directory.Delete(targetFolder);
-
-                return true;
-            }
-
-            return false;
-        }
     }
 }

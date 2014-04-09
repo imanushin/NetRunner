@@ -21,8 +21,15 @@ namespace NetRunner.Executable.Common
             return new ReadOnlyList<TValue>(items);
         }
 
+        public static IEnumerable<TValue> SkipNulls<TValue>(this IEnumerable<TValue> items)
+        {
+            Validate.ArgumentIsNotNull(items, "items");
+
+            return items.Where(item => !ReferenceEquals(null, item));
+        }
+
         [NotNull]
-        public static HtmlNode FirstCell(this IEnumerable<HtmlNode> items)
+        public static HtmlNode FirstCell(this ICollection<HtmlNode> items)
         {
             Validate.CollectionArgumentHasElements(items, "items");
 

@@ -52,7 +52,7 @@ namespace NetRunner.Executable.Invokation
         {
             get
             {
-                return method.ReturnType.IsAssignableFrom(typeof(IEnumerable));
+                return method.ReturnType.IsAssignableFrom(typeof(IEnumerable)) || method.ReturnType.IsAssignableFrom(typeof(BaseTableArgument));
             }
         }
 

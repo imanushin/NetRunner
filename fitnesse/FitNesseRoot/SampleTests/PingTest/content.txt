@@ -25,3 +25,34 @@
 | '''ping site''' | ''!-https://google.com-!'' |
 | '''ping site''' | ''https://google.com123123'' |
 | '''ping site''' | ''https://google.com2354235245'' | '''without exceptions''' |
+
+!note proper execution
+| '''create subfolders in ''' | ''./'' |
+| '''folder name''' |
+| test 1 |
+| test 2 |
+
+!note proper execution
+| '''remove subfolders from ''' | ''./'' |
+| '''folder name''' |
+| test 1 |
+| test 2 |
+
+!note fail during result creation
+| '''create subfolders in ''' | ''::'' |
+| '''folder name''' |
+| 123 |
+
+!note fail during row processing
+| '''create subfolders in ''' | ''./'' |
+| '''folder name''' |
+| 123 |
+| :: |
+| 321 |
+
+!note fail during row processing
+| '''remove subfolders from''' | ''./'' |
+| '''folder name''' |
+| 123 |
+| :: |
+| 321 |

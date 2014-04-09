@@ -13,7 +13,7 @@ namespace NetRunner.Executable.Invokation
         {
             RowReference = rowReference;
             Validate.ArgumentStringIsMeanful(functionName, "functionName");
-            Validate.CollectionArgumentHasElements(arguments, "arguments");
+            Validate.ArgumentIsNotNull(arguments, "arguments");
 
             FunctionName = functionName.Replace(" ", string.Empty);
             Arguments = arguments.ToReadOnlyList();

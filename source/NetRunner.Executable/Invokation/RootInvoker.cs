@@ -15,10 +15,12 @@ namespace NetRunner.Executable.Invokation
     {
         public static string InvokeTable(HtmlTable table, TestCounts currentStatistic, ReflectionLoader loader)
         {
+            var changes = new List<AbstractTableChange>();
+
             FunctionExecutionResult result;
             try
             {
-                var functionToInvoke = TableParser.ParseTable(table, loader);
+                var functionToInvoke = TableParser.ParseTable(table, loader, changes);
 
                 Trace.TraceInformation("Execute function {0}", functionToInvoke);
 
@@ -32,8 +34,6 @@ namespace NetRunner.Executable.Invokation
 
                 var firstRow = table.Rows.FirstOrDefault();
 
-                var changes = new List<AbstractTableChange>();
-
                 if (firstRow != null)
                 {
                     changes.Add(new AddExceptionLine("Internal execution error: ", ex, firstRow.RowReference));
@@ -42,10 +42,10 @@ namespace NetRunner.Executable.Invokation
                 result = new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Exception, changes);
             }
 
-            return FormatResult(table, result, currentStatistic);
+            return FormatResult(table, result, currentStatistic, changes);
         }
 
-        private static string FormatResult(HtmlTable table, FunctionExecutionResult result, TestCounts currentStatistic)
+        private static string FormatResult(HtmlTable table, FunctionExecutionResult result, TestCounts currentStatistic, IReadOnlyCollection<AbstractTableChange> tableParseInformation)
         {
             switch (result.ResultType)
             {
@@ -65,7 +65,7 @@ namespace NetRunner.Executable.Invokation
                     throw new InvalidOperationException(string.Format("Unknown result: {0}", result));
             }
 
-            var tableChanges = result.TableChanges.ToList();
+            var tableChanges = result.TableChanges.Concat(tableParseInformation).ToList();
 
             var traceData = TestExecutionLog.ExtractLogged();
 

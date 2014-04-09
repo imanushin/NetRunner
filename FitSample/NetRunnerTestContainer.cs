@@ -50,9 +50,14 @@ namespace FitSample
             });
         }
 
-        public CreateFolderArgument OrganizeDirectory(string baseDirectoryPath)
+        public CreateFolderArgument CreateSubfoldersIn(string baseDirectoryPath)
         {
             return new CreateFolderArgument(baseDirectoryPath);
+        }
+
+        public RemoveFolderArgument RemoveSubfoldersFrom(string baseDirectoryPath)
+        {
+            return new RemoveFolderArgument(baseDirectoryPath);
         }
     }
 }

@@ -12,7 +12,7 @@ namespace NetRunner.Executable.Invokation
 {
     internal static class TableParser
     {
-        public static AbstractTestFunction ParseTable(HtmlTable table, ReflectionLoader loader)
+        public static AbstractTestFunction ParseTable(HtmlTable table, ReflectionLoader loader, List<AbstractTableChange> tableParseInformation)
         {
             Validate.CollectionArgumentHasElements(table.Rows, "table");
 
@@ -32,7 +32,20 @@ namespace NetRunner.Executable.Invokation
 
             if (!functionToExecute.HasStrongResult)
             {
-                var parsedRows = table.Rows.Select(row => ParseSimpleTestFunction(row, loader)).ToReadOnlyList();
+                var parsedRows = table.Rows.Select(row =>
+                {
+                    try
+                    {
+                        return ParseSimpleTestFunction(row, loader);
+                    }
+                    catch (Exception ex)
+                    {
+                        tableParseInformation.Add(new AddExceptionLine("Unable to parse row", ex, row.RowReference));
+                    }
+
+                    return null;
+
+                }).SkipNulls().ToReadOnlyList();
 
                 return new TestFunctionsSequence(parsedRows);
             }
@@ -53,7 +66,7 @@ namespace NetRunner.Executable.Invokation
                 header.FunctionName);
 
             var headers = table.Rows.Second().Cells.Select(c => c.CleanedContent).ToReadOnlyList();
-            
+
             return new CollectionArgumentedFunction(headers, table.Rows.Skip(2), header, functionToExecute);
         }
 
