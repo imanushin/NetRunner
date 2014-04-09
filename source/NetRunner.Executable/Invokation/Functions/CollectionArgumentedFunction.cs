@@ -20,9 +20,9 @@ namespace NetRunner.Executable.Invokation.Functions
             Validate.CollectionArgumentHasElements(columnNames, "columnNames");
 
             Function = function;
-            ColumnNames = columnNames;
             Rows = rows.ToReadOnlyList();
             FunctionReference = functionToExecute;
+            CleanedColumnNames = columnNames.Select(c => c.Replace(" ", string.Empty)).ToReadOnlyList();
         }
 
         public TestFunctionReference FunctionReference
@@ -37,7 +37,7 @@ namespace NetRunner.Executable.Invokation.Functions
             private set;
         }
 
-        public ReadOnlyList<string> ColumnNames
+        public ReadOnlyList<string> CleanedColumnNames
         {
             get;
             private set;
@@ -52,7 +52,7 @@ namespace NetRunner.Executable.Invokation.Functions
         protected override IEnumerable<object> GetInnerObjects()
         {
             yield return Function;
-            yield return ColumnNames;
+            yield return CleanedColumnNames;
             yield return Rows;
             yield return FunctionReference;
         }
@@ -61,17 +61,17 @@ namespace NetRunner.Executable.Invokation.Functions
         {
             var resultType = FunctionReference.ResultType;
 
-            if (resultType.IsAssignableFrom(typeof(IEnumerable)))
+            if (typeof(IEnumerable).IsAssignableFrom(resultType))
             {
                 return InvokeCollection(loader);
             }
 
-            if (resultType.IsAssignableFrom(typeof(BaseTableArgument)))
+            if (typeof(BaseTableArgument).IsAssignableFrom(resultType))
             {
                 return InvokeTable(loader);
             }
 
-            throw new InvalidOperationException("Result type {0} does not supported");
+            throw new InvalidOperationException(string.Format("Result type {0} does not supported", resultType));
         }
 
         private FunctionExecutionResult InvokeTable(ReflectionLoader loader)
@@ -92,18 +92,20 @@ namespace NetRunner.Executable.Invokation.Functions
 
             foreach (var row in Rows)
             {
-                var functionToExecute = loader.FindFunction(ColumnNames, tableResult);
+                var functionToExecute = loader.FindFunction(CleanedColumnNames, tableResult);
 
                 if (functionToExecute == null)
                 {
                     changes.Add(new ExecutionFailedMessage(
                         row.RowReference,
-                        string.Format("Unable to find function with these parameters: {0}", ColumnNames),
+                        string.Format("Unable to find function with these parameters: {0}", CleanedColumnNames),
                         "Unable to find function"));
 
                     changes.Add(new AddRowCssClass(row.RowReference, HtmlParser.FailCssClass));
 
                     allIsOk = false;
+
+                    continue;
                 }
 
                 var rowResult = InvokeFunction(loader, functionToExecute, row.Cells.Select(c => c.CleanedContent).ToReadOnlyList());
@@ -177,13 +179,13 @@ namespace NetRunner.Executable.Invokation.Functions
 
                 var currentRow = Rows[rowIndex];
 
-                for (int columnIndex = 0; columnIndex < ColumnNames.Count; columnIndex++)
+                for (int columnIndex = 0; columnIndex < CleanedColumnNames.Count; columnIndex++)
                 {
                     try
                     {
                         var expectedResult = currentRow.Cells[columnIndex].CleanedContent;
 
-                        var currentIsOk = CompareItems(resultObject, expectedResult, ColumnNames[rowIndex], loader, tableChanges);
+                        var currentIsOk = CompareItems(resultObject, expectedResult, CleanedColumnNames[rowIndex], loader, tableChanges);
 
                         var cellChange = new ChangeCellCssClass(currentRow.RowReference, columnIndex, currentIsOk ? HtmlParser.PassCssClass : HtmlParser.FailCssClass);
 
@@ -217,7 +219,7 @@ namespace NetRunner.Executable.Invokation.Functions
             {
                 var resultObject = orderedResult[rowIndex];
 
-                var cells = ColumnNames.Select(name => ReadProperty(name, resultObject, loader) + "<br/> <i>surplus</i>").ToReadOnlyList();
+                var cells = CleanedColumnNames.Select(name => ReadProperty(name, resultObject, loader) + "<br/> <i>surplus</i>").ToReadOnlyList();
 
                 tableChanges.Add(new AppendRowWithCells(HtmlParser.FailCssClass, cells));
 
@@ -250,8 +252,8 @@ namespace NetRunner.Executable.Invokation.Functions
             foreach (HtmlRow htmlRow in Rows)
             {
                 Validate.Condition(
-                    ColumnNames.Count == htmlRow.Cells.Count,
-                    "Row {0} contain less values ({1}) than header row ({2}).", htmlRow, htmlRow.Cells.Count, ColumnNames.Count);
+                    CleanedColumnNames.Count == htmlRow.Cells.Count,
+                    "Row {0} contain less values ({1}) than header row ({2}).", htmlRow, htmlRow.Cells.Count, CleanedColumnNames.Count);
 
                 Validate.Condition(
                     htmlRow.Cells.All(c => !c.IsBold),

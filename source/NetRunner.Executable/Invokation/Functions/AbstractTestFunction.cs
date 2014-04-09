@@ -10,6 +10,10 @@ namespace NetRunner.Executable.Invokation.Functions
         protected object InvokeFunction(ReflectionLoader loader, TestFunctionReference functionReference, ReadOnlyList<string> inputArguments
             )
         {
+            Validate.ArgumentIsNotNull(loader, "loader");
+            Validate.ArgumentIsNotNull(functionReference, "functionReference");
+            Validate.ArgumentIsNotNull(inputArguments, "inputArguments");
+
             var expectedTypes = functionReference.ArgumentTypes;
             var actualTypes = new object[expectedTypes.Count];
 

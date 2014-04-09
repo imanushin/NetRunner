@@ -39,7 +39,7 @@ namespace NetRunner.Executable.Invokation
                     changes.Add(new AddExceptionLine("Internal execution error: ", ex, firstRow.RowReference));
                 }
 
-                result = new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Exception, changes);
+                result = new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Exception, ReadOnlyList<AbstractTableChange>.Empty);
             }
 
             return FormatResult(table, result, currentStatistic, changes);

@@ -56,7 +56,7 @@ namespace NetRunner.Executable.Invokation
             var allMethods = targetType.GetMethods();
 
             var methodCandidates =
-                allMethods.Where(m => m.GetParameters().Select(p => p.Name).SequenceEqual(argumentNames, null));
+                allMethods.Where(m => m.GetParameters().Select(p => p.Name).SequenceEqual(argumentNames, StringComparer.OrdinalIgnoreCase));
 
             var firstCandidate = methodCandidates.FirstOrDefault();
 

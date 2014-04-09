@@ -52,7 +52,8 @@ namespace NetRunner.Executable.Invokation
         {
             get
             {
-                return method.ReturnType.IsAssignableFrom(typeof(IEnumerable)) || method.ReturnType.IsAssignableFrom(typeof(BaseTableArgument));
+                return typeof(IEnumerable).IsAssignableFrom(method.ReturnType)
+                    || typeof(BaseTableArgument).IsAssignableFrom(method.ReturnType);
             }
         }
 
