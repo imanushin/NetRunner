@@ -15,6 +15,8 @@ namespace FitSample
         public CreateFolderArgument(string baseDirectoryPath)
         {
             this.baseDirectoryPath = baseDirectoryPath;
+
+            Directory.Exists(baseDirectoryPath);
         }
 
         public void CreateFolder(string folderName)

@@ -1,4 +1,5 @@
-﻿using NetRunner.Executable.Common;
+﻿using System;
+using NetRunner.Executable.Common;
 using NetRunner.Executable.RawData;
 
 namespace NetRunner.Executable.Invokation.Functions
@@ -7,8 +8,11 @@ namespace NetRunner.Executable.Invokation.Functions
     {
         public abstract FunctionExecutionResult Invoke(ReflectionLoader loader);
 
-        protected object InvokeFunction(ReflectionLoader loader, TestFunctionReference functionReference, ReadOnlyList<string> inputArguments
-            )
+        protected object InvokeFunction(
+            ReflectionLoader loader,
+            TestFunctionReference functionReference,
+            ReadOnlyList<string> inputArguments,
+            out Exception executionException)
         {
             Validate.ArgumentIsNotNull(loader, "loader");
             Validate.ArgumentIsNotNull(functionReference, "functionReference");
@@ -22,7 +26,18 @@ namespace NetRunner.Executable.Invokation.Functions
                 actualTypes[i] = ParametersConverter.ConvertParameter(inputArguments[i], expectedTypes[i].ParameterType, loader);
             }
 
-            return functionReference.Invoke(actualTypes);
+            executionException = null;
+
+            try
+            {
+                return functionReference.Invoke(actualTypes);
+            }
+            catch (Exception ex)
+            {
+                executionException = ex;
+
+                return null;
+            }
         }
     }
 }

@@ -38,7 +38,16 @@ namespace NetRunner.Executable.Invokation.Functions
         {
             try
             {
-                var result = InvokeFunction(loader, FunctionReference, Function.Arguments);
+                Exception executionException;
+                var result = InvokeFunction(loader, FunctionReference, Function.Arguments, out executionException);
+
+                if (executionException != null)
+                {
+                    var errorChange = new AddExceptionLine("Function execution failed with error", executionException, Function.RowReference);
+
+                    return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Exception, new[] { errorChange });
+                }
+
 
                 if (Equals(false, result))
                 {
