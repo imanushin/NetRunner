@@ -309,14 +309,14 @@ namespace NetRunner.Executable.Invokation.Functions
                 return false;
             }
 
-            if (ReferenceEquals(null, resultObject))
+            if (ReferenceEquals(null, resultValue))
             {
                 return string.IsNullOrEmpty(expectedResult);
             }
 
             var expectedObject = ParametersConverter.ConvertParameter(expectedResult, propertyType, loader);
 
-            return resultObject.Equals(expectedObject);
+            return resultValue.Equals(expectedObject);
         }
     }
 }
