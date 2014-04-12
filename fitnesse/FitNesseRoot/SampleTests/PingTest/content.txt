@@ -8,10 +8,6 @@
 
 |!-FitSample.SampleFixture-!|
 
-| '''ping site''' | ''https://google.com'' |
-
-| '''ping site''' | ''https://google.com2354235245'' | '''without exceptions''' |
-
 | '''list files in''' | ''.\'' |
 | '''Name''' |'''Extension'''|
 

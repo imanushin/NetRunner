@@ -10,10 +10,13 @@ namespace NetRunner.Executable.RawData
 {
     internal sealed class FitnesseHtmlDocument : BaseReadOnlyObject
     {
-        public FitnesseHtmlDocument(string textBeforeFirstTable, ReadOnlyList<HtmlTable> tables)
+        public FitnesseHtmlDocument(string textBeforeFirstTable, IEnumerable<HtmlTable> tables)
         {
+            Validate.ArgumentIsNotNull(tables, "tables");
+            Validate.ArgumentIsNotNull(textBeforeFirstTable, "textBeforeFirstTable");
+
             TextBeforeFirstTable = textBeforeFirstTable;
-            Tables = tables;
+            Tables = tables.ToReadOnlyList();
         }
 
         public string TextBeforeFirstTable

@@ -28,28 +28,55 @@ namespace NetRunner.Executable.RawData
 
             document.LoadHtml(htmlDocument);
 
-            var allChildNodes = document.DocumentNode.ChildNodes.ToArray();
+            var allTables = FindAllTables(document.DocumentNode).ToReadOnlyList();
 
-            var tables = allChildNodes.Where(IsTableNode).ToArray();
+            if (!allTables.Any())
+            {
+                return new FitnesseHtmlDocument(htmlDocument, ReadOnlyList<HtmlTable>.Empty);
+            }
 
-            var parsedTables = tables
-                .Select(t => (
-                ParseTable(t,
-                    String.Join(Environment.NewLine,
-                        allChildNodes
-                        .SkipWhile(n => n != t)
-                        .Skip(1)
-                        .TakeWhile(n => !IsTableNode(n))
-                        .Select(n => n.OuterHtml)))))
-                .ToReadOnlyList();
+            var parsedTables = new List<HtmlTable>();
 
-            var firstTable = tables.First();
+            for (int tableIndex = 0; tableIndex < allTables.Count; tableIndex++)
+            {
+                var table = allTables[tableIndex];
 
-            var nodesBeforeFirst = allChildNodes.TakeWhile(n => n != firstTable).ToArray();
+                int tableEndPosition = table.NextSibling.StreamPosition;
+                int nextTableStart = (tableIndex + 1 == allTables.Count) ? htmlDocument.Length - 1 : allTables[tableIndex + 1].StreamPosition;
 
-            var textBeforeFirst = String.Join(Environment.NewLine, nodesBeforeFirst.Select(n => n.OuterHtml));
+                var textBetweenTables = htmlDocument.Substring(tableEndPosition, nextTableStart - tableEndPosition);
+
+                var parsedTable = ParseTable(table, textBetweenTables);
+
+                parsedTables.Add(parsedTable);
+            }
+
+            var firstTable = allTables.FirstOrDefault();
+
+            Validate.IsNotNull(firstTable, "Test should have at least one table for execution");
+
+            var textBeforeFirst = htmlDocument.Substring(0, firstTable.StreamPosition);
 
             return new FitnesseHtmlDocument(textBeforeFirst, parsedTables);
+        }
+
+        private static IEnumerable<HtmlNode> FindAllTables(HtmlNode currentNode)
+        {
+            var tablesFound = new List<HtmlNode>();
+
+            foreach (HtmlNode childNode in currentNode.ChildNodes)
+            {
+                if (string.Equals(childNode.Name, TableNodeName, StringComparison.OrdinalIgnoreCase))
+                {
+                    tablesFound.Add(childNode);
+
+                    continue;
+                }
+
+                tablesFound.AddRange(FindAllTables(childNode));
+            }
+
+            return tablesFound;
         }
 
         private static bool IsTableNode(HtmlNode cn)

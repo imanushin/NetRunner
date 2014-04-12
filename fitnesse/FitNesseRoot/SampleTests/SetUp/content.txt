@@ -1,0 +1,6 @@
+!define right_web_page {google.com}
+!define wrong_web_page {google.com}
+
+| '''ping site''' | ''${right_web_page}'' |
+
+| '''ping site''' | ''${wrong_web_page}'' | '''without exceptions''' |
