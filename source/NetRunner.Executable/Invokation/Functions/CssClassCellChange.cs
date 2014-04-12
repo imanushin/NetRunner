@@ -8,11 +8,11 @@ using NetRunner.Executable.RawData;
 
 namespace NetRunner.Executable.Invokation.Functions
 {
-    internal sealed class ChangeCellCssClass : AbstractCellChange
+    internal class CssClassCellChange : AbstractCellChange
     {
         private readonly string newClass;
 
-        public ChangeCellCssClass(HtmlRowReference row, int column, string newClass)
+        public CssClassCellChange(HtmlRowReference row, int column, string newClass)
             : base(row, column)
         {
             this.newClass = newClass;

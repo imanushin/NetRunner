@@ -202,7 +202,7 @@ namespace NetRunner.Executable.Invokation.Functions
 
             var tableChanges = new List<AbstractTableChange>();
 
-            bool isInputDataCorrect = CheckInputData();
+            CheckInputData();
 
             for (int rowIndex = 0; rowIndex < orderedResult.Length && rowIndex < Rows.Count; rowIndex++)
             {
@@ -216,9 +216,15 @@ namespace NetRunner.Executable.Invokation.Functions
                     {
                         var expectedResult = currentRow.Cells[columnIndex].CleanedContent;
 
-                        var currentIsOk = CompareItems(resultObject, expectedResult, CleanedColumnNames[rowIndex], loader);
+                        object actualValue;
 
-                        var cellChange = new ChangeCellCssClass(currentRow.RowReference, columnIndex, currentIsOk ? HtmlParser.PassCssClass : HtmlParser.FailCssClass);
+                        var currentIsOk = CompareItems(resultObject, expectedResult, CleanedColumnNames[columnIndex], loader, out actualValue);
+
+
+
+                        var cellChange = currentIsOk
+                            ? new CssClassCellChange(currentRow.RowReference, columnIndex, HtmlParser.PassCssClass)
+                            : new ShowActualValueCellChange(currentRow.RowReference, columnIndex, actualValue);
 
                         tableChanges.Add(cellChange);
 
@@ -226,7 +232,7 @@ namespace NetRunner.Executable.Invokation.Functions
                     }
                     catch (ConversionException ex)
                     {
-                        tableChanges.Add(new ChangeCellCssClass(currentRow.RowReference, columnIndex, HtmlParser.ErrorCssClass));
+                        tableChanges.Add(new CssClassCellChange(currentRow.RowReference, columnIndex, HtmlParser.ErrorCssClass));
 
                         tableChanges.Add(new AddCellExpandableInfo(currentRow.RowReference, columnIndex, "Unable to parse cell", ex.ToString()));
 
@@ -294,16 +300,19 @@ namespace NetRunner.Executable.Invokation.Functions
             return true;
         }
 
-        private bool CompareItems(object resultObject, string expectedResult, string propertyName, ReflectionLoader loader)
+        private bool CompareItems(object resultObject, string expectedResult, string propertyName, ReflectionLoader loader, out object resultValue)
         {
-            object resultValue;
             Type propertyType;
 
             if (!loader.TryReadPropery(resultObject, propertyName, out propertyType, out resultValue))
+            {
                 return false;
+            }
 
             if (ReferenceEquals(null, resultObject))
+            {
                 return string.IsNullOrEmpty(expectedResult);
+            }
 
             var expectedObject = ParametersConverter.ConvertParameter(expectedResult, propertyType, loader);
 
