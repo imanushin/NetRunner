@@ -17,6 +17,7 @@ namespace NetRunner.Executable.RawData
         internal const string IgnoreCssClass = "ignore";
         internal const string ClassAttributeName = "class";
 
+        internal const string LineBreak = "<br/>";
         internal const string BoldNodeName = "b";
         internal const string TableCellNodeName = "td";
         internal const string TableRowNodeName = "tr";
@@ -66,7 +67,7 @@ namespace NetRunner.Executable.RawData
 
             foreach (HtmlNode childNode in currentNode.ChildNodes)
             {
-                if (string.Equals(childNode.Name, TableNodeName, StringComparison.OrdinalIgnoreCase))
+                if (String.Equals(childNode.Name, TableNodeName, StringComparison.OrdinalIgnoreCase))
                 {
                     tablesFound.Add(childNode);
 
@@ -100,5 +101,6 @@ namespace NetRunner.Executable.RawData
 
             return new HtmlRow(allCells.Select(cell => new HtmlCell(cell)), HtmlRowReference.MarkRowAndGenerateReference(rowNode));
         }
+
     }
 }

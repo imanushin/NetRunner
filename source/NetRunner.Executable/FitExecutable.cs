@@ -19,7 +19,7 @@ namespace NetRunner.Executable
             }
         }
 
-        public static void ProcessTestDocuments(FitnesseCommunicator communicator, string assemblylist)
+        private static void ProcessTestDocuments(FitnesseCommunicator communicator, string assemblylist)
         {
             var loader = new ReflectionLoader(assemblylist.Split(new[]
             {
@@ -44,6 +44,8 @@ namespace NetRunner.Executable
 
                         communicator.SendDocument(result + table.TextAfterTable);
                     }
+
+                    communicator.SendDocument(HtmlParser.LineBreak);
 
                     communicator.SendCounts(counts);
                 }
