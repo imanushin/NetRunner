@@ -15,6 +15,10 @@ namespace FitSample
     {
         public bool PingSite(string url)
         {
+            if (url == "http://error.com")
+            {
+                throw new Exception("Error");
+            }
             var request = WebRequest.CreateHttp(url);
 
             using (var responce = request.GetResponse())

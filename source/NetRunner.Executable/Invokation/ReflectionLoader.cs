@@ -207,7 +207,7 @@ namespace NetRunner.Executable.Invokation
             return loadedAssemblies;
         }
 
-        public bool TryReadPropery(object targetObject, string propertyName, [CanBeNull] out object resultValue)
+        public bool TryReadPropery(object targetObject, string propertyName, [CanBeNull]  out Type propertyType, [CanBeNull] out object resultValue)
         {
             var targetType = targetObject.GetType();
 
@@ -217,10 +217,12 @@ namespace NetRunner.Executable.Invokation
             {
                 Trace.TraceError("Unable to find property with name {0} for type {1} ({2})", propertyName, targetType, targetObject);
                 resultValue = null;
+                propertyType = null;
                 return false;
             }
 
             resultValue = property.GetValue(targetObject);
+            propertyType = property.PropertyType;
 
             return true;
         }

@@ -1,15 +1,19 @@
 !contents -R2 -g -p -f -h
 
-!path C:\git\fitsharp\FitSample\bin\Debug\FitSample.dll
-#!define COMMAND_PATTERN {%m -v -r fit.Runner.FitServer,C:\git\fitsharp\FitSample\bin\Debug\fit.dll %p}
-#!define TEST_RUNNER {C:\git\fitsharp\source\Runner\bin\Debug\Runner.exe}
+!path f:\Projects\fitsharp\FitSample\bin\Debug\FitSample.dll
+#!define COMMAND_PATTERN {%m -v -r fit.Runner.FitServer,f:\Projects\fitsharp\FitSample\bin\Debug\fit.dll %p}
+#!define TEST_RUNNER {f:\Projects\fitsharp\source\Runner\bin\Debug\Runner.exe}
 !define COMMAND_PATTERN {%m %p}
-!define TEST_RUNNER {C:\git\fitsharp\source\NetRunner.Executable\bin\Debug\NetRunner.Executable.exe}
+!define TEST_RUNNER {f:\Projects\fitsharp\source\NetRunner.Executable\bin\Debug\NetRunner.Executable.exe}
 
 |!-FitSample.SampleFixture-!|
 
+
 | '''list files in''' | ''.\'' |
 | '''Name''' |'''Extension'''|
+|Test|.tst|
+|run|.bat|
+
 
 
 | '''ping site''' | ''https://google.com123'' |

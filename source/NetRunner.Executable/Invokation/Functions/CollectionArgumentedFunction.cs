@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using NetRunner.Executable.Common;
@@ -182,6 +183,7 @@ namespace NetRunner.Executable.Invokation.Functions
 
         private FunctionExecutionResult InvokeCollection(ReflectionLoader loader)
         {
+            Debugger.Launch();
             Exception executionException;
             var result = (IEnumerable)InvokeFunction(loader, FunctionReference, Function.Arguments, out executionException);
 
@@ -200,7 +202,7 @@ namespace NetRunner.Executable.Invokation.Functions
 
             var tableChanges = new List<AbstractTableChange>();
 
-            bool isInputDataCorrect = CheckInputData(tableChanges);
+            bool isInputDataCorrect = CheckInputData();
 
             for (int rowIndex = 0; rowIndex < orderedResult.Length && rowIndex < Rows.Count; rowIndex++)
             {
@@ -214,7 +216,7 @@ namespace NetRunner.Executable.Invokation.Functions
                     {
                         var expectedResult = currentRow.Cells[columnIndex].CleanedContent;
 
-                        var currentIsOk = CompareItems(resultObject, expectedResult, CleanedColumnNames[rowIndex], loader, tableChanges);
+                        var currentIsOk = CompareItems(resultObject, expectedResult, CleanedColumnNames[rowIndex], loader);
 
                         var cellChange = new ChangeCellCssClass(currentRow.RowReference, columnIndex, currentIsOk ? HtmlParser.PassCssClass : HtmlParser.FailCssClass);
 
@@ -266,17 +268,17 @@ namespace NetRunner.Executable.Invokation.Functions
         private string ReadProperty(string propertyName, object resultObject, ReflectionLoader loader)
         {
             object resultValue;
+            Type propertyType;
 
-            if (!loader.TryReadPropery(resultObject, propertyName, out resultValue))
+            if (!loader.TryReadPropery(resultObject, propertyName, out propertyType, out resultValue))
                 return string.Format("Unable to read property {0}", propertyName);
 
             return (resultValue ?? string.Empty).ToString();
         }
 
-        private bool CheckInputData(List<AbstractTableChange> tableChanges)
+        private bool CheckInputData()
         {
             //ToDo: fill table changes
-            bool allIsOk = true;
 
             foreach (HtmlRow htmlRow in Rows)
             {
@@ -289,20 +291,21 @@ namespace NetRunner.Executable.Invokation.Functions
                     "Some of cells of row '{0}' are bold. All rows except first two should have non-bold entry, because bold type means metadata, non-bold type means test value", htmlRow);
             }
 
-            return allIsOk;
+            return true;
         }
 
-        private bool CompareItems(object resultObject, string expectedResult, string propertyName, ReflectionLoader loader, List<AbstractTableChange> cellChanges)
+        private bool CompareItems(object resultObject, string expectedResult, string propertyName, ReflectionLoader loader)
         {
             object resultValue;
+            Type propertyType;
 
-            if (!loader.TryReadPropery(resultObject, propertyName, out resultValue))
+            if (!loader.TryReadPropery(resultObject, propertyName, out propertyType, out resultValue))
                 return false;
 
             if (ReferenceEquals(null, resultObject))
                 return string.IsNullOrEmpty(expectedResult);
 
-            var expectedObject = ParametersConverter.ConvertParameter(expectedResult, resultObject.GetType(), loader);
+            var expectedObject = ParametersConverter.ConvertParameter(expectedResult, propertyType, loader);
 
             return resultObject.Equals(expectedObject);
         }
