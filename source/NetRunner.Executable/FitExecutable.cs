@@ -11,13 +11,11 @@ namespace NetRunner.Executable
 {
     internal static class FitExecutable
     {
-        private const string suiteSetupIdentifier = "suitesetup";
-
         internal static void Execute(ApplicationSettings settings)
         {
             using (var communicator = new FitnesseCommunicator(settings.Host, settings.Port, settings.SocketToken))
             {
-               ProcessTestDocuments(communicator, settings.Assemblylist);    
+                ProcessTestDocuments(communicator, settings.Assemblylist);
             }
         }
 
@@ -27,11 +25,8 @@ namespace NetRunner.Executable
             {
                 ','
             }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim()));
-
-            bool suiteIsAbandoned = false;
-            bool maybeProcessingSuiteSetup = true;
-
-            for (string document = communicator.ReceiveDocument(); document.Any() && !suiteIsAbandoned; document = communicator.ReceiveDocument())
+            
+            for (string document = communicator.ReceiveDocument(); document.Any(); document = communicator.ReceiveDocument())
             {
                 Trace.WriteLine("Processing document of size: " + document.Length);
 
@@ -42,19 +37,6 @@ namespace NetRunner.Executable
                     var parsedDocument = HtmlParser.Parse(document);
 
                     communicator.SendDocument(parsedDocument.TextBeforeFirstTable);
-
-                    /*init test context*/
-
-                    Trace.WriteLine("test...");
-
-                    if ( /*is sute setup?*/false || maybeProcessingSuiteSetup)
-                    {
-                        /*execute setup*/
-                    }
-                    else
-                    {
-                        /*execute test*/
-                    }
 
                     foreach (var table in parsedDocument.Tables)
                     {
@@ -69,19 +51,9 @@ namespace NetRunner.Executable
                 {
                     Trace.TraceError("Test execution exception: {0}", e);
                 }
-
-                maybeProcessingSuiteSetup = false;
             }
 
             Trace.WriteLine("Completion signal received");
-
-            if (suiteIsAbandoned)
-                throw new InvalidOperationException("Suite is abadoned by caller");
         }
-
-        private static void ProcessTestDocument(string document)
-        {
-        }
-
     }
 }

@@ -20,7 +20,15 @@ document/FitnesseRoot/RecentChanges/
 document/FitnesseRoot/files/testResults/
 
 /fitnesse/FitNesseRoot/ErrorLogs
-/fitnesse/FitNesseRoot/SampleTests/*/*.zip
+/fitnesse/FitNesseRoot/*/*/*/*/*/*/*/*/*.zip
+/fitnesse/FitNesseRoot/*/*/*/*/*/*/*/*.zip
+/fitnesse/FitNesseRoot/*/*/*/*/*/*/*.zip
+/fitnesse/FitNesseRoot/*/*/*/*/*/*.zip
+/fitnesse/FitNesseRoot/*/*/*/*/*.zip
+/fitnesse/FitNesseRoot/*/*/*/*.zip
+/fitnesse/FitNesseRoot/*/*/*.zip
+/fitnesse/FitNesseRoot/*/*.zip
+/fitnesse/FitNesseRoot/*.zip
 
 /fitnesse/FitNesseRoot/RecentChanges
 /fitnesse/FitNesseRoot/files/testResults
