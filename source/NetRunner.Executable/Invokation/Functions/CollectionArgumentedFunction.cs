@@ -183,7 +183,6 @@ namespace NetRunner.Executable.Invokation.Functions
 
         private FunctionExecutionResult InvokeCollection(ReflectionLoader loader)
         {
-            Debugger.Launch();
             Exception executionException;
             var result = (IEnumerable)InvokeFunction(loader, FunctionReference, Function.Arguments, out executionException);
 
@@ -245,7 +244,7 @@ namespace NetRunner.Executable.Invokation.Functions
             {
                 var currentRow = Rows[rowIndex];
 
-                var cells = currentRow.Cells.Select(c => c.CleanedContent + "<br/> missing").ToReadOnlyList();
+                var cells = currentRow.Cells.Select(c => c.CleanedContent + "<br/> <i class=\"code\">missing</i>").ToReadOnlyList();
 
                 tableChanges.Add(new AppendRowWithCells(HtmlParser.FailCssClass, cells));
 
@@ -256,7 +255,7 @@ namespace NetRunner.Executable.Invokation.Functions
             {
                 var resultObject = orderedResult[rowIndex];
 
-                var cells = CleanedColumnNames.Select(name => ReadProperty(name, resultObject, loader) + "<br/> <i>surplus</i>").ToReadOnlyList();
+                var cells = CleanedColumnNames.Select(name => ReadProperty(name, resultObject, loader) + "<br/> <i class=\"code\">surplus</i>").ToReadOnlyList();
 
                 tableChanges.Add(new AppendRowWithCells(HtmlParser.FailCssClass, cells));
 
