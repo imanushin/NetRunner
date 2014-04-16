@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NetRunner.Executable.Common;
 using NetRunner.Executable.Invokation;
 using NetRunner.Executable.RawData;
 
@@ -24,7 +25,7 @@ namespace NetRunner.Executable
             var loader = new ReflectionLoader(assemblylist.Split(new[]
             {
                 ','
-            }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim()));
+            }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim()).ToReadOnlyList());
             
             for (string document = communicator.ReceiveDocument(); document.Any(); document = communicator.ReceiveDocument())
             {

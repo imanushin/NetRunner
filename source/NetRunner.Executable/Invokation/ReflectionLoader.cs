@@ -14,15 +14,17 @@ namespace NetRunner.Executable.Invokation
 {
     internal sealed class ReflectionLoader
     {
-        private static readonly Type testContainer = typeof(BaseTestContainer);
+        private static readonly Type testContainerType = typeof(BaseTestContainer);
+
         private readonly ReadOnlyList<TestFunctionReference> functions;
+        private readonly ReadOnlyList<BaseParser> parsers;
 
         private static readonly string[] ignoredFunctions =
         {
             "ToString", "GetHashCode", "Equals", "GetType"
         };
 
-        public ReflectionLoader(IEnumerable<string> assemblyPathes)
+        public ReflectionLoader(IReadOnlyCollection<string> assemblyPathes)
         {
             var pathes = assemblyPathes.ToReadOnlyList();
 
@@ -30,8 +32,8 @@ namespace NetRunner.Executable.Invokation
 
             var loadedAssemblies = LoadAssemblies(pathes);
 
-            var assemblyFolders = loadedAssemblies
-                .Select(a => Path.GetDirectoryName(a.Location))
+            var assemblyFolders = assemblyPathes
+                .Select(Path.GetDirectoryName)
                 .Distinct(StringComparer.OrdinalIgnoreCase)
                 .ToReadOnlyList();
 
@@ -40,12 +42,22 @@ namespace NetRunner.Executable.Invokation
             Trace.TraceInformation("Additional folder for assembly loading: {0}", assemblyFolders.JoinToStringLazy("; "));
 
             var testTypes = FindTestTypes(loadedAssemblies);
+            var parserTypes = FindParsersAvailable(loadedAssemblies).ToReadOnlyList();
 
-            var testContainers = CreateTestContainers(testTypes);
+            var testContainers = CreateTypeInstances<BaseTestContainer>(testTypes);
 
             functions = FindFunctionsAvailable(testContainers);
 
+            parsers = CreateTypeInstances<BaseParser>(parserTypes);
+
             Trace.TraceInformation("All available functions: {0}", functions.JoinToStringLazy(Environment.NewLine));
+        }
+
+        private IEnumerable<Type> FindParsersAvailable(List<Assembly> assemblies)
+        {
+            return assemblies.SelectMany(a => a.GetTypes())
+                        .Where(CanBeConstructed)
+                        .Where(t => t.IsSubclassOf(typeof(BaseParser))).ToReadOnlyList();
         }
 
         [CanBeNull]
@@ -95,9 +107,9 @@ namespace NetRunner.Executable.Invokation
             return functions.ToReadOnlyList();
         }
 
-        private static ReadOnlyList<BaseTestContainer> CreateTestContainers(ReadOnlyList<Type> testTypes)
+        private static ReadOnlyList<TResultType> CreateTypeInstances<TResultType>(ReadOnlyList<Type> testTypes)
         {
-            var testContainers = new List<BaseTestContainer>();
+            var testContainers = new List<TResultType>();
 
             foreach (Type testType in testTypes)
             {
@@ -107,7 +119,7 @@ namespace NetRunner.Executable.Invokation
 
                     Validate.IsNotNull(constructor, "Unable to find constructor without parameters for type {0}", testType.Name);
 
-                    var targetObject = (BaseTestContainer)constructor.Invoke(new object[0]);
+                    var targetObject = (TResultType)constructor.Invoke(new object[0]);
 
                     testContainers.Add(targetObject);
                 }
@@ -151,8 +163,8 @@ namespace NetRunner.Executable.Invokation
                 try
                 {
                     var types = assembly.GetTypes()
-                        .Where(t => !(t.IsGenericType || t.IsAbstract || t.IsValueType))
-                        .Where(t => t.IsSubclassOf(testContainer)).ToReadOnlyList();
+                        .Where(CanBeConstructed)
+                        .Where(t => t.IsSubclassOf(testContainerType)).ToReadOnlyList();
 
                     Trace.TraceInformation("Test containers from assembly {1}: {0}", types, assembly);
 
@@ -178,9 +190,14 @@ namespace NetRunner.Executable.Invokation
             return result;
         }
 
+        private static bool CanBeConstructed(Type t)
+        {
+            return !(t.IsGenericType || t.IsAbstract || t.IsValueType);
+        }
+
         private static List<Assembly> LoadAssemblies(ReadOnlyList<string> pathes)
         {
-            var loadedAssemblies = new List<Assembly>();
+            var loadedAssemblies = new List<Assembly>() { testContainerType.Assembly };
 
             foreach (string assemblyPath in pathes)
             {
@@ -193,7 +210,7 @@ namespace NetRunner.Executable.Invokation
                         continue;
                     }
 
-                    var loadedAssembly = Assembly.LoadFile(assemblyPath);
+                    var loadedAssembly = Assembly.Load(File.ReadAllBytes(assemblyPath));
 
                     Trace.TraceInformation("Assembly {0} was loaded", loadedAssembly);
 
