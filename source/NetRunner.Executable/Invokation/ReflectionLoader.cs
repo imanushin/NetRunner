@@ -17,7 +17,7 @@ namespace NetRunner.Executable.Invokation
         private static readonly Type testContainerType = typeof(BaseTestContainer);
 
         private readonly ReadOnlyList<TestFunctionReference> functions;
-        private readonly ReadOnlyList<BaseParser> parsers;
+
 
         private static readonly string[] ignoredFunctions =
         {
@@ -46,11 +46,21 @@ namespace NetRunner.Executable.Invokation
 
             var testContainers = CreateTypeInstances<BaseTestContainer>(testTypes);
 
-            functions = FindFunctionsAvailable(testContainers);
+            functions = FindFunctionsAvailable(testContainers.ToReadOnlyList());
 
-            parsers = CreateTypeInstances<BaseParser>(parserTypes);
+            var parsersFound = CreateTypeInstances<BaseParser>(parserTypes);
+
+            parsersFound.Sort((first, second) => second.Priority - first.Priority);
+
+            Parsers = parsersFound.ToReadOnlyList();
 
             Trace.TraceInformation("All available functions: {0}", functions.JoinToStringLazy(Environment.NewLine));
+        }
+
+        public ReadOnlyList<BaseParser> Parsers
+        {
+            get;
+            private set;
         }
 
         private IEnumerable<Type> FindParsersAvailable(List<Assembly> assemblies)
@@ -107,9 +117,9 @@ namespace NetRunner.Executable.Invokation
             return functions.ToReadOnlyList();
         }
 
-        private static ReadOnlyList<TResultType> CreateTypeInstances<TResultType>(ReadOnlyList<Type> testTypes)
+        private static List<TResultType> CreateTypeInstances<TResultType>(ReadOnlyList<Type> testTypes)
         {
-            var testContainers = new List<TResultType>();
+            var result = new List<TResultType>();
 
             foreach (Type testType in testTypes)
             {
@@ -121,14 +131,15 @@ namespace NetRunner.Executable.Invokation
 
                     var targetObject = (TResultType)constructor.Invoke(new object[0]);
 
-                    testContainers.Add(targetObject);
+                    result.Add(targetObject);
                 }
                 catch (Exception ex)
                 {
                     Trace.TraceError("Unable to create instance of type {0} because of error: {1}", testType, ex);
                 }
             }
-            return testContainers.ToReadOnlyList();
+
+            return result;
         }
 
         private static Assembly LoadFrom(ReadOnlyList<string> assemblyFolders, ResolveEventArgs args)

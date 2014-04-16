@@ -36,7 +36,7 @@ namespace NetRunner.ExternalLibrary
 
                 if (!parseMethods.TryGetValue(targetType, out parseMethod))
                 {
-                    parseMethod = targetType.GetMethods(BindingFlags.Static).FirstOrDefault(IsParseMethod);
+                    parseMethod = targetType.GetMethods().FirstOrDefault(m => IsParseMethod(m, targetType));
 
                     if (parseMethod == null)
                     {
@@ -58,9 +58,15 @@ namespace NetRunner.ExternalLibrary
 
             return true;
         }
-        private static bool IsParseMethod(MethodInfo method)
+        private static bool IsParseMethod(MethodInfo method, Type expectedType)
         {
             if (!string.Equals(method.Name, "Parse", StringComparison.OrdinalIgnoreCase))
+                return false;
+
+            if (!method.IsStatic)
+                return false;
+
+            if (!expectedType.IsAssignableFrom(method.ReturnType))
                 return false;
 
             var parameters = method.GetParameters();
@@ -70,7 +76,7 @@ namespace NetRunner.ExternalLibrary
 
             var firstParameter = parameters.First();
 
-            if (typeof (string) != firstParameter.ParameterType)
+            if (typeof(string) != firstParameter.ParameterType)
                 return false;
 
             return true;

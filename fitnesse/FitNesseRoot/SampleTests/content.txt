@@ -1,2 +1,8 @@
+
+!path ..\FitSample\bin\Debug\FitSample.dll
+
+!define COMMAND_PATTERN {%m %p}
+!define TEST_RUNNER {..\source\NetRunner.Executable\bin\Debug\NetRunner.Executable.exe}
+
 !contents -R2 -g -p -f -h
 

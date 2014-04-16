@@ -13,6 +13,11 @@ namespace FitSample
 {
     internal sealed class NetRunnerTestContainer : BaseTestContainer
     {
+        public bool IsPositive(int value)
+        {
+            return value > 0;
+        }
+
         public bool PingSite(string url)
         {
             if (url == "http://error.com")

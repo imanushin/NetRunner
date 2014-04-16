@@ -1,0 +1,6 @@
+
+| '''is positive''' | ''1'' |
+
+| '''is positive''' | -1 |
+
+| '''is positive''' | sad1 |

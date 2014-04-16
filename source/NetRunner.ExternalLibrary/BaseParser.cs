@@ -6,6 +6,7 @@ using NetRunner.ExternalLibrary.Properties;
 
 namespace NetRunner.ExternalLibrary
 {
+    [UsedImplicitly]
     public abstract class BaseParser
     {
         // ReSharper disable ConvertToConstant.Global
