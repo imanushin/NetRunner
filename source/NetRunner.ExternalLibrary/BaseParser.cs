@@ -14,6 +14,8 @@ namespace NetRunner.ExternalLibrary
         {
             public static readonly int EmbeddedParsersPriority = -10;
 
+            public static readonly int ConverterParserPrioriry = -5;
+
             public static readonly int DefaultPriority = 0;
         }
         // ReSharper restore ConvertToConstant.Global
