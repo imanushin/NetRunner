@@ -46,7 +46,7 @@
     <Compile Include="RemoveFolderArgument.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\source\NetRunner.ExternalLibrary\NetRunner.ExternalLibrary.csproj">
+    <ProjectReference Include="..\NetRunner.ExternalLibrary\NetRunner.ExternalLibrary.csproj">
       <Project>{19D01E12-2663-4BD7-8D71-425BD4F1643C}</Project>
       <Name>NetRunner.ExternalLibrary</Name>
     </ProjectReference>
