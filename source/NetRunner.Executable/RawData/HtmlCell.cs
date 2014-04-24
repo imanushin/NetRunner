@@ -43,5 +43,10 @@ namespace NetRunner.Executable.RawData
         {
             yield return tableCell.OuterHtml;
         }
+
+        protected override string GetString()
+        {
+            return tableCell.OuterHtml;
+        }
     }
 }

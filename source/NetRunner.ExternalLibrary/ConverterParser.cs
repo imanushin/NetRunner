@@ -24,8 +24,9 @@ namespace NetRunner.ExternalLibrary
 
                 return true;
             }
-            catch (InvalidCastException ex)
+            catch (InvalidCastException)
             {
+#warning Trace this exception to the log
                 parsedResult = default(TResult);
 
                 return false;

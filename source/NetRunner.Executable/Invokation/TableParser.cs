@@ -87,13 +87,26 @@ namespace NetRunner.Executable.Invokation
         [CanBeNull]
         private static FunctionHeader ParseHeader(HtmlRow row)
         {
+            var cells = row.Cells;
+
+            var firstCell = cells.First();
+
+            AbstractKeyword keyword = null;
+
+            if (!firstCell.IsBold)//first non-bold cell could be keyword only
+            {
+                keyword = KeywordManager.Parse(firstCell);
+
+                cells = keyword.PatchCells(cells);
+            }
+
             string functionName = string.Concat(row.Cells.Where(c => c.IsBold).Select(c => c.CleanedContent));
-            string[] arguments = row.Cells.Where(c => !c.IsBold).Select(c => c.CleanedContent).ToArray();
+            string[] arguments = cells.Where(c => !c.IsBold).Select(c => c.CleanedContent).ToArray();
 
             if (string.IsNullOrWhiteSpace(functionName))
                 return null;
 
-            return new FunctionHeader(functionName, arguments, row.RowReference);
+            return new FunctionHeader(functionName, arguments, row.RowReference, keyword);
         }
 
     }
