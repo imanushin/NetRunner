@@ -4,16 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NetRunner.Executable.Common;
+using NetRunner.Executable.Invokation.Keywords;
 using NetRunner.ExternalLibrary.Properties;
 
 namespace NetRunner.Executable.Invokation
 {
     internal sealed class FunctionHeader : BaseReadOnlyObject
     {
-        public FunctionHeader(string functionName, IReadOnlyCollection<string> arguments, HtmlRowReference rowReference, [CanBeNull] AbstractKeyword keyword)
+        public FunctionHeader(string functionName, IReadOnlyCollection<string> arguments, HtmlRowReference rowReference, AbstractKeyword keyword)
         {
             Validate.ArgumentStringIsMeanful(functionName, "functionName");
             Validate.ArgumentIsNotNull(arguments, "arguments");
+            Validate.ArgumentIsNotNull(keyword, "keyword");
 
             FunctionName = functionName.Replace(" ", string.Empty);
             Arguments = arguments.ToReadOnlyList();
@@ -27,7 +29,6 @@ namespace NetRunner.Executable.Invokation
             private set;
         }
 
-        [CanBeNull]
         public AbstractKeyword Keyword
         {
             get;
@@ -55,7 +56,7 @@ namespace NetRunner.Executable.Invokation
 
         protected override string GetString()
         {
-            return string.Format("FunctionName: {0}, Arguments: {1}", FunctionName, Arguments);
+            return string.Format("FunctionName: {0}, Arguments: {1}, Keyword: {2}", FunctionName, Arguments, Keyword);
         }
     }
 }

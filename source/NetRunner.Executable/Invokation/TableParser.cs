@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NetRunner.Executable.Common;
 using NetRunner.Executable.Invokation.Functions;
+using NetRunner.Executable.Invokation.Keywords;
 using NetRunner.Executable.RawData;
 using NetRunner.ExternalLibrary.Properties;
 
@@ -89,16 +90,9 @@ namespace NetRunner.Executable.Invokation
         {
             var cells = row.Cells;
 
-            var firstCell = cells.First();
+            AbstractKeyword keyword = keyword = KeywordManager.Parse(cells);
 
-            AbstractKeyword keyword = null;
-
-            if (!firstCell.IsBold)//first non-bold cell could be keyword only
-            {
-                keyword = KeywordManager.Parse(firstCell);
-
-                cells = keyword.PatchCells(cells);
-            }
+            cells = keyword.PatchedCells;
 
             string functionName = string.Concat(row.Cells.Where(c => c.IsBold).Select(c => c.CleanedContent));
             string[] arguments = cells.Where(c => !c.IsBold).Select(c => c.CleanedContent).ToArray();

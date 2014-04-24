@@ -52,7 +52,7 @@
     <Compile Include="Common\Validate.cs" />
     <Compile Include="FitExecutable.cs" />
     <Compile Include="FitnesseCommunicator.cs" />
-    <Compile Include="Invokation\AbstractKeyword.cs" />
+    <Compile Include="Invokation\Keywords\AbstractKeyword.cs" />
     <Compile Include="Invokation\Functions\AbstractCellChange.cs" />
     <Compile Include="Invokation\Functions\AbstractTableChange.cs" />
     <Compile Include="Invokation\ConversionException.cs" />
@@ -70,7 +70,9 @@
     <Compile Include="Invokation\Functions\ExecutionFailedMessage.cs" />
     <Compile Include="Invokation\Functions\ShowActualValueCellChange.cs" />
     <Compile Include="Invokation\HtmlRowReference.cs" />
-    <Compile Include="Invokation\KeywordManager.cs" />
+    <Compile Include="Invokation\Keywords\CheckResultKeyword.cs" />
+    <Compile Include="Invokation\Keywords\EmptyKeyword.cs" />
+    <Compile Include="Invokation\Keywords\KeywordManager.cs" />
     <Compile Include="Invokation\ParametersConverter.cs" />
     <Compile Include="Invokation\ReflectionLoader.cs" />
     <Compile Include="Invokation\RootInvoker.cs" />
@@ -79,7 +81,7 @@
     <Compile Include="Invokation\TableParser.cs" />
     <Compile Include="Invokation\TestExecutionLog.cs" />
     <Compile Include="Invokation\TestFunctionReference.cs" />
-    <Compile Include="Invokation\UnknownKeyword.cs" />
+    <Compile Include="Invokation\Keywords\UnknownKeyword.cs" />
     <Compile Include="RawData\FitnesseHtmlDocument.cs" />
     <Compile Include="RawData\HtmlCell.cs" />
     <Compile Include="RawData\HtmlParser.cs" />
