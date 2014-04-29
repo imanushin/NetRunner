@@ -38,18 +38,17 @@ namespace NetRunner.Executable.Invokation.Functions
         {
             try
             {
-                Exception executionException;
-                var result = InvokeFunction(loader, FunctionReference, Function.Arguments, out executionException);
+                var result = InvokeFunction(loader, FunctionReference, Function);
 
-                if (executionException != null)
+                if (result.Exception != null)
                 {
-                    var errorChange = new AddExceptionLine("Function execution failed with error", executionException, Function.RowReference);
+                    var errorChange = new AddExceptionLine("Function execution failed with error", result.Exception, Function.RowReference);
 
                     return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Exception, new[] { errorChange });
                 }
 
 
-                if (Equals(false, result))
+                if (Equals(false, result.Result))
                 {
                     return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Fail, new[] { new AddRowCssClass(Function.RowReference, HtmlParser.FailCssClass) });
                 }

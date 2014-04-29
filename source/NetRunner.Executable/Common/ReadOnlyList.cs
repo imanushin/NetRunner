@@ -15,7 +15,7 @@ namespace NetRunner.Executable.Common
     internal sealed class ReadOnlyList<TValue> : BaseReadOnlyObject, IReadOnlyCollection<TValue>
     {
         private readonly TValue[] innerValues;
-        public static readonly IEnumerable<TValue> Empty = new ReadOnlyList<TValue>(new TValue[0]);
+        public static readonly ReadOnlyList<TValue> Empty = new ReadOnlyList<TValue>(new TValue[0]);
 
         public ReadOnlyList(IEnumerable<TValue> values)
         {

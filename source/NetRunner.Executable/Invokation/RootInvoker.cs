@@ -23,7 +23,7 @@ namespace NetRunner.Executable.Invokation
                 var functionToInvoke = TableParser.ParseTable(table, loader, changes);
 
                 Trace.TraceInformation("Execute function {0}", functionToInvoke);
-
+                
                 result = functionToInvoke.Invoke(loader);
 
                 Trace.TraceInformation("Execution result: {0}", result);

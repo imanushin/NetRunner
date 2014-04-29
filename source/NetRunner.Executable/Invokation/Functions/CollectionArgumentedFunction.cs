@@ -82,17 +82,16 @@ namespace NetRunner.Executable.Invokation.Functions
             bool exceptionsOccurred = false;
             bool allIsOk = true;
 
-            Exception executionException;
-            var result = InvokeFunction(loader, FunctionReference, Function.Arguments, out executionException);
+            var result = InvokeFunction(loader, FunctionReference, Function);
 
-            if (executionException != null)
+            if (result.Exception != null)
             {
-                var errorChange = new AddExceptionLine("Function execution failed with error", executionException, Function.RowReference);
+                var errorChange = new AddExceptionLine("Function execution failed with error", result.Exception, Function.RowReference);
 
                 return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Exception, new[] { errorChange });
             }
 
-            var tableResult = result as BaseTableArgument;
+            var tableResult = result.Result as BaseTableArgument;
 
             var functionExecutionResult = CheckTableFunctionResult(result, tableResult, changes);
 
@@ -120,25 +119,24 @@ namespace NetRunner.Executable.Invokation.Functions
                 var rowResult = InvokeFunction(
                     loader, 
                     functionToExecute, 
-                    row.Cells.Select(c => c.CleanedContent).ToReadOnlyList(),
-                    out executionException);
+                    row.Cells.Select(c => c.CleanedContent).ToReadOnlyList());
 
-                if (executionException != null)
+                if (rowResult.Exception != null)
                 {
                     exceptionsOccurred = true;
                     allIsOk = false;
 
-                    changes.Add(new AddExceptionLine( "Unable to execute function", executionException, row.RowReference));
+                    changes.Add(new AddExceptionLine( "Unable to execute function", rowResult.Exception, row.RowReference));
                     changes.Add(new AddRowCssClass(row.RowReference, HtmlParser.ErrorCssClass));
                 }
 
-                if (Equals(false, rowResult))
+                if (Equals(false, rowResult.Result))
                 {
                     changes.Add(new AddRowCssClass(row.RowReference, HtmlParser.FailCssClass));
 
                     allIsOk = false;
                 }
-                else if (Equals(true, rowResult))
+                else if (Equals(true, rowResult.Result))
                 {
                     changes.Add(new AddRowCssClass(row.RowReference, HtmlParser.PassCssClass));
                 }
@@ -183,19 +181,19 @@ namespace NetRunner.Executable.Invokation.Functions
 
         private FunctionExecutionResult InvokeCollection(ReflectionLoader loader)
         {
-            Exception executionException;
-            var result = (IEnumerable)InvokeFunction(loader, FunctionReference, Function.Arguments, out executionException);
+            var result = InvokeFunction(loader, FunctionReference, Function);
+            var collectionResult = (IEnumerable)result.Result;
 
-            if (executionException != null)
+            if (result.Exception != null)
             {
-                var errorChange = new AddExceptionLine("Function execution failed with error", executionException, Function.RowReference);
+                var errorChange = new AddExceptionLine("Function execution failed with error", result.Exception, Function.RowReference);
 
                 return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Exception, new[] { errorChange });
             }
 
-            result = result ?? new object[0];
+            collectionResult = collectionResult ?? new object[0];
 
-            var orderedResult = result.Cast<object>().ToArray();
+            var orderedResult = collectionResult.Cast<object>().ToArray();
 
             var allRight = true;
 

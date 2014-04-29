@@ -90,7 +90,7 @@ namespace NetRunner.Executable.Invokation
         {
             var cells = row.Cells;
 
-            AbstractKeyword keyword = keyword = KeywordManager.Parse(cells);
+            AbstractKeyword keyword = KeywordManager.Parse(cells);
 
             cells = keyword.PatchedCells;
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using NetRunner.Executable.Common;
@@ -9,6 +10,11 @@ namespace NetRunner.Executable.Invokation.Keywords
 {
     internal static class KeywordManager
     {
+        private static readonly Func<IReadOnlyCollection<HtmlCell>, AbstractKeyword>[] parsers =
+            {
+                CheckResultKeyword.TryParse
+            };
+
         [NotNull]
         public static AbstractKeyword Parse(IReadOnlyCollection<HtmlCell> cells)
         {
@@ -16,10 +22,16 @@ namespace NetRunner.Executable.Invokation.Keywords
 
             var firstCell = cells.First();
 
-            if(firstCell.IsBold)
+            if (firstCell.IsBold)
                 return new EmptyKeyword(cells);
 
-            Trace.TraceWarning("!!!!!");
+            foreach (var parser in parsers)
+            {
+                var result = parser(cells);
+
+                if (result != null)
+                    return result;
+            }
 
             return new UnknownKeyword(cells);
         }

@@ -8,11 +8,20 @@ namespace NetRunner.Executable.Invokation.Functions
     {
         public abstract FunctionExecutionResult Invoke(ReflectionLoader loader);
 
-        protected object InvokeFunction(
+        protected InvokationResult InvokeFunction(
             ReflectionLoader loader,
             TestFunctionReference functionReference,
-            ReadOnlyList<string> inputArguments,
-            out Exception executionException)
+            FunctionHeader originalFunction)
+        {
+            var keyword = originalFunction.Keyword;
+
+            return keyword.InvokeFunction(() => InvokeFunction(loader, functionReference, originalFunction.Arguments));
+        }
+
+        protected InvokationResult InvokeFunction(
+            ReflectionLoader loader,
+            TestFunctionReference functionReference,
+            ReadOnlyList<string> inputArguments)
         {
             Validate.ArgumentIsNotNull(loader, "loader");
             Validate.ArgumentIsNotNull(functionReference, "functionReference");
@@ -25,18 +34,16 @@ namespace NetRunner.Executable.Invokation.Functions
             {
                 actualTypes[i] = ParametersConverter.ConvertParameter(inputArguments[i], expectedTypes[i].ParameterType, loader);
             }
-
-            executionException = null;
-
+            
             try
             {
-                return functionReference.Invoke(actualTypes);
+                var result = functionReference.Invoke(actualTypes);
+
+                return new InvokationResult(result, null);
             }
             catch (Exception ex)
             {
-                executionException = ex;
-
-                return null;
+                return new InvokationResult(null, ex);
             }
         }
     }
