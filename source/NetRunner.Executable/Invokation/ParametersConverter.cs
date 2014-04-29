@@ -13,14 +13,14 @@ namespace NetRunner.Executable.Invokation
         private static readonly Dictionary<Type, BaseParser> parsers = new Dictionary<Type, BaseParser>();
         private static readonly MethodInfo tryParseMethod = typeof(BaseParser).GetMethod("TryParse");
 
-        public static object ConvertParameter(string inputData, Type expectedType, ReflectionLoader loader)
+        public static object ConvertParameter(string inputData, Type expectedType)
         {
             BaseParser parser;
             object result;
 
             if (!parsers.TryGetValue(expectedType, out parser))
             {
-                foreach (var baseParser in loader.Parsers)
+                foreach (var baseParser in ReflectionLoader.Instance.Parsers)
                 {
                     try
                     {
@@ -37,7 +37,7 @@ namespace NetRunner.Executable.Invokation
                     }
                 }
 
-                throw new InvalidOperationException(string.Format("Unable to find parser for type {0}. Parsers available: {1}", expectedType, loader.Parsers));
+                throw new InvalidOperationException(string.Format("Unable to find parser for type {0}. Parsers available: {1}", expectedType, ReflectionLoader.Instance.Parsers));
             }
 
             bool parseResult;

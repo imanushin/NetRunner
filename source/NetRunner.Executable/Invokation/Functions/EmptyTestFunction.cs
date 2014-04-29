@@ -17,7 +17,7 @@ namespace NetRunner.Executable.Invokation.Functions
             return new object[0];
         }
 
-        public override FunctionExecutionResult Invoke(ReflectionLoader loader)
+        public override FunctionExecutionResult Invoke()
         {
             return functionExecutionResult;
         }

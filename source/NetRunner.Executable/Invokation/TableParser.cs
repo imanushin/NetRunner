@@ -13,7 +13,7 @@ namespace NetRunner.Executable.Invokation
 {
     internal static class TableParser
     {
-        public static AbstractTestFunction ParseTable(HtmlTable table, ReflectionLoader loader, List<AbstractTableChange> tableParseInformation)
+        public static AbstractTestFunction ParseTable(HtmlTable table, List<AbstractTableChange> tableParseInformation)
         {
             Validate.CollectionArgumentHasElements(table.Rows, "table");
 
@@ -22,7 +22,7 @@ namespace NetRunner.Executable.Invokation
             if (header == null)
                 return EmptyTestFunction.Instance;
 
-            var functionToExecute = loader.FindFunction(header.FunctionName, header.Arguments.Count);
+            var functionToExecute = ReflectionLoader.Instance.FindFunction(header.FunctionName, header.Arguments.Count);
 
             if (table.Rows.Count == 1)
             {
@@ -37,7 +37,7 @@ namespace NetRunner.Executable.Invokation
                 {
                     try
                     {
-                        return ParseSimpleTestFunction(row, loader);
+                        return ParseSimpleTestFunction(row);
                     }
                     catch (Exception ex)
                     {
@@ -71,14 +71,14 @@ namespace NetRunner.Executable.Invokation
             return new CollectionArgumentedFunction(headers, table.Rows.Skip(2), header, functionToExecute);
         }
 
-        private static AbstractTestFunction ParseSimpleTestFunction(HtmlRow row, ReflectionLoader loader)
+        private static AbstractTestFunction ParseSimpleTestFunction(HtmlRow row)
         {
             var header = ParseHeader(row);
 
             if (header == null)
                 return EmptyTestFunction.Instance;
 
-            var functionReference = loader.FindFunction(header.FunctionName, header.Arguments.Count);
+            var functionReference = ReflectionLoader.Instance.FindFunction(header.FunctionName, header.Arguments.Count);
 
             Validate.IsNotNull(functionReference, "Unable to find function {0}", header.FunctionName);
 

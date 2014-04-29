@@ -18,13 +18,34 @@ namespace NetRunner.Executable.Invokation
 
         private readonly ReadOnlyList<TestFunctionReference> functions;
 
+        private static ReflectionLoader instance;
+
+        public static ReflectionLoader Instance
+        {
+            get
+            {
+                Validate.IsNotNull(instance, "{0} had not been initialized yet", typeof(ReflectionLoader).Name);
+
+                return instance;
+            }
+        }
 
         private static readonly string[] ignoredFunctions =
         {
             "ToString", "GetHashCode", "Equals", "GetType"
         };
 
-        public ReflectionLoader(IReadOnlyCollection<string> assemblyPathes)
+        private ReflectionLoader()
+        {
+        }
+
+        private ReflectionLoader(ReadOnlyList<TestFunctionReference> testFunctionReferences, ReadOnlyList<BaseParser> parsers)
+        {
+            functions = testFunctionReferences;
+            Parsers = parsers;
+        }
+
+        public static void Initialize(IReadOnlyCollection<string> assemblyPathes)
         {
             var pathes = assemblyPathes.ToReadOnlyList();
 
@@ -40,21 +61,23 @@ namespace NetRunner.Executable.Invokation
             AppDomain.CurrentDomain.AssemblyResolve += (sender, args) => LoadFrom(assemblyFolders, args);
 
             Trace.TraceInformation("Additional folder for assembly loading: {0}", assemblyFolders.JoinToStringLazy("; "));
-
+            
             var testTypes = FindTestTypes(loadedAssemblies);
             var parserTypes = FindParsersAvailable(loadedAssemblies).ToReadOnlyList();
 
             var testContainers = CreateTypeInstances<BaseTestContainer>(testTypes);
 
-            functions = FindFunctionsAvailable(testContainers.ToReadOnlyList());
+            var functions = FindFunctionsAvailable(testContainers.ToReadOnlyList());
 
             var parsersFound = CreateTypeInstances<BaseParser>(parserTypes);
 
             parsersFound.Sort((first, second) => second.Priority - first.Priority);
 
-            Parsers = parsersFound.ToReadOnlyList();
+            var parsers = parsersFound.ToReadOnlyList();
 
             Trace.TraceInformation("All available functions: {0}", functions.JoinToStringLazy(Environment.NewLine));
+
+            instance = new ReflectionLoader(functions, parsers);
         }
 
         public ReadOnlyList<BaseParser> Parsers
@@ -63,7 +86,7 @@ namespace NetRunner.Executable.Invokation
             private set;
         }
 
-        private IEnumerable<Type> FindParsersAvailable(List<Assembly> assemblies)
+        private static IEnumerable<Type> FindParsersAvailable(List<Assembly> assemblies)
         {
             return assemblies.SelectMany(a => a.GetTypes())
                         .Where(CanBeConstructed)

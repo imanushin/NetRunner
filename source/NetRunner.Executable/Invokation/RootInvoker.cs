@@ -13,18 +13,18 @@ namespace NetRunner.Executable.Invokation
 {
     internal static class RootInvoker
     {
-        public static string InvokeTable(HtmlTable table, TestCounts currentStatistic, ReflectionLoader loader)
+        public static string InvokeTable(HtmlTable table, TestCounts currentStatistic)
         {
             var changes = new List<AbstractTableChange>();
 
             FunctionExecutionResult result;
             try
             {
-                var functionToInvoke = TableParser.ParseTable(table, loader, changes);
+                var functionToInvoke = TableParser.ParseTable(table, changes);
 
                 Trace.TraceInformation("Execute function {0}", functionToInvoke);
                 
-                result = functionToInvoke.Invoke(loader);
+                result = functionToInvoke.Invoke();
 
                 Trace.TraceInformation("Execution result: {0}", result);
             }

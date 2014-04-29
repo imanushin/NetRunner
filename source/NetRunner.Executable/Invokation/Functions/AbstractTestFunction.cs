@@ -6,24 +6,21 @@ namespace NetRunner.Executable.Invokation.Functions
 {
     internal abstract class AbstractTestFunction : BaseReadOnlyObject
     {
-        public abstract FunctionExecutionResult Invoke(ReflectionLoader loader);
+        public abstract FunctionExecutionResult Invoke();
 
         protected InvokationResult InvokeFunction(
-            ReflectionLoader loader,
             TestFunctionReference functionReference,
             FunctionHeader originalFunction)
         {
             var keyword = originalFunction.Keyword;
 
-            return keyword.InvokeFunction(() => InvokeFunction(loader, functionReference, originalFunction.Arguments));
+            return keyword.InvokeFunction(() => InvokeFunction(functionReference, originalFunction.Arguments), functionReference);
         }
 
         protected InvokationResult InvokeFunction(
-            ReflectionLoader loader,
             TestFunctionReference functionReference,
             ReadOnlyList<string> inputArguments)
         {
-            Validate.ArgumentIsNotNull(loader, "loader");
             Validate.ArgumentIsNotNull(functionReference, "functionReference");
             Validate.ArgumentIsNotNull(inputArguments, "inputArguments");
 
@@ -32,7 +29,7 @@ namespace NetRunner.Executable.Invokation.Functions
 
             for (int i = 0; i < expectedTypes.Count; i++)
             {
-                actualTypes[i] = ParametersConverter.ConvertParameter(inputArguments[i], expectedTypes[i].ParameterType, loader);
+                actualTypes[i] = ParametersConverter.ConvertParameter(inputArguments[i], expectedTypes[i].ParameterType);
             }
             
             try

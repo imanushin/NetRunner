@@ -25,14 +25,14 @@ namespace NetRunner.Executable.Invokation.Functions
             return InnerFunctions;
         }
 
-        public override FunctionExecutionResult Invoke(ReflectionLoader loader)
+        public override FunctionExecutionResult Invoke()
         {
             var results = new List<FunctionExecutionResult.FunctionRunResult>();
             var changes = new List<AbstractTableChange>();
 
             foreach (var innerFunction in InnerFunctions)
             {
-                var localResult = innerFunction.Invoke(loader);
+                var localResult = innerFunction.Invoke();
 
                 changes.AddRange(localResult.TableChanges);
                 

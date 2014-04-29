@@ -58,31 +58,31 @@ namespace NetRunner.Executable.Invokation.Functions
             yield return FunctionReference;
         }
 
-        public override FunctionExecutionResult Invoke(ReflectionLoader loader)
+        public override FunctionExecutionResult Invoke()
         {
             var resultType = FunctionReference.ResultType;
 
             if (typeof(IEnumerable).IsAssignableFrom(resultType))
             {
-                return InvokeCollection(loader);
+                return InvokeCollection();
             }
 
             if (typeof(BaseTableArgument).IsAssignableFrom(resultType))
             {
-                return InvokeTable(loader);
+                return InvokeTable();
             }
 
             throw new InvalidOperationException(string.Format("Result type {0} does not supported", resultType));
         }
 
-        private FunctionExecutionResult InvokeTable(ReflectionLoader loader)
+        private FunctionExecutionResult InvokeTable()
         {
             var changes = new List<AbstractTableChange>();
 
             bool exceptionsOccurred = false;
             bool allIsOk = true;
 
-            var result = InvokeFunction(loader, FunctionReference, Function);
+            var result = InvokeFunction(FunctionReference, Function);
 
             if (result.Exception != null)
             {
@@ -100,7 +100,7 @@ namespace NetRunner.Executable.Invokation.Functions
 
             foreach (var row in Rows)
             {
-                var functionToExecute = loader.FindFunction(CleanedColumnNames, tableResult);
+                var functionToExecute = ReflectionLoader.Instance.FindFunction(CleanedColumnNames, tableResult);
 
                 if (functionToExecute == null)
                 {
@@ -117,7 +117,6 @@ namespace NetRunner.Executable.Invokation.Functions
                 }
 
                 var rowResult = InvokeFunction(
-                    loader, 
                     functionToExecute, 
                     row.Cells.Select(c => c.CleanedContent).ToReadOnlyList());
 
@@ -179,9 +178,9 @@ namespace NetRunner.Executable.Invokation.Functions
             return null;
         }
 
-        private FunctionExecutionResult InvokeCollection(ReflectionLoader loader)
+        private FunctionExecutionResult InvokeCollection()
         {
-            var result = InvokeFunction(loader, FunctionReference, Function);
+            var result = InvokeFunction(FunctionReference, Function);
             var collectionResult = (IEnumerable)result.Result;
 
             if (result.Exception != null)
@@ -215,7 +214,7 @@ namespace NetRunner.Executable.Invokation.Functions
 
                         object actualValue;
 
-                        var currentIsOk = CompareItems(resultObject, expectedResult, CleanedColumnNames[columnIndex], loader, out actualValue);
+                        var currentIsOk = CompareItems(resultObject, expectedResult, CleanedColumnNames[columnIndex], out actualValue);
 
 
 
@@ -253,7 +252,7 @@ namespace NetRunner.Executable.Invokation.Functions
             {
                 var resultObject = orderedResult[rowIndex];
 
-                var cells = CleanedColumnNames.Select(name => ReadProperty(name, resultObject, loader) + "<br/> <i class=\"code\">surplus</i>").ToReadOnlyList();
+                var cells = CleanedColumnNames.Select(name => ReadProperty(name, resultObject) + "<br/> <i class=\"code\">surplus</i>").ToReadOnlyList();
 
                 tableChanges.Add(new AppendRowWithCells(HtmlParser.FailCssClass, cells));
 
@@ -268,12 +267,12 @@ namespace NetRunner.Executable.Invokation.Functions
             return new FunctionExecutionResult(resultType, tableChanges);
         }
 
-        private string ReadProperty(string propertyName, object resultObject, ReflectionLoader loader)
+        private string ReadProperty(string propertyName, object resultObject)
         {
             object resultValue;
             Type propertyType;
 
-            if (!loader.TryReadPropery(resultObject, propertyName, out propertyType, out resultValue))
+            if (!ReflectionLoader.Instance.TryReadPropery(resultObject, propertyName, out propertyType, out resultValue))
                 return string.Format("Unable to read property {0}", propertyName);
 
             return (resultValue ?? string.Empty).ToString();
@@ -297,11 +296,11 @@ namespace NetRunner.Executable.Invokation.Functions
             return true;
         }
 
-        private bool CompareItems(object resultObject, string expectedResult, string propertyName, ReflectionLoader loader, out object resultValue)
+        private bool CompareItems(object resultObject, string expectedResult, string propertyName,  out object resultValue)
         {
             Type propertyType;
 
-            if (!loader.TryReadPropery(resultObject, propertyName, out propertyType, out resultValue))
+            if (!ReflectionLoader.Instance.TryReadPropery(resultObject, propertyName, out propertyType, out resultValue))
             {
                 return false;
             }
@@ -311,7 +310,7 @@ namespace NetRunner.Executable.Invokation.Functions
                 return string.IsNullOrEmpty(expectedResult);
             }
 
-            var expectedObject = ParametersConverter.ConvertParameter(expectedResult, propertyType, loader);
+            var expectedObject = ParametersConverter.ConvertParameter(expectedResult, propertyType);
 
             return resultValue.Equals(expectedObject);
         }

@@ -13,7 +13,7 @@ namespace NetRunner.Executable.Invokation.Keywords
             get;
         }
 
-        public virtual InvokationResult InvokeFunction(Func<InvokationResult> func)
+        public virtual InvokationResult InvokeFunction(Func<InvokationResult> func, TestFunctionReference targetFunction)
         {
             return func();
         }

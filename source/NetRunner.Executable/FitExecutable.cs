@@ -22,7 +22,7 @@ namespace NetRunner.Executable
 
         private static void ProcessTestDocuments(FitnesseCommunicator communicator, string assemblylist)
         {
-            var loader = new ReflectionLoader(assemblylist.Split(new[]
+            ReflectionLoader.Initialize(assemblylist.Split(new[]
             {
                 ','
             }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim()).ToReadOnlyList());
@@ -41,7 +41,7 @@ namespace NetRunner.Executable
 
                     foreach (var table in parsedDocument.Tables)
                     {
-                        var result = RootInvoker.InvokeTable(table, counts, loader);
+                        var result = RootInvoker.InvokeTable(table, counts);
 
                         communicator.SendDocument(result + table.TextAfterTable);
                     }

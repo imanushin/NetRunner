@@ -34,11 +34,11 @@ namespace NetRunner.Executable.Invokation.Functions
             yield return Function;
         }
 
-        public override FunctionExecutionResult Invoke(ReflectionLoader loader)
+        public override FunctionExecutionResult Invoke()
         {
             try
             {
-                var result = InvokeFunction(loader, FunctionReference, Function);
+                var result = InvokeFunction(FunctionReference, Function);
 
                 if (result.Exception != null)
                 {
