@@ -21,5 +21,11 @@ namespace NetRunner.Executable.Invokation.Keywords
                 return cells.Skip(1).ToReadOnlyList();
             }
         }
+
+        protected override IEnumerable<object> GetInnerObjects()
+        {
+            yield return cells;
+        }
+
     }
 }

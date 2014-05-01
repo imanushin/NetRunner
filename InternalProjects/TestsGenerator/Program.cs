@@ -46,7 +46,7 @@ namespace TestsGenerator
 
                 Trace.WriteLine(string.Format("Path to projects folder: {0}", pathToProjects));
 
-                string pathToBinaries = Path.Combine(pathToProjects, "Binaries");
+                string pathToBinaries = Path.Combine(pathToProjects, "..\\binary\\currentBuild\\");
 
                 Trace.WriteLine(string.Format("Path to binaries folder: {0}", pathToBinaries));
 

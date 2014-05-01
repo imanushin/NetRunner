@@ -1,4 +1,5 @@
-﻿using System.DirectoryServices;
+﻿using System.Diagnostics;
+using System.DirectoryServices;
 using System.IO;
 using System.Security.Cryptography.X509Certificates;
 using CommonObjectsGenerator;
@@ -56,8 +57,9 @@ namespace {0}
 }}
 ";
 
-        private const string SealedClassTemplate =
-@"
+
+        private const string commonTestClassStart =
+            @"
     [TestClass]
     public sealed partial class {0}Test : ReadOnlyObjectTest
     {{
@@ -87,8 +89,10 @@ namespace {0}
             }}
         }}
 
-        {1}
+";
 
+        private const string commonTestClassEnd =
+            @"
         [TestMethod]
         public void {0}_GetHashCodeTest()
         {{
@@ -113,64 +117,29 @@ namespace {0}
             BaseToStringTest(objects);
         }}
     }}
+
+        private static IEnumerable<{0}> GetInstances()
+        {{
+            return GetApparents().Concat(GetInstancesOfCurrentType());
+        }}
 ";
 
-        private const string AbstractClassTemplate =
+        private const string sealedClassTemplate =
 @"
-    [TestClass]
-    public sealed partial class {0}Test : ReadOnlyObjectTest
-    {{
-        internal static readonly ObjectsCache<{0}> objects = new ObjectsCache<{0}>(GetInstances);
-
-        internal static {0} First
+        private static IEnumerable<{0}>GetApparents()
         {{
-            get
-            {{
-                return objects.Objects.First();
-            }}
+            return ReadOnlyList<{0}>.Empty;
         }}
+";
 
-        internal static {0} Second
-        {{
-            get
-            {{
-                return objects.Objects.Skip(1).First();
-            }}
-        }}
-
-        internal static {0} Third
-        {{
-            get
-            {{
-                return objects.Objects.Skip(2).First();
-            }}
-        }}
-
-        private static IEnumerable<{0}>GetInstances()
+        private const string GetApparentsTemplate =
+@"
+        private static IEnumerable<{0}>GetApparents()
         {{
             return
             new {0}[0].Union(
 {1});
         }}
-
-        [TestMethod]
-        public void {0}_GetHashCodeTest()
-        {{
-            BaseGetHashCodeTest(objects);
-        }}
-
-        [TestMethod]
-        public void {0}_EqualsTest()
-        {{
-            BaseEqualsTest(objects);
-        }}
-
-        [TestMethod]
-        public void {0}_SerializationTest()
-        {{
-            BaseSerializationTest(objects);
-        }}
-    }}
 ";
 
         private const string CheckNullArgConstructorTestTemplate =
@@ -220,20 +189,24 @@ namespace {0}
 
                 foreach (Type type in grouping.Where(type => !type.IsInterface))
                 {
+                    namespaceEntry.AppendFormat(commonTestClassStart, type.Name);
+
                     if (type.IsSealed)
                     {
-                        string constructorNullArgumetnsCheck = GenerateTestForConstructors(type);
-                        namespaceEntry.AppendFormat(SealedClassTemplate, type.Name, constructorNullArgumetnsCheck);
-                    }
-                    else if (type.IsAbstract)
-                    {
-                        GenerateAbstractClassTemplate(namespaceEntry, type, types);
+                        namespaceEntry.AppendFormat(sealedClassTemplate, type.Name);
                     }
                     else
                     {
-                        throw new Exception(string.Format("Type {0} isn't sealed and isn't abstract", type));
+                        GenerateAbstractClassTemplate(namespaceEntry, type, types);
                     }
 
+                    if (!type.IsAbstract)
+                    {
+                        string constructorNullArgumetnsCheck = GenerateTestForConstructors(type);
+                        namespaceEntry.Append(constructorNullArgumetnsCheck);
+                    }
+
+                    namespaceEntry.AppendFormat(commonTestClassEnd, type.Name);
                 }
 
                 result.AppendFormat(namespaceTemplate, ReadonlyClassesFinder.ConvertToTestNamespace(grouping.Key), namespaceEntry);
@@ -249,9 +222,6 @@ namespace {0}
                 "System.Collections.Generic",
                 "System.Linq",
                 "Microsoft.VisualStudio.TestTools.UnitTesting",
-                "LeakBlocker.Libraries.Common.Tests",
-                "LeakBlocker.Libraries.Common",
-                "LeakBlocker.Libraries.Common.Collections",
             };
 
             importedNamespaces =
@@ -391,12 +361,12 @@ namespace {0}
 
             Type parameterType = parameter.ParameterType;
 
-            string initializer = CreateTypeInitializer(parameterType);
+            string initializer = CreateTypeInitializer(parameterType, parameter.Member);
 
             return string.Format(template, parameter.Name, initializer);
         }
 
-        private static string CreateTypeInitializer(Type parameterType)
+        private static string CreateTypeInitializer(Type parameterType, MemberInfo owner)
         {
             if (ReadonlyClassesFinder.IsTypeReadOnly(parameterType))
             {
@@ -491,17 +461,55 @@ namespace {0}
                 return string.Format("new byte[]{{ 1, 2, 3 }}");
             }
 
+            if (typeof(Exception) == parameterType)
+            {
+                return string.Format("new Exception(\"Text exception\")");
+            }
+
+            if (typeof(Object) == parameterType)
+            {
+                return string.Format("new object()");
+            }
+
+            if (typeof(MethodInfo) == parameterType)
+            {
+                return string.Format("GetType().Methods.First()");
+            }
+
+            if (string.Equals(parameterType.Name, "FunctionContainer", StringComparison.Ordinal))
+            {
+                return string.Format("new FakeFunctionContainer()");
+            }
+
+            if (string.Equals(parameterType.Name, "HtmlNode", StringComparison.Ordinal))
+            {
+                return string.Format("new HtmlNode()");
+            }
+
+            if (parameterType.IsArray)
+            {
+                const string initializerTemplate = "new {0}[] {{ {1}, {1} }}";
+
+                var innerType = Type.GetType(parameterType.FullName.Replace("[]", string.Empty), true);
+
+                string innerInitializer = CreateTypeInitializer(innerType, parameterType);
+
+                return string.Format(initializerTemplate, innerType.Name, innerInitializer);
+            }
+
             if (IsCollection(parameterType))
             {
                 const string initializerTemplate = "new List<{0}>{{ {1} }}.ToReadOnlyList()";
 
-                Type genericArg = parameterType.GetGenericArguments()[0];
-                string innerInitializer = CreateTypeInitializer(genericArg);
+                var genericArguments = parameterType.GetGenericArguments();
+
+                Type genericArg = genericArguments[0];
+                string innerInitializer = CreateTypeInitializer(genericArg, parameterType);
 
                 return string.Format(initializerTemplate, genericArg.Name, innerInitializer);
             }
 
-            throw new Exception(string.Format("Unable to generate initializer for the type {0}", parameterType));
+            throw new InvalidOperationException(string.Format("Unable to generate initializer for the type {0} (member of {1}.{2})", parameterType, owner.DeclaringType, owner.Name));
         }
 
         private static bool IsCollection(Type classType)
@@ -517,7 +525,7 @@ namespace {0}
 
             string resultUnion = string.Join(").Union(" + Environment.NewLine, unions);
 
-            namespaceEntry.AppendFormat(AbstractClassTemplate, type.Name, resultUnion);
+            namespaceEntry.AppendFormat(GetApparentsTemplate, type.Name, resultUnion);
         }
 
         public string FileName

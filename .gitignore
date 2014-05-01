@@ -35,3 +35,4 @@ document/FitnesseRoot/files/testResults/
 /fitnesse/test_runner.log
 /binary/tools/TestsGenerator/TestsGenerator.vshost.exe
 /binary/tools/TestsGenerator/TestsGenerator.vshost.exe.manifest
+/binary/currentBuild

@@ -84,5 +84,11 @@ namespace NetRunner.Executable.Invokation.Keywords
 
             return new CheckResultKeyword(cellsInTheMiddle, lastCell);
         }
+
+        protected override IEnumerable<object> GetInnerObjects()
+        {
+            yield return patchedCells;
+            yield return lastCell;
+        }
     }
 }

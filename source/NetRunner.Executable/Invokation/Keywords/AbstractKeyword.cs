@@ -6,7 +6,7 @@ using NetRunner.Executable.RawData;
 
 namespace NetRunner.Executable.Invokation.Keywords
 {
-    internal abstract class AbstractKeyword
+    internal abstract class AbstractKeyword : BaseReadOnlyObject
     {
         public abstract ReadOnlyList<HtmlCell> PatchedCells
         {

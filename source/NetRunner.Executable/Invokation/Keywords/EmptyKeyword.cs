@@ -27,5 +27,10 @@ namespace NetRunner.Executable.Invokation.Keywords
                 return cells;
             }
         }
+
+        protected override IEnumerable<object> GetInnerObjects()
+        {
+            yield return cells;
+        }
     }
 }
