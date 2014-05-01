@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using NetRunner.Executable.Common;
 using NetRunner.Executable.RawData;
 
@@ -34,16 +35,16 @@ namespace NetRunner.Executable.Invokation.Functions
             {
                 actualTypes[i] = ParametersConverter.ConvertParameter(inputArguments[i], expectedTypes[i].ParameterType);
             }
-            
+
             try
             {
                 var result = functionReference.Invoke(actualTypes);
 
                 return new InvokationResult(result, null);
             }
-            catch (Exception ex)
+            catch (TargetInvocationException ex)
             {
-                return new InvokationResult(null, ex);
+                return new InvokationResult(null, ex.InnerException);
             }
         }
     }

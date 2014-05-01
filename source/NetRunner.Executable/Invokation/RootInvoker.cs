@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using HtmlAgilityPack;
 using NetRunner.Executable.Common;
 using NetRunner.Executable.Invokation.Functions;
@@ -88,7 +89,7 @@ namespace NetRunner.Executable.Invokation
                 }
                 catch (Exception ex)
                 {
-                    Trace.TraceError("Unable to patch table {0} with changes {1} because of error {2}", resultTable.OuterHtml, tableChange, ex);
+                    Trace.TraceError("Unable to patch table {0} with changes {1} because of error {2}", HttpUtility.HtmlEncode(resultTable.OuterHtml), tableChange, ex);
                 }
             }
 

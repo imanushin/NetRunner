@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using HtmlAgilityPack;
 using NetRunner.Executable.Common;
 using NetRunner.ExternalLibrary.Properties;
@@ -66,7 +67,7 @@ namespace NetRunner.Executable.RawData
 
         protected override string GetString()
         {
-            return string.Format("Cell Index: {0}; html: {1}", CellIndex, tableCell.OuterHtml);
+            return string.Format("Cell Index: {0}; html: {1}", CellIndex, HttpUtility.HtmlEncode(tableCell.OuterHtml));
         }
 
         [NotNull, Pure]
@@ -78,7 +79,7 @@ namespace NetRunner.Executable.RawData
             var result = node.Descendants()
                 .FirstOrDefault(n => n.GetAttributeValue(globalAttributeIndexName, cellAbsenteeIndex) == CellIndex);
 
-            Validate.IsNotNull(result, "Unable to cell {0} in the table {1}", this, node);
+            Validate.IsNotNull(result, "Unable to cell {0} in the table {1}", this, HttpUtility.HtmlEncode(node.InnerHtml));
 
             return result;
         }

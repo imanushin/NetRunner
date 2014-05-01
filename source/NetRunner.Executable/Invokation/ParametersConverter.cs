@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using NetRunner.Executable.Common;
 using NetRunner.ExternalLibrary;
 
 namespace NetRunner.Executable.Invokation
@@ -31,28 +32,27 @@ namespace NetRunner.Executable.Invokation
                             return result;
                         }
                     }
-                    catch (Exception ex)
+                    catch (TargetInvocationException ex)
                     {
-                        throw new ConversionException(expectedType, inputData, ex);
+                        throw new ConversionException(expectedType, inputData, ex.InnerException);
                     }
                 }
 
                 throw new InvalidOperationException(string.Format("Unable to find parser for type {0}. Parsers available: {1}", expectedType, ReflectionLoader.Instance.Parsers));
             }
 
-            bool parseResult;
+            bool resultWasParsed;
 
             try
             {
-                parseResult = TryParseData(inputData, expectedType, parser, out result);
+                resultWasParsed = TryParseData(inputData, expectedType, parser, out result);
             }
-            catch (Exception ex)
+            catch (TargetInvocationException ex)
             {
-                throw new ConversionException(expectedType, inputData, ex);
+                throw new ConversionException(expectedType, inputData, ex.InnerException);
             }
 
-            if (!parseResult)
-                throw new InvalidOperationException(string.Format("Internal error: Object {0} parser type {1} earlier however it could not do this now.", parser, expectedType));
+            Validate.Condition(resultWasParsed, "Internal error: Object {0} parser type {1} earlier however it could not do this now.", parser, expectedType);
 
             return result;
         }

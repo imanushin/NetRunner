@@ -1,0 +1,70 @@
+!note One surplus
+| '''List Files In''' | ''./'' |
+| '''Name''' | '''Extension''' |
+| ''fitnesse-standalone'' | ''.jar'' |
+
+!note all is ok
+| '''List Files In''' | ''./'' |
+| '''Name''' | '''Extension''' |
+| ''fitnesse-standalone'' | ''.jar'' |
+| ''run'' | .bat |
+
+!note wrong columns count
+| '''List Files In''' | ''./'' |
+| '''Name''' | '''Extension''' |
+| ''fitnesse-standalone'' | ''.jar'' | ''.jar'' |
+| ''run'' | .bat'' |
+
+!note wrong columns count
+| '''List Files In''' | ''./'' |
+| '''Name''' | '''Extension''' |
+| ''fitnesse-standalone'' |
+| ''run'' | .bat'' |
+
+!note inner bold text
+| '''List Files In''' | ''./'' |
+| '''Name''' | '''Extension''' |
+| ''fitnesse-standalone'' | '''.jar''' |
+| ''run'' | .bat'' |
+ 
+
+!note proper execution
+| '''create subfolders in ''' | ''./'' |
+| '''folder name''' |
+| test 1 |
+| test 2 |
+
+!note proper execution
+| '''remove subfolders from ''' | ''./'' |
+| '''folder name''' |
+| test 1 |
+| test 2 |
+
+!note fail during result creation
+| '''create subfolders in ''' | ''::'' |
+| '''folder name''' |
+| 123 |
+
+!note fail because of wrong columns count
+| '''create subfolders in ''' | ''./'' |
+| '''folder name''' |
+| 123 | 123 |
+
+!note fail because of bold text
+| '''create subfolders in ''' | ''./'' |
+| '''folder name''' |
+| '''123''' |
+
+!note fail during row processing
+| '''create subfolders in ''' | ''./'' |
+| '''folder name''' |
+| 123 |
+| :: |
+| 321 |
+
+!note fail during row processing
+| '''remove subfolders from''' | ''./'' |
+| '''folder name''' |
+| 123 |
+| :: |
+| 321 |

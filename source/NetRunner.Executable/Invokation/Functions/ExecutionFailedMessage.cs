@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using HtmlAgilityPack;
 using NetRunner.Executable.Common;
 using NetRunner.Executable.RawData;
+using NetRunner.ExternalLibrary.Properties;
 
 namespace NetRunner.Executable.Invokation.Functions
 {
@@ -15,10 +16,15 @@ namespace NetRunner.Executable.Invokation.Functions
         private readonly string message;
         private readonly string header;
 
-        public ExecutionFailedMessage(HtmlRowReference rowReference, string message, string header)
+        [StringFormatMethod("messageFormat")]
+        public ExecutionFailedMessage(HtmlRowReference rowReference, string header, string messageFormat, params object[] args)
         {
+            Validate.ArgumentIsNotNull(rowReference, "rowReference");
+            Validate.ArgumentStringIsMeanful(header, "header");
+            Validate.ArgumentStringIsMeanful(messageFormat, "messageFormat");
+
             this.rowReference = rowReference;
-            this.message = message;
+            this.message = string.Format(messageFormat, args);
             this.header = header;
         }
 

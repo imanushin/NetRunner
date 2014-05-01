@@ -117,7 +117,7 @@ namespace NetRunner.Executable.Invokation.Functions
                 }
 
                 var rowResult = InvokeFunction(
-                    functionToExecute, 
+                    functionToExecute,
                     row.Cells.Select(c => c.CleanedContent).ToReadOnlyList());
 
                 changes.AddRange(rowResult.TableChanges);
@@ -127,7 +127,7 @@ namespace NetRunner.Executable.Invokation.Functions
                     exceptionsOccurred = true;
                     allIsOk = false;
 
-                    changes.Add(new AddExceptionLine( "Unable to execute function", rowResult.Exception, row.RowReference));
+                    changes.Add(new AddExceptionLine("Unable to execute function", rowResult.Exception, row.RowReference));
                     changes.Add(new AddRowCssClass(row.RowReference, HtmlParser.ErrorCssClass));
                 }
 
@@ -200,7 +200,19 @@ namespace NetRunner.Executable.Invokation.Functions
 
             var tableChanges = new List<AbstractTableChange>();
 
-            CheckInputData();
+            var inputDataErrors = CheckInputData();
+
+            if (inputDataErrors.Any())
+            {
+                inputDataErrors.Add(new ExecutionFailedMessage(
+                    Function.RowReference,
+                    "Row invokation was skipped because of parser errors",
+                    "Row invokation was skipped because of parser errors"));
+
+                inputDataErrors.Add(new AddRowCssClass(Function.RowReference, HtmlParser.FailCssClass));
+
+                return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Fail, inputDataErrors);
+            }
 
             for (int rowIndex = 0; rowIndex < orderedResult.Length && rowIndex < Rows.Count; rowIndex++)
             {
@@ -278,25 +290,42 @@ namespace NetRunner.Executable.Invokation.Functions
             return (resultValue ?? string.Empty).ToString();
         }
 
-        private bool CheckInputData()
+        private List<AbstractTableChange> CheckInputData()
         {
-            //ToDo: fill table changes
+            var errors = new List<AbstractTableChange>();
 
             foreach (HtmlRow htmlRow in Rows)
             {
-                Validate.Condition(
-                    CleanedColumnNames.Count == htmlRow.Cells.Count,
-                    "Row {0} contain less values ({1}) than header row ({2}).", htmlRow, htmlRow.Cells.Count, CleanedColumnNames.Count);
+                if (CleanedColumnNames.Count != htmlRow.Cells.Count)
+                {
+                    errors.Add(new ExecutionFailedMessage(
+                        htmlRow.RowReference,
+                        string.Format("Wrong column count: {0} expected, however {1} actual", CleanedColumnNames.Count, htmlRow.Cells.Count),
+                        "Current contain different count values (count: {0}) than header row (count: {1}).",
+                        htmlRow.Cells.Count,
+                        CleanedColumnNames.Count));
 
-                Validate.Condition(
-                    htmlRow.Cells.All(c => !c.IsBold),
-                    "Some of cells of row '{0}' are bold. All rows except first two should have non-bold entry, because bold type means metadata, non-bold type means test value", htmlRow);
+                    errors.Add(new AddRowCssClass(htmlRow.RowReference, HtmlParser.FailCssClass));
+                }
+
+                var boldCells = htmlRow.Cells.Where(c => c.IsBold).Select(c => "'" + c.CleanedContent + "'").ToReadOnlyList();
+
+                if (boldCells.Any())
+                {
+                    errors.Add(new ExecutionFailedMessage(
+                        htmlRow.RowReference,
+                        string.Format("{0} cells are bold. All cells should be non-bold", boldCells.Count),
+                        "All rows except first two should have non-bold entry, because bold type means metadata, non-bold type means test value. Current bold contains bold cells: {0}",
+                        boldCells));
+
+                    errors.Add(new AddRowCssClass(htmlRow.RowReference, HtmlParser.FailCssClass));
+                }
             }
 
-            return true;
+            return errors;
         }
 
-        private bool CompareItems(object resultObject, string expectedResult, string propertyName,  out object resultValue)
+        private bool CompareItems(object resultObject, string expectedResult, string propertyName, out object resultValue)
         {
             Type propertyType;
 

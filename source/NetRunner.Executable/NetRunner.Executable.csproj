@@ -37,6 +37,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -53,6 +54,7 @@
     <Compile Include="FitExecutable.cs" />
     <Compile Include="FitnesseCommunicator.cs" />
     <Compile Include="Invokation\Functions\InvokationResult.cs" />
+    <Compile Include="Invokation\InternalException.cs" />
     <Compile Include="Invokation\Keywords\AbstractKeyword.cs" />
     <Compile Include="Invokation\Functions\AbstractTableChange.cs" />
     <Compile Include="Invokation\ConversionException.cs" />

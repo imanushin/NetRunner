@@ -61,9 +61,19 @@ namespace NetRunner.Executable.Invokation.Functions
 
                 return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Success, result.TableChanges.Concat(trueResultMark));
             }
+            catch (InternalException ex)
+            {
+                return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Exception, new[]
+                {
+                    new AddExceptionLine(ex.Message, ex.InnerException, Function.RowReference)
+                });
+            }
             catch (Exception ex)
             {
-                return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Exception, new[] { new AddExceptionLine(ex, Function.RowReference) });
+                return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Exception, new[]
+                {
+                    new AddExceptionLine(ex, Function.RowReference)
+                });
             }
         }
 

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.Contracts;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -47,7 +48,7 @@ namespace NetRunner.Executable.Common
 
         protected override string GetString()
         {
-            return JoinToStringLazy(", ").ToString();
+            return Count.ToString(CultureInfo.InvariantCulture) + ": " + JoinToStringLazy(", ");
         }
 
         public object JoinToStringLazy(string separator)
@@ -57,7 +58,7 @@ namespace NetRunner.Executable.Common
 
         public ReadOnlyList<TValue> Concat(params TValue[] otherValues)
         {
-            return Concat((IReadOnlyCollection<TValue>) otherValues); //cast to avoid recursive call
+            return Concat((IReadOnlyCollection<TValue>)otherValues); //cast to avoid recursive call
         }
 
         public ReadOnlyList<TValue> Concat(IReadOnlyCollection<TValue> otherValues)
