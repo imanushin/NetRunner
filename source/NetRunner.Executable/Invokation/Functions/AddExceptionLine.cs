@@ -52,5 +52,10 @@ namespace NetRunner.Executable.Invokation.Functions
         {
             AddExpandableRow(node, rowReference, header, string.Join("<br/>", exceptions), HtmlParser.ErrorCssClass);
         }
+
+        public static string FormatExceptionHeader(Exception exception)
+        {
+            return string.Format("Function execution failed with error {0}", exception.GetType().Name);
+        }
     }
 }

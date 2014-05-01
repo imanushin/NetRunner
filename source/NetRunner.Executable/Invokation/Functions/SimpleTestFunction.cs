@@ -45,7 +45,7 @@ namespace NetRunner.Executable.Invokation.Functions
 
                 if (result.Exception != null)
                 {
-                    var errorChange = new AddExceptionLine("Function execution failed with error", result.Exception, Function.RowReference);
+                    var errorChange = new AddExceptionLine(AddExceptionLine.FormatExceptionHeader(result.Exception), result.Exception, Function.RowReference);
 
                     return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Exception, result.TableChanges.Concat(errorChange));
                 }

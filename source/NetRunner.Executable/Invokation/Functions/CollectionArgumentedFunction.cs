@@ -86,7 +86,7 @@ namespace NetRunner.Executable.Invokation.Functions
 
             if (result.Exception != null)
             {
-                var errorChange = new AddExceptionLine("Function execution failed with error", result.Exception, Function.RowReference);
+                var errorChange = new AddExceptionLine(AddExceptionLine.FormatExceptionHeader(result.Exception), result.Exception, Function.RowReference);
 
                 return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Exception, result.TableChanges.Concat(errorChange));
             }
@@ -127,7 +127,7 @@ namespace NetRunner.Executable.Invokation.Functions
                     exceptionsOccurred = true;
                     allIsOk = false;
 
-                    changes.Add(new AddExceptionLine("Unable to execute function", rowResult.Exception, row.RowReference));
+                    changes.Add(new AddExceptionLine(AddExceptionLine.FormatExceptionHeader(rowResult.Exception), rowResult.Exception, row.RowReference));
                     changes.Add(new AddRowCssClass(row.RowReference, HtmlParser.ErrorCssClass));
                 }
 
@@ -187,7 +187,7 @@ namespace NetRunner.Executable.Invokation.Functions
 
             if (result.Exception != null)
             {
-                var errorChange = new AddExceptionLine("Function execution failed with error", result.Exception, Function.RowReference);
+                var errorChange = new AddExceptionLine(AddExceptionLine.FormatExceptionHeader(result.Exception), result.Exception, Function.RowReference);
 
                 return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Exception, new[] { errorChange });
             }
