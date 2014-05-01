@@ -126,6 +126,13 @@ namespace {0}
         }}
 ";
 
+        private const string abstractClassTemplate = @"
+        private static IEnumerable<{0}> GetInstancesOfCurrentType()
+        {{
+            return ReadOnlyList<{0}>.Empty;
+        }}
+";
+
         private const string GetApparentsTemplate =
 @"
         private static IEnumerable<{0}>GetApparents()
@@ -158,10 +165,27 @@ namespace {0}
         }}
 ";
 
+        private const string testFileTemplate =
+            @"
+{0}
+
+namespace {1}
+{{
+    partial class {2}Test
+    {{
+        private static IEnumerable<{2}> GetInstancesOfCurrentType()
+        {{
+            #error Implement test class {2}Test to retrieve possible objects for type {2}
+        }}
+    }}
+}}
+
+";
+
         private const string UnionPartTemplate = @"{1}Test.objects";
 
 
-        public string GetFileEntry(Assembly targetAssembly)
+        public OutFile[] GetFileEntries(Assembly targetAssembly)
         {
             ISet<Type> types = new HashSet<Type>(ReadonlyClassesFinder.FindTypes(targetAssembly));
 
@@ -174,6 +198,8 @@ namespace {0}
             importedNamespaces = importedNamespaces.Select(name => string.Format("using {0};", name)).ToList();
 
             string namespaces = string.Join(Environment.NewLine, importedNamespaces);
+
+            var otherFiles = GenerateFileTemplates(types, namespaces);
 
             var result = new StringBuilder();
 
@@ -199,6 +225,10 @@ namespace {0}
                         string constructorNullArgumetnsCheck = GenerateTestForConstructors(type);
                         namespaceEntry.Append(constructorNullArgumetnsCheck);
                     }
+                    else
+                    {
+                        namespaceEntry.AppendFormat(abstractClassTemplate, type.Name);
+                    }
 
                     namespaceEntry.AppendFormat(commonTestClassEnd, type.Name);
                 }
@@ -206,7 +236,36 @@ namespace {0}
                 result.AppendFormat(namespaceTemplate, ReadonlyClassesFinder.ConvertToTestNamespace(grouping.Key), namespaceEntry);
             }
 
-            return string.Format(totalTemplate, namespaces, result);
+            var entry = string.Format(totalTemplate, namespaces, result);
+
+            otherFiles.Add(new OutFile(fileName, entry, true));
+
+            return otherFiles.ToArray();
+        }
+
+        private List<OutFile> GenerateFileTemplates(ISet<Type> types, string namespaces)
+        {
+            var result = new List<OutFile>();
+
+            foreach (Type type in types)
+            {
+                if (type.IsAbstract)
+                    continue;
+
+                var localPath = Path.Combine(
+                    string.Join(Path.DirectorySeparatorChar.ToString(), type.Namespace.Split('.').Skip(2).ToArray()),
+                    type.Name + "Test.cs");
+
+                string fileEntry = string.Format(
+                    testFileTemplate,
+                    namespaces,
+                    ReadonlyClassesFinder.ConvertToTestNamespace(type.Namespace),
+                    type.Name);
+
+                result.Add(new OutFile(localPath, fileEntry, false));
+            }
+
+            return result;
         }
 
         private static IEnumerable<string> GetNamespaces(ISet<Type> types)
@@ -521,14 +580,6 @@ namespace {0}
             string resultUnion = string.Join(").Union(" + Environment.NewLine, unions);
 
             namespaceEntry.AppendFormat(GetApparentsTemplate, type.Name, resultUnion);
-        }
-
-        public string FileName
-        {
-            get
-            {
-                return fileName;
-            }
         }
     }
 }

@@ -12,9 +12,6 @@ namespace NetRunner.Executable.Tests
     [TestClass]
     public abstract class ReadOnlyObjectTest
     {
-        private static readonly BinaryFormatter binaryFormatter = new BinaryFormatter();
-        private const int maxObjectsToTest = 16;
-
         protected virtual bool SkipTesting
         {
             get

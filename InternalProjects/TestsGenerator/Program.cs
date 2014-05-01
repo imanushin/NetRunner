@@ -69,25 +69,38 @@ namespace TestsGenerator
 
                 foreach (ITestGenerator generator in generators)
                 {
-                    string resultFileEntry = generator.GetFileEntry(targetAssembly);
+                    var resultFiles = generator.GetFileEntries(targetAssembly);
 
-                    string testsProject = pathToTargetProject.Replace(projectName, testProjectName);
-
-                    string resultFilePath = Path.Combine(testsProject, generator.FileName);
-
-                    Trace.WriteLine("Result file: " + resultFilePath);
-
-                    if (File.Exists(resultFilePath))
+                    foreach (OutFile resultFile in resultFiles)
                     {
-                        string oldData = File.ReadAllText(resultFilePath);
+                        string testsProject = pathToTargetProject.Replace(projectName, testProjectName);
 
-                        if (oldData == resultFileEntry)
-                            continue;
+                        string resultFilePath = Path.Combine(testsProject, resultFile.FileLocalPath);
 
-                        File.Delete(resultFilePath);
+                        Trace.WriteLine("Result file: " + resultFilePath);
+
+                        var fileDirectory = Path.GetDirectoryName(resultFilePath);
+
+                        if (!Directory.Exists(fileDirectory))
+                        {
+                            Directory.CreateDirectory(fileDirectory);
+                        }
+
+                        if (resultFile.OverrideExisting && File.Exists(resultFilePath))
+                        {
+                            string oldData = File.ReadAllText(resultFilePath);
+
+                            if (oldData == resultFile.FileEntry)
+                                continue;
+
+                            File.Delete(resultFilePath);
+                        }
+
+                        if (resultFile.OverrideExisting || !File.Exists(resultFilePath))
+                        {
+                            File.WriteAllText(resultFilePath, resultFile.FileEntry);
+                        }
                     }
-
-                    File.WriteAllText(resultFilePath, resultFileEntry);
                 }
                 return 0;
             }

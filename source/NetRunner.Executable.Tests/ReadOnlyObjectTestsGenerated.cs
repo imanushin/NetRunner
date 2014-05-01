@@ -76,6 +76,11 @@ EmptyKeywordTest.objects).Union(
 UnknownKeywordTest.objects);
         }
 
+        private static IEnumerable<AbstractKeyword> GetInstancesOfCurrentType()
+        {
+            return ReadOnlyList<AbstractKeyword>.Empty;
+        }
+
         [TestMethod]
         public void AbstractKeyword_GetHashCodeTest()
         {
@@ -364,6 +369,11 @@ ExecutionFailedMessageTest.objects).Union(
 ShowActualValueCellChangeTest.objects);
         }
 
+        private static IEnumerable<AbstractTableChange> GetInstancesOfCurrentType()
+        {
+            return ReadOnlyList<AbstractTableChange>.Empty;
+        }
+
         [TestMethod]
         public void AbstractTableChange_GetHashCodeTest()
         {
@@ -426,6 +436,11 @@ CollectionArgumentedFunctionTest.objects).Union(
 EmptyTestFunctionTest.objects).Union(
 TestFunctionsSequenceTest.objects).Union(
 SimpleTestFunctionTest.objects);
+        }
+
+        private static IEnumerable<AbstractTestFunction> GetInstancesOfCurrentType()
+        {
+            return ReadOnlyList<AbstractTestFunction>.Empty;
         }
 
         [TestMethod]

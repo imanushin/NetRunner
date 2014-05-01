@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="OutFile.cs" />
     <Compile Include="ReadonlyObjectGenerators\CheckEnumTestGenerator.cs" />
     <Compile Include="ReadonlyObjectGenerators\DateTimeTestGenerator.cs" />
     <Compile Include="ITestGenerator.cs" />
