@@ -89,6 +89,11 @@ namespace {0}
             }}
         }}
 
+        private static IEnumerable<{0}> GetInstances()
+        {{
+            return GetApparents().Concat(GetInstancesOfCurrentType());
+        }}
+
 ";
 
         private const string commonTestClassEnd =
@@ -106,22 +111,11 @@ namespace {0}
         }}
 
         [TestMethod]
-        public void {0}_SerializationTest()
-        {{
-            BaseSerializationTest(objects);
-        }}
-
-        [TestMethod]
         public void {0}_ToStringTest()
         {{
             BaseToStringTest(objects);
         }}
     }}
-
-        private static IEnumerable<{0}> GetInstances()
-        {{
-            return GetApparents().Concat(GetInstancesOfCurrentType());
-        }}
 ";
 
         private const string sealedClassTemplate =
@@ -222,6 +216,7 @@ namespace {0}
                 "System.Collections.Generic",
                 "System.Linq",
                 "Microsoft.VisualStudio.TestTools.UnitTesting",
+                "NetRunner.Executable.Tests",
             };
 
             importedNamespaces =

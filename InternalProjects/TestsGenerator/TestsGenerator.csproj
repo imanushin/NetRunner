@@ -50,7 +50,6 @@
   <ItemGroup>
     <Compile Include="ReadonlyObjectGenerators\CheckEnumTestGenerator.cs" />
     <Compile Include="ReadonlyObjectGenerators\DateTimeTestGenerator.cs" />
-    <Compile Include="EnumTestsGenerator.cs" />
     <Compile Include="ITestGenerator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

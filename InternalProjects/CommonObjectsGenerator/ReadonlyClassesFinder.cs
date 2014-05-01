@@ -42,8 +42,7 @@ namespace CommonObjectsGenerator
 
         public static string ConvertToTestNamespace(string objectNamespace)
         {
-            int indexOfFirstDot = objectNamespace.IndexOf('.');
-            int indexOfSecondDot = objectNamespace.IndexOf('.', indexOfFirstDot + 1);
+            int indexOfSecondDot = objectNamespace.IndexOf('.');
             int indexOfThirdDot = objectNamespace.IndexOf('.', indexOfSecondDot + 1);
 
             if (indexOfThirdDot == -1)

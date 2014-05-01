@@ -55,7 +55,9 @@
   </Choose>
   <ItemGroup>
     <Compile Include="EnumGeneratedTests.cs" />
+    <Compile Include="Invokation\Keywords\EmptyKeywordTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReadOnlyObjectTest.cs" />
     <Compile Include="ReadOnlyObjectTestsGenerated.cs" />
   </ItemGroup>
   <ItemGroup>

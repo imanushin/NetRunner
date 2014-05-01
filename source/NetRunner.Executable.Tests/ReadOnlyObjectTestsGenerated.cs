@@ -5,11 +5,12 @@ using NetRunner.Executable.Common;
 using NetRunner.Executable.Invokation;
 using NetRunner.Executable.Invokation.Functions;
 using NetRunner.Executable.Invokation.Keywords;
-using NetRunner.Executable.Invokation.Tests;
-using NetRunner.Executable.Invokation.Tests.Functions;
-using NetRunner.Executable.Invokation.Tests.Keywords;
 using NetRunner.Executable.RawData;
-using NetRunner.Executable.RawData.Tests;
+using NetRunner.Executable.Tests;
+using NetRunner.Executable.Tests.Invokation;
+using NetRunner.Executable.Tests.Invokation.Functions;
+using NetRunner.Executable.Tests.Invokation.Keywords;
+using NetRunner.Executable.Tests.RawData;
 using NetRunner.ExternalLibrary;
 using System;
 using System.Collections.Generic;
@@ -28,7 +29,7 @@ using System.Reflection;
 #pragma warning disable 219
 
 
-namespace NetRunner.Executable.Invokation.Tests.Keywords
+namespace NetRunner.Executable.Tests.Invokation.Keywords
 {
 
     [TestClass]
@@ -60,6 +61,11 @@ namespace NetRunner.Executable.Invokation.Tests.Keywords
             }
         }
 
+        private static IEnumerable<AbstractKeyword> GetInstances()
+        {
+            return GetApparents().Concat(GetInstancesOfCurrentType());
+        }
+
 
         private static IEnumerable<AbstractKeyword>GetApparents()
         {
@@ -83,22 +89,11 @@ UnknownKeywordTest.objects);
         }
 
         [TestMethod]
-        public void AbstractKeyword_SerializationTest()
-        {
-            BaseSerializationTest(objects);
-        }
-
-        [TestMethod]
         public void AbstractKeyword_ToStringTest()
         {
             BaseToStringTest(objects);
         }
     }
-
-        private static IEnumerable<AbstractKeyword> GetInstances()
-        {
-            return GetApparents().Concat(GetInstancesOfCurrentType());
-        }
 
     [TestClass]
     public sealed partial class CheckResultKeywordTest : ReadOnlyObjectTest
@@ -129,6 +124,11 @@ UnknownKeywordTest.objects);
             }
         }
 
+        private static IEnumerable<CheckResultKeyword> GetInstances()
+        {
+            return GetApparents().Concat(GetInstancesOfCurrentType());
+        }
+
 
         private static IEnumerable<CheckResultKeyword>GetApparents()
         {
@@ -148,22 +148,11 @@ UnknownKeywordTest.objects);
         }
 
         [TestMethod]
-        public void CheckResultKeyword_SerializationTest()
-        {
-            BaseSerializationTest(objects);
-        }
-
-        [TestMethod]
         public void CheckResultKeyword_ToStringTest()
         {
             BaseToStringTest(objects);
         }
     }
-
-        private static IEnumerable<CheckResultKeyword> GetInstances()
-        {
-            return GetApparents().Concat(GetInstancesOfCurrentType());
-        }
 
     [TestClass]
     public sealed partial class EmptyKeywordTest : ReadOnlyObjectTest
@@ -192,6 +181,11 @@ UnknownKeywordTest.objects);
             {
                 return objects.Objects.Skip(2).First();
             }
+        }
+
+        private static IEnumerable<EmptyKeyword> GetInstances()
+        {
+            return GetApparents().Concat(GetInstancesOfCurrentType());
         }
 
 
@@ -232,22 +226,11 @@ UnknownKeywordTest.objects);
         }
 
         [TestMethod]
-        public void EmptyKeyword_SerializationTest()
-        {
-            BaseSerializationTest(objects);
-        }
-
-        [TestMethod]
         public void EmptyKeyword_ToStringTest()
         {
             BaseToStringTest(objects);
         }
     }
-
-        private static IEnumerable<EmptyKeyword> GetInstances()
-        {
-            return GetApparents().Concat(GetInstancesOfCurrentType());
-        }
 
     [TestClass]
     public sealed partial class UnknownKeywordTest : ReadOnlyObjectTest
@@ -276,6 +259,11 @@ UnknownKeywordTest.objects);
             {
                 return objects.Objects.Skip(2).First();
             }
+        }
+
+        private static IEnumerable<UnknownKeyword> GetInstances()
+        {
+            return GetApparents().Concat(GetInstancesOfCurrentType());
         }
 
 
@@ -316,26 +304,15 @@ UnknownKeywordTest.objects);
         }
 
         [TestMethod]
-        public void UnknownKeyword_SerializationTest()
-        {
-            BaseSerializationTest(objects);
-        }
-
-        [TestMethod]
         public void UnknownKeyword_ToStringTest()
         {
             BaseToStringTest(objects);
         }
     }
 
-        private static IEnumerable<UnknownKeyword> GetInstances()
-        {
-            return GetApparents().Concat(GetInstancesOfCurrentType());
-        }
-
 }
 
-namespace NetRunner.Executable.Invokation.Tests.Functions
+namespace NetRunner.Executable.Tests.Invokation.Functions
 {
 
     [TestClass]
@@ -367,6 +344,11 @@ namespace NetRunner.Executable.Invokation.Tests.Functions
             }
         }
 
+        private static IEnumerable<AbstractTableChange> GetInstances()
+        {
+            return GetApparents().Concat(GetInstancesOfCurrentType());
+        }
+
 
         private static IEnumerable<AbstractTableChange>GetApparents()
         {
@@ -395,22 +377,11 @@ ShowActualValueCellChangeTest.objects);
         }
 
         [TestMethod]
-        public void AbstractTableChange_SerializationTest()
-        {
-            BaseSerializationTest(objects);
-        }
-
-        [TestMethod]
         public void AbstractTableChange_ToStringTest()
         {
             BaseToStringTest(objects);
         }
     }
-
-        private static IEnumerable<AbstractTableChange> GetInstances()
-        {
-            return GetApparents().Concat(GetInstancesOfCurrentType());
-        }
 
     [TestClass]
     public sealed partial class AbstractTestFunctionTest : ReadOnlyObjectTest
@@ -441,6 +412,11 @@ ShowActualValueCellChangeTest.objects);
             }
         }
 
+        private static IEnumerable<AbstractTestFunction> GetInstances()
+        {
+            return GetApparents().Concat(GetInstancesOfCurrentType());
+        }
+
 
         private static IEnumerable<AbstractTestFunction>GetApparents()
         {
@@ -465,22 +441,11 @@ SimpleTestFunctionTest.objects);
         }
 
         [TestMethod]
-        public void AbstractTestFunction_SerializationTest()
-        {
-            BaseSerializationTest(objects);
-        }
-
-        [TestMethod]
         public void AbstractTestFunction_ToStringTest()
         {
             BaseToStringTest(objects);
         }
     }
-
-        private static IEnumerable<AbstractTestFunction> GetInstances()
-        {
-            return GetApparents().Concat(GetInstancesOfCurrentType());
-        }
 
     [TestClass]
     public sealed partial class AddCellExpandableInfoTest : ReadOnlyObjectTest
@@ -509,6 +474,11 @@ SimpleTestFunctionTest.objects);
             {
                 return objects.Objects.Skip(2).First();
             }
+        }
+
+        private static IEnumerable<AddCellExpandableInfo> GetInstances()
+        {
+            return GetApparents().Concat(GetInstancesOfCurrentType());
         }
 
 
@@ -651,22 +621,11 @@ SimpleTestFunctionTest.objects);
         }
 
         [TestMethod]
-        public void AddCellExpandableInfo_SerializationTest()
-        {
-            BaseSerializationTest(objects);
-        }
-
-        [TestMethod]
         public void AddCellExpandableInfo_ToStringTest()
         {
             BaseToStringTest(objects);
         }
     }
-
-        private static IEnumerable<AddCellExpandableInfo> GetInstances()
-        {
-            return GetApparents().Concat(GetInstancesOfCurrentType());
-        }
 
     [TestClass]
     public sealed partial class AddExceptionLineTest : ReadOnlyObjectTest
@@ -695,6 +654,11 @@ SimpleTestFunctionTest.objects);
             {
                 return objects.Objects.Skip(2).First();
             }
+        }
+
+        private static IEnumerable<AddExceptionLine> GetInstances()
+        {
+            return GetApparents().Concat(GetInstancesOfCurrentType());
         }
 
 
@@ -980,22 +944,11 @@ SimpleTestFunctionTest.objects);
         }
 
         [TestMethod]
-        public void AddExceptionLine_SerializationTest()
-        {
-            BaseSerializationTest(objects);
-        }
-
-        [TestMethod]
         public void AddExceptionLine_ToStringTest()
         {
             BaseToStringTest(objects);
         }
     }
-
-        private static IEnumerable<AddExceptionLine> GetInstances()
-        {
-            return GetApparents().Concat(GetInstancesOfCurrentType());
-        }
 
     [TestClass]
     public sealed partial class AddTraceLineTest : ReadOnlyObjectTest
@@ -1024,6 +977,11 @@ SimpleTestFunctionTest.objects);
             {
                 return objects.Objects.Skip(2).First();
             }
+        }
+
+        private static IEnumerable<AddTraceLine> GetInstances()
+        {
+            return GetApparents().Concat(GetInstancesOfCurrentType());
         }
 
 
@@ -1113,22 +1071,11 @@ SimpleTestFunctionTest.objects);
         }
 
         [TestMethod]
-        public void AddTraceLine_SerializationTest()
-        {
-            BaseSerializationTest(objects);
-        }
-
-        [TestMethod]
         public void AddTraceLine_ToStringTest()
         {
             BaseToStringTest(objects);
         }
     }
-
-        private static IEnumerable<AddTraceLine> GetInstances()
-        {
-            return GetApparents().Concat(GetInstancesOfCurrentType());
-        }
 
     [TestClass]
     public sealed partial class AppendRowWithCellsTest : ReadOnlyObjectTest
@@ -1157,6 +1104,11 @@ SimpleTestFunctionTest.objects);
             {
                 return objects.Objects.Skip(2).First();
             }
+        }
+
+        private static IEnumerable<AppendRowWithCells> GetInstances()
+        {
+            return GetApparents().Concat(GetInstancesOfCurrentType());
         }
 
 
@@ -1246,22 +1198,11 @@ SimpleTestFunctionTest.objects);
         }
 
         [TestMethod]
-        public void AppendRowWithCells_SerializationTest()
-        {
-            BaseSerializationTest(objects);
-        }
-
-        [TestMethod]
         public void AppendRowWithCells_ToStringTest()
         {
             BaseToStringTest(objects);
         }
     }
-
-        private static IEnumerable<AppendRowWithCells> GetInstances()
-        {
-            return GetApparents().Concat(GetInstancesOfCurrentType());
-        }
 
     [TestClass]
     public sealed partial class CssClassCellChangeTest : ReadOnlyObjectTest
@@ -1290,6 +1231,11 @@ SimpleTestFunctionTest.objects);
             {
                 return objects.Objects.Skip(2).First();
             }
+        }
+
+        private static IEnumerable<CssClassCellChange> GetInstances()
+        {
+            return GetApparents().Concat(GetInstancesOfCurrentType());
         }
 
 
@@ -1381,22 +1327,11 @@ ShowActualValueCellChangeTest.objects);
         }
 
         [TestMethod]
-        public void CssClassCellChange_SerializationTest()
-        {
-            BaseSerializationTest(objects);
-        }
-
-        [TestMethod]
         public void CssClassCellChange_ToStringTest()
         {
             BaseToStringTest(objects);
         }
     }
-
-        private static IEnumerable<CssClassCellChange> GetInstances()
-        {
-            return GetApparents().Concat(GetInstancesOfCurrentType());
-        }
 
     [TestClass]
     public sealed partial class CollectionArgumentedFunctionTest : ReadOnlyObjectTest
@@ -1425,6 +1360,11 @@ ShowActualValueCellChangeTest.objects);
             {
                 return objects.Objects.Skip(2).First();
             }
+        }
+
+        private static IEnumerable<CollectionArgumentedFunction> GetInstances()
+        {
+            return GetApparents().Concat(GetInstancesOfCurrentType());
         }
 
 
@@ -1534,22 +1474,11 @@ ShowActualValueCellChangeTest.objects);
         }
 
         [TestMethod]
-        public void CollectionArgumentedFunction_SerializationTest()
-        {
-            BaseSerializationTest(objects);
-        }
-
-        [TestMethod]
         public void CollectionArgumentedFunction_ToStringTest()
         {
             BaseToStringTest(objects);
         }
     }
-
-        private static IEnumerable<CollectionArgumentedFunction> GetInstances()
-        {
-            return GetApparents().Concat(GetInstancesOfCurrentType());
-        }
 
     [TestClass]
     public sealed partial class EmptyTestFunctionTest : ReadOnlyObjectTest
@@ -1580,6 +1509,11 @@ ShowActualValueCellChangeTest.objects);
             }
         }
 
+        private static IEnumerable<EmptyTestFunction> GetInstances()
+        {
+            return GetApparents().Concat(GetInstancesOfCurrentType());
+        }
+
 
         private static IEnumerable<EmptyTestFunction>GetApparents()
         {
@@ -1599,22 +1533,11 @@ ShowActualValueCellChangeTest.objects);
         }
 
         [TestMethod]
-        public void EmptyTestFunction_SerializationTest()
-        {
-            BaseSerializationTest(objects);
-        }
-
-        [TestMethod]
         public void EmptyTestFunction_ToStringTest()
         {
             BaseToStringTest(objects);
         }
     }
-
-        private static IEnumerable<EmptyTestFunction> GetInstances()
-        {
-            return GetApparents().Concat(GetInstancesOfCurrentType());
-        }
 
     [TestClass]
     public sealed partial class AddRowCssClassTest : ReadOnlyObjectTest
@@ -1643,6 +1566,11 @@ ShowActualValueCellChangeTest.objects);
             {
                 return objects.Objects.Skip(2).First();
             }
+        }
+
+        private static IEnumerable<AddRowCssClass> GetInstances()
+        {
+            return GetApparents().Concat(GetInstancesOfCurrentType());
         }
 
 
@@ -1732,22 +1660,11 @@ ShowActualValueCellChangeTest.objects);
         }
 
         [TestMethod]
-        public void AddRowCssClass_SerializationTest()
-        {
-            BaseSerializationTest(objects);
-        }
-
-        [TestMethod]
         public void AddRowCssClass_ToStringTest()
         {
             BaseToStringTest(objects);
         }
     }
-
-        private static IEnumerable<AddRowCssClass> GetInstances()
-        {
-            return GetApparents().Concat(GetInstancesOfCurrentType());
-        }
 
     [TestClass]
     public sealed partial class ExecutionFailedMessageTest : ReadOnlyObjectTest
@@ -1776,6 +1693,11 @@ ShowActualValueCellChangeTest.objects);
             {
                 return objects.Objects.Skip(2).First();
             }
+        }
+
+        private static IEnumerable<ExecutionFailedMessage> GetInstances()
+        {
+            return GetApparents().Concat(GetInstancesOfCurrentType());
         }
 
 
@@ -1945,22 +1867,11 @@ ShowActualValueCellChangeTest.objects);
         }
 
         [TestMethod]
-        public void ExecutionFailedMessage_SerializationTest()
-        {
-            BaseSerializationTest(objects);
-        }
-
-        [TestMethod]
         public void ExecutionFailedMessage_ToStringTest()
         {
             BaseToStringTest(objects);
         }
     }
-
-        private static IEnumerable<ExecutionFailedMessage> GetInstances()
-        {
-            return GetApparents().Concat(GetInstancesOfCurrentType());
-        }
 
     [TestClass]
     public sealed partial class ShowActualValueCellChangeTest : ReadOnlyObjectTest
@@ -1989,6 +1900,11 @@ ShowActualValueCellChangeTest.objects);
             {
                 return objects.Objects.Skip(2).First();
             }
+        }
+
+        private static IEnumerable<ShowActualValueCellChange> GetInstances()
+        {
+            return GetApparents().Concat(GetInstancesOfCurrentType());
         }
 
 
@@ -2050,22 +1966,11 @@ ShowActualValueCellChangeTest.objects);
         }
 
         [TestMethod]
-        public void ShowActualValueCellChange_SerializationTest()
-        {
-            BaseSerializationTest(objects);
-        }
-
-        [TestMethod]
         public void ShowActualValueCellChange_ToStringTest()
         {
             BaseToStringTest(objects);
         }
     }
-
-        private static IEnumerable<ShowActualValueCellChange> GetInstances()
-        {
-            return GetApparents().Concat(GetInstancesOfCurrentType());
-        }
 
     [TestClass]
     public sealed partial class TestFunctionsSequenceTest : ReadOnlyObjectTest
@@ -2094,6 +1999,11 @@ ShowActualValueCellChangeTest.objects);
             {
                 return objects.Objects.Skip(2).First();
             }
+        }
+
+        private static IEnumerable<TestFunctionsSequence> GetInstances()
+        {
+            return GetApparents().Concat(GetInstancesOfCurrentType());
         }
 
 
@@ -2134,22 +2044,11 @@ ShowActualValueCellChangeTest.objects);
         }
 
         [TestMethod]
-        public void TestFunctionsSequence_SerializationTest()
-        {
-            BaseSerializationTest(objects);
-        }
-
-        [TestMethod]
         public void TestFunctionsSequence_ToStringTest()
         {
             BaseToStringTest(objects);
         }
     }
-
-        private static IEnumerable<TestFunctionsSequence> GetInstances()
-        {
-            return GetApparents().Concat(GetInstancesOfCurrentType());
-        }
 
     [TestClass]
     public sealed partial class SimpleTestFunctionTest : ReadOnlyObjectTest
@@ -2178,6 +2077,11 @@ ShowActualValueCellChangeTest.objects);
             {
                 return objects.Objects.Skip(2).First();
             }
+        }
+
+        private static IEnumerable<SimpleTestFunction> GetInstances()
+        {
+            return GetApparents().Concat(GetInstancesOfCurrentType());
         }
 
 
@@ -2239,26 +2143,15 @@ ShowActualValueCellChangeTest.objects);
         }
 
         [TestMethod]
-        public void SimpleTestFunction_SerializationTest()
-        {
-            BaseSerializationTest(objects);
-        }
-
-        [TestMethod]
         public void SimpleTestFunction_ToStringTest()
         {
             BaseToStringTest(objects);
         }
     }
 
-        private static IEnumerable<SimpleTestFunction> GetInstances()
-        {
-            return GetApparents().Concat(GetInstancesOfCurrentType());
-        }
-
 }
 
-namespace NetRunner.Executable.Invokation.Tests
+namespace NetRunner.Executable.Tests.Invokation
 {
 
     [TestClass]
@@ -2288,6 +2181,11 @@ namespace NetRunner.Executable.Invokation.Tests
             {
                 return objects.Objects.Skip(2).First();
             }
+        }
+
+        private static IEnumerable<FunctionExecutionResult> GetInstances()
+        {
+            return GetApparents().Concat(GetInstancesOfCurrentType());
         }
 
 
@@ -2349,22 +2247,11 @@ namespace NetRunner.Executable.Invokation.Tests
         }
 
         [TestMethod]
-        public void FunctionExecutionResult_SerializationTest()
-        {
-            BaseSerializationTest(objects);
-        }
-
-        [TestMethod]
         public void FunctionExecutionResult_ToStringTest()
         {
             BaseToStringTest(objects);
         }
     }
-
-        private static IEnumerable<FunctionExecutionResult> GetInstances()
-        {
-            return GetApparents().Concat(GetInstancesOfCurrentType());
-        }
 
     [TestClass]
     public sealed partial class FunctionHeaderTest : ReadOnlyObjectTest
@@ -2393,6 +2280,11 @@ namespace NetRunner.Executable.Invokation.Tests
             {
                 return objects.Objects.Skip(2).First();
             }
+        }
+
+        private static IEnumerable<FunctionHeader> GetInstances()
+        {
+            return GetApparents().Concat(GetInstancesOfCurrentType());
         }
 
 
@@ -2532,22 +2424,11 @@ namespace NetRunner.Executable.Invokation.Tests
         }
 
         [TestMethod]
-        public void FunctionHeader_SerializationTest()
-        {
-            BaseSerializationTest(objects);
-        }
-
-        [TestMethod]
         public void FunctionHeader_ToStringTest()
         {
             BaseToStringTest(objects);
         }
     }
-
-        private static IEnumerable<FunctionHeader> GetInstances()
-        {
-            return GetApparents().Concat(GetInstancesOfCurrentType());
-        }
 
     [TestClass]
     public sealed partial class HtmlRowReferenceTest : ReadOnlyObjectTest
@@ -2578,6 +2459,11 @@ namespace NetRunner.Executable.Invokation.Tests
             }
         }
 
+        private static IEnumerable<HtmlRowReference> GetInstances()
+        {
+            return GetApparents().Concat(GetInstancesOfCurrentType());
+        }
+
 
         private static IEnumerable<HtmlRowReference>GetApparents()
         {
@@ -2597,22 +2483,11 @@ namespace NetRunner.Executable.Invokation.Tests
         }
 
         [TestMethod]
-        public void HtmlRowReference_SerializationTest()
-        {
-            BaseSerializationTest(objects);
-        }
-
-        [TestMethod]
         public void HtmlRowReference_ToStringTest()
         {
             BaseToStringTest(objects);
         }
     }
-
-        private static IEnumerable<HtmlRowReference> GetInstances()
-        {
-            return GetApparents().Concat(GetInstancesOfCurrentType());
-        }
 
     [TestClass]
     public sealed partial class TestFunctionReferenceTest : ReadOnlyObjectTest
@@ -2641,6 +2516,11 @@ namespace NetRunner.Executable.Invokation.Tests
             {
                 return objects.Objects.Skip(2).First();
             }
+        }
+
+        private static IEnumerable<TestFunctionReference> GetInstances()
+        {
+            return GetApparents().Concat(GetInstancesOfCurrentType());
         }
 
 
@@ -2702,26 +2582,15 @@ namespace NetRunner.Executable.Invokation.Tests
         }
 
         [TestMethod]
-        public void TestFunctionReference_SerializationTest()
-        {
-            BaseSerializationTest(objects);
-        }
-
-        [TestMethod]
         public void TestFunctionReference_ToStringTest()
         {
             BaseToStringTest(objects);
         }
     }
 
-        private static IEnumerable<TestFunctionReference> GetInstances()
-        {
-            return GetApparents().Concat(GetInstancesOfCurrentType());
-        }
-
 }
 
-namespace NetRunner.Executable.RawData.Tests
+namespace NetRunner.Executable.Tests.RawData
 {
 
     [TestClass]
@@ -2751,6 +2620,11 @@ namespace NetRunner.Executable.RawData.Tests
             {
                 return objects.Objects.Skip(2).First();
             }
+        }
+
+        private static IEnumerable<FitnesseHtmlDocument> GetInstances()
+        {
+            return GetApparents().Concat(GetInstancesOfCurrentType());
         }
 
 
@@ -2840,22 +2714,11 @@ namespace NetRunner.Executable.RawData.Tests
         }
 
         [TestMethod]
-        public void FitnesseHtmlDocument_SerializationTest()
-        {
-            BaseSerializationTest(objects);
-        }
-
-        [TestMethod]
         public void FitnesseHtmlDocument_ToStringTest()
         {
             BaseToStringTest(objects);
         }
     }
-
-        private static IEnumerable<FitnesseHtmlDocument> GetInstances()
-        {
-            return GetApparents().Concat(GetInstancesOfCurrentType());
-        }
 
     [TestClass]
     public sealed partial class HtmlCellTest : ReadOnlyObjectTest
@@ -2884,6 +2747,11 @@ namespace NetRunner.Executable.RawData.Tests
             {
                 return objects.Objects.Skip(2).First();
             }
+        }
+
+        private static IEnumerable<HtmlCell> GetInstances()
+        {
+            return GetApparents().Concat(GetInstancesOfCurrentType());
         }
 
 
@@ -2924,22 +2792,11 @@ namespace NetRunner.Executable.RawData.Tests
         }
 
         [TestMethod]
-        public void HtmlCell_SerializationTest()
-        {
-            BaseSerializationTest(objects);
-        }
-
-        [TestMethod]
         public void HtmlCell_ToStringTest()
         {
             BaseToStringTest(objects);
         }
     }
-
-        private static IEnumerable<HtmlCell> GetInstances()
-        {
-            return GetApparents().Concat(GetInstancesOfCurrentType());
-        }
 
     [TestClass]
     public sealed partial class HtmlRowTest : ReadOnlyObjectTest
@@ -2968,6 +2825,11 @@ namespace NetRunner.Executable.RawData.Tests
             {
                 return objects.Objects.Skip(2).First();
             }
+        }
+
+        private static IEnumerable<HtmlRow> GetInstances()
+        {
+            return GetApparents().Concat(GetInstancesOfCurrentType());
         }
 
 
@@ -3029,22 +2891,11 @@ namespace NetRunner.Executable.RawData.Tests
         }
 
         [TestMethod]
-        public void HtmlRow_SerializationTest()
-        {
-            BaseSerializationTest(objects);
-        }
-
-        [TestMethod]
         public void HtmlRow_ToStringTest()
         {
             BaseToStringTest(objects);
         }
     }
-
-        private static IEnumerable<HtmlRow> GetInstances()
-        {
-            return GetApparents().Concat(GetInstancesOfCurrentType());
-        }
 
     [TestClass]
     public sealed partial class HtmlTableTest : ReadOnlyObjectTest
@@ -3073,6 +2924,11 @@ namespace NetRunner.Executable.RawData.Tests
             {
                 return objects.Objects.Skip(2).First();
             }
+        }
+
+        private static IEnumerable<HtmlTable> GetInstances()
+        {
+            return GetApparents().Concat(GetInstancesOfCurrentType());
         }
 
 
@@ -3186,22 +3042,11 @@ namespace NetRunner.Executable.RawData.Tests
         }
 
         [TestMethod]
-        public void HtmlTable_SerializationTest()
-        {
-            BaseSerializationTest(objects);
-        }
-
-        [TestMethod]
         public void HtmlTable_ToStringTest()
         {
             BaseToStringTest(objects);
         }
     }
-
-        private static IEnumerable<HtmlTable> GetInstances()
-        {
-            return GetApparents().Concat(GetInstancesOfCurrentType());
-        }
 
 }
 

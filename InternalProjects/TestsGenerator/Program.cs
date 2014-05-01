@@ -65,7 +65,7 @@ namespace TestsGenerator
 
                 string testProjectName = projectName + ".Tests";
 
-                var generators = new ITestGenerator[] { new ReadonlyObjectTestGenerator(), new EnumTestsGenerator() };
+                var generators = new ITestGenerator[] { new ReadonlyObjectTestGenerator() };
 
                 foreach (ITestGenerator generator in generators)
                 {
