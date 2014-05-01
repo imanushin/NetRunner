@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NetRunner.Executable.Common;
+using NetRunner.Executable.Invokation.Functions;
 using NetRunner.Executable.RawData;
 using NetRunner.ExternalLibrary.Properties;
 
@@ -11,15 +12,16 @@ namespace NetRunner.Executable.Invokation.Keywords
 {
     internal sealed class CheckResultKeyword : AbstractKeyword
     {
-        private ReadOnlyList<HtmlCell> cells;
-        private ReadOnlyList<HtmlCell> patchedCells;
+        private readonly ReadOnlyList<HtmlCell> patchedCells;
+        private readonly HtmlCell lastCell;
 
         private CheckResultKeyword(ReadOnlyList<HtmlCell> patchedCells, HtmlCell lastCell)
         {
-            Validate.CollectionArgumentHasElements(cells, "patchedCells");
+            Validate.CollectionArgumentHasElements(patchedCells, "patchedCells");
             Validate.ArgumentIsNotNull(lastCell, "lastCell");
 
             this.patchedCells = patchedCells;
+            this.lastCell = lastCell;
         }
 
         public override ReadOnlyList<HtmlCell> PatchedCells
@@ -28,6 +30,22 @@ namespace NetRunner.Executable.Invokation.Keywords
             {
                 return patchedCells;
             }
+        }
+
+        public override InvokationResult InvokeFunction(Func<InvokationResult> func, TestFunctionReference targetFunction)
+        {
+            var result = base.InvokeFunction(func, targetFunction);
+
+            if (result.Exception != null)
+                return result;
+
+            var resultObject = result.Result;
+
+            var expectedObject = ParametersConverter.ConvertParameter(lastCell.CleanedContent, targetFunction.ResultType);
+
+            bool checkSucceded = Equals(expectedObject, resultObject);
+
+            return new InvokationResult(checkSucceded, null);
         }
 
         /// <summary>

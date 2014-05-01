@@ -4,14 +4,16 @@ using System.Linq;
 using HtmlAgilityPack;
 using NetRunner.Executable.Common;
 using NetRunner.Executable.RawData;
+using NetRunner.ExternalLibrary.Properties;
 
 namespace NetRunner.Executable.Invokation.Functions
 {
     internal sealed class SimpleTestFunction : AbstractTestFunction
     {
-        public SimpleTestFunction(FunctionHeader header, TestFunctionReference functionToExecute)
+        public SimpleTestFunction([NotNull] FunctionHeader header, [NotNull] TestFunctionReference functionToExecute)
         {
             Validate.ArgumentIsNotNull(header, "header");
+            Validate.ArgumentIsNotNull(functionToExecute, "functionToExecute");
 
             Function = header;
             FunctionReference = functionToExecute;
@@ -32,6 +34,7 @@ namespace NetRunner.Executable.Invokation.Functions
         protected override IEnumerable<object> GetInnerObjects()
         {
             yield return Function;
+            yield return FunctionReference;
         }
 
         public override FunctionExecutionResult Invoke()

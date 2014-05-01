@@ -13,6 +13,11 @@ namespace FitSample
 {
     internal sealed class NetRunnerTestContainer : BaseTestContainer
     {
+        public int SummAndWillBe(int first, int second)
+        {
+            return first + second;
+        }
+
         public bool IsPositive(int value)
         {
             return value > 0;

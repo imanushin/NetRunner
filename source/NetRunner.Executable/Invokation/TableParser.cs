@@ -24,12 +24,12 @@ namespace NetRunner.Executable.Invokation
 
             var functionToExecute = ReflectionLoader.Instance.FindFunction(header.FunctionName, header.Arguments.Count);
 
+            Validate.IsNotNull(functionToExecute, "Unable to find function {0}", header.FunctionName);
+
             if (table.Rows.Count == 1)
             {
                 return new SimpleTestFunction(header, functionToExecute);
             }
-
-            Validate.IsNotNull(functionToExecute, "Unable to find function {0}", header.FunctionName);
 
             if (!functionToExecute.HasStrongResult)
             {

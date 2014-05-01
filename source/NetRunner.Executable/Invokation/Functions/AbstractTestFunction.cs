@@ -12,6 +12,9 @@ namespace NetRunner.Executable.Invokation.Functions
             TestFunctionReference functionReference,
             FunctionHeader originalFunction)
         {
+            Validate.ArgumentIsNotNull(functionReference, "functionReference");
+            Validate.ArgumentIsNotNull(originalFunction, "originalFunction");
+
             var keyword = originalFunction.Keyword;
 
             return keyword.InvokeFunction(() => InvokeFunction(functionReference, originalFunction.Arguments), functionReference);
