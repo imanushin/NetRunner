@@ -41,7 +41,7 @@ namespace TestsGenerator.ReadonlyObjectGenerators
 
             const string replacementTemplate = "({0}){1}";
 
-            string replacement = string.Format(replacementTemplate, parameterType, wrongValue);
+            string replacement = string.Format(replacementTemplate, EnumTestsGenerator.GetEnumName(parameterType), wrongValue);
 
             Type targetType = param.Member.DeclaringType;
 

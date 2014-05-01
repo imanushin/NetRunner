@@ -23,7 +23,13 @@ namespace NetRunner.Executable.Tests.Invokation
     {
         private static IEnumerable<TestFunctionReference> GetInstancesOfCurrentType()
         {
-            #error Implement test class TestFunctionReferenceTest to retrieve possible objects for type TestFunctionReference
+            foreach (var methodInfo in typeof(TestFunctionReferenceTest).GetMethods())
+            {
+                foreach (var container in new[] { new FakeFunctionContainer(1), new FakeFunctionContainer(1) })
+                {
+                    yield return new TestFunctionReference(methodInfo, container);
+                }
+            }
         }
     }
 }

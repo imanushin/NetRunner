@@ -23,7 +23,13 @@ namespace NetRunner.Executable.Tests.Invokation.Functions
     {
         private static IEnumerable<AddTraceLine> GetInstancesOfCurrentType()
         {
-            #error Implement test class AddTraceLineTest to retrieve possible objects for type AddTraceLine
+            foreach (string text in new[] { "1", "2" })
+            {
+                foreach (var htmlRowReference in HtmlRowReferenceTest.objects.Objects)
+                {
+                    yield return new AddTraceLine(text, htmlRowReference);
+                }
+            }
         }
     }
 }

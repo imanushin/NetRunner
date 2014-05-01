@@ -23,7 +23,20 @@ namespace NetRunner.Executable.Tests.Invokation
     {
         private static IEnumerable<HtmlRowReference> GetInstancesOfCurrentType()
         {
-            #error Implement test class HtmlRowReferenceTest to retrieve possible objects for type HtmlRowReference
+            var document = new HtmlDocument();
+
+            var first = document.CreateElement(HtmlParser.TableRowNodeName);
+            first.InnerHtml = "check";
+
+            var second = document.CreateElement(HtmlParser.TableRowNodeName);
+            second.InnerHtml = "<b>function name</b>";
+
+            var third = document.CreateElement(HtmlParser.TableRowNodeName);
+            third.InnerHtml = "<i>res</i>";
+
+            yield return HtmlRowReference.MarkRowAndGenerateReference(first);
+            yield return HtmlRowReference.MarkRowAndGenerateReference(second);
+            yield return HtmlRowReference.MarkRowAndGenerateReference(third);
         }
     }
 }

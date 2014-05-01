@@ -23,7 +23,13 @@ namespace NetRunner.Executable.Tests.Invokation.Functions
     {
         private static IEnumerable<ShowActualValueCellChange> GetInstancesOfCurrentType()
         {
-            #error Implement test class ShowActualValueCellChangeTest to retrieve possible objects for type ShowActualValueCellChange
+            foreach (var actualValue in new[] { "1", new object() })
+            {
+                foreach (var htmlCell in HtmlCellTest.objects.Objects)
+                {
+                    yield return new ShowActualValueCellChange(htmlCell, actualValue);
+                }
+            }
         }
     }
 }

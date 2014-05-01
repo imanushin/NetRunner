@@ -23,7 +23,10 @@ namespace NetRunner.Executable.Tests.Invokation.Functions
     {
         private static IEnumerable<TestFunctionsSequence> GetInstancesOfCurrentType()
         {
-            #error Implement test class TestFunctionsSequenceTest to retrieve possible objects for type TestFunctionsSequence
+            foreach (var testFunctions in new[] { AbstractTestFunctionTest.objects.Skip(1).ToReadOnlyList(), AbstractTestFunctionTest.objects.Take(2).ToReadOnlyList() })
+            {
+                yield return new TestFunctionsSequence(testFunctions);
+            }
         }
     }
 }

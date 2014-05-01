@@ -23,7 +23,20 @@ namespace NetRunner.Executable.Tests.RawData
     {
         private static IEnumerable<HtmlCell> GetInstancesOfCurrentType()
         {
-            #error Implement test class HtmlCellTest to retrieve possible objects for type HtmlCell
+            var document = new HtmlDocument();
+
+            var first = document.CreateElement("td");
+            first.InnerHtml = "check";
+
+            var second = document.CreateElement("td");
+            second.InnerHtml = "<b>function name</b>";
+
+            var third = document.CreateElement("td");
+            third.InnerHtml = "<i>res</i>";
+
+            yield return new HtmlCell(first);
+            yield return new HtmlCell(second);
+            yield return new HtmlCell(third);
         }
     }
 }

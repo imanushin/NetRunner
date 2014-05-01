@@ -23,7 +23,14 @@ namespace NetRunner.Executable.Tests.Invokation.Functions
     {
         private static IEnumerable<ExecutionFailedMessage> GetInstancesOfCurrentType()
         {
-            #error Implement test class ExecutionFailedMessageTest to retrieve possible objects for type ExecutionFailedMessage
+            foreach (HtmlRowReference rowReference in HtmlRowReferenceTest.objects.Objects)
+            {
+                foreach (var header in new[] { "header1", "header2" })
+                {
+                    yield return new ExecutionFailedMessage(rowReference, header, "test");
+                    yield return new ExecutionFailedMessage(rowReference, header, "test {0}", "123");
+                }
+            }
         }
     }
 }

@@ -23,7 +23,25 @@ namespace NetRunner.Executable.Tests.RawData
     {
         private static IEnumerable<HtmlTable> GetInstancesOfCurrentType()
         {
-            #error Implement test class HtmlTableTest to retrieve possible objects for type HtmlTable
+            var document = new HtmlDocument();
+
+            var first = document.CreateElement(HtmlParser.TableRowNodeName);
+            first.InnerHtml = "check";
+
+            var second = document.CreateElement(HtmlParser.TableRowNodeName);
+            second.InnerHtml = "<b>function name</b>";
+
+            foreach (var htmlNode in new[] { first, second })
+            {
+                foreach (var rows in new[] { HtmlRowTest.objects.Objects.Skip(1).ToReadOnlyList(), HtmlRowTest.objects.Objects.Take(2).ToReadOnlyList() })
+                {
+                    foreach (var suffix in new[] { "suffix1", "" })
+                    {
+                        yield return new HtmlTable(rows, htmlNode, suffix);
+                    }
+                }
+            }
+
         }
     }
 }

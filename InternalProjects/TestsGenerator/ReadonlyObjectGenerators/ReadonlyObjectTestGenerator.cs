@@ -143,7 +143,7 @@ namespace {0}
         }}
 ";
 
-        private const string CheckNullArgConstructorTestTemplate =
+        private const string checkNullArgConstructorTestTemplate =
 @"
         [TestMethod]
         public void {2}_CheckNullArg_{0}{4}()
@@ -383,11 +383,12 @@ namespace {1}
                 methodSuffix = "_" + indexer++;
             }
 
-            string currentArgs = argumentsList.Replace(param.Name, currentArgsReplacement);
+            var currentArgs = string.Join(", ", argumentsList.Split(',').Select(s => s.Trim())
+                .Select(s => string.Equals(s, param.Name, StringComparison.Ordinal) ? currentArgsReplacement : s));
 
             Type targetType = param.Member.DeclaringType;
 
-            return string.Format(CheckNullArgConstructorTestTemplate, param.Name, initialization, targetType.Name, currentArgs, methodSuffix);
+            return string.Format(checkNullArgConstructorTestTemplate, param.Name, initialization, targetType.Name, currentArgs, methodSuffix);
         }
 
         private static string GetFullName(Type t)
@@ -420,77 +421,77 @@ namespace {1}
             return string.Format(template, parameter.Name, initializer);
         }
 
-        private static string CreateTypeInitializer(Type parameterType, MemberInfo owner)
+        private static string CreateTypeInitializer(Type enumType, MemberInfo owner)
         {
-            if (ReadonlyClassesFinder.IsTypeReadOnly(parameterType))
+            if (ReadonlyClassesFinder.IsTypeReadOnly(enumType))
             {
                 const string initializerTemplate = "{0}Test.First";
 
-                return string.Format(initializerTemplate, parameterType.Name);
+                return string.Format(initializerTemplate, enumType.Name);
             }
-            if (typeof(int) == parameterType)
+            if (typeof(int) == enumType)
             {
                 return (indexer++).ToString(CultureInfo.InvariantCulture);
             }
-            if (typeof(byte) == parameterType)
+            if (typeof(byte) == enumType)
             {
                 return ((byte)(indexer++)).ToString(CultureInfo.InvariantCulture);
             }
-            if (typeof(bool) == parameterType)
+            if (typeof(bool) == enumType)
             {
                 return "true";
             }
-            if (typeof(string) == parameterType)
+            if (typeof(string) == enumType)
             {
                 return string.Format(@"""text {0}""", indexer++);
             }
-            if (typeof(IntPtr) == parameterType)
+            if (typeof(IntPtr) == enumType)
             {
                 return string.Format(@"+memory");
             }
-            if (typeof(long) == parameterType)
+            if (typeof(long) == enumType)
             {
                 return string.Format((indexer++).ToString());
             }
-            if (typeof(DirectoryEntry) == parameterType)
+            if (typeof(DirectoryEntry) == enumType)
             {
                 return "new DirectoryEntry()";
             }
-            if (typeof(X509Certificate2) == parameterType)
+            if (typeof(X509Certificate2) == enumType)
             {
                 return "new X509Certificate2()";
             }
-            if (typeof(SecurityIdentifier) == parameterType)
+            if (typeof(SecurityIdentifier) == enumType)
             {
                 return string.Format(@"new SecurityIdentifier(WellKnownSidType.NullSid, null)");
             }
-            if (typeof(Guid) == parameterType)
+            if (typeof(Guid) == enumType)
             {
                 return string.Format(@"new Guid(""{0}"")", new Guid("{C556EA1B-20B8-4E2D-BB3F-8C1A9A691C73}"));
             }
-            if (parameterType.Name == "IScopeObject")
+            if (enumType.Name == "IScopeObject")
             {
                 return "DomainAccountTest.First";
             }
-            if (parameterType.Name.StartsWith("IDictionary`") || parameterType.Name.StartsWith("Dictionary`"))
+            if (enumType.Name.StartsWith("IDictionary`") || enumType.Name.StartsWith("Dictionary`"))
             {
-                return string.Format("new Dictionary<{0},{1}>()", GetFullName(parameterType.GenericTypeArguments[0]), GetFullName(parameterType.GenericTypeArguments[1]));
+                return string.Format("new Dictionary<{0},{1}>()", GetFullName(enumType.GenericTypeArguments[0]), GetFullName(enumType.GenericTypeArguments[1]));
             }
-            if (parameterType.Name.StartsWith("ReadOnlyDictionary`"))
+            if (enumType.Name.StartsWith("ReadOnlyDictionary`"))
             {
-                return string.Format("new Dictionary<{0},{1}>().ToReadOnlyDictionary()", GetFullName(parameterType.GenericTypeArguments[0]), GetFullName(parameterType.GenericTypeArguments[1]));
+                return string.Format("new Dictionary<{0},{1}>().ToReadOnlyDictionary()", GetFullName(enumType.GenericTypeArguments[0]), GetFullName(enumType.GenericTypeArguments[1]));
             }
-            if (parameterType.Name.StartsWith("Func`"))
+            if (enumType.Name.StartsWith("Func`"))
             {
-                string parameters = string.Join(", ", Enumerable.Range(1, parameterType.GenericTypeArguments.Length - 1).Select(num => "arg" + num));
+                string parameters = string.Join(", ", Enumerable.Range(1, enumType.GenericTypeArguments.Length - 1).Select(num => "arg" + num));
 
-                string resultType = parameterType.GenericTypeArguments.Last().Name;
+                string resultType = enumType.GenericTypeArguments.Last().Name;
 
-                string allArguments = string.Join(", ", parameterType.GenericTypeArguments.Select(type => type.Name));
+                string allArguments = string.Join(", ", enumType.GenericTypeArguments.Select(type => type.Name));
 
                 return string.Format("new Func<{2}>(({0})=>default({1}))", parameters, resultType, allArguments);
             }
-            if (typeof(DateTime) == parameterType)//Всё равно упадет в другом тесте
+            if (typeof(DateTime) == enumType)//Всё равно упадет в другом тесте
             {
                 DateTime result = startDate.AddSeconds(indexer++).AddMinutes(indexer++).AddHours(indexer++);
 
@@ -503,67 +504,69 @@ namespace {1}
                     result.Minute,
                     result.Second);
             }
-            if (parameterType.IsEnum)
+            if (enumType.IsEnum)
             {
-                const string initializerTemplate = "EnumHelper<{0}>.Values.First()";
+                const string initializerTemplate = "Enum.GetValues(typeof({0})).Cast<{0}>().First()";
 
-                return string.Format(initializerTemplate, parameterType.Name);
+                var name = EnumTestsGenerator.GetEnumName(enumType);
+
+                return string.Format(initializerTemplate, name);
             }
 
-            if (typeof(byte[]) == parameterType)
+            if (typeof(byte[]) == enumType)
             {
                 return string.Format("new byte[]{{ 1, 2, 3 }}");
             }
 
-            if (typeof(Exception) == parameterType)
+            if (typeof(Exception) == enumType)
             {
                 return string.Format("new Exception(\"Text exception\")");
             }
 
-            if (typeof(Object) == parameterType)
+            if (typeof(Object) == enumType)
             {
                 return string.Format("new object()");
             }
 
-            if (typeof(MethodInfo) == parameterType)
+            if (typeof(MethodInfo) == enumType)
             {
-                return string.Format("GetType().Methods.First()");
+                return string.Format("GetType().GetMethods().First()");
             }
 
-            if (string.Equals(parameterType.Name, "FunctionContainer", StringComparison.Ordinal))
+            if (string.Equals(enumType.Name, "FunctionContainer", StringComparison.Ordinal))
             {
-                return string.Format("new FakeFunctionContainer()");
+                return string.Format("new FakeFunctionContainer(1)");
             }
 
-            if (string.Equals(parameterType.Name, "HtmlNode", StringComparison.Ordinal))
+            if (string.Equals(enumType.Name, "HtmlNode", StringComparison.Ordinal))
             {
-                return string.Format("new HtmlNode()");
+                return string.Format("HtmlNode.CreateNode(\"<i>TEST</>\")");
             }
 
-            if (parameterType.IsArray)
+            if (enumType.IsArray)
             {
                 const string initializerTemplate = "new {0}[] {{ {1}, {1} }}";
 
-                var innerType = Type.GetType(parameterType.FullName.Replace("[]", string.Empty), true);
+                var innerType = Type.GetType(enumType.FullName.Replace("[]", string.Empty), true);
 
-                string innerInitializer = CreateTypeInitializer(innerType, parameterType);
+                string innerInitializer = CreateTypeInitializer(innerType, enumType);
 
                 return string.Format(initializerTemplate, innerType.Name, innerInitializer);
             }
 
-            if (IsCollection(parameterType))
+            if (IsCollection(enumType))
             {
                 const string initializerTemplate = "new List<{0}>{{ {1} }}.ToReadOnlyList()";
 
-                var genericArguments = parameterType.GetGenericArguments();
+                var genericArguments = enumType.GetGenericArguments();
 
                 Type genericArg = genericArguments[0];
-                string innerInitializer = CreateTypeInitializer(genericArg, parameterType);
+                string innerInitializer = CreateTypeInitializer(genericArg, enumType);
 
                 return string.Format(initializerTemplate, genericArg.Name, innerInitializer);
             }
 
-            throw new InvalidOperationException(string.Format("Unable to generate initializer for the type {0} (member of {1}.{2})", parameterType, owner.DeclaringType, owner.Name));
+            throw new InvalidOperationException(string.Format("Unable to generate initializer for the type {0} (member of {1}.{2})", enumType, owner.DeclaringType, owner.Name));
         }
 
         private static bool IsCollection(Type classType)

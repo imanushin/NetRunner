@@ -23,7 +23,20 @@ namespace NetRunner.Executable.Tests.Invokation
     {
         private static IEnumerable<FunctionHeader> GetInstancesOfCurrentType()
         {
-            #error Implement test class FunctionHeaderTest to retrieve possible objects for type FunctionHeader
+            foreach (var name in new[] { "name1", "name2" })
+            {
+                foreach (var args in new[] { new[] { "arg1", "arg2" }, new string[0] })
+                {
+                    foreach (HtmlRowReference htmlRowReference in HtmlRowReferenceTest.objects.Objects)
+                    {
+                        foreach (AbstractKeyword keyword in AbstractKeywordTest.objects.Objects)
+                        {
+                            yield return new FunctionHeader(name, args, htmlRowReference, keyword);
+
+                        }
+                    }
+                }
+            }
         }
     }
 }

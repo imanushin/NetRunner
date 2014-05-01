@@ -23,7 +23,13 @@ namespace NetRunner.Executable.Tests.Invokation.Functions
     {
         private static IEnumerable<CssClassCellChange> GetInstancesOfCurrentType()
         {
-            #error Implement test class CssClassCellChangeTest to retrieve possible objects for type CssClassCellChange
+            foreach (string cssClass in new[] { "1", "2" })
+            {
+                foreach (var cell in HtmlCellTest.objects.Objects)
+                {
+                    yield return new CssClassCellChange(cell, cssClass);
+                }
+            }
         }
     }
 }

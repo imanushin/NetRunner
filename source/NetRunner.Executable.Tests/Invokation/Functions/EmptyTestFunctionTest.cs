@@ -23,7 +23,7 @@ namespace NetRunner.Executable.Tests.Invokation.Functions
     {
         private static IEnumerable<EmptyTestFunction> GetInstancesOfCurrentType()
         {
-            #error Implement test class EmptyTestFunctionTest to retrieve possible objects for type EmptyTestFunction
+            yield return EmptyTestFunction.Instance;
         }
     }
 }

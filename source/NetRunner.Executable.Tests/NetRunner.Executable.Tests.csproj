@@ -55,6 +55,8 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="EnumGeneratedTests.cs" />
+    <Compile Include="FakeFunctionContainer.cs" />
     <Compile Include="Invokation\FunctionExecutionResultTest.cs" />
     <Compile Include="Invokation\FunctionHeaderTest.cs" />
     <Compile Include="Invokation\Functions\AddCellExpandableInfoTest.cs" />

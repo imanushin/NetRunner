@@ -23,7 +23,13 @@ namespace NetRunner.Executable.Tests.RawData
     {
         private static IEnumerable<HtmlRow> GetInstancesOfCurrentType()
         {
-            #error Implement test class HtmlRowTest to retrieve possible objects for type HtmlRow
+            foreach (HtmlRowReference rowReference in HtmlRowReferenceTest.objects.Objects)
+            {
+                foreach (var cells in new[] { HtmlCellTest.objects.Objects.Skip(1), HtmlCellTest.objects.Objects.Take(2) })
+                {
+                    yield return new HtmlRow(cells, rowReference);
+                }
+            }
         }
     }
 }

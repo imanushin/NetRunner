@@ -23,7 +23,20 @@ namespace NetRunner.Executable.Tests.Invokation.Functions
     {
         private static IEnumerable<CollectionArgumentedFunction> GetInstancesOfCurrentType()
         {
-            #error Implement test class CollectionArgumentedFunctionTest to retrieve possible objects for type CollectionArgumentedFunction
+            foreach (var columnNames in new[] { new[] { "1", "2" }.ToReadOnlyList(), new[] { "2", "3" }.ToReadOnlyList() })
+            {
+                foreach (var rows in new[] { HtmlRowTest.objects.Objects.Skip(1).ToReadOnlyList(), HtmlRowTest.objects.Objects.Take(2).ToReadOnlyList() })
+                {
+                    foreach (FunctionHeader function in FunctionHeaderTest.objects.Objects)
+                    {
+                        foreach (TestFunctionReference testFunctionReference in TestFunctionReferenceTest.objects.Objects)
+                        {
+                            yield return new CollectionArgumentedFunction(columnNames, rows, function, testFunctionReference);
+                           
+                        }
+                    }
+                }
+            }
         }
     }
 }

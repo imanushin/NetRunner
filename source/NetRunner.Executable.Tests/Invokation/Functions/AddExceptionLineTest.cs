@@ -23,7 +23,13 @@ namespace NetRunner.Executable.Tests.Invokation.Functions
     {
         private static IEnumerable<AddExceptionLine> GetInstancesOfCurrentType()
         {
-            #error Implement test class AddExceptionLineTest to retrieve possible objects for type AddExceptionLine
+            foreach (Exception exception in new[]{new Exception("1"), new InvalidOperationException("2")})
+            {
+                foreach (var htmlRowReference in HtmlRowReferenceTest.objects.Objects)
+                {
+                    yield return new AddExceptionLine(exception, htmlRowReference);
+                }
+            }
         }
     }
 }

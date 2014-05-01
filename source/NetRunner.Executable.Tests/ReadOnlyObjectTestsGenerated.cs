@@ -1442,7 +1442,7 @@ ShowActualValueCellChangeTest.objects);
 
             try
             {
-                new CollectionArgumentedFunction(columnNames, rows, null, nullToExecute);
+                new CollectionArgumentedFunction(columnNames, rows, null, functionToExecute);
             }
             catch(ArgumentNullException ex)
             {
@@ -2212,12 +2212,12 @@ namespace NetRunner.Executable.Tests.Invokation
         [TestMethod]
         public void FunctionExecutionResult_CheckWrongEnumArg_resultType()
         {
-            var resultType = EnumHelper<FunctionRunResult>.Values.First();
+            var resultType = Enum.GetValues(typeof(FunctionExecutionResult.FunctionRunResult)).Cast<FunctionExecutionResult.FunctionRunResult>().First();
             var tableChanges = new List<AbstractTableChange>{ AbstractTableChangeTest.First }.ToReadOnlyList();
 
             try
             {
-                new FunctionExecutionResult((NetRunner.Executable.Invokation.FunctionExecutionResult+FunctionRunResult)4, tableChanges);
+                new FunctionExecutionResult((FunctionExecutionResult.FunctionRunResult)4, tableChanges);
             }
             catch(ArgumentException ex)
             {
@@ -2232,7 +2232,7 @@ namespace NetRunner.Executable.Tests.Invokation
         [TestMethod]
         public void FunctionExecutionResult_CheckNullArg_tableChanges()
         {
-            var resultType = EnumHelper<FunctionRunResult>.Values.First();
+            var resultType = Enum.GetValues(typeof(FunctionExecutionResult.FunctionRunResult)).Cast<FunctionExecutionResult.FunctionRunResult>().First();
             var tableChanges = new List<AbstractTableChange>{ AbstractTableChangeTest.First }.ToReadOnlyList();
 
             try
@@ -2547,8 +2547,8 @@ namespace NetRunner.Executable.Tests.Invokation
         [TestMethod]
         public void TestFunctionReference_CheckNullArg_method()
         {
-            var method = GetType().Methods.First();
-            var targetObject = new FakeFunctionContainer();
+            var method = GetType().GetMethods().First();
+            var targetObject = new FakeFunctionContainer(1);
 
             try
             {
@@ -2567,8 +2567,8 @@ namespace NetRunner.Executable.Tests.Invokation
         [TestMethod]
         public void TestFunctionReference_CheckNullArg_targetObject()
         {
-            var method = GetType().Methods.First();
-            var targetObject = new FakeFunctionContainer();
+            var method = GetType().GetMethods().First();
+            var targetObject = new FakeFunctionContainer(1);
 
             try
             {
@@ -2778,7 +2778,7 @@ namespace NetRunner.Executable.Tests.RawData
         [TestMethod]
         public void HtmlCell_CheckNullArg_tableCell()
         {
-            var tableCell = new HtmlNode();
+            var tableCell = HtmlNode.CreateNode("<i>TEST</>");
 
             try
             {
@@ -2956,7 +2956,7 @@ namespace NetRunner.Executable.Tests.RawData
         public void HtmlTable_CheckNullArg_rows()
         {
             var rows = new List<HtmlRow>{ HtmlRowTest.First }.ToReadOnlyList();
-            var tableNode = new HtmlNode();
+            var tableNode = HtmlNode.CreateNode("<i>TEST</>");
             var textAfterTable = "text 135371";
 
             try
@@ -2977,7 +2977,7 @@ namespace NetRunner.Executable.Tests.RawData
         public void HtmlTable_CheckNullArg_tableNode()
         {
             var rows = new List<HtmlRow>{ HtmlRowTest.First }.ToReadOnlyList();
-            var tableNode = new HtmlNode();
+            var tableNode = HtmlNode.CreateNode("<i>TEST</>");
             var textAfterTable = "text 135371";
 
             try
@@ -3006,7 +3006,7 @@ namespace NetRunner.Executable.Tests.RawData
         private void CheckEmptyStringArg_textAfterTable(string stringArgument)
         {
             var rows = new List<HtmlRow>{ HtmlRowTest.First }.ToReadOnlyList();
-            var tableNode = new HtmlNode();
+            var tableNode = HtmlNode.CreateNode("<i>TEST</>");
             var textAfterTable = "text 135371";
 
             try
@@ -3027,7 +3027,7 @@ namespace NetRunner.Executable.Tests.RawData
         public void HtmlTable_CheckNullArg_textAfterTable()
         {
             var rows = new List<HtmlRow>{ HtmlRowTest.First }.ToReadOnlyList();
-            var tableNode = new HtmlNode();
+            var tableNode = HtmlNode.CreateNode("<i>TEST</>");
             var textAfterTable = "text 135371";
 
             try

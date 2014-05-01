@@ -23,7 +23,13 @@ namespace NetRunner.Executable.Tests.RawData
     {
         private static IEnumerable<FitnesseHtmlDocument> GetInstancesOfCurrentType()
         {
-            #error Implement test class FitnesseHtmlDocumentTest to retrieve possible objects for type FitnesseHtmlDocument
+            foreach (string preffix in new[] { "", "preffix1" })
+            {
+                foreach (var tables in new[] { HtmlTableTest.objects.Objects.Skip(1), HtmlTableTest.objects.Objects.Take(2) })
+                {
+                    yield return new FitnesseHtmlDocument(preffix, tables);
+                }
+            }
         }
     }
 }

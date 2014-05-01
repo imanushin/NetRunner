@@ -23,7 +23,13 @@ namespace NetRunner.Executable.Tests.Invokation
     {
         private static IEnumerable<FunctionExecutionResult> GetInstancesOfCurrentType()
         {
-            #error Implement test class FunctionExecutionResultTest to retrieve possible objects for type FunctionExecutionResult
+            foreach (FunctionExecutionResult.FunctionRunResult result in Enum.GetValues(typeof(FunctionExecutionResult.FunctionRunResult)))
+            {
+                foreach (var changes in new[] { AbstractTableChangeTest.objects.Objects.Skip(1), AbstractTableChangeTest.objects.Take(2) })
+                {
+                    yield return new FunctionExecutionResult(result, changes);
+                }
+            }
         }
     }
 }

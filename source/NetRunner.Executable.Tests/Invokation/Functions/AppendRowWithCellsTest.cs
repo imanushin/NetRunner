@@ -23,7 +23,13 @@ namespace NetRunner.Executable.Tests.Invokation.Functions
     {
         private static IEnumerable<AppendRowWithCells> GetInstancesOfCurrentType()
         {
-            #error Implement test class AppendRowWithCellsTest to retrieve possible objects for type AppendRowWithCells
+            foreach (string cssClass in new[] { "1", "2" })
+            {
+                foreach (var cells in new[] { new[] { "1", "2" }, new[] { "2", "1" }, new[] { "2", "3" } })
+                {
+                    yield return new AppendRowWithCells(cssClass, cells);
+                }
+            }
         }
     }
 }

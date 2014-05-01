@@ -5,7 +5,7 @@ namespace NetRunner.Executable.Invokation.Functions
 {
     internal sealed class EmptyTestFunction : AbstractTestFunction
     {
-        public static EmptyTestFunction Instance = new EmptyTestFunction();
+        public static readonly EmptyTestFunction Instance = new EmptyTestFunction();
         private readonly FunctionExecutionResult functionExecutionResult = new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Ignore, ReadOnlyList<AbstractTableChange>.Empty);
 
         private EmptyTestFunction()

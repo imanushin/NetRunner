@@ -23,7 +23,13 @@ namespace NetRunner.Executable.Tests.Invokation.Functions
     {
         private static IEnumerable<AddRowCssClass> GetInstancesOfCurrentType()
         {
-            #error Implement test class AddRowCssClassTest to retrieve possible objects for type AddRowCssClass
+            foreach (string cssClass in new[] { "1", "2" })
+            {
+                foreach (var htmlRowReference in HtmlRowReferenceTest.objects.Objects)
+                {
+                    yield return new AddRowCssClass(htmlRowReference, cssClass);
+                }
+            }
         }
     }
 }
