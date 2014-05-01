@@ -1,13 +1,15 @@
 ﻿using HtmlAgilityPack;
 using NetRunner.Executable.RawData;
+using NetRunner.ExternalLibrary.Properties;
 
 namespace NetRunner.Executable.Invokation.Functions
 {
     internal sealed class ShowActualValueCellChange : CssClassCellChange
     {
+        [CanBeNull]
         private readonly object actualValue;
 
-        public ShowActualValueCellChange(HtmlCell cell, object actualValue)
+        public ShowActualValueCellChange(HtmlCell cell, [CanBeNull] object actualValue)
             : base(cell, HtmlParser.FailCssClass)
         {
             this.actualValue = actualValue;
@@ -31,7 +33,7 @@ namespace NetRunner.Executable.Invokation.Functions
             htmlCell.AppendChild(expectBlock);
             htmlCell.InnerHtml += expect + "</br>";
             htmlCell.AppendChild(actualBlock);
-            htmlCell.InnerHtml += actualValue;
+            htmlCell.InnerHtml += actualValue ?? string.Empty;
         }
     }
 }

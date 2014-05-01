@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
+using NetRunner.Executable.Common;
 using NetRunner.Executable.RawData;
 
 namespace NetRunner.Executable.Invokation.Functions
@@ -14,6 +15,9 @@ namespace NetRunner.Executable.Invokation.Functions
 
         public CssClassCellChange(HtmlCell cell, string newClass)
         {
+            Validate.ArgumentIsNotNull(cell, "cell");
+            Validate.ArgumentStringIsMeanful(newClass, "newClass");
+
             this.Cell = cell;
             this.newClass = newClass;
         }

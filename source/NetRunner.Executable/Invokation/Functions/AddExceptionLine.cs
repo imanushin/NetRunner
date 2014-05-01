@@ -18,11 +18,14 @@ namespace NetRunner.Executable.Invokation.Functions
         public AddExceptionLine(string header, Exception exception, HtmlRowReference rowReference)
             : this(header, new[] { exception }, rowReference)
         {
+            Validate.ArgumentIsNotNull(exception, "exception");
         }
 
-        public AddExceptionLine(string header, IEnumerable<Exception> exceptions, HtmlRowReference rowReference)
+        public AddExceptionLine(string header, IReadOnlyCollection<Exception> exceptions, HtmlRowReference rowReference)
         {
             Validate.ArgumentIsNotNull(rowReference, "rowReference");
+            Validate.ArgumentStringIsMeanful(header, "header");
+            Validate.CollectionArgumentHasElements(exceptions, "exceptions");
 
             this.header = header;
             this.exceptions = exceptions.ToReadOnlyList();
@@ -34,9 +37,10 @@ namespace NetRunner.Executable.Invokation.Functions
         public AddExceptionLine(Exception exception, HtmlRowReference rowReference)
             : this(new[] { exception }, rowReference)
         {
+            Validate.ArgumentIsNotNull(exception, "exception");
         }
 
-        public AddExceptionLine(IEnumerable<Exception> exceptions, HtmlRowReference rowReference)
+        public AddExceptionLine(IReadOnlyCollection<Exception> exceptions, HtmlRowReference rowReference)
             : this("Test failed with exceptions", exceptions, rowReference)
         {
         }

@@ -12,8 +12,12 @@ namespace NetRunner.Executable.RawData
     {
         private readonly HtmlNode tableNode;
 
-        public HtmlTable(IEnumerable<HtmlRow> rows, HtmlNode tableNode, string textAfterTable)
+        public HtmlTable(IReadOnlyCollection<HtmlRow> rows, HtmlNode tableNode, [StringCanBeEmptyAttribute]string textAfterTable)
         {
+            Validate.CollectionArgumentHasElements(rows, "rows");
+            Validate.ArgumentIsNotNull(tableNode, "tableNode");
+            Validate.ArgumentIsNotNull(textAfterTable, "textAfterTable");
+
             TextAfterTable = textAfterTable;
             this.tableNode = tableNode;
             Rows = rows.ToReadOnlyList();

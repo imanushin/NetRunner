@@ -339,7 +339,9 @@ namespace {1}
                     if (typeof(DateTime) == param.ParameterType && targetType.Name != "Time")
                         result.Append(DateTimeTestGenerator.CreateWrongDateTimeConstructor(param));
 
-                    if (param.ParameterType.IsValueType || param.Attributes.HasFlag(ParameterAttributes.Optional))
+                    if (param.ParameterType.IsValueType
+                        || param.Attributes.HasFlag(ParameterAttributes.Optional)
+                        || param.GetCustomAttributes(true).Any(a => string.Equals(a.GetType().Name, "CanBeNullAttribute"))) //resharper attribute
                         continue;
 
                     string ctor = CreateNullArgConstructor(skipOverloading, param, argumentsList, initialization);
@@ -356,11 +358,7 @@ namespace {1}
             if (parameterInfo.Attributes.HasFlag(ParameterAttributes.Optional))
                 return true;
 
-            Attribute emptyAttribute = parameterInfo.Member.GetCustomAttributes()
-                .Where(attr => attr.GetType().Name == "StringCanBeEmptyAttribute")
-                .FirstOrDefault(attr => attr.Match(parameterInfo.Name));
-
-            return emptyAttribute != null;
+            return parameterInfo.GetCustomAttributes().Any(attr => string.Equals(attr.GetType().Name, "StringCanBeEmptyAttribute", StringComparison.Ordinal));
         }
 
         private static string CreateNullArgConstructor(
@@ -540,7 +538,7 @@ namespace {1}
 
             if (string.Equals(enumType.Name, "HtmlNode", StringComparison.Ordinal))
             {
-                return string.Format("HtmlNode.CreateNode(\"<i>TEST</>\")");
+                return string.Format("HtmlNode.CreateNode(\"<i>TEST<i/>\")");
             }
 
             if (enumType.IsArray)

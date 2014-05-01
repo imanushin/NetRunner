@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.ModelBinding;
 using HtmlAgilityPack;
+using NetRunner.Executable.Common;
 using NetRunner.Executable.RawData;
 
 namespace NetRunner.Executable.Invokation.Functions
@@ -16,6 +18,10 @@ namespace NetRunner.Executable.Invokation.Functions
 
         public AddCellExpandableInfo(HtmlCell cell, string header, string info)
         {
+            Validate.ArgumentIsNotNull(cell, "cell");
+            Validate.ArgumentStringIsMeanful(header, "header");
+            Validate.ArgumentStringIsMeanful(info, "info");
+
             this.cell = cell;
             this.header = header;
             this.info = info;

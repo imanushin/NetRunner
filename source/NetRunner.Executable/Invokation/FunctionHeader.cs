@@ -16,6 +16,7 @@ namespace NetRunner.Executable.Invokation
             Validate.ArgumentStringIsMeanful(functionName, "functionName");
             Validate.ArgumentIsNotNull(arguments, "arguments");
             Validate.ArgumentIsNotNull(keyword, "keyword");
+            Validate.ArgumentIsNotNull(rowReference, "rowReference");
 
             FunctionName = functionName.Replace(" ", string.Empty);
             Arguments = arguments.ToReadOnlyList();

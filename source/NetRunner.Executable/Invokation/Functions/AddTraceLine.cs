@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
+using NetRunner.Executable.Common;
 
 namespace NetRunner.Executable.Invokation.Functions
 {
@@ -14,6 +15,9 @@ namespace NetRunner.Executable.Invokation.Functions
 
         public AddTraceLine(string text, HtmlRowReference rowReference)
         {
+            Validate.ArgumentStringIsMeanful(text, "text");
+            Validate.ArgumentIsNotNull(rowReference, "rowReference");
+
             this.text = text;
             this.rowReference = rowReference;
         }

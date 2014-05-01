@@ -23,12 +23,9 @@ namespace NetRunner.Executable.Tests.Invokation.Functions
     {
         private static IEnumerable<ShowActualValueCellChange> GetInstancesOfCurrentType()
         {
-            foreach (var actualValue in new[] { "1", new object() })
+            foreach (var htmlCell in HtmlCellTest.objects.Objects)
             {
-                foreach (var htmlCell in HtmlCellTest.objects.Objects)
-                {
-                    yield return new ShowActualValueCellChange(htmlCell, actualValue);
-                }
+                yield return new ShowActualValueCellChange(htmlCell, new object());
             }
         }
     }

@@ -10,8 +10,11 @@ namespace NetRunner.Executable.RawData
 {
     internal sealed class HtmlRow : BaseReadOnlyObject
     {
-        public HtmlRow(IEnumerable<HtmlCell> cellsEntries, HtmlRowReference rowReference)
+        public HtmlRow(IReadOnlyCollection<HtmlCell> cellsEntries, HtmlRowReference rowReference)
         {
+            Validate.CollectionArgumentHasElements(cellsEntries, "cellsEntries");
+            Validate.ArgumentIsNotNull(rowReference, "rowReference");
+
             Cells = cellsEntries.ToReadOnlyList();
             RowReference = rowReference;
         }

@@ -11,6 +11,8 @@ namespace NetRunner.Executable.Invokation.Keywords
 
         public UnknownKeyword(IReadOnlyCollection<HtmlCell> cells)
         {
+            Validate.CollectionArgumentHasElements(cells, "cells");
+
             this.cells = cells.ToReadOnlyList();
         }
 

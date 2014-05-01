@@ -98,8 +98,7 @@ namespace NetRunner.Executable.RawData
         {
             var allCells = rowNode.ChildNodes.Where(cn => String.Equals(cn.Name, TableCellNodeName, StringComparison.OrdinalIgnoreCase));
 
-
-            return new HtmlRow(allCells.Select(cell => new HtmlCell(cell)), HtmlRowReference.MarkRowAndGenerateReference(rowNode));
+            return new HtmlRow(allCells.Select(cell => new HtmlCell(cell)).ToReadOnlyList(), HtmlRowReference.MarkRowAndGenerateReference(rowNode));
         }
 
     }

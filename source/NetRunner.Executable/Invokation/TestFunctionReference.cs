@@ -16,6 +16,9 @@ namespace NetRunner.Executable.Invokation
 
         public TestFunctionReference(MethodInfo method, FunctionContainer targetObject)
         {
+            Validate.ArgumentIsNotNull(method, "method");
+            Validate.ArgumentIsNotNull(targetObject, "targetObject");
+
             this.method = method;
             TargetObject = targetObject;
 

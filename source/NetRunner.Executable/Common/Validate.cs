@@ -91,5 +91,20 @@ namespace NetRunner.Executable.Common
             ArgumentIsNotNull(elements, argumentName);
             ArgumentCondition(elements.Any(), argumentName, "Collection of type {0}<{1}> does not contain elements", elements.GetType().Name, typeof(TValue));
         }
+
+        /// <summary>
+        /// Checks if the specified value is defined in enumeration. 
+        /// </summary>
+        /// <typeparam name="T">Argument type.</typeparam>
+        /// <param name="argument">Argument.</param>
+        /// <param name="argumentName">Argument name.</param>
+        public static void ArgumentEnumerationValueIsDefined<T>(T argument, [InvokerParameterName] string argumentName = null)
+            where T : struct, IComparable, IFormattable, IConvertible
+        {
+            Type enumerationType = typeof(T);
+
+            ArgumentCondition(enumerationType.IsEnum, argumentName, "Parameter {0} should be enum", argumentName);
+            ArgumentCondition(Enum.IsDefined(enumerationType, argument), argumentName, "Enumeration {0} does not contain value {1}.", enumerationType.Name, argument);
+        }
     }
 }

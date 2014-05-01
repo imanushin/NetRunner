@@ -16,6 +16,7 @@ namespace NetRunner.Executable.Invokation.Functions
         public AddRowCssClass(HtmlRowReference rowReference, string targetCssClass)
         {
             Validate.ArgumentStringIsMeanful(targetCssClass, "targetCssClass");
+            Validate.ArgumentIsNotNull(rowReference, "rowReference");
 
             this.rowReference = rowReference;
             this.targetCssClass = targetCssClass;
@@ -24,6 +25,7 @@ namespace NetRunner.Executable.Invokation.Functions
         protected override IEnumerable<object> GetInnerObjects()
         {
             yield return rowReference;
+            yield return targetCssClass;
         }
 
         public override void PatchHtmlTable(HtmlNode table)

@@ -833,7 +833,7 @@ SimpleTestFunctionTest.objects);
 
             try
             {
-                new AddExceptionLine(header, (IEnumerable<Exception>)null, rowReference);
+                new AddExceptionLine(header, (IReadOnlyCollection<Exception>)null, rowReference);
             }
             catch(ArgumentNullException ex)
             {
@@ -914,7 +914,7 @@ SimpleTestFunctionTest.objects);
 
             try
             {
-                new AddExceptionLine((IEnumerable<Exception>)null, rowReference);
+                new AddExceptionLine((IReadOnlyCollection<Exception>)null, rowReference);
             }
             catch(ArgumentNullException ex)
             {
@@ -1949,26 +1949,6 @@ ShowActualValueCellChangeTest.objects);
         }
 
         [TestMethod]
-        public void ShowActualValueCellChange_CheckNullArg_actualValue()
-        {
-            var cell = HtmlCellTest.First;
-            var actualValue = new object();
-
-            try
-            {
-                new ShowActualValueCellChange(cell, null);
-            }
-            catch(ArgumentNullException ex)
-            {
-                CheckArgumentExceptionParameter( "actualValue", ex.ParamName );
-
-                return;
-            }
-
-            Assert.Fail("Argument 'actualValue' isn't checked for null inputs");
-        }
-
-        [TestMethod]
         public void ShowActualValueCellChange_GetHashCodeTest()
         {
             BaseGetHashCodeTest(objects);
@@ -2649,34 +2629,6 @@ namespace NetRunner.Executable.Tests.RawData
         }
 
         [TestMethod]
-        public void FitnesseHtmlDocument_CheckEmptyStringArg_textBeforeFirstTable()
-        {
-            CheckEmptyStringArg_textBeforeFirstTable(string.Empty);
-            CheckEmptyStringArg_textBeforeFirstTable("    ");
-            CheckEmptyStringArg_textBeforeFirstTable(Environment.NewLine);
-            CheckEmptyStringArg_textBeforeFirstTable("\n\r");
-        }
-
-        private void CheckEmptyStringArg_textBeforeFirstTable(string stringArgument)
-        {
-            var textBeforeFirstTable = "text 135370";
-            var tables = new List<HtmlTable>{ HtmlTableTest.First }.ToReadOnlyList();
-
-            try
-            {
-                new FitnesseHtmlDocument(stringArgument, tables);
-            }
-            catch(ArgumentException ex)
-            {
-                CheckArgumentExceptionParameter( "textBeforeFirstTable", ex.ParamName );
-
-                return;
-            }
-
-            Assert.Fail("String in the argument 'textBeforeFirstTable' isn't checked for emply values");
-        }
-
-        [TestMethod]
         public void FitnesseHtmlDocument_CheckNullArg_textBeforeFirstTable()
         {
             var textBeforeFirstTable = "text 135370";
@@ -2778,7 +2730,7 @@ namespace NetRunner.Executable.Tests.RawData
         [TestMethod]
         public void HtmlCell_CheckNullArg_tableCell()
         {
-            var tableCell = HtmlNode.CreateNode("<i>TEST</>");
+            var tableCell = HtmlNode.CreateNode("<i>TEST<i/>");
 
             try
             {
@@ -2956,7 +2908,7 @@ namespace NetRunner.Executable.Tests.RawData
         public void HtmlTable_CheckNullArg_rows()
         {
             var rows = new List<HtmlRow>{ HtmlRowTest.First }.ToReadOnlyList();
-            var tableNode = HtmlNode.CreateNode("<i>TEST</>");
+            var tableNode = HtmlNode.CreateNode("<i>TEST<i/>");
             var textAfterTable = "text 135371";
 
             try
@@ -2977,7 +2929,7 @@ namespace NetRunner.Executable.Tests.RawData
         public void HtmlTable_CheckNullArg_tableNode()
         {
             var rows = new List<HtmlRow>{ HtmlRowTest.First }.ToReadOnlyList();
-            var tableNode = HtmlNode.CreateNode("<i>TEST</>");
+            var tableNode = HtmlNode.CreateNode("<i>TEST<i/>");
             var textAfterTable = "text 135371";
 
             try
@@ -2995,39 +2947,10 @@ namespace NetRunner.Executable.Tests.RawData
         }
 
         [TestMethod]
-        public void HtmlTable_CheckEmptyStringArg_textAfterTable()
-        {
-            CheckEmptyStringArg_textAfterTable(string.Empty);
-            CheckEmptyStringArg_textAfterTable("    ");
-            CheckEmptyStringArg_textAfterTable(Environment.NewLine);
-            CheckEmptyStringArg_textAfterTable("\n\r");
-        }
-
-        private void CheckEmptyStringArg_textAfterTable(string stringArgument)
-        {
-            var rows = new List<HtmlRow>{ HtmlRowTest.First }.ToReadOnlyList();
-            var tableNode = HtmlNode.CreateNode("<i>TEST</>");
-            var textAfterTable = "text 135371";
-
-            try
-            {
-                new HtmlTable(rows, tableNode, stringArgument);
-            }
-            catch(ArgumentException ex)
-            {
-                CheckArgumentExceptionParameter( "textAfterTable", ex.ParamName );
-
-                return;
-            }
-
-            Assert.Fail("String in the argument 'textAfterTable' isn't checked for emply values");
-        }
-
-        [TestMethod]
         public void HtmlTable_CheckNullArg_textAfterTable()
         {
             var rows = new List<HtmlRow>{ HtmlRowTest.First }.ToReadOnlyList();
-            var tableNode = HtmlNode.CreateNode("<i>TEST</>");
+            var tableNode = HtmlNode.CreateNode("<i>TEST<i/>");
             var textAfterTable = "text 135371";
 
             try

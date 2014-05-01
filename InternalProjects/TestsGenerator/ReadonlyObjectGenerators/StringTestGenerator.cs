@@ -9,7 +9,7 @@ namespace TestsGenerator.ReadonlyObjectGenerators
     {
         private static int indexer;
 
-        private const string CheckEmptyStringConstructorTestTemplate =
+        private const string checkEmptyStringConstructorTestTemplate =
 @"
         [TestMethod]
         public void {2}_CheckEmptyStringArg_{0}{4}()
@@ -63,7 +63,7 @@ namespace TestsGenerator.ReadonlyObjectGenerators
 
             string currentArgs = argumentsList.Replace(param.Name, replacement);
 
-            return string.Format(CheckEmptyStringConstructorTestTemplate, param.Name, initialization, targetType.Name, currentArgs, methodSuffix);
+            return string.Format(checkEmptyStringConstructorTestTemplate, param.Name, initialization, targetType.Name, currentArgs, methodSuffix);
         }
 
     }

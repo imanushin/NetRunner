@@ -14,16 +14,19 @@ namespace NetRunner.Executable.Invokation.Functions
         private readonly string cellClass;
         private readonly ReadOnlyList<string> cellHtmlDatas;
 
-        public AppendRowWithCells(string cellClass, IEnumerable<string> cellHtmlDatas)
+        public AppendRowWithCells(string cellClass, IReadOnlyCollection<string> cellHtmlDatas)
         {
+            Validate.ArgumentStringIsMeanful(cellClass, "cellClass");
+            Validate.CollectionArgumentHasElements(cellHtmlDatas, "cellHtmlDatas");
+
             this.cellClass = cellClass;
             this.cellHtmlDatas = cellHtmlDatas.ToReadOnlyList();
         }
 
         protected override IEnumerable<object> GetInnerObjects()
         {
-           yield return cellClass;
-           yield return cellHtmlDatas;
+            yield return cellClass;
+            yield return cellHtmlDatas;
         }
 
         public override void PatchHtmlTable(HtmlNode table)

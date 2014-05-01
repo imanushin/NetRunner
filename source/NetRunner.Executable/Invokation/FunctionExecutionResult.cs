@@ -15,6 +15,9 @@ namespace NetRunner.Executable.Invokation
     {
         public FunctionExecutionResult(FunctionRunResult resultType, IEnumerable<AbstractTableChange> tableChanges)
         {
+            Validate.ArgumentIsNotNull(tableChanges, "tableChanges");
+            Validate.ArgumentEnumerationValueIsDefined(resultType, "resultType");
+
             ResultType = resultType;
             TableChanges = tableChanges.ToReadOnlyList();
         }

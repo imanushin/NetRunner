@@ -34,9 +34,9 @@ namespace NetRunner.Executable.Tests.RawData
             var third = document.CreateElement("td");
             third.InnerHtml = "<i>res</i>";
 
-            yield return new HtmlCell(first);
-            yield return new HtmlCell(second);
-            yield return new HtmlCell(third);
+            yield return new HtmlCell(first.Clone());
+            yield return new HtmlCell(second.Clone());
+            yield return new HtmlCell(third.Clone());
         }
     }
 }

@@ -27,7 +27,7 @@ namespace NetRunner.Executable.Tests.RawData
             {
                 foreach (var cells in new[] { HtmlCellTest.objects.Objects.Skip(1), HtmlCellTest.objects.Objects.Take(2) })
                 {
-                    yield return new HtmlRow(cells, rowReference);
+                    yield return new HtmlRow(cells.ToReadOnlyList(), rowReference);
                 }
             }
         }

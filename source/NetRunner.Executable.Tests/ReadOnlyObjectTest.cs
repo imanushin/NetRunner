@@ -41,7 +41,7 @@ namespace NetRunner.Executable.Tests
             if (SkipTesting)
                 return;
 
-            List<T> items = objects.ToList();//Чтобы был индексер
+            List<T> items = objects.ToList();//To have indexer for iterations
 
             for (int currentIndex = 0; currentIndex < items.Count; currentIndex++)
             {
@@ -53,11 +53,11 @@ namespace NetRunner.Executable.Tests
 
                     if (currentIndex == otherIndex)
                     {
-                        Assert.AreEqual(currentItem, otherItem);//Равен сам себе
+                        Assert.AreEqual(currentItem, otherItem);//Check that it really equal by himself
                     }
                     else
                     {
-                        Assert.AreNotEqual(currentItem, otherItem);//В обратную сторону тоже будет проверка, но потом
+                        Assert.AreNotEqual(currentItem, otherItem);//The same checking will be from the other, one the next loop step
                     }
                 }
             }
@@ -70,11 +70,6 @@ namespace NetRunner.Executable.Tests
                 Assert.IsFalse(target.Equals(null));
                 Assert.IsFalse(target.Equals("some string"));
             }
-        }
-
-        protected virtual bool SkipSerializationTest()
-        {
-            return false;
         }
 
         protected void BaseToStringTest<T>(ObjectsCache<T> objects)

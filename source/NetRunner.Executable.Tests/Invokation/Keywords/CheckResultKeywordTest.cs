@@ -29,8 +29,8 @@ namespace NetRunner.Executable.Tests.Invokation.Keywords
             var last2 = document.CreateElement("td");
             last2.InnerHtml = "res";
 
-            yield return CheckResultKeyword.TryParse(new[] { new HtmlCell(first), new HtmlCell(second), new HtmlCell(last1) });
-            yield return CheckResultKeyword.TryParse(new[] { new HtmlCell(first), new HtmlCell(second), new HtmlCell(last2) });
+            yield return CheckResultKeyword.TryParse(new[] { new HtmlCell(first.Clone()), new HtmlCell(second.Clone()), new HtmlCell(last1.Clone()) });
+            yield return CheckResultKeyword.TryParse(new[] { new HtmlCell(first.Clone()), new HtmlCell(second.Clone()), new HtmlCell(last2.Clone()) });
         }
     }
 }

@@ -23,7 +23,7 @@ namespace NetRunner.Executable.Tests.Invokation.Functions
     {
         private static IEnumerable<TestFunctionsSequence> GetInstancesOfCurrentType()
         {
-            foreach (var testFunctions in new[] { AbstractTestFunctionTest.objects.Skip(1).ToReadOnlyList(), AbstractTestFunctionTest.objects.Take(2).ToReadOnlyList() })
+            foreach (var testFunctions in new[] { SimpleTestFunctionTest.objects.Skip(1).Cast<AbstractTestFunction>().ToReadOnlyList(), CollectionArgumentedFunctionTest.objects.Take(2).Cast<AbstractTestFunction>().ToReadOnlyList() })
             {
                 yield return new TestFunctionsSequence(testFunctions);
             }
