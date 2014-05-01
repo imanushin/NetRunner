@@ -23,7 +23,7 @@ namespace NetRunner.Executable.Invokation
                 var functionToInvoke = TableParser.ParseTable(table, changes);
 
                 Trace.TraceInformation("Execute function {0}", functionToInvoke);
-                
+
                 result = functionToInvoke.Invoke();
 
                 Trace.TraceInformation("Execution result: {0}", result);
@@ -82,7 +82,14 @@ namespace NetRunner.Executable.Invokation
 
             foreach (var tableChange in tableChanges)
             {
-                tableChange.PatchHtmlTable(resultTable);
+                try
+                {
+                    tableChange.PatchHtmlTable(resultTable);
+                }
+                catch (Exception ex)
+                {
+                    Trace.TraceError("Unable to patch table {0} with changes {1} because of error {2}", resultTable.OuterHtml, tableChange, ex);
+                }
             }
 
             return resultTable.OuterHtml;

@@ -54,7 +54,6 @@
     <Compile Include="FitnesseCommunicator.cs" />
     <Compile Include="Invokation\Functions\InvokationResult.cs" />
     <Compile Include="Invokation\Keywords\AbstractKeyword.cs" />
-    <Compile Include="Invokation\Functions\AbstractCellChange.cs" />
     <Compile Include="Invokation\Functions\AbstractTableChange.cs" />
     <Compile Include="Invokation\ConversionException.cs" />
     <Compile Include="Invokation\Functions\AbstractTestFunction.cs" />

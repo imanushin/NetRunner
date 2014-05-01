@@ -8,28 +8,32 @@ using NetRunner.Executable.RawData;
 
 namespace NetRunner.Executable.Invokation.Functions
 {
-    internal class CssClassCellChange : AbstractCellChange
+    internal class CssClassCellChange : AbstractTableChange
     {
         private readonly string newClass;
 
-        public CssClassCellChange(HtmlRowReference row, int column, string newClass)
-            : base(row, column)
+        public CssClassCellChange(HtmlCell cell, string newClass)
         {
+            this.Cell = cell;
             this.newClass = newClass;
+        }
+
+        public HtmlCell Cell
+        {
+            get;
+            private set;
         }
 
         protected override IEnumerable<object> GetInnerObjects()
         {
             yield return newClass;
-
-            foreach (var innerObject in base.GetInnerObjects())
-            {
-                yield return innerObject;
-            }
+            yield return Cell;
         }
 
-        protected override void PatchCell(HtmlNode htmlCell)
+        public override void PatchHtmlTable(HtmlNode table)
         {
+            var htmlCell = Cell.FindMyself(table);
+
             var attribute = htmlCell.Attributes.AttributesWithName(HtmlParser.ClassAttributeName).FirstOrDefault();
 
             if (attribute == null)

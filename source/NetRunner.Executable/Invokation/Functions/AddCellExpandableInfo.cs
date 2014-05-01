@@ -4,29 +4,35 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
+using NetRunner.Executable.RawData;
 
 namespace NetRunner.Executable.Invokation.Functions
 {
-    internal sealed class AddCellExpandableInfo : AbstractCellChange
+    internal sealed class AddCellExpandableInfo : AbstractTableChange
     {
+        private readonly HtmlCell cell;
         private readonly string header;
         private readonly string info;
 
-        public AddCellExpandableInfo(HtmlRowReference row, int column, string header, string info)
-            : base(row, column)
+        public AddCellExpandableInfo(HtmlCell cell, string header, string info)
         {
+            this.cell = cell;
             this.header = header;
             this.info = info;
         }
 
         protected override IEnumerable<object> GetInnerObjects()
         {
-            return base.GetInnerObjects().Concat(new[]{info, header});
+            yield return cell;
+            yield return header;
+            yield return info;
         }
 
-        protected override void PatchCell(HtmlNode htmlCell)
+        public override void PatchHtmlTable(HtmlNode table)
         {
-            AddExpandableDivToCell(header, info, htmlCell);
+            var targetNode = cell.FindMyself(table);
+
+            AddExpandableDivToCell(header, info, targetNode);
         }
     }
 }

@@ -47,21 +47,22 @@ namespace NetRunner.Executable.Invokation.Functions
                 {
                     var errorChange = new AddExceptionLine("Function execution failed with error", result.Exception, Function.RowReference);
 
-                    return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Exception, new[] { errorChange });
+                    return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Exception, result.TableChanges.Concat(errorChange));
                 }
-
 
                 if (Equals(false, result.Result))
                 {
-                    return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Fail, new[] { new AddRowCssClass(Function.RowReference, HtmlParser.FailCssClass) });
+                    var falseResultMark = new AddRowCssClass(Function.RowReference, HtmlParser.FailCssClass);
+
+                    return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Fail, result.TableChanges.Concat(falseResultMark));
                 }
 
-                return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Success, new[] { new AddRowCssClass(Function.RowReference, HtmlParser.PassCssClass) });
+                var trueResultMark = new AddRowCssClass(Function.RowReference, HtmlParser.PassCssClass);
+
+                return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Success, result.TableChanges.Concat(trueResultMark));
             }
             catch (Exception ex)
             {
-                //                TestExecutionLog.Trace("Unable to execute function {0} because of error {1}", this, ex);
-
                 return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Exception, new[] { new AddExceptionLine(ex, Function.RowReference) });
             }
         }

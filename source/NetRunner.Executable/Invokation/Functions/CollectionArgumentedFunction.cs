@@ -88,7 +88,7 @@ namespace NetRunner.Executable.Invokation.Functions
             {
                 var errorChange = new AddExceptionLine("Function execution failed with error", result.Exception, Function.RowReference);
 
-                return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Exception, new[] { errorChange });
+                return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Exception, result.TableChanges.Concat(errorChange));
             }
 
             var tableResult = result.Result as BaseTableArgument;
@@ -119,6 +119,8 @@ namespace NetRunner.Executable.Invokation.Functions
                 var rowResult = InvokeFunction(
                     functionToExecute, 
                     row.Cells.Select(c => c.CleanedContent).ToReadOnlyList());
+
+                changes.AddRange(rowResult.TableChanges);
 
                 if (rowResult.Exception != null)
                 {
@@ -216,11 +218,9 @@ namespace NetRunner.Executable.Invokation.Functions
 
                         var currentIsOk = CompareItems(resultObject, expectedResult, CleanedColumnNames[columnIndex], out actualValue);
 
-
-
                         var cellChange = currentIsOk
-                            ? new CssClassCellChange(currentRow.RowReference, columnIndex, HtmlParser.PassCssClass)
-                            : new ShowActualValueCellChange(currentRow.RowReference, columnIndex, actualValue);
+                            ? new CssClassCellChange(currentRow.Cells[columnIndex], HtmlParser.PassCssClass)
+                            : new ShowActualValueCellChange(currentRow.Cells[columnIndex], actualValue);
 
                         tableChanges.Add(cellChange);
 
@@ -228,9 +228,9 @@ namespace NetRunner.Executable.Invokation.Functions
                     }
                     catch (ConversionException ex)
                     {
-                        tableChanges.Add(new CssClassCellChange(currentRow.RowReference, columnIndex, HtmlParser.ErrorCssClass));
+                        tableChanges.Add(new CssClassCellChange(currentRow.Cells[columnIndex], HtmlParser.ErrorCssClass));
 
-                        tableChanges.Add(new AddCellExpandableInfo(currentRow.RowReference, columnIndex, "Unable to parse cell", ex.ToString()));
+                        tableChanges.Add(new AddCellExpandableInfo(currentRow.Cells[columnIndex], "Unable to parse cell", ex.ToString()));
 
                         allRight = false;
                     }

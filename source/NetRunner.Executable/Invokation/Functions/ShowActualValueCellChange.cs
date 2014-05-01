@@ -7,19 +7,22 @@ namespace NetRunner.Executable.Invokation.Functions
     {
         private readonly object actualValue;
 
-        public ShowActualValueCellChange(HtmlRowReference row, int column, object actualValue)
-            : base(row, column, HtmlParser.FailCssClass)
+        public ShowActualValueCellChange(HtmlCell cell, object actualValue)
+            : base(cell, HtmlParser.FailCssClass)
         {
             this.actualValue = actualValue;
         }
 
-        protected override void PatchCell(HtmlNode htmlCell)
+        public override void PatchHtmlTable(HtmlNode table)
         {
-            base.PatchCell(htmlCell);
+            base.PatchHtmlTable(table);
+
+            var htmlCell = Cell.FindMyself(table);
+
             var expect = htmlCell.InnerText;
             htmlCell.InnerHtml = string.Empty;
             var expectBlock = htmlCell.OwnerDocument.CreateElement("i");
-            expectBlock.Attributes.Add("class","code");
+            expectBlock.Attributes.Add("class", "code");
             expectBlock.InnerHtml = "expect: ";
 
             var actualBlock = expectBlock.Clone();

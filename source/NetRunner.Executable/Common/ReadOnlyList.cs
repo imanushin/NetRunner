@@ -55,6 +55,21 @@ namespace NetRunner.Executable.Common
             return new LazyJoiner(this, separator);
         }
 
+        public ReadOnlyList<TValue> Concat(params TValue[] otherValues)
+        {
+            return Concat((IReadOnlyCollection<TValue>) otherValues); //cast to avoid recursive call
+        }
+
+        public ReadOnlyList<TValue> Concat(IReadOnlyCollection<TValue> otherValues)
+        {
+            Validate.ArgumentIsNotNull(otherValues, "otherValues");
+
+            if (!otherValues.Any())
+                return this;
+
+            return new ReadOnlyList<TValue>(Enumerable.Concat(this, otherValues));
+        }
+
         private sealed class LazyJoiner
         {
             private readonly Lazy<string> toStringResult;

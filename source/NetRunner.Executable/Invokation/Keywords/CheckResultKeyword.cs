@@ -45,7 +45,16 @@ namespace NetRunner.Executable.Invokation.Keywords
 
             bool checkSucceded = Equals(expectedObject, resultObject);
 
-            return new InvokationResult(checkSucceded, null);
+            if (checkSucceded)
+            {
+                return new InvokationResult(true, null);
+            }
+            else
+            {
+                var showActualValueCellChange = new ShowActualValueCellChange(lastCell, resultObject);
+
+                return new InvokationResult(false, null, new[] { showActualValueCellChange });
+            }
         }
 
         /// <summary>
@@ -59,7 +68,7 @@ namespace NetRunner.Executable.Invokation.Keywords
         [CanBeNull]
         public static CheckResultKeyword TryParse(IReadOnlyCollection<HtmlCell> inputCells)
         {
-            if (inputCells.Count < 3) 
+            if (inputCells.Count < 3)
                 return null;
 
             var firstCell = inputCells.First().CleanedContent.Trim();

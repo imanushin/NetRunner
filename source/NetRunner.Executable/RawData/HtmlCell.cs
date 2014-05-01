@@ -1,21 +1,41 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
 using NetRunner.Executable.Common;
+using NetRunner.ExternalLibrary.Properties;
 
 namespace NetRunner.Executable.RawData
 {
     internal sealed class HtmlCell : BaseReadOnlyObject
     {
+        private const string globalAttributeIndexName = "GlobalCellIndex";
+
         private readonly HtmlNode tableCell;
+
+        private const int cellAbsenteeIndex = -1;
+        private static int cellGlobalIndex = cellAbsenteeIndex + 1;
 
         public HtmlCell(HtmlNode tableCell)
         {
             this.tableCell = tableCell;
+
             Validate.ArgumentIsNotNull(tableCell, "tableCell");
+
+            CellIndex = cellGlobalIndex++;
+
+            Validate.ArgumentCondition(!tableCell.Attributes.Contains(globalAttributeIndexName), "tableCell", "Input cell has already had attribute {0}: {1}", globalAttributeIndexName, tableCell.OuterHtml);
+
+            tableCell.Attributes.Append(globalAttributeIndexName, CellIndex.ToString(CultureInfo.InvariantCulture));
+        }
+
+        public int CellIndex
+        {
+            get;
+            private set;
         }
 
         public bool IsBold
@@ -38,15 +58,29 @@ namespace NetRunner.Executable.RawData
                 return tableCell.InnerText;
             }
         }
-        
+
         protected override IEnumerable<object> GetInnerObjects()
         {
-            yield return tableCell.OuterHtml;
+            yield return CellIndex;
         }
 
         protected override string GetString()
         {
-            return tableCell.OuterHtml;
+            return string.Format("Cell Index: {0}; html: {1}", CellIndex, tableCell.OuterHtml);
+        }
+
+        [NotNull]
+        public HtmlNode FindMyself([NotNull] HtmlNode node)
+        {
+            Validate.ArgumentIsNotNull(node, "node");
+
+            //do find because our node is from original html, however input node is from result html text
+            var result = node.Descendants()
+                .FirstOrDefault(n => n.GetAttributeValue(globalAttributeIndexName, cellAbsenteeIndex) == CellIndex);
+
+            Validate.IsNotNull(result, "Unable to cell {0} in the table {1}", this, node);
+
+            return result;
         }
     }
 }
