@@ -28,7 +28,7 @@ namespace CommonObjectsGenerator
             Type baseType = type.BaseType;
             while(baseType != null)
             {
-                if (baseType.FullName == "LeakBlocker.Libraries.Common.BaseReadOnlyObject")
+                if (baseType.FullName == "NetRunner.Executable.Common.BaseReadOnlyObject")
                     break;
                 baseType = baseType.BaseType;
             }
