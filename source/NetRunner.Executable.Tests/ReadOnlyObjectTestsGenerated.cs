@@ -1,4 +1,6 @@
 
+// ReSharper disable RedundantUsingDirective
+
 using HtmlAgilityPack;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NetRunner.Executable.Common;
@@ -17,6 +19,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
+// ReSharper restore RedundantUsingDirective
+
 // ReSharper disable ConvertToConstant.Local
 // ReSharper disable ObjectCreationAsStatement
 // ReSharper disable InconsistentNaming
@@ -24,9 +28,14 @@ using System.Reflection;
 // ReSharper disable UnusedVariable
 // ReSharper disable RedundantCast
 // ReSharper disable UnusedMember.Global
+// ReSharper disable PartialTypeWithSinglePart
+// ReSharper disable RedundantExplicitArrayCreation
+// ReSharper disable AssignNullToNotNullAttribute
+// ReSharper disable MemberCanBePrivate.Global
 
 #pragma warning disable 67
 #pragma warning disable 219
+#pragma warning disable 168
 
 
 namespace NetRunner.Executable.Tests.Invokation.Keywords
@@ -2991,6 +3000,12 @@ namespace NetRunner.Executable.Tests.RawData
 
 #pragma warning restore 219
 #pragma warning restore 67
+#pragma warning restore 168
+
+// ReSharper restore MemberCanBePrivate.Global
+// ReSharper restore AssignNullToNotNullAttribute
+// ReSharper restore RedundantExplicitArrayCreation
+// ReSharper restore PartialTypeWithSinglePart
 // ReSharper restore RedundantCast
 // ReSharper restore UnusedVariable
 // ReSharper restore ConditionIsAlwaysTrueOrFalse

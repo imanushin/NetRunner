@@ -22,7 +22,11 @@ namespace TestsGenerator.ReadonlyObjectGenerators
 
         private const string totalTemplate =
 @"
+// ReSharper disable RedundantUsingDirective
+
 {0}
+
+// ReSharper restore RedundantUsingDirective
 
 // ReSharper disable ConvertToConstant.Local
 // ReSharper disable ObjectCreationAsStatement
@@ -31,14 +35,25 @@ namespace TestsGenerator.ReadonlyObjectGenerators
 // ReSharper disable UnusedVariable
 // ReSharper disable RedundantCast
 // ReSharper disable UnusedMember.Global
+// ReSharper disable PartialTypeWithSinglePart
+// ReSharper disable RedundantExplicitArrayCreation
+// ReSharper disable AssignNullToNotNullAttribute
+// ReSharper disable MemberCanBePrivate.Global
 
 #pragma warning disable 67
 #pragma warning disable 219
+#pragma warning disable 168
 
 {1}
 
 #pragma warning restore 219
 #pragma warning restore 67
+#pragma warning restore 168
+
+// ReSharper restore MemberCanBePrivate.Global
+// ReSharper restore AssignNullToNotNullAttribute
+// ReSharper restore RedundantExplicitArrayCreation
+// ReSharper restore PartialTypeWithSinglePart
 // ReSharper restore RedundantCast
 // ReSharper restore UnusedVariable
 // ReSharper restore ConditionIsAlwaysTrueOrFalse
