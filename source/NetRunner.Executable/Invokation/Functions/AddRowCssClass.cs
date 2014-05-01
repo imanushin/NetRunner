@@ -45,7 +45,7 @@ namespace NetRunner.Executable.Invokation.Functions
                 }
                 else
                 {
-                    oldAttributes.Value = oldAttributes.Value + "," + targetCssClass;
+                    oldAttributes.Value = oldAttributes.Value + " " + targetCssClass;
                 }
             }
         }

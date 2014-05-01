@@ -69,7 +69,7 @@ namespace NetRunner.Executable.RawData
             return string.Format("Cell Index: {0}; html: {1}", CellIndex, tableCell.OuterHtml);
         }
 
-        [NotNull]
+        [NotNull, Pure]
         public HtmlNode FindMyself([NotNull] HtmlNode node)
         {
             Validate.ArgumentIsNotNull(node, "node");
