@@ -1,0 +1,3 @@
+!path ..\binary\currentBuild\NetRunner.InternalTests.dll
+
+!contents -R2 -g -p -f -h

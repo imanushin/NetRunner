@@ -1,0 +1,5 @@
+| '''set fitnesse path''' | http://localhost:8080 |
+
+| '''execute page''' | ''.InternalTests.TestScenarios.SimpleFunctionsTests'' |
+
+| check | '''result table count''' | 1 |
