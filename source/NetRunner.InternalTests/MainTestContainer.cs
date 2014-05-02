@@ -19,6 +19,7 @@ namespace NetRunner.InternalTests
         private Uri pathToFitnesseRoot;
 
         private TestResults testResult;
+        private SingleTest currentTest;
 
         public bool SetFitnessePath(Uri pathToRoot)
         {
@@ -73,6 +74,8 @@ namespace NetRunner.InternalTests
                         Trace.TraceInformation("Test execution result: {1}{0}{1}-------------------------", result, Environment.NewLine);
 
                         testResult = new TestResults(result);
+
+                        InitTest("1");
                     }
                 }
             }
@@ -88,6 +91,40 @@ namespace NetRunner.InternalTests
             }
 
             return testResult.Tests.Count;
+        }
+
+        public bool InitTest(string testNameOrIndex)
+        {
+            testNameOrIndex = testNameOrIndex.Trim();
+
+            if (testNameOrIndex.StartsWith("."))
+                testNameOrIndex = testNameOrIndex.Substring(1);
+
+            int testIndex;
+            if (int.TryParse(testNameOrIndex, out testIndex))
+            {
+                currentTest = testResult.Tests[testIndex - 1];
+
+                return true;
+            }
+
+            currentTest = testResult.Tests.FirstOrDefault(t => string.Equals(testNameOrIndex, t.TestName, StringComparison.OrdinalIgnoreCase));
+
+            if (currentTest == null)
+            {
+                Trace.TraceError("Unable to find test {0}. Tests available: {1}", testNameOrIndex, string.Join(", ", testResult.Tests.Select(t => t.TestName)));
+            }
+
+            return currentTest != null;
+        }
+
+        public IEnumerable CurrentTestResults()
+        {
+            return currentTest.Counts.Select(c => new
+            {
+                Type = c.Key,
+                Count = c.Value
+            });
         }
     }
 }

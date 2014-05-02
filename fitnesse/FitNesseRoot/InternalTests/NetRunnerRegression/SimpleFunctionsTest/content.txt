@@ -1,5 +1,16 @@
+!define testName {''.InternalTests.TestScenarios.SimpleFunctionsTests''}
+
 | '''set fitnesse path''' | http://localhost:8080 |
 
-| '''execute page''' | ''.InternalTests.TestScenarios.SimpleFunctionsTests'' |
+| '''execute page''' | ${testName} |
 
 | check | '''tests count''' | 1 |
+
+| '''Init Test''' | ${testName} |
+
+| '''Current Test Results''' |
+| '''Type''' | '''Count''' |
+| right | 1 |
+| wrong | 0 |
+| ignores | 0 |
+| exceptions | 0 |

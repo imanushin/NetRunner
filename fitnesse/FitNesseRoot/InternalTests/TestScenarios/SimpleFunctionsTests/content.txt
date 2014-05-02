@@ -1,2 +1,1 @@
-
-| '''ping site''' | ''google.com'' |
+| '''ping site''' | ''https://google.com'' |
