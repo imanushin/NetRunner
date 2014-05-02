@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -7,6 +8,7 @@ using System.Net;
 using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 using HtmlAgilityPack;
 using NetRunner.ExternalLibrary;
 
@@ -16,9 +18,9 @@ namespace NetRunner.InternalTests
     {
         private Uri pathToFitnesseRoot;
 
-        private List<HtmlNode> tables;
+        private TestResults testResult;
 
-        public bool SetFintessePath(Uri pathToRoot)
+        public bool SetFitnessePath(Uri pathToRoot)
         {
             try
             {
@@ -47,22 +49,45 @@ namespace NetRunner.InternalTests
             return true;
         }
 
-        public bool ExecutePage(string pageLocalUrl)
+        public void ExecutePage(string pageLocalUrl)
         {
-            /**/
-            return false;
+            pageLocalUrl = pageLocalUrl.Trim();
+
+            if (pageLocalUrl.StartsWith("."))
+                pageLocalUrl = pageLocalUrl.Substring(1);
+
+            var testUri = new Uri(pathToFitnesseRoot, pageLocalUrl + "?test&format=xml");
+
+            Trace.TraceInformation("Accessing url: {0}", testUri);
+
+            var request = WebRequest.CreateHttp(testUri);
+
+            using (var responce = request.GetResponse())
+            {
+                using (var stream = responce.GetResponseStream())
+                {
+                    using (var reader = new StreamReader(stream))
+                    {
+                        var result = reader.ReadToEnd();
+
+                        Trace.TraceInformation("Test execution result: {1}{0}{1}-------------------------", result, Environment.NewLine);
+
+                        testResult = new TestResults(result);
+                    }
+                }
+            }
         }
 
-        public int ResultTableCount()
+        public int TestsCount()
         {
-            if (tables == null)
+            if (testResult == null)
             {
                 Trace.TraceError("No tests were executed");
 
                 return -1;
             }
 
-            return tables.Count;
+            return testResult.Tests.Count;
         }
     }
 }

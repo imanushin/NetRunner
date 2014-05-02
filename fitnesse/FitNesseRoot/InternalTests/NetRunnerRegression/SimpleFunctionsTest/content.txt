@@ -2,4 +2,4 @@
 
 | '''execute page''' | ''.InternalTests.TestScenarios.SimpleFunctionsTests'' |
 
-| check | '''result table count''' | 1 |
+| check | '''tests count''' | 1 |

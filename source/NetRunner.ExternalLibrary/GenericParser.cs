@@ -5,7 +5,7 @@ using System.Text;
 
 namespace NetRunner.ExternalLibrary
 {
-    internal abstract class GenericParser<TResultValue> : BaseParser
+    public abstract class GenericParser<TResultValue> : BaseParser
     {
         protected GenericParser(int priority)
             : base(priority)
