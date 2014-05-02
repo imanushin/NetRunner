@@ -13,4 +13,13 @@
 | right | 1 |
 | wrong | 0 |
 | ignores | 0 |
-| exceptions | 0 |
+| exceptions | 1 |
+
+| check | '''Row Count Of Table''' | 1 | '''is''' | 1 | 
+
+| '''Analyse Table''' | 1 |
+| '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
+| 1 | 1 | Contains | ping site |
+| 2 | 2 | Contains | https://google.com |
+| 1..2 | 1..2 | Contains | class="pass" |
+| 1..2 | 1..2 | Count | 2 |

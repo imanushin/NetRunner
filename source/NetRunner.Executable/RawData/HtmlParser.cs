@@ -80,11 +80,6 @@ namespace NetRunner.Executable.RawData
             return tablesFound;
         }
 
-        private static bool IsTableNode(HtmlNode cn)
-        {
-            return String.Equals(cn.Name, TableNodeName, StringComparison.OrdinalIgnoreCase);
-        }
-
         private static HtmlTable ParseTable(HtmlNode tableNode, string textAfterTable)
         {
             var allRows = tableNode.ChildNodes.Where(cn => String.Equals(cn.Name, TableRowNodeName, StringComparison.OrdinalIgnoreCase));

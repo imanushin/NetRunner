@@ -36,11 +36,13 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseDictionaryParser.cs" />
     <Compile Include="BaseParser.cs" />
     <Compile Include="BaseTableArgument.cs" />
     <Compile Include="BaseTestContainer.cs" />
     <Compile Include="ConverterParser.cs" />
     <Compile Include="DefaultParser.cs" />
+    <Compile Include="EnumParser.cs" />
     <Compile Include="FunctionContainer.cs" />
     <Compile Include="GenericParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -3,16 +3,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HtmlAgilityPack;
 
 namespace NetRunner.InternalTests
 {
     internal sealed class SingleTest
     {
-        public SingleTest(string testName, IReadOnlyDictionary<string, int> counts, string contents)
+        private readonly HtmlDocument document;
+
+        private readonly HtmlNode[] tables;
+
+        public SingleTest(string testName, IReadOnlyDictionary<string, int> counts, string content)
         {
             TestName = testName;
             Counts = counts;
-            Contents = contents;
+            Content = content;
+
+            document = new HtmlDocument();
+
+            document.LoadHtml(content);
+
+            tables = FindAllTables(document.DocumentNode).ToArray();
         }
 
         public string TestName
@@ -27,10 +38,34 @@ namespace NetRunner.InternalTests
             private set;
         }
 
-        public string Contents
+        public string Content
         {
             get;
             private set;
+        }
+
+        public HtmlNode GetTable(int tableIndex)
+        {
+            return tables[tableIndex - 1];
+        }
+
+        private static IEnumerable<HtmlNode> FindAllTables(HtmlNode currentNode)
+        {
+            var tablesFound = new List<HtmlNode>();
+
+            foreach (HtmlNode childNode in currentNode.ChildNodes)
+            {
+                if (String.Equals(childNode.Name, "table", StringComparison.OrdinalIgnoreCase))
+                {
+                    tablesFound.Add(childNode);
+
+                    continue;
+                }
+
+                tablesFound.AddRange(FindAllTables(childNode));
+            }
+
+            return tablesFound;
         }
     }
 }

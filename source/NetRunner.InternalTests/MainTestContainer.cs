@@ -126,5 +126,15 @@ namespace NetRunner.InternalTests
                 Count = c.Value
             });
         }
+
+        public TableAnalyser AnalyseTable(int tableIndex)
+        {
+            return new TableAnalyser(currentTest.GetTable(tableIndex));
+        }
+
+        public int RowCountOfTableIs(int tableIndex)
+        {
+            return currentTest.GetTable(tableIndex).ChildNodes.Count(n => string.Equals(n.Name, "tr", StringComparison.OrdinalIgnoreCase));
+        }
     }
 }
