@@ -5,6 +5,7 @@
 To add your first "page", click the [[Edit][FrontPage?edit]] button and add a [[!-WikiWord-!][FitNesse.UserGuide.WikiWord]] to the page.
 
 SampleTests
+InternalTests
 
 | '''To Learn More...'''|
 | [[A One-Minute Description][FitNesse.UserGuide.OneMinuteDescription]]|''What is [[FitNesse][FitNesse.FitNesse]]? Start here.''|

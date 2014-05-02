@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FitSample", "source\FitSamp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetRunner.Executable.Tests", "source\NetRunner.Executable.Tests\NetRunner.Executable.Tests.csproj", "{D1D07315-BEB3-4C28-BB46-2871100D6688}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetRunner.InternalTests", "source\NetRunner.InternalTests\NetRunner.InternalTests.csproj", "{50030B05-BB2E-4FDF-8F83-331E050E9A2F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,6 +34,10 @@ Global
 		{D1D07315-BEB3-4C28-BB46-2871100D6688}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D1D07315-BEB3-4C28-BB46-2871100D6688}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D1D07315-BEB3-4C28-BB46-2871100D6688}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50030B05-BB2E-4FDF-8F83-331E050E9A2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50030B05-BB2E-4FDF-8F83-331E050E9A2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50030B05-BB2E-4FDF-8F83-331E050E9A2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50030B05-BB2E-4FDF-8F83-331E050E9A2F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

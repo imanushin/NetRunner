@@ -1,4 +1,7 @@
-!path ..\binary\currentBuild\FitSample.dll
+!1 Internal regression suite
+!contents -R2 -g -p -f -h
+
+!path ..\binary\currentBuild\NetRunner.InternalTests.dll
 
 !define COMMAND_PATTERN {%m %p}
 !define TEST_RUNNER {..\binary\currentBuild\NetRunner.Executable.exe}
