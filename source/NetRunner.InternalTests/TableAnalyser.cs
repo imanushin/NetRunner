@@ -14,6 +14,7 @@ namespace NetRunner.InternalTests
         internal enum Operation
         {
             Contains,
+            NotContains,
             Count
         }
 
@@ -36,7 +37,9 @@ namespace NetRunner.InternalTests
             switch (operation)
             {
                 case Operation.Contains:
-                    return actualCells.All(n => n.OuterHtml.Contains(parameter));
+                    return actualCells.All(n => n.OuterHtml.Contains(parameter)) && actualCells.Any();
+                case Operation.NotContains:
+                    return !actualCells.Any(n => n.OuterHtml.Contains(parameter)) && actualCells.Any();
                 case Operation.Count:
                     return int.Parse(parameter) == actualCells.Count();
                 default:

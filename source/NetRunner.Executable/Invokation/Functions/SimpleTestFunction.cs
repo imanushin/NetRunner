@@ -46,8 +46,9 @@ namespace NetRunner.Executable.Invokation.Functions
                 if (result.Exception != null)
                 {
                     var errorChange = new AddExceptionLine(AddExceptionLine.FormatExceptionHeader(result.Exception), result.Exception, Function.RowReference);
+                    var rowCss = new AddRowCssClass(Function.RowReference, HtmlParser.ErrorCssClass);
 
-                    return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Exception, result.TableChanges.Concat(errorChange));
+                    return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Exception, result.TableChanges.Concat(errorChange, rowCss));
                 }
 
                 if (Equals(false, result.Result))
