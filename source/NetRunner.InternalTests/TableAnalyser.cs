@@ -14,7 +14,7 @@ namespace NetRunner.InternalTests
         internal enum Operation
         {
             Contains,
-            NotContains,
+            NotContain,
             Count
         }
 
@@ -38,7 +38,7 @@ namespace NetRunner.InternalTests
             {
                 case Operation.Contains:
                     return actualCells.All(n => n.OuterHtml.Contains(parameter)) && actualCells.Any();
-                case Operation.NotContains:
+                case Operation.NotContain:
                     return !actualCells.Any(n => n.OuterHtml.Contains(parameter)) && actualCells.Any();
                 case Operation.Count:
                     return int.Parse(parameter) == actualCells.Count();
@@ -51,12 +51,18 @@ namespace NetRunner.InternalTests
         {
             var result = new List<HtmlNode>();
 
-            for (int rowIndex = row.FirstIndex; rowIndex <= row.LastIndex && rowIndex < cells.Length; rowIndex++)
+            for (int rowIndex = 0; rowIndex < cells.Length; rowIndex++)
             {
+                if(!row.Exists(rowIndex))
+                    continue;
+
                 var currentRow = cells[rowIndex];
 
-                for (int columnIndex = column.FirstIndex; columnIndex <= column.LastIndex && columnIndex < currentRow.Length; columnIndex++)
+                for (int columnIndex = 0; columnIndex < currentRow.Length; columnIndex++)
                 {
+                    if (!column.Exists(columnIndex))
+                        continue;
+
                     result.Add(currentRow[columnIndex]);
                 }
             }

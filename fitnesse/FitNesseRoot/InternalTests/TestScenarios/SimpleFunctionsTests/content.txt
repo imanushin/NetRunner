@@ -1,4 +1,12 @@
-
 |'''ping site'''|''https://google.com''|
 
 |'''ping site'''|''https://google.com123''|
+
+|'''ping site'''|!-https://google.com-!|
+
+| '''ping site''' | ''https://google.com2354235245'' | '''without exceptions''' |
+
+|'''ping site'''|''https://google.com''|
+|'''ping site'''|''https://google.com123''|
+|'''ping site'''|!-https://google.com-!|
+| '''ping site''' | ''https://google.com2354235245'' | '''without exceptions''' |

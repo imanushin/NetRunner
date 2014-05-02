@@ -10,10 +10,10 @@
 
 | '''Current Test Results''' |
 | '''Type''' | '''Count''' |
-| right | 1 |
-| wrong | 0 |
+| right | 2 |
+| wrong | 1 |
 | ignores | 0 |
-| exceptions | 1 |
+| exceptions | 2 |
 
 | check | '''Row Count Of Table''' | 1 | '''is''' | 1 | 
 
@@ -32,5 +32,41 @@
 | 2 | 1 | Contains | https://google.com123 |
 | 1..2 | 1 | Contains | class="error" |
 | 1 | 2 | Contains | !-WebException-! |
-| 1 | 2 | Not Contains | !-NetRunner.Executable-! | 
+| 1 | 2 | Not Contain | !-NetRunner.Executable-! | 
+
+| check | '''Row Count Of Table''' | 3 | '''is''' | 1 | 
+
+| '''Analyse Table''' | 3 |
+| '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
+| 1 | 1 | Contains | ping site |
+| 2 | 1 | Contains | https://google.com |
+| 1..2 | 1..2 | Contains | class="pass" |
+| 1..2 | 1..2 | Count | 2 |
+
+| check | '''Row Count Of Table''' | 4 | '''is''' | 1 | 
+
+| '''Analyse Table''' | 4 |
+| '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
+| 1 | 1 | Contains | ping site |
+| 2 | 1 | Contains | https://google.com |
+| 1..2 | 1..2 | Contains | class="fail" |
+| 1..2 | 1..2 | Count | 2 |
+
+| check | '''Row Count Of Table''' | 5 | '''is''' | 5 | 
+
+| '''Analyse Table''' | 5 |
+| '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
+| 1 | 1..2, 4..5 | Contains | ping site |
+| 2 | 1 | Contains | https://google.com |
+| 1..100 | 1 | Contains | class="pass" |
+| 2 | 2 | Contains | https://google.com123 |
+| 1..100 | 2 | Contains | class="error" |
+| 1 | 3 | Contains | !-WebException-! |
+| 1 | 3 | Not Contain | !-NetRunner.Executable-! |
+| 2 | 4 | Contains | https://google.com |
+| 1..100 | 4 | Contains | class="pass" |
+| 2 | 5 | Contains | https://google.com2354235245 |
+| 1..100 | 5 | Contains | class="fail" |
+| 1..100 | 1..100 | Count | 10 |
+
 
