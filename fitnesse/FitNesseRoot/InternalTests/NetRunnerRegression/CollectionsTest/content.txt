@@ -1,0 +1,77 @@
+!define testName {''.InternalTests.TestScenarios.CollectionsTests''}
+!define invokationWasSkippedText {Row invokation was skipped because of parser errors}
+
+| '''set fitnesse path''' | http://localhost:8080 |
+
+| '''execute page''' | ${testName} |
+
+| check | '''tests count''' | 1 |
+
+| '''Init Test''' | ${testName} |
+
+| '''Current Test Results''' |
+| '''Type''' | '''Count''' |
+| right | 1 |
+| wrong | 4 |
+| ignores | 0 |
+| exceptions | 0 |
+
+| check | '''Row Count Of Table''' | 1 | '''is''' | 4 | 
+
+| '''Analyse Table''' | 1 |
+| '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
+| 1 | 1 | Contains | List Files In |
+| 2 | 1 | Contains | ./ |
+| 1..2 | 3 | Contains | class="pass" |
+| 1 | 3 | Contains | fitnesse-standalone |
+| 2 | 3 | Contains | .jar |
+| 1..2 | 4 | Contains | class="fail" |
+| 1 | 4 | Contains | surplus |
+| 2 | 4 | Contains | surplus |
+| 1..100 | 1..100 | Count | 8 |
+
+
+| '''Analyse Table''' | 2 |
+| '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
+| 1 | 1 | Contains | List Files In |
+| 2 | 1 | Contains | ./ |
+| 1..2 | 3..4 | Contains | class="pass" |
+| 1..100 | 1..100 | Count | 8 |
+| 1..100 | 1..100 | Not Contain | class="fail" |
+
+| check | '''Row Count Of Table''' | 3 | '''is''' | 4 | 
+
+| '''Analyse Table''' | 3 |
+| '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
+| 1 | 1 | Contains | List Files In |
+| 2 | 1 | Contains | ./ |
+| 1 | 1 | Contains | ${invokationWasSkippedText} |
+| 1..2 | 1, 3 | Contains | class="fail" |
+| 1..2 | 4 | Not Contain | class="fail" |
+| 1 | 3 | Contains | Wrong column count |
+| 1..100 | 2 | Count | 2 |
+| 1..100 | 3 | Count | 3 |
+
+| check | '''Row Count Of Table''' | 4 | '''is''' | 4 | 
+
+| '''Analyse Table''' | 4 |
+| '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
+| 1 | 1 | Contains | List Files In |
+| 2 | 1 | Contains | ./ |
+| 1 | 1 | Contains | ${invokationWasSkippedText} |
+| 1..2 | 1, 3 | Contains | class="fail" |
+| 1..2 | 4 | Not Contain | class="fail" |
+| 1 | 3 | Contains | Wrong column count |
+| 1..100 | 2 | Count | 2 |
+| 1..100 | 3 | Count | 1 |
+
+| check | '''Row Count Of Table''' | 5 | '''is''' | 4 | 
+
+| '''Analyse Table''' | 5 |
+| '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
+| 1 | 1 | Contains | List Files In |
+| 2 | 1 | Contains | ./ |
+| 1 | 1 | Contains | ${invokationWasSkippedText} |
+| 1..2 | 1, 3 | Contains | class="fail" |
+| 1..2 | 4 | Not Contain | class="fail" |
+| 2 | 3 | Contains | All cells should be non-bold |

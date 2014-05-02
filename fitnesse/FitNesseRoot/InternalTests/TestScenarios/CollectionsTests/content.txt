@@ -1,0 +1,30 @@
+
+!note One surplus
+| '''List Files In''' | ''./'' |
+| '''Name''' | '''Extension''' |
+| ''fitnesse-standalone'' | ''.jar'' |
+
+!note all is ok
+| '''List Files In''' | ''./'' |
+| '''Name''' | '''Extension''' |
+| ''fitnesse-standalone'' | ''.jar'' |
+| ''run'' | .bat |
+
+!note wrong columns count
+| '''List Files In''' | ''./'' |
+| '''Name''' | '''Extension''' |
+| ''fitnesse-standalone'' | ''.jar'' | ''.jar'' |
+| ''run'' | .bat'' |
+
+!note wrong columns count
+| '''List Files In''' | ''./'' |
+| '''Name''' | '''Extension''' |
+| ''fitnesse-standalone'' |
+| ''run'' | .bat'' |
+
+!note inner bold text
+| '''List Files In''' | ''./'' |
+| '''Name''' | '''Extension''' |
+| ''fitnesse-standalone'' | '''.jar''' |
+| ''run'' | .bat'' |
+ 
