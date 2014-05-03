@@ -37,7 +37,7 @@ namespace NetRunner.Executable.Invokation
 
                 if (firstRow != null)
                 {
-                    changes.Add(new AddExceptionLine("Internal execution error: ", ex, firstRow.RowReference));
+                    changes.Add(new AddExceptionLine(string.Format("Internal execution error: {0}", ex.GetType().Name), ex, firstRow.RowReference));
                 }
 
                 result = new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Exception, ReadOnlyList<AbstractTableChange>.Empty);

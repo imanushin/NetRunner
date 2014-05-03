@@ -154,7 +154,7 @@ namespace NetRunner.Executable.Invokation.Functions
             return null;
         }
 
-        protected static FunctionExecutionResult FormatResult(bool exceptionsOccurred, bool allIsOk, IEnumerable<AbstractTableChange> changes)
+        protected FunctionExecutionResult FormatResult(bool exceptionsOccurred, bool allIsOk, IEnumerable<AbstractTableChange> changes)
         {
             var resultType = exceptionsOccurred
                 ? FunctionExecutionResult.FunctionRunResult.Exception
@@ -162,7 +162,22 @@ namespace NetRunner.Executable.Invokation.Functions
                     ? FunctionExecutionResult.FunctionRunResult.Success
                     : FunctionExecutionResult.FunctionRunResult.Fail);
 
-            return new FunctionExecutionResult(resultType, changes);
+            var innerChanges = changes.ToList();
+
+            if (exceptionsOccurred)
+            {
+                innerChanges.Add(new AddRowCssClass(Function.RowReference, HtmlParser.ErrorCssClass));
+            }
+            else if (allIsOk)
+            {
+                innerChanges.Add(new AddRowCssClass(Function.RowReference, HtmlParser.PassCssClass));
+            }
+            else
+            {
+                innerChanges.Add(new AddRowCssClass(Function.RowReference, HtmlParser.FailCssClass));
+            }
+
+            return new FunctionExecutionResult(resultType, innerChanges);
         }
 
 

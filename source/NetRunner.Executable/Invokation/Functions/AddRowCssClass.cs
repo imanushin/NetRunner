@@ -47,7 +47,12 @@ namespace NetRunner.Executable.Invokation.Functions
                 }
                 else
                 {
-                    oldAttributes.Value = oldAttributes.Value + " " + targetCssClass;
+                    var oldClasses = oldAttributes.Value.Split(new[]
+                    {
+                        ' '
+                    }, StringSplitOptions.RemoveEmptyEntries).Concat(new[]{targetCssClass}).Distinct(StringComparer.OrdinalIgnoreCase).ToArray();
+
+                    oldAttributes.Value = string.Join(" ", oldClasses);
                 }
             }
         }
