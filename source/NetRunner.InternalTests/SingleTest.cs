@@ -11,8 +11,6 @@ namespace NetRunner.InternalTests
     {
         private readonly HtmlDocument document;
 
-        private readonly HtmlNode[] tables;
-
         public SingleTest(string testName, IReadOnlyDictionary<string, int> counts, string content)
         {
             TestName = testName;
@@ -23,7 +21,7 @@ namespace NetRunner.InternalTests
 
             document.LoadHtml(content);
 
-            tables = FindAllTables(document.DocumentNode).ToArray();
+            Tables = FindAllTables(document.DocumentNode).ToArray();
         }
 
         public string TestName
@@ -44,9 +42,10 @@ namespace NetRunner.InternalTests
             private set;
         }
 
-        public HtmlNode GetTable(int tableIndex)
+        public HtmlNode[] Tables
         {
-            return tables[tableIndex - 1];
+            get;
+            private set;
         }
 
         private static IEnumerable<HtmlNode> FindAllTables(HtmlNode currentNode)

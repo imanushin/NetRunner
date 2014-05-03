@@ -1,0 +1,4 @@
+!note check that result does not contain call stack
+| '''Analyse All Tables In All Tests''' |
+| '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
+| 1..100 | 1..100 | Not Contain | !-NetRunner.Executable.-! |

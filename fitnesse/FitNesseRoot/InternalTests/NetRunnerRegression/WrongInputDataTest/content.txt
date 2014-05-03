@@ -1,0 +1,29 @@
+!define testName {''.InternalTests.TestScenarios.WrongInputDataTests''}
+
+| '''execute page''' | ${testName} |
+
+| check | '''tests count''' | 1 |
+
+| '''Init Test''' | ${testName} |
+
+| '''Current Test Results''' |
+| '''Type''' | '''Count''' |
+| right | 0 |
+| wrong | 0 |
+| ignores | 0 |
+| exceptions | 0 |
+
+*| check | '''Row Count Of Table''' | 1 | '''is''' | 4 | 
+
+*| '''Analyse Table''' | 1 |
+*| '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
+*| 1 | 1 | Contains | create subfolders in |
+*| 2 | 1 | Contains | ./ |
+*| 1..100 | 1 | Contains | class="pass" |
+*| 1..100 | 2..100 | Not Contain | class="pass" |
+*| 1..100 | 1..100 | Not Contain | class="fail" |
+*| 1..100 | 1..100 | Count | 5 |
+
+*| check | '''Row Count Of Table''' | 2 | '''is''' | 4 | 
+
+

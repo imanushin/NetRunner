@@ -18,14 +18,14 @@ namespace NetRunner.InternalTests
             Count
         }
 
-        private HtmlNode table;
+        private HtmlNode[] table;
         private HtmlNode[][] cells;
 
-        public TableAnalyser(HtmlNode table)
+        public TableAnalyser(HtmlNode[] table)
         {
             this.table = table;
 
-            var rows = table.ChildNodes.Where(n => string.Equals("tr", n.Name, StringComparison.OrdinalIgnoreCase)).ToArray();
+            var rows = table.SelectMany(t => t.ChildNodes.Where(n => string.Equals("tr", n.Name, StringComparison.OrdinalIgnoreCase))).ToArray();
 
             cells = rows.Select(r => r.ChildNodes.Where(n => string.Equals("td", n.Name, StringComparison.OrdinalIgnoreCase)).ToArray()).ToArray();
         }
@@ -53,7 +53,7 @@ namespace NetRunner.InternalTests
 
             for (int rowIndex = 0; rowIndex < cells.Length; rowIndex++)
             {
-                if(!row.Exists(rowIndex))
+                if (!row.Exists(rowIndex))
                     continue;
 
                 var currentRow = cells[rowIndex];

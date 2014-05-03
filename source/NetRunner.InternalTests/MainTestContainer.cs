@@ -129,12 +129,19 @@ namespace NetRunner.InternalTests
 
         public TableAnalyser AnalyseTable(int tableIndex)
         {
-            return new TableAnalyser(currentTest.GetTable(tableIndex));
+            return new TableAnalyser(new[] { currentTest.Tables[tableIndex - 1] });
+        }
+
+        public TableAnalyser AnalyseAllTablesInAllTests()
+        {
+            return new TableAnalyser(testResult.Tests.SelectMany(t => t.Tables).ToArray());
         }
 
         public int RowCountOfTableIs(int tableIndex)
         {
-            return currentTest.GetTable(tableIndex).ChildNodes.Count(n => string.Equals(n.Name, "tr", StringComparison.OrdinalIgnoreCase));
+            return currentTest.Tables[tableIndex - 1].ChildNodes.Count(n => string.Equals(n.Name, "tr", StringComparison.OrdinalIgnoreCase));
         }
+
+
     }
 }
