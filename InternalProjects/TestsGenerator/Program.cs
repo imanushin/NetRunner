@@ -69,7 +69,11 @@ namespace TestsGenerator
 
                 foreach (ITestGenerator generator in generators)
                 {
-                    var resultFiles = generator.GetFileEntries(targetAssembly);
+                    var configFilePath = Path.Combine(pathToTargetProject, generator.ConfigFileName);
+
+                    Trace.WriteLine(string.Format("Config file path: {0}", configFilePath));
+
+                    var resultFiles = generator.GetFileEntries(targetAssembly, new ConfigFile(configFilePath));
 
                     foreach (OutFile resultFile in resultFiles)
                     {

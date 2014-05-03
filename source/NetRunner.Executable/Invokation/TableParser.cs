@@ -31,9 +31,12 @@ namespace NetRunner.Executable.Invokation
                 return new SimpleTestFunction(header, functionToExecute);
             }
 
-            if (!functionToExecute.HasStrongResult)
-            {
-                var parsedRows = table.Rows.Select(row =>
+            var result = ParseTableValuedFunction(table, header, functionToExecute);
+
+            if (result != null)
+                return result;
+
+            var parsedRows = table.Rows.Select(row =>
                 {
                     try
                     {
@@ -48,27 +51,13 @@ namespace NetRunner.Executable.Invokation
 
                 }).SkipNulls().ToReadOnlyList();
 
-                return new TestFunctionsSequence(parsedRows);
-            }
-
-            return ParseTableValuedFunction(table, header, functionToExecute);
+            return new TestFunctionsSequence(parsedRows);
         }
 
+        [CanBeNull]
         private static AbstractTestFunction ParseTableValuedFunction(HtmlTable table, FunctionHeader header, TestFunctionReference functionToExecute)
         {
-            Validate.Condition(
-                table.Rows.Second().Cells.All(c => c.IsBold),
-                "All elements on second row (named 'headers') should be bold. These values are used in the function {0} to match internal field name and table column name.",
-                header.FunctionName);
-
-            Validate.Condition(
-                table.Rows.Second().Cells.Any(),
-                "There are no any values in the second row in function {0}. Please add header row to match table values and function result/input",
-                header.FunctionName);
-
-            var headers = table.Rows.Second().Cells.Select(c => c.CleanedContent).ToReadOnlyList();
-
-            return new CollectionArgumentedFunction(headers, table.Rows.Skip(2), header, functionToExecute);
+            return BaseComplexArgumentedFunction.GetFunction(table.Rows.Second(), table.Rows.Skip(2), header, functionToExecute);
         }
 
         private static AbstractTestFunction ParseSimpleTestFunction(HtmlRow row)

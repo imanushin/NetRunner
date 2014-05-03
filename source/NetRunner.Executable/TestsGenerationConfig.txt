@@ -1,0 +1,8 @@
+﻿
+[namespaces]
+NetRunner.Executable.Common
+
+[fakeTypes]
+System.Reflection.MethodInfo=>GetType().GetMethods().First()
+HtmlAgilityPack.HtmlNode=>HtmlNode.CreateNode("<i>TEST<i/>")
+NetRunner.ExternalLibrary.FunctionContainer=>new FakeFunctionContainer(1)

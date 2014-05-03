@@ -9,6 +9,11 @@ namespace TestsGenerator
 {
     internal interface ITestGenerator
     {
-        OutFile[] GetFileEntries(Assembly targetAssembly);
+        OutFile[] GetFileEntries(Assembly targetAssembly, ConfigFile configFile);
+
+        string ConfigFileName
+        {
+            get;
+        }
     }
 }

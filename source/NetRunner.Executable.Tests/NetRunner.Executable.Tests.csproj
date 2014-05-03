@@ -64,12 +64,13 @@
     <Compile Include="Invokation\Functions\AddRowCssClassTest.cs" />
     <Compile Include="Invokation\Functions\AddTraceLineTest.cs" />
     <Compile Include="Invokation\Functions\AppendRowWithCellsTest.cs" />
-    <Compile Include="Invokation\Functions\CollectionArgumentedFunctionTest.cs" />
+    <Compile Include="Invokation\Functions\CollectionResultFunctionTest.cs" />
     <Compile Include="Invokation\Functions\CssClassCellChangeTest.cs" />
     <Compile Include="Invokation\Functions\EmptyTestFunctionTest.cs" />
     <Compile Include="Invokation\Functions\ExecutionFailedMessageTest.cs" />
     <Compile Include="Invokation\Functions\ShowActualValueCellChangeTest.cs" />
     <Compile Include="Invokation\Functions\SimpleTestFunctionTest.cs" />
+    <Compile Include="Invokation\Functions\TableResultFunctionTest.cs" />
     <Compile Include="Invokation\Functions\TestFunctionsSequenceTest.cs" />
     <Compile Include="Invokation\HtmlRowReferenceTest.cs" />
     <Compile Include="Invokation\Keywords\CheckResultKeywordTest.cs" />

@@ -1,5 +1,4 @@
 !define testName {''.InternalTests.TestScenarios.CollectionsTests''}
-!define invokationWasSkippedText {Row invokation was skipped because of parser errors}
 
 | '''set fitnesse path''' | http://localhost:8080 |
 

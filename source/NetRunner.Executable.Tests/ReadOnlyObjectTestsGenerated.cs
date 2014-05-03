@@ -15,6 +15,7 @@ using NetRunner.Executable.Tests.Invokation.Keywords;
 using NetRunner.Executable.Tests.RawData;
 using NetRunner.ExternalLibrary;
 using System;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -32,308 +33,556 @@ using System.Reflection;
 // ReSharper disable RedundantExplicitArrayCreation
 // ReSharper disable AssignNullToNotNullAttribute
 // ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable RedundantNameQualifier
 
 #pragma warning disable 67
 #pragma warning disable 219
 #pragma warning disable 168
 
 
-namespace NetRunner.Executable.Tests.Invokation.Keywords
-{
-
-    [TestClass]
-    public sealed partial class AbstractKeywordTest : ReadOnlyObjectTest
-    {
-        internal static readonly ObjectsCache<AbstractKeyword> objects = new ObjectsCache<AbstractKeyword>(GetInstances);
-
-        internal static AbstractKeyword First
-        {
-            get
-            {
-                return objects.Objects.First();
-            }
-        }
-
-        internal static AbstractKeyword Second
-        {
-            get
-            {
-                return objects.Objects.Skip(1).First();
-            }
-        }
-
-        internal static AbstractKeyword Third
-        {
-            get
-            {
-                return objects.Objects.Skip(2).First();
-            }
-        }
-
-        private static IEnumerable<AbstractKeyword> GetInstances()
-        {
-            return GetApparents().Concat(GetInstancesOfCurrentType());
-        }
-
-
-        private static IEnumerable<AbstractKeyword>GetApparents()
-        {
-            return
-            new AbstractKeyword[0].Union(
-CheckResultKeywordTest.objects).Union(
-EmptyKeywordTest.objects).Union(
-UnknownKeywordTest.objects);
-        }
-
-        private static IEnumerable<AbstractKeyword> GetInstancesOfCurrentType()
-        {
-            return ReadOnlyList<AbstractKeyword>.Empty;
-        }
-
-        [TestMethod]
-        public void AbstractKeyword_GetHashCodeTest()
-        {
-            BaseGetHashCodeTest(objects);
-        }
-
-        [TestMethod]
-        public void AbstractKeyword_EqualsTest()
-        {
-            BaseEqualsTest(objects);
-        }
-
-        [TestMethod]
-        public void AbstractKeyword_ToStringTest()
-        {
-            BaseToStringTest(objects);
-        }
-    }
-
-    [TestClass]
-    public sealed partial class CheckResultKeywordTest : ReadOnlyObjectTest
-    {
-        internal static readonly ObjectsCache<CheckResultKeyword> objects = new ObjectsCache<CheckResultKeyword>(GetInstances);
-
-        internal static CheckResultKeyword First
-        {
-            get
-            {
-                return objects.Objects.First();
-            }
-        }
-
-        internal static CheckResultKeyword Second
-        {
-            get
-            {
-                return objects.Objects.Skip(1).First();
-            }
-        }
-
-        internal static CheckResultKeyword Third
-        {
-            get
-            {
-                return objects.Objects.Skip(2).First();
-            }
-        }
-
-        private static IEnumerable<CheckResultKeyword> GetInstances()
-        {
-            return GetApparents().Concat(GetInstancesOfCurrentType());
-        }
-
-
-        private static IEnumerable<CheckResultKeyword>GetApparents()
-        {
-            return ReadOnlyList<CheckResultKeyword>.Empty;
-        }
-
-        [TestMethod]
-        public void CheckResultKeyword_GetHashCodeTest()
-        {
-            BaseGetHashCodeTest(objects);
-        }
-
-        [TestMethod]
-        public void CheckResultKeyword_EqualsTest()
-        {
-            BaseEqualsTest(objects);
-        }
-
-        [TestMethod]
-        public void CheckResultKeyword_ToStringTest()
-        {
-            BaseToStringTest(objects);
-        }
-    }
-
-    [TestClass]
-    public sealed partial class EmptyKeywordTest : ReadOnlyObjectTest
-    {
-        internal static readonly ObjectsCache<EmptyKeyword> objects = new ObjectsCache<EmptyKeyword>(GetInstances);
-
-        internal static EmptyKeyword First
-        {
-            get
-            {
-                return objects.Objects.First();
-            }
-        }
-
-        internal static EmptyKeyword Second
-        {
-            get
-            {
-                return objects.Objects.Skip(1).First();
-            }
-        }
-
-        internal static EmptyKeyword Third
-        {
-            get
-            {
-                return objects.Objects.Skip(2).First();
-            }
-        }
-
-        private static IEnumerable<EmptyKeyword> GetInstances()
-        {
-            return GetApparents().Concat(GetInstancesOfCurrentType());
-        }
-
-
-        private static IEnumerable<EmptyKeyword>GetApparents()
-        {
-            return ReadOnlyList<EmptyKeyword>.Empty;
-        }
-
-        [TestMethod]
-        public void EmptyKeyword_CheckNullArg_cells()
-        {
-            var cells = new List<HtmlCell>{ HtmlCellTest.First }.ToReadOnlyList();
-
-            try
-            {
-                new EmptyKeyword(null);
-            }
-            catch(ArgumentNullException ex)
-            {
-                CheckArgumentExceptionParameter( "cells", ex.ParamName );
-
-                return;
-            }
-
-            Assert.Fail("Argument 'cells' isn't checked for null inputs");
-        }
-
-        [TestMethod]
-        public void EmptyKeyword_GetHashCodeTest()
-        {
-            BaseGetHashCodeTest(objects);
-        }
-
-        [TestMethod]
-        public void EmptyKeyword_EqualsTest()
-        {
-            BaseEqualsTest(objects);
-        }
-
-        [TestMethod]
-        public void EmptyKeyword_ToStringTest()
-        {
-            BaseToStringTest(objects);
-        }
-    }
-
-    [TestClass]
-    public sealed partial class UnknownKeywordTest : ReadOnlyObjectTest
-    {
-        internal static readonly ObjectsCache<UnknownKeyword> objects = new ObjectsCache<UnknownKeyword>(GetInstances);
-
-        internal static UnknownKeyword First
-        {
-            get
-            {
-                return objects.Objects.First();
-            }
-        }
-
-        internal static UnknownKeyword Second
-        {
-            get
-            {
-                return objects.Objects.Skip(1).First();
-            }
-        }
-
-        internal static UnknownKeyword Third
-        {
-            get
-            {
-                return objects.Objects.Skip(2).First();
-            }
-        }
-
-        private static IEnumerable<UnknownKeyword> GetInstances()
-        {
-            return GetApparents().Concat(GetInstancesOfCurrentType());
-        }
-
-
-        private static IEnumerable<UnknownKeyword>GetApparents()
-        {
-            return ReadOnlyList<UnknownKeyword>.Empty;
-        }
-
-        [TestMethod]
-        public void UnknownKeyword_CheckNullArg_cells()
-        {
-            var cells = new List<HtmlCell>{ HtmlCellTest.First }.ToReadOnlyList();
-
-            try
-            {
-                new UnknownKeyword(null);
-            }
-            catch(ArgumentNullException ex)
-            {
-                CheckArgumentExceptionParameter( "cells", ex.ParamName );
-
-                return;
-            }
-
-            Assert.Fail("Argument 'cells' isn't checked for null inputs");
-        }
-
-        [TestMethod]
-        public void UnknownKeyword_GetHashCodeTest()
-        {
-            BaseGetHashCodeTest(objects);
-        }
-
-        [TestMethod]
-        public void UnknownKeyword_EqualsTest()
-        {
-            BaseEqualsTest(objects);
-        }
-
-        [TestMethod]
-        public void UnknownKeyword_ToStringTest()
-        {
-            BaseToStringTest(objects);
-        }
-    }
-
-}
-
 namespace NetRunner.Executable.Tests.Invokation.Functions
 {
 
     [TestClass]
+    public sealed partial class AbstractTestFunctionTest : ReadOnlyObjectTest
+    {
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static readonly ObjectsCache<AbstractTestFunction> objects = new ObjectsCache<AbstractTestFunction>(GetInstances);
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static IEnumerable<AbstractTestFunction[]> CreateNonEmptyObjectsArrays()
+        {
+            return new[]
+            {
+                AbstractTestFunctionTest.objects.Objects.Skip(1).ToArray(),
+                AbstractTestFunctionTest.objects.Objects.Take(2).ToArray(),
+                AbstractTestFunctionTest.objects.Objects.Take(1).ToArray()
+            };
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static AbstractTestFunction First
+        {
+            get
+            {
+                return objects.Objects.First();
+            }
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static AbstractTestFunction Second
+        {
+            get
+            {
+                return objects.Objects.Skip(1).First();
+            }
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static AbstractTestFunction Third
+        {
+            get
+            {
+                return objects.Objects.Skip(2).First();
+            }
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        private static IEnumerable<AbstractTestFunction> GetInstances()
+        {
+            return GetApparents().Concat(GetInstancesOfCurrentType());
+        }
+
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        private static IEnumerable<AbstractTestFunction>GetApparents()
+        {
+            return
+            new AbstractTestFunction[0].Union(
+BaseComplexArgumentedFunctionTest.objects).Union(
+CollectionResultFunctionTest.objects).Union(
+TableResultFunctionTest.objects).Union(
+EmptyTestFunctionTest.objects).Union(
+TestFunctionsSequenceTest.objects).Union(
+SimpleTestFunctionTest.objects);
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        private static IEnumerable<AbstractTestFunction> GetInstancesOfCurrentType()
+        {
+            return ReadOnlyList<AbstractTestFunction>.Empty;
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void AbstractTestFunction_GetHashCodeTest()
+        {
+            BaseGetHashCodeTest(objects);
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void AbstractTestFunction_EqualsTest()
+        {
+            BaseEqualsTest(objects);
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void AbstractTestFunction_ToStringTest()
+        {
+            BaseToStringTest(objects);
+        }
+    }
+
+    [TestClass]
+    public sealed partial class BaseComplexArgumentedFunctionTest : ReadOnlyObjectTest
+    {
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static readonly ObjectsCache<BaseComplexArgumentedFunction> objects = new ObjectsCache<BaseComplexArgumentedFunction>(GetInstances);
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static IEnumerable<BaseComplexArgumentedFunction[]> CreateNonEmptyObjectsArrays()
+        {
+            return new[]
+            {
+                BaseComplexArgumentedFunctionTest.objects.Objects.Skip(1).ToArray(),
+                BaseComplexArgumentedFunctionTest.objects.Objects.Take(2).ToArray(),
+                BaseComplexArgumentedFunctionTest.objects.Objects.Take(1).ToArray()
+            };
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static BaseComplexArgumentedFunction First
+        {
+            get
+            {
+                return objects.Objects.First();
+            }
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static BaseComplexArgumentedFunction Second
+        {
+            get
+            {
+                return objects.Objects.Skip(1).First();
+            }
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static BaseComplexArgumentedFunction Third
+        {
+            get
+            {
+                return objects.Objects.Skip(2).First();
+            }
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        private static IEnumerable<BaseComplexArgumentedFunction> GetInstances()
+        {
+            return GetApparents().Concat(GetInstancesOfCurrentType());
+        }
+
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        private static IEnumerable<BaseComplexArgumentedFunction>GetApparents()
+        {
+            return
+            new BaseComplexArgumentedFunction[0].Union(
+CollectionResultFunctionTest.objects).Union(
+TableResultFunctionTest.objects);
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        private static IEnumerable<BaseComplexArgumentedFunction> GetInstancesOfCurrentType()
+        {
+            return ReadOnlyList<BaseComplexArgumentedFunction>.Empty;
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void BaseComplexArgumentedFunction_GetHashCodeTest()
+        {
+            BaseGetHashCodeTest(objects);
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void BaseComplexArgumentedFunction_EqualsTest()
+        {
+            BaseEqualsTest(objects);
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void BaseComplexArgumentedFunction_ToStringTest()
+        {
+            BaseToStringTest(objects);
+        }
+    }
+
+    [TestClass]
+    public sealed partial class CollectionResultFunctionTest : ReadOnlyObjectTest
+    {
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static readonly ObjectsCache<CollectionResultFunction> objects = new ObjectsCache<CollectionResultFunction>(GetInstances);
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static IEnumerable<CollectionResultFunction[]> CreateNonEmptyObjectsArrays()
+        {
+            return new[]
+            {
+                CollectionResultFunctionTest.objects.Objects.Skip(1).ToArray(),
+                CollectionResultFunctionTest.objects.Objects.Take(2).ToArray(),
+                CollectionResultFunctionTest.objects.Objects.Take(1).ToArray()
+            };
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static CollectionResultFunction First
+        {
+            get
+            {
+                return objects.Objects.First();
+            }
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static CollectionResultFunction Second
+        {
+            get
+            {
+                return objects.Objects.Skip(1).First();
+            }
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static CollectionResultFunction Third
+        {
+            get
+            {
+                return objects.Objects.Skip(2).First();
+            }
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        private static IEnumerable<CollectionResultFunction> GetInstances()
+        {
+            return GetApparents().Concat(GetInstancesOfCurrentType());
+        }
+
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        private static IEnumerable<CollectionResultFunction>GetApparents()
+        {
+            return ReadOnlyList<CollectionResultFunction>.Empty;
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void CollectionResultFunction_CheckNullArg_columnsRow()
+        {
+            var columnsRow = HtmlRowTest.First;
+            var rows = new List<HtmlRow>{ HtmlRowTest.First }.ToReadOnlyList();
+            var function = FunctionHeaderTest.First;
+            var functionToExecute = TestFunctionReferenceTest.First;
+
+            try
+            {
+                new CollectionResultFunction(null, rows, function, functionToExecute);
+            }
+            catch(ArgumentNullException ex)
+            {
+                CheckArgumentExceptionParameter( "columnsRow", ex.ParamName );
+
+                return;
+            }
+
+            Assert.Fail("Argument 'columnsRow' isn't checked for null inputs");
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void CollectionResultFunction_CheckNullArg_rows()
+        {
+            var columnsRow = HtmlRowTest.First;
+            var rows = new List<HtmlRow>{ HtmlRowTest.First }.ToReadOnlyList();
+            var function = FunctionHeaderTest.First;
+            var functionToExecute = TestFunctionReferenceTest.First;
+
+            try
+            {
+                new CollectionResultFunction(columnsRow, null, function, functionToExecute);
+            }
+            catch(ArgumentNullException ex)
+            {
+                CheckArgumentExceptionParameter( "rows", ex.ParamName );
+
+                return;
+            }
+
+            Assert.Fail("Argument 'rows' isn't checked for null inputs");
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void CollectionResultFunction_CheckNullArg_function()
+        {
+            var columnsRow = HtmlRowTest.First;
+            var rows = new List<HtmlRow>{ HtmlRowTest.First }.ToReadOnlyList();
+            var function = FunctionHeaderTest.First;
+            var functionToExecute = TestFunctionReferenceTest.First;
+
+            try
+            {
+                new CollectionResultFunction(columnsRow, rows, null, functionToExecute);
+            }
+            catch(ArgumentNullException ex)
+            {
+                CheckArgumentExceptionParameter( "function", ex.ParamName );
+
+                return;
+            }
+
+            Assert.Fail("Argument 'function' isn't checked for null inputs");
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void CollectionResultFunction_CheckNullArg_functionToExecute()
+        {
+            var columnsRow = HtmlRowTest.First;
+            var rows = new List<HtmlRow>{ HtmlRowTest.First }.ToReadOnlyList();
+            var function = FunctionHeaderTest.First;
+            var functionToExecute = TestFunctionReferenceTest.First;
+
+            try
+            {
+                new CollectionResultFunction(columnsRow, rows, function, null);
+            }
+            catch(ArgumentNullException ex)
+            {
+                CheckArgumentExceptionParameter( "functionToExecute", ex.ParamName );
+
+                return;
+            }
+
+            Assert.Fail("Argument 'functionToExecute' isn't checked for null inputs");
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void CollectionResultFunction_GetHashCodeTest()
+        {
+            BaseGetHashCodeTest(objects);
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void CollectionResultFunction_EqualsTest()
+        {
+            BaseEqualsTest(objects);
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void CollectionResultFunction_ToStringTest()
+        {
+            BaseToStringTest(objects);
+        }
+    }
+
+    [TestClass]
+    public sealed partial class TableResultFunctionTest : ReadOnlyObjectTest
+    {
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static readonly ObjectsCache<TableResultFunction> objects = new ObjectsCache<TableResultFunction>(GetInstances);
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static IEnumerable<TableResultFunction[]> CreateNonEmptyObjectsArrays()
+        {
+            return new[]
+            {
+                TableResultFunctionTest.objects.Objects.Skip(1).ToArray(),
+                TableResultFunctionTest.objects.Objects.Take(2).ToArray(),
+                TableResultFunctionTest.objects.Objects.Take(1).ToArray()
+            };
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static TableResultFunction First
+        {
+            get
+            {
+                return objects.Objects.First();
+            }
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static TableResultFunction Second
+        {
+            get
+            {
+                return objects.Objects.Skip(1).First();
+            }
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static TableResultFunction Third
+        {
+            get
+            {
+                return objects.Objects.Skip(2).First();
+            }
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        private static IEnumerable<TableResultFunction> GetInstances()
+        {
+            return GetApparents().Concat(GetInstancesOfCurrentType());
+        }
+
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        private static IEnumerable<TableResultFunction>GetApparents()
+        {
+            return ReadOnlyList<TableResultFunction>.Empty;
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void TableResultFunction_CheckNullArg_columnsRow()
+        {
+            var columnsRow = HtmlRowTest.First;
+            var rows = new List<HtmlRow>{ HtmlRowTest.First }.ToReadOnlyList();
+            var function = FunctionHeaderTest.First;
+            var functionToExecute = TestFunctionReferenceTest.First;
+
+            try
+            {
+                new TableResultFunction(null, rows, function, functionToExecute);
+            }
+            catch(ArgumentNullException ex)
+            {
+                CheckArgumentExceptionParameter( "columnsRow", ex.ParamName );
+
+                return;
+            }
+
+            Assert.Fail("Argument 'columnsRow' isn't checked for null inputs");
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void TableResultFunction_CheckNullArg_rows()
+        {
+            var columnsRow = HtmlRowTest.First;
+            var rows = new List<HtmlRow>{ HtmlRowTest.First }.ToReadOnlyList();
+            var function = FunctionHeaderTest.First;
+            var functionToExecute = TestFunctionReferenceTest.First;
+
+            try
+            {
+                new TableResultFunction(columnsRow, null, function, functionToExecute);
+            }
+            catch(ArgumentNullException ex)
+            {
+                CheckArgumentExceptionParameter( "rows", ex.ParamName );
+
+                return;
+            }
+
+            Assert.Fail("Argument 'rows' isn't checked for null inputs");
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void TableResultFunction_CheckNullArg_function()
+        {
+            var columnsRow = HtmlRowTest.First;
+            var rows = new List<HtmlRow>{ HtmlRowTest.First }.ToReadOnlyList();
+            var function = FunctionHeaderTest.First;
+            var functionToExecute = TestFunctionReferenceTest.First;
+
+            try
+            {
+                new TableResultFunction(columnsRow, rows, null, functionToExecute);
+            }
+            catch(ArgumentNullException ex)
+            {
+                CheckArgumentExceptionParameter( "function", ex.ParamName );
+
+                return;
+            }
+
+            Assert.Fail("Argument 'function' isn't checked for null inputs");
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void TableResultFunction_CheckNullArg_functionToExecute()
+        {
+            var columnsRow = HtmlRowTest.First;
+            var rows = new List<HtmlRow>{ HtmlRowTest.First }.ToReadOnlyList();
+            var function = FunctionHeaderTest.First;
+            var functionToExecute = TestFunctionReferenceTest.First;
+
+            try
+            {
+                new TableResultFunction(columnsRow, rows, function, null);
+            }
+            catch(ArgumentNullException ex)
+            {
+                CheckArgumentExceptionParameter( "functionToExecute", ex.ParamName );
+
+                return;
+            }
+
+            Assert.Fail("Argument 'functionToExecute' isn't checked for null inputs");
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void TableResultFunction_GetHashCodeTest()
+        {
+            BaseGetHashCodeTest(objects);
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void TableResultFunction_EqualsTest()
+        {
+            BaseEqualsTest(objects);
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void TableResultFunction_ToStringTest()
+        {
+            BaseToStringTest(objects);
+        }
+    }
+
+    [TestClass]
     public sealed partial class AbstractTableChangeTest : ReadOnlyObjectTest
     {
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static readonly ObjectsCache<AbstractTableChange> objects = new ObjectsCache<AbstractTableChange>(GetInstances);
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static IEnumerable<AbstractTableChange[]> CreateNonEmptyObjectsArrays()
+        {
+            return new[]
+            {
+                AbstractTableChangeTest.objects.Objects.Skip(1).ToArray(),
+                AbstractTableChangeTest.objects.Objects.Take(2).ToArray(),
+                AbstractTableChangeTest.objects.Objects.Take(1).ToArray()
+            };
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static AbstractTableChange First
         {
             get
@@ -342,6 +591,7 @@ namespace NetRunner.Executable.Tests.Invokation.Functions
             }
         }
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static AbstractTableChange Second
         {
             get
@@ -350,6 +600,7 @@ namespace NetRunner.Executable.Tests.Invokation.Functions
             }
         }
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static AbstractTableChange Third
         {
             get
@@ -358,12 +609,14 @@ namespace NetRunner.Executable.Tests.Invokation.Functions
             }
         }
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         private static IEnumerable<AbstractTableChange> GetInstances()
         {
             return GetApparents().Concat(GetInstancesOfCurrentType());
         }
 
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         private static IEnumerable<AbstractTableChange>GetApparents()
         {
             return
@@ -378,94 +631,29 @@ ExecutionFailedMessageTest.objects).Union(
 ShowActualValueCellChangeTest.objects);
         }
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         private static IEnumerable<AbstractTableChange> GetInstancesOfCurrentType()
         {
             return ReadOnlyList<AbstractTableChange>.Empty;
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void AbstractTableChange_GetHashCodeTest()
         {
             BaseGetHashCodeTest(objects);
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void AbstractTableChange_EqualsTest()
         {
             BaseEqualsTest(objects);
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void AbstractTableChange_ToStringTest()
-        {
-            BaseToStringTest(objects);
-        }
-    }
-
-    [TestClass]
-    public sealed partial class AbstractTestFunctionTest : ReadOnlyObjectTest
-    {
-        internal static readonly ObjectsCache<AbstractTestFunction> objects = new ObjectsCache<AbstractTestFunction>(GetInstances);
-
-        internal static AbstractTestFunction First
-        {
-            get
-            {
-                return objects.Objects.First();
-            }
-        }
-
-        internal static AbstractTestFunction Second
-        {
-            get
-            {
-                return objects.Objects.Skip(1).First();
-            }
-        }
-
-        internal static AbstractTestFunction Third
-        {
-            get
-            {
-                return objects.Objects.Skip(2).First();
-            }
-        }
-
-        private static IEnumerable<AbstractTestFunction> GetInstances()
-        {
-            return GetApparents().Concat(GetInstancesOfCurrentType());
-        }
-
-
-        private static IEnumerable<AbstractTestFunction>GetApparents()
-        {
-            return
-            new AbstractTestFunction[0].Union(
-CollectionArgumentedFunctionTest.objects).Union(
-EmptyTestFunctionTest.objects).Union(
-TestFunctionsSequenceTest.objects).Union(
-SimpleTestFunctionTest.objects);
-        }
-
-        private static IEnumerable<AbstractTestFunction> GetInstancesOfCurrentType()
-        {
-            return ReadOnlyList<AbstractTestFunction>.Empty;
-        }
-
-        [TestMethod]
-        public void AbstractTestFunction_GetHashCodeTest()
-        {
-            BaseGetHashCodeTest(objects);
-        }
-
-        [TestMethod]
-        public void AbstractTestFunction_EqualsTest()
-        {
-            BaseEqualsTest(objects);
-        }
-
-        [TestMethod]
-        public void AbstractTestFunction_ToStringTest()
         {
             BaseToStringTest(objects);
         }
@@ -474,8 +662,21 @@ SimpleTestFunctionTest.objects);
     [TestClass]
     public sealed partial class AddCellExpandableInfoTest : ReadOnlyObjectTest
     {
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static readonly ObjectsCache<AddCellExpandableInfo> objects = new ObjectsCache<AddCellExpandableInfo>(GetInstances);
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static IEnumerable<AddCellExpandableInfo[]> CreateNonEmptyObjectsArrays()
+        {
+            return new[]
+            {
+                AddCellExpandableInfoTest.objects.Objects.Skip(1).ToArray(),
+                AddCellExpandableInfoTest.objects.Objects.Take(2).ToArray(),
+                AddCellExpandableInfoTest.objects.Objects.Take(1).ToArray()
+            };
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static AddCellExpandableInfo First
         {
             get
@@ -484,6 +685,7 @@ SimpleTestFunctionTest.objects);
             }
         }
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static AddCellExpandableInfo Second
         {
             get
@@ -492,6 +694,7 @@ SimpleTestFunctionTest.objects);
             }
         }
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static AddCellExpandableInfo Third
         {
             get
@@ -500,18 +703,21 @@ SimpleTestFunctionTest.objects);
             }
         }
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         private static IEnumerable<AddCellExpandableInfo> GetInstances()
         {
             return GetApparents().Concat(GetInstancesOfCurrentType());
         }
 
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         private static IEnumerable<AddCellExpandableInfo>GetApparents()
         {
             return ReadOnlyList<AddCellExpandableInfo>.Empty;
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void AddCellExpandableInfo_CheckNullArg_cell()
         {
             var cell = HtmlCellTest.First;
@@ -562,6 +768,7 @@ SimpleTestFunctionTest.objects);
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void AddCellExpandableInfo_CheckNullArg_header()
         {
             var cell = HtmlCellTest.First;
@@ -612,6 +819,7 @@ SimpleTestFunctionTest.objects);
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void AddCellExpandableInfo_CheckNullArg_info()
         {
             var cell = HtmlCellTest.First;
@@ -633,18 +841,21 @@ SimpleTestFunctionTest.objects);
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void AddCellExpandableInfo_GetHashCodeTest()
         {
             BaseGetHashCodeTest(objects);
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void AddCellExpandableInfo_EqualsTest()
         {
             BaseEqualsTest(objects);
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void AddCellExpandableInfo_ToStringTest()
         {
             BaseToStringTest(objects);
@@ -654,8 +865,21 @@ SimpleTestFunctionTest.objects);
     [TestClass]
     public sealed partial class AddExceptionLineTest : ReadOnlyObjectTest
     {
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static readonly ObjectsCache<AddExceptionLine> objects = new ObjectsCache<AddExceptionLine>(GetInstances);
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static IEnumerable<AddExceptionLine[]> CreateNonEmptyObjectsArrays()
+        {
+            return new[]
+            {
+                AddExceptionLineTest.objects.Objects.Skip(1).ToArray(),
+                AddExceptionLineTest.objects.Objects.Take(2).ToArray(),
+                AddExceptionLineTest.objects.Objects.Take(1).ToArray()
+            };
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static AddExceptionLine First
         {
             get
@@ -664,6 +888,7 @@ SimpleTestFunctionTest.objects);
             }
         }
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static AddExceptionLine Second
         {
             get
@@ -672,6 +897,7 @@ SimpleTestFunctionTest.objects);
             }
         }
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static AddExceptionLine Third
         {
             get
@@ -680,12 +906,14 @@ SimpleTestFunctionTest.objects);
             }
         }
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         private static IEnumerable<AddExceptionLine> GetInstances()
         {
             return GetApparents().Concat(GetInstancesOfCurrentType());
         }
 
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         private static IEnumerable<AddExceptionLine>GetApparents()
         {
             return ReadOnlyList<AddExceptionLine>.Empty;
@@ -703,7 +931,7 @@ SimpleTestFunctionTest.objects);
         private void CheckEmptyStringArg_header_0(string stringArgument)
         {
             var header = "text 135348";
-            var exception = new Exception("Text exception");
+            var exception = new Exception("Text exception 135349");
             var rowReference = HtmlRowReferenceTest.First;
 
             try
@@ -721,10 +949,11 @@ SimpleTestFunctionTest.objects);
         }
 
         [TestMethod]
-        public void AddExceptionLine_CheckNullArg_header_135349()
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void AddExceptionLine_CheckNullArg_header_135350()
         {
             var header = "text 135348";
-            var exception = new Exception("Text exception");
+            var exception = new Exception("Text exception 135349");
             var rowReference = HtmlRowReferenceTest.First;
 
             try
@@ -742,10 +971,11 @@ SimpleTestFunctionTest.objects);
         }
 
         [TestMethod]
-        public void AddExceptionLine_CheckNullArg_exception_135350()
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void AddExceptionLine_CheckNullArg_exception_135351()
         {
             var header = "text 135348";
-            var exception = new Exception("Text exception");
+            var exception = new Exception("Text exception 135349");
             var rowReference = HtmlRowReferenceTest.First;
 
             try
@@ -763,10 +993,11 @@ SimpleTestFunctionTest.objects);
         }
 
         [TestMethod]
-        public void AddExceptionLine_CheckNullArg_rowReference_135351()
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void AddExceptionLine_CheckNullArg_rowReference_135352()
         {
             var header = "text 135348";
-            var exception = new Exception("Text exception");
+            var exception = new Exception("Text exception 135349");
             var rowReference = HtmlRowReferenceTest.First;
 
             try
@@ -794,8 +1025,8 @@ SimpleTestFunctionTest.objects);
 
         private void CheckEmptyStringArg_header_1(string stringArgument)
         {
-            var header = "text 135352";
-            var exceptions = new List<Exception>{ new Exception("Text exception") }.ToReadOnlyList();
+            var header = "text 135353";
+            var exceptions = new List<Exception>{ new Exception("Text exception 135354") }.ToReadOnlyList();
             var rowReference = HtmlRowReferenceTest.First;
 
             try
@@ -813,10 +1044,11 @@ SimpleTestFunctionTest.objects);
         }
 
         [TestMethod]
-        public void AddExceptionLine_CheckNullArg_header_135353()
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void AddExceptionLine_CheckNullArg_header_135355()
         {
-            var header = "text 135352";
-            var exceptions = new List<Exception>{ new Exception("Text exception") }.ToReadOnlyList();
+            var header = "text 135353";
+            var exceptions = new List<Exception>{ new Exception("Text exception 135354") }.ToReadOnlyList();
             var rowReference = HtmlRowReferenceTest.First;
 
             try
@@ -834,10 +1066,11 @@ SimpleTestFunctionTest.objects);
         }
 
         [TestMethod]
-        public void AddExceptionLine_CheckNullArg_exceptions_135354()
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void AddExceptionLine_CheckNullArg_exceptions_135356()
         {
-            var header = "text 135352";
-            var exceptions = new List<Exception>{ new Exception("Text exception") }.ToReadOnlyList();
+            var header = "text 135353";
+            var exceptions = new List<Exception>{ new Exception("Text exception 135354") }.ToReadOnlyList();
             var rowReference = HtmlRowReferenceTest.First;
 
             try
@@ -855,10 +1088,11 @@ SimpleTestFunctionTest.objects);
         }
 
         [TestMethod]
-        public void AddExceptionLine_CheckNullArg_rowReference_135355()
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void AddExceptionLine_CheckNullArg_rowReference_135357()
         {
-            var header = "text 135352";
-            var exceptions = new List<Exception>{ new Exception("Text exception") }.ToReadOnlyList();
+            var header = "text 135353";
+            var exceptions = new List<Exception>{ new Exception("Text exception 135354") }.ToReadOnlyList();
             var rowReference = HtmlRowReferenceTest.First;
 
             try
@@ -876,9 +1110,10 @@ SimpleTestFunctionTest.objects);
         }
 
         [TestMethod]
-        public void AddExceptionLine_CheckNullArg_exception_135356()
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void AddExceptionLine_CheckNullArg_exception_135359()
         {
-            var exception = new Exception("Text exception");
+            var exception = new Exception("Text exception 135358");
             var rowReference = HtmlRowReferenceTest.First;
 
             try
@@ -896,9 +1131,10 @@ SimpleTestFunctionTest.objects);
         }
 
         [TestMethod]
-        public void AddExceptionLine_CheckNullArg_rowReference_135357()
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void AddExceptionLine_CheckNullArg_rowReference_135360()
         {
-            var exception = new Exception("Text exception");
+            var exception = new Exception("Text exception 135358");
             var rowReference = HtmlRowReferenceTest.First;
 
             try
@@ -916,9 +1152,10 @@ SimpleTestFunctionTest.objects);
         }
 
         [TestMethod]
-        public void AddExceptionLine_CheckNullArg_exceptions_135358()
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void AddExceptionLine_CheckNullArg_exceptions_135362()
         {
-            var exceptions = new List<Exception>{ new Exception("Text exception") }.ToReadOnlyList();
+            var exceptions = new List<Exception>{ new Exception("Text exception 135361") }.ToReadOnlyList();
             var rowReference = HtmlRowReferenceTest.First;
 
             try
@@ -936,9 +1173,10 @@ SimpleTestFunctionTest.objects);
         }
 
         [TestMethod]
-        public void AddExceptionLine_CheckNullArg_rowReference_135359()
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void AddExceptionLine_CheckNullArg_rowReference_135363()
         {
-            var exceptions = new List<Exception>{ new Exception("Text exception") }.ToReadOnlyList();
+            var exceptions = new List<Exception>{ new Exception("Text exception 135361") }.ToReadOnlyList();
             var rowReference = HtmlRowReferenceTest.First;
 
             try
@@ -956,18 +1194,21 @@ SimpleTestFunctionTest.objects);
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void AddExceptionLine_GetHashCodeTest()
         {
             BaseGetHashCodeTest(objects);
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void AddExceptionLine_EqualsTest()
         {
             BaseEqualsTest(objects);
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void AddExceptionLine_ToStringTest()
         {
             BaseToStringTest(objects);
@@ -977,8 +1218,21 @@ SimpleTestFunctionTest.objects);
     [TestClass]
     public sealed partial class AddTraceLineTest : ReadOnlyObjectTest
     {
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static readonly ObjectsCache<AddTraceLine> objects = new ObjectsCache<AddTraceLine>(GetInstances);
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static IEnumerable<AddTraceLine[]> CreateNonEmptyObjectsArrays()
+        {
+            return new[]
+            {
+                AddTraceLineTest.objects.Objects.Skip(1).ToArray(),
+                AddTraceLineTest.objects.Objects.Take(2).ToArray(),
+                AddTraceLineTest.objects.Objects.Take(1).ToArray()
+            };
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static AddTraceLine First
         {
             get
@@ -987,6 +1241,7 @@ SimpleTestFunctionTest.objects);
             }
         }
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static AddTraceLine Second
         {
             get
@@ -995,6 +1250,7 @@ SimpleTestFunctionTest.objects);
             }
         }
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static AddTraceLine Third
         {
             get
@@ -1003,12 +1259,14 @@ SimpleTestFunctionTest.objects);
             }
         }
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         private static IEnumerable<AddTraceLine> GetInstances()
         {
             return GetApparents().Concat(GetInstancesOfCurrentType());
         }
 
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         private static IEnumerable<AddTraceLine>GetApparents()
         {
             return ReadOnlyList<AddTraceLine>.Empty;
@@ -1025,7 +1283,7 @@ SimpleTestFunctionTest.objects);
 
         private void CheckEmptyStringArg_text(string stringArgument)
         {
-            var text = "text 135360";
+            var text = "text 135364";
             var rowReference = HtmlRowReferenceTest.First;
 
             try
@@ -1043,9 +1301,10 @@ SimpleTestFunctionTest.objects);
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void AddTraceLine_CheckNullArg_text()
         {
-            var text = "text 135360";
+            var text = "text 135364";
             var rowReference = HtmlRowReferenceTest.First;
 
             try
@@ -1063,9 +1322,10 @@ SimpleTestFunctionTest.objects);
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void AddTraceLine_CheckNullArg_rowReference()
         {
-            var text = "text 135360";
+            var text = "text 135364";
             var rowReference = HtmlRowReferenceTest.First;
 
             try
@@ -1083,18 +1343,21 @@ SimpleTestFunctionTest.objects);
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void AddTraceLine_GetHashCodeTest()
         {
             BaseGetHashCodeTest(objects);
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void AddTraceLine_EqualsTest()
         {
             BaseEqualsTest(objects);
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void AddTraceLine_ToStringTest()
         {
             BaseToStringTest(objects);
@@ -1104,8 +1367,21 @@ SimpleTestFunctionTest.objects);
     [TestClass]
     public sealed partial class AppendRowWithCellsTest : ReadOnlyObjectTest
     {
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static readonly ObjectsCache<AppendRowWithCells> objects = new ObjectsCache<AppendRowWithCells>(GetInstances);
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static IEnumerable<AppendRowWithCells[]> CreateNonEmptyObjectsArrays()
+        {
+            return new[]
+            {
+                AppendRowWithCellsTest.objects.Objects.Skip(1).ToArray(),
+                AppendRowWithCellsTest.objects.Objects.Take(2).ToArray(),
+                AppendRowWithCellsTest.objects.Objects.Take(1).ToArray()
+            };
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static AppendRowWithCells First
         {
             get
@@ -1114,6 +1390,7 @@ SimpleTestFunctionTest.objects);
             }
         }
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static AppendRowWithCells Second
         {
             get
@@ -1122,6 +1399,7 @@ SimpleTestFunctionTest.objects);
             }
         }
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static AppendRowWithCells Third
         {
             get
@@ -1130,12 +1408,14 @@ SimpleTestFunctionTest.objects);
             }
         }
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         private static IEnumerable<AppendRowWithCells> GetInstances()
         {
             return GetApparents().Concat(GetInstancesOfCurrentType());
         }
 
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         private static IEnumerable<AppendRowWithCells>GetApparents()
         {
             return ReadOnlyList<AppendRowWithCells>.Empty;
@@ -1152,8 +1432,8 @@ SimpleTestFunctionTest.objects);
 
         private void CheckEmptyStringArg_cellClass(string stringArgument)
         {
-            var cellClass = "text 135361";
-            var cellHtmlDatas = new List<String>{ "text 135362" }.ToReadOnlyList();
+            var cellClass = "text 135365";
+            var cellHtmlDatas = new List<String>{ "text 135366" }.ToReadOnlyList();
 
             try
             {
@@ -1170,10 +1450,11 @@ SimpleTestFunctionTest.objects);
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void AppendRowWithCells_CheckNullArg_cellClass()
         {
-            var cellClass = "text 135361";
-            var cellHtmlDatas = new List<String>{ "text 135362" }.ToReadOnlyList();
+            var cellClass = "text 135365";
+            var cellHtmlDatas = new List<String>{ "text 135366" }.ToReadOnlyList();
 
             try
             {
@@ -1190,10 +1471,11 @@ SimpleTestFunctionTest.objects);
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void AppendRowWithCells_CheckNullArg_cellHtmlDatas()
         {
-            var cellClass = "text 135361";
-            var cellHtmlDatas = new List<String>{ "text 135362" }.ToReadOnlyList();
+            var cellClass = "text 135365";
+            var cellHtmlDatas = new List<String>{ "text 135366" }.ToReadOnlyList();
 
             try
             {
@@ -1210,18 +1492,21 @@ SimpleTestFunctionTest.objects);
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void AppendRowWithCells_GetHashCodeTest()
         {
             BaseGetHashCodeTest(objects);
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void AppendRowWithCells_EqualsTest()
         {
             BaseEqualsTest(objects);
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void AppendRowWithCells_ToStringTest()
         {
             BaseToStringTest(objects);
@@ -1231,8 +1516,21 @@ SimpleTestFunctionTest.objects);
     [TestClass]
     public sealed partial class CssClassCellChangeTest : ReadOnlyObjectTest
     {
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static readonly ObjectsCache<CssClassCellChange> objects = new ObjectsCache<CssClassCellChange>(GetInstances);
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static IEnumerable<CssClassCellChange[]> CreateNonEmptyObjectsArrays()
+        {
+            return new[]
+            {
+                CssClassCellChangeTest.objects.Objects.Skip(1).ToArray(),
+                CssClassCellChangeTest.objects.Objects.Take(2).ToArray(),
+                CssClassCellChangeTest.objects.Objects.Take(1).ToArray()
+            };
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static CssClassCellChange First
         {
             get
@@ -1241,6 +1539,7 @@ SimpleTestFunctionTest.objects);
             }
         }
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static CssClassCellChange Second
         {
             get
@@ -1249,6 +1548,7 @@ SimpleTestFunctionTest.objects);
             }
         }
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static CssClassCellChange Third
         {
             get
@@ -1257,12 +1557,14 @@ SimpleTestFunctionTest.objects);
             }
         }
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         private static IEnumerable<CssClassCellChange> GetInstances()
         {
             return GetApparents().Concat(GetInstancesOfCurrentType());
         }
 
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         private static IEnumerable<CssClassCellChange>GetApparents()
         {
             return
@@ -1271,10 +1573,11 @@ ShowActualValueCellChangeTest.objects);
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void CssClassCellChange_CheckNullArg_cell()
         {
             var cell = HtmlCellTest.First;
-            var newClass = "text 135363";
+            var newClass = "text 135367";
 
             try
             {
@@ -1302,7 +1605,7 @@ ShowActualValueCellChangeTest.objects);
         private void CheckEmptyStringArg_newClass(string stringArgument)
         {
             var cell = HtmlCellTest.First;
-            var newClass = "text 135363";
+            var newClass = "text 135367";
 
             try
             {
@@ -1319,10 +1622,11 @@ ShowActualValueCellChangeTest.objects);
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void CssClassCellChange_CheckNullArg_newClass()
         {
             var cell = HtmlCellTest.First;
-            var newClass = "text 135363";
+            var newClass = "text 135367";
 
             try
             {
@@ -1339,166 +1643,22 @@ ShowActualValueCellChangeTest.objects);
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void CssClassCellChange_GetHashCodeTest()
         {
             BaseGetHashCodeTest(objects);
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void CssClassCellChange_EqualsTest()
         {
             BaseEqualsTest(objects);
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void CssClassCellChange_ToStringTest()
-        {
-            BaseToStringTest(objects);
-        }
-    }
-
-    [TestClass]
-    public sealed partial class CollectionArgumentedFunctionTest : ReadOnlyObjectTest
-    {
-        internal static readonly ObjectsCache<CollectionArgumentedFunction> objects = new ObjectsCache<CollectionArgumentedFunction>(GetInstances);
-
-        internal static CollectionArgumentedFunction First
-        {
-            get
-            {
-                return objects.Objects.First();
-            }
-        }
-
-        internal static CollectionArgumentedFunction Second
-        {
-            get
-            {
-                return objects.Objects.Skip(1).First();
-            }
-        }
-
-        internal static CollectionArgumentedFunction Third
-        {
-            get
-            {
-                return objects.Objects.Skip(2).First();
-            }
-        }
-
-        private static IEnumerable<CollectionArgumentedFunction> GetInstances()
-        {
-            return GetApparents().Concat(GetInstancesOfCurrentType());
-        }
-
-
-        private static IEnumerable<CollectionArgumentedFunction>GetApparents()
-        {
-            return ReadOnlyList<CollectionArgumentedFunction>.Empty;
-        }
-
-        [TestMethod]
-        public void CollectionArgumentedFunction_CheckNullArg_columnNames()
-        {
-            var columnNames = new List<String>{ "text 135364" }.ToReadOnlyList();
-            var rows = new List<HtmlRow>{ HtmlRowTest.First }.ToReadOnlyList();
-            var function = FunctionHeaderTest.First;
-            var functionToExecute = TestFunctionReferenceTest.First;
-
-            try
-            {
-                new CollectionArgumentedFunction(null, rows, function, functionToExecute);
-            }
-            catch(ArgumentNullException ex)
-            {
-                CheckArgumentExceptionParameter( "columnNames", ex.ParamName );
-
-                return;
-            }
-
-            Assert.Fail("Argument 'columnNames' isn't checked for null inputs");
-        }
-
-        [TestMethod]
-        public void CollectionArgumentedFunction_CheckNullArg_rows()
-        {
-            var columnNames = new List<String>{ "text 135364" }.ToReadOnlyList();
-            var rows = new List<HtmlRow>{ HtmlRowTest.First }.ToReadOnlyList();
-            var function = FunctionHeaderTest.First;
-            var functionToExecute = TestFunctionReferenceTest.First;
-
-            try
-            {
-                new CollectionArgumentedFunction(columnNames, null, function, functionToExecute);
-            }
-            catch(ArgumentNullException ex)
-            {
-                CheckArgumentExceptionParameter( "rows", ex.ParamName );
-
-                return;
-            }
-
-            Assert.Fail("Argument 'rows' isn't checked for null inputs");
-        }
-
-        [TestMethod]
-        public void CollectionArgumentedFunction_CheckNullArg_function()
-        {
-            var columnNames = new List<String>{ "text 135364" }.ToReadOnlyList();
-            var rows = new List<HtmlRow>{ HtmlRowTest.First }.ToReadOnlyList();
-            var function = FunctionHeaderTest.First;
-            var functionToExecute = TestFunctionReferenceTest.First;
-
-            try
-            {
-                new CollectionArgumentedFunction(columnNames, rows, null, functionToExecute);
-            }
-            catch(ArgumentNullException ex)
-            {
-                CheckArgumentExceptionParameter( "function", ex.ParamName );
-
-                return;
-            }
-
-            Assert.Fail("Argument 'function' isn't checked for null inputs");
-        }
-
-        [TestMethod]
-        public void CollectionArgumentedFunction_CheckNullArg_functionToExecute()
-        {
-            var columnNames = new List<String>{ "text 135364" }.ToReadOnlyList();
-            var rows = new List<HtmlRow>{ HtmlRowTest.First }.ToReadOnlyList();
-            var function = FunctionHeaderTest.First;
-            var functionToExecute = TestFunctionReferenceTest.First;
-
-            try
-            {
-                new CollectionArgumentedFunction(columnNames, rows, function, null);
-            }
-            catch(ArgumentNullException ex)
-            {
-                CheckArgumentExceptionParameter( "functionToExecute", ex.ParamName );
-
-                return;
-            }
-
-            Assert.Fail("Argument 'functionToExecute' isn't checked for null inputs");
-        }
-
-        [TestMethod]
-        public void CollectionArgumentedFunction_GetHashCodeTest()
-        {
-            BaseGetHashCodeTest(objects);
-        }
-
-        [TestMethod]
-        public void CollectionArgumentedFunction_EqualsTest()
-        {
-            BaseEqualsTest(objects);
-        }
-
-        [TestMethod]
-        public void CollectionArgumentedFunction_ToStringTest()
         {
             BaseToStringTest(objects);
         }
@@ -1507,8 +1667,21 @@ ShowActualValueCellChangeTest.objects);
     [TestClass]
     public sealed partial class EmptyTestFunctionTest : ReadOnlyObjectTest
     {
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static readonly ObjectsCache<EmptyTestFunction> objects = new ObjectsCache<EmptyTestFunction>(GetInstances);
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static IEnumerable<EmptyTestFunction[]> CreateNonEmptyObjectsArrays()
+        {
+            return new[]
+            {
+                EmptyTestFunctionTest.objects.Objects.Skip(1).ToArray(),
+                EmptyTestFunctionTest.objects.Objects.Take(2).ToArray(),
+                EmptyTestFunctionTest.objects.Objects.Take(1).ToArray()
+            };
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static EmptyTestFunction First
         {
             get
@@ -1517,6 +1690,7 @@ ShowActualValueCellChangeTest.objects);
             }
         }
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static EmptyTestFunction Second
         {
             get
@@ -1525,6 +1699,7 @@ ShowActualValueCellChangeTest.objects);
             }
         }
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static EmptyTestFunction Third
         {
             get
@@ -1533,30 +1708,35 @@ ShowActualValueCellChangeTest.objects);
             }
         }
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         private static IEnumerable<EmptyTestFunction> GetInstances()
         {
             return GetApparents().Concat(GetInstancesOfCurrentType());
         }
 
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         private static IEnumerable<EmptyTestFunction>GetApparents()
         {
             return ReadOnlyList<EmptyTestFunction>.Empty;
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void EmptyTestFunction_GetHashCodeTest()
         {
             BaseGetHashCodeTest(objects);
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void EmptyTestFunction_EqualsTest()
         {
             BaseEqualsTest(objects);
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void EmptyTestFunction_ToStringTest()
         {
             BaseToStringTest(objects);
@@ -1566,8 +1746,21 @@ ShowActualValueCellChangeTest.objects);
     [TestClass]
     public sealed partial class AddRowCssClassTest : ReadOnlyObjectTest
     {
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static readonly ObjectsCache<AddRowCssClass> objects = new ObjectsCache<AddRowCssClass>(GetInstances);
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static IEnumerable<AddRowCssClass[]> CreateNonEmptyObjectsArrays()
+        {
+            return new[]
+            {
+                AddRowCssClassTest.objects.Objects.Skip(1).ToArray(),
+                AddRowCssClassTest.objects.Objects.Take(2).ToArray(),
+                AddRowCssClassTest.objects.Objects.Take(1).ToArray()
+            };
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static AddRowCssClass First
         {
             get
@@ -1576,6 +1769,7 @@ ShowActualValueCellChangeTest.objects);
             }
         }
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static AddRowCssClass Second
         {
             get
@@ -1584,6 +1778,7 @@ ShowActualValueCellChangeTest.objects);
             }
         }
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static AddRowCssClass Third
         {
             get
@@ -1592,22 +1787,25 @@ ShowActualValueCellChangeTest.objects);
             }
         }
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         private static IEnumerable<AddRowCssClass> GetInstances()
         {
             return GetApparents().Concat(GetInstancesOfCurrentType());
         }
 
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         private static IEnumerable<AddRowCssClass>GetApparents()
         {
             return ReadOnlyList<AddRowCssClass>.Empty;
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void AddRowCssClass_CheckNullArg_rowReference()
         {
             var rowReference = HtmlRowReferenceTest.First;
-            var targetCssClass = "text 135365";
+            var targetCssClass = "text 135368";
 
             try
             {
@@ -1635,7 +1833,7 @@ ShowActualValueCellChangeTest.objects);
         private void CheckEmptyStringArg_targetCssClass(string stringArgument)
         {
             var rowReference = HtmlRowReferenceTest.First;
-            var targetCssClass = "text 135365";
+            var targetCssClass = "text 135368";
 
             try
             {
@@ -1652,10 +1850,11 @@ ShowActualValueCellChangeTest.objects);
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void AddRowCssClass_CheckNullArg_targetCssClass()
         {
             var rowReference = HtmlRowReferenceTest.First;
-            var targetCssClass = "text 135365";
+            var targetCssClass = "text 135368";
 
             try
             {
@@ -1672,18 +1871,21 @@ ShowActualValueCellChangeTest.objects);
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void AddRowCssClass_GetHashCodeTest()
         {
             BaseGetHashCodeTest(objects);
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void AddRowCssClass_EqualsTest()
         {
             BaseEqualsTest(objects);
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void AddRowCssClass_ToStringTest()
         {
             BaseToStringTest(objects);
@@ -1693,8 +1895,21 @@ ShowActualValueCellChangeTest.objects);
     [TestClass]
     public sealed partial class ExecutionFailedMessageTest : ReadOnlyObjectTest
     {
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static readonly ObjectsCache<ExecutionFailedMessage> objects = new ObjectsCache<ExecutionFailedMessage>(GetInstances);
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static IEnumerable<ExecutionFailedMessage[]> CreateNonEmptyObjectsArrays()
+        {
+            return new[]
+            {
+                ExecutionFailedMessageTest.objects.Objects.Skip(1).ToArray(),
+                ExecutionFailedMessageTest.objects.Objects.Take(2).ToArray(),
+                ExecutionFailedMessageTest.objects.Objects.Take(1).ToArray()
+            };
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static ExecutionFailedMessage First
         {
             get
@@ -1703,6 +1918,7 @@ ShowActualValueCellChangeTest.objects);
             }
         }
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static ExecutionFailedMessage Second
         {
             get
@@ -1711,6 +1927,7 @@ ShowActualValueCellChangeTest.objects);
             }
         }
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static ExecutionFailedMessage Third
         {
             get
@@ -1719,23 +1936,26 @@ ShowActualValueCellChangeTest.objects);
             }
         }
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         private static IEnumerable<ExecutionFailedMessage> GetInstances()
         {
             return GetApparents().Concat(GetInstancesOfCurrentType());
         }
 
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         private static IEnumerable<ExecutionFailedMessage>GetApparents()
         {
             return ReadOnlyList<ExecutionFailedMessage>.Empty;
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void ExecutionFailedMessage_CheckNullArg_rowReference()
         {
             var rowReference = HtmlRowReferenceTest.First;
-            var header = "text 135366";
-            var messageFormat = "text 135367";
+            var header = "text 135369";
+            var messageFormat = "text 135370";
             var args = new Object[] { new object(), new object() };
 
             try
@@ -1764,8 +1984,8 @@ ShowActualValueCellChangeTest.objects);
         private void CheckEmptyStringArg_header(string stringArgument)
         {
             var rowReference = HtmlRowReferenceTest.First;
-            var header = "text 135366";
-            var messageFormat = "text 135367";
+            var header = "text 135369";
+            var messageFormat = "text 135370";
             var args = new Object[] { new object(), new object() };
 
             try
@@ -1783,11 +2003,12 @@ ShowActualValueCellChangeTest.objects);
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void ExecutionFailedMessage_CheckNullArg_header()
         {
             var rowReference = HtmlRowReferenceTest.First;
-            var header = "text 135366";
-            var messageFormat = "text 135367";
+            var header = "text 135369";
+            var messageFormat = "text 135370";
             var args = new Object[] { new object(), new object() };
 
             try
@@ -1816,8 +2037,8 @@ ShowActualValueCellChangeTest.objects);
         private void CheckEmptyStringArg_messageFormat(string stringArgument)
         {
             var rowReference = HtmlRowReferenceTest.First;
-            var header = "text 135366";
-            var messageFormat = "text 135367";
+            var header = "text 135369";
+            var messageFormat = "text 135370";
             var args = new Object[] { new object(), new object() };
 
             try
@@ -1835,11 +2056,12 @@ ShowActualValueCellChangeTest.objects);
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void ExecutionFailedMessage_CheckNullArg_messageFormat()
         {
             var rowReference = HtmlRowReferenceTest.First;
-            var header = "text 135366";
-            var messageFormat = "text 135367";
+            var header = "text 135369";
+            var messageFormat = "text 135370";
             var args = new Object[] { new object(), new object() };
 
             try
@@ -1857,11 +2079,12 @@ ShowActualValueCellChangeTest.objects);
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void ExecutionFailedMessage_CheckNullArg_args()
         {
             var rowReference = HtmlRowReferenceTest.First;
-            var header = "text 135366";
-            var messageFormat = "text 135367";
+            var header = "text 135369";
+            var messageFormat = "text 135370";
             var args = new Object[] { new object(), new object() };
 
             try
@@ -1879,18 +2102,21 @@ ShowActualValueCellChangeTest.objects);
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void ExecutionFailedMessage_GetHashCodeTest()
         {
             BaseGetHashCodeTest(objects);
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void ExecutionFailedMessage_EqualsTest()
         {
             BaseEqualsTest(objects);
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void ExecutionFailedMessage_ToStringTest()
         {
             BaseToStringTest(objects);
@@ -1900,8 +2126,21 @@ ShowActualValueCellChangeTest.objects);
     [TestClass]
     public sealed partial class ShowActualValueCellChangeTest : ReadOnlyObjectTest
     {
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static readonly ObjectsCache<ShowActualValueCellChange> objects = new ObjectsCache<ShowActualValueCellChange>(GetInstances);
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static IEnumerable<ShowActualValueCellChange[]> CreateNonEmptyObjectsArrays()
+        {
+            return new[]
+            {
+                ShowActualValueCellChangeTest.objects.Objects.Skip(1).ToArray(),
+                ShowActualValueCellChangeTest.objects.Objects.Take(2).ToArray(),
+                ShowActualValueCellChangeTest.objects.Objects.Take(1).ToArray()
+            };
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static ShowActualValueCellChange First
         {
             get
@@ -1910,6 +2149,7 @@ ShowActualValueCellChangeTest.objects);
             }
         }
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static ShowActualValueCellChange Second
         {
             get
@@ -1918,6 +2158,7 @@ ShowActualValueCellChangeTest.objects);
             }
         }
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static ShowActualValueCellChange Third
         {
             get
@@ -1926,18 +2167,21 @@ ShowActualValueCellChangeTest.objects);
             }
         }
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         private static IEnumerable<ShowActualValueCellChange> GetInstances()
         {
             return GetApparents().Concat(GetInstancesOfCurrentType());
         }
 
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         private static IEnumerable<ShowActualValueCellChange>GetApparents()
         {
             return ReadOnlyList<ShowActualValueCellChange>.Empty;
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void ShowActualValueCellChange_CheckNullArg_cell()
         {
             var cell = HtmlCellTest.First;
@@ -1958,18 +2202,21 @@ ShowActualValueCellChangeTest.objects);
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void ShowActualValueCellChange_GetHashCodeTest()
         {
             BaseGetHashCodeTest(objects);
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void ShowActualValueCellChange_EqualsTest()
         {
             BaseEqualsTest(objects);
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void ShowActualValueCellChange_ToStringTest()
         {
             BaseToStringTest(objects);
@@ -1979,8 +2226,21 @@ ShowActualValueCellChangeTest.objects);
     [TestClass]
     public sealed partial class TestFunctionsSequenceTest : ReadOnlyObjectTest
     {
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static readonly ObjectsCache<TestFunctionsSequence> objects = new ObjectsCache<TestFunctionsSequence>(GetInstances);
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static IEnumerable<TestFunctionsSequence[]> CreateNonEmptyObjectsArrays()
+        {
+            return new[]
+            {
+                TestFunctionsSequenceTest.objects.Objects.Skip(1).ToArray(),
+                TestFunctionsSequenceTest.objects.Objects.Take(2).ToArray(),
+                TestFunctionsSequenceTest.objects.Objects.Take(1).ToArray()
+            };
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static TestFunctionsSequence First
         {
             get
@@ -1989,6 +2249,7 @@ ShowActualValueCellChangeTest.objects);
             }
         }
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static TestFunctionsSequence Second
         {
             get
@@ -1997,6 +2258,7 @@ ShowActualValueCellChangeTest.objects);
             }
         }
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static TestFunctionsSequence Third
         {
             get
@@ -2005,18 +2267,21 @@ ShowActualValueCellChangeTest.objects);
             }
         }
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         private static IEnumerable<TestFunctionsSequence> GetInstances()
         {
             return GetApparents().Concat(GetInstancesOfCurrentType());
         }
 
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         private static IEnumerable<TestFunctionsSequence>GetApparents()
         {
             return ReadOnlyList<TestFunctionsSequence>.Empty;
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void TestFunctionsSequence_CheckNullArg_innerFunctions()
         {
             var innerFunctions = new List<AbstractTestFunction>{ AbstractTestFunctionTest.First }.ToReadOnlyList();
@@ -2036,18 +2301,21 @@ ShowActualValueCellChangeTest.objects);
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void TestFunctionsSequence_GetHashCodeTest()
         {
             BaseGetHashCodeTest(objects);
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void TestFunctionsSequence_EqualsTest()
         {
             BaseEqualsTest(objects);
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void TestFunctionsSequence_ToStringTest()
         {
             BaseToStringTest(objects);
@@ -2057,8 +2325,21 @@ ShowActualValueCellChangeTest.objects);
     [TestClass]
     public sealed partial class SimpleTestFunctionTest : ReadOnlyObjectTest
     {
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static readonly ObjectsCache<SimpleTestFunction> objects = new ObjectsCache<SimpleTestFunction>(GetInstances);
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static IEnumerable<SimpleTestFunction[]> CreateNonEmptyObjectsArrays()
+        {
+            return new[]
+            {
+                SimpleTestFunctionTest.objects.Objects.Skip(1).ToArray(),
+                SimpleTestFunctionTest.objects.Objects.Take(2).ToArray(),
+                SimpleTestFunctionTest.objects.Objects.Take(1).ToArray()
+            };
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static SimpleTestFunction First
         {
             get
@@ -2067,6 +2348,7 @@ ShowActualValueCellChangeTest.objects);
             }
         }
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static SimpleTestFunction Second
         {
             get
@@ -2075,6 +2357,7 @@ ShowActualValueCellChangeTest.objects);
             }
         }
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static SimpleTestFunction Third
         {
             get
@@ -2083,18 +2366,21 @@ ShowActualValueCellChangeTest.objects);
             }
         }
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         private static IEnumerable<SimpleTestFunction> GetInstances()
         {
             return GetApparents().Concat(GetInstancesOfCurrentType());
         }
 
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         private static IEnumerable<SimpleTestFunction>GetApparents()
         {
             return ReadOnlyList<SimpleTestFunction>.Empty;
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void SimpleTestFunction_CheckNullArg_header()
         {
             var header = FunctionHeaderTest.First;
@@ -2115,6 +2401,7 @@ ShowActualValueCellChangeTest.objects);
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void SimpleTestFunction_CheckNullArg_functionToExecute()
         {
             var header = FunctionHeaderTest.First;
@@ -2135,19 +2422,393 @@ ShowActualValueCellChangeTest.objects);
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void SimpleTestFunction_GetHashCodeTest()
         {
             BaseGetHashCodeTest(objects);
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void SimpleTestFunction_EqualsTest()
         {
             BaseEqualsTest(objects);
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void SimpleTestFunction_ToStringTest()
+        {
+            BaseToStringTest(objects);
+        }
+    }
+
+}
+
+namespace NetRunner.Executable.Tests.Invokation.Keywords
+{
+
+    [TestClass]
+    public sealed partial class AbstractKeywordTest : ReadOnlyObjectTest
+    {
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static readonly ObjectsCache<AbstractKeyword> objects = new ObjectsCache<AbstractKeyword>(GetInstances);
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static IEnumerable<AbstractKeyword[]> CreateNonEmptyObjectsArrays()
+        {
+            return new[]
+            {
+                AbstractKeywordTest.objects.Objects.Skip(1).ToArray(),
+                AbstractKeywordTest.objects.Objects.Take(2).ToArray(),
+                AbstractKeywordTest.objects.Objects.Take(1).ToArray()
+            };
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static AbstractKeyword First
+        {
+            get
+            {
+                return objects.Objects.First();
+            }
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static AbstractKeyword Second
+        {
+            get
+            {
+                return objects.Objects.Skip(1).First();
+            }
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static AbstractKeyword Third
+        {
+            get
+            {
+                return objects.Objects.Skip(2).First();
+            }
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        private static IEnumerable<AbstractKeyword> GetInstances()
+        {
+            return GetApparents().Concat(GetInstancesOfCurrentType());
+        }
+
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        private static IEnumerable<AbstractKeyword>GetApparents()
+        {
+            return
+            new AbstractKeyword[0].Union(
+CheckResultKeywordTest.objects).Union(
+EmptyKeywordTest.objects).Union(
+UnknownKeywordTest.objects);
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        private static IEnumerable<AbstractKeyword> GetInstancesOfCurrentType()
+        {
+            return ReadOnlyList<AbstractKeyword>.Empty;
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void AbstractKeyword_GetHashCodeTest()
+        {
+            BaseGetHashCodeTest(objects);
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void AbstractKeyword_EqualsTest()
+        {
+            BaseEqualsTest(objects);
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void AbstractKeyword_ToStringTest()
+        {
+            BaseToStringTest(objects);
+        }
+    }
+
+    [TestClass]
+    public sealed partial class CheckResultKeywordTest : ReadOnlyObjectTest
+    {
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static readonly ObjectsCache<CheckResultKeyword> objects = new ObjectsCache<CheckResultKeyword>(GetInstances);
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static IEnumerable<CheckResultKeyword[]> CreateNonEmptyObjectsArrays()
+        {
+            return new[]
+            {
+                CheckResultKeywordTest.objects.Objects.Skip(1).ToArray(),
+                CheckResultKeywordTest.objects.Objects.Take(2).ToArray(),
+                CheckResultKeywordTest.objects.Objects.Take(1).ToArray()
+            };
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static CheckResultKeyword First
+        {
+            get
+            {
+                return objects.Objects.First();
+            }
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static CheckResultKeyword Second
+        {
+            get
+            {
+                return objects.Objects.Skip(1).First();
+            }
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static CheckResultKeyword Third
+        {
+            get
+            {
+                return objects.Objects.Skip(2).First();
+            }
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        private static IEnumerable<CheckResultKeyword> GetInstances()
+        {
+            return GetApparents().Concat(GetInstancesOfCurrentType());
+        }
+
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        private static IEnumerable<CheckResultKeyword>GetApparents()
+        {
+            return ReadOnlyList<CheckResultKeyword>.Empty;
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void CheckResultKeyword_GetHashCodeTest()
+        {
+            BaseGetHashCodeTest(objects);
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void CheckResultKeyword_EqualsTest()
+        {
+            BaseEqualsTest(objects);
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void CheckResultKeyword_ToStringTest()
+        {
+            BaseToStringTest(objects);
+        }
+    }
+
+    [TestClass]
+    public sealed partial class EmptyKeywordTest : ReadOnlyObjectTest
+    {
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static readonly ObjectsCache<EmptyKeyword> objects = new ObjectsCache<EmptyKeyword>(GetInstances);
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static IEnumerable<EmptyKeyword[]> CreateNonEmptyObjectsArrays()
+        {
+            return new[]
+            {
+                EmptyKeywordTest.objects.Objects.Skip(1).ToArray(),
+                EmptyKeywordTest.objects.Objects.Take(2).ToArray(),
+                EmptyKeywordTest.objects.Objects.Take(1).ToArray()
+            };
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static EmptyKeyword First
+        {
+            get
+            {
+                return objects.Objects.First();
+            }
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static EmptyKeyword Second
+        {
+            get
+            {
+                return objects.Objects.Skip(1).First();
+            }
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static EmptyKeyword Third
+        {
+            get
+            {
+                return objects.Objects.Skip(2).First();
+            }
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        private static IEnumerable<EmptyKeyword> GetInstances()
+        {
+            return GetApparents().Concat(GetInstancesOfCurrentType());
+        }
+
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        private static IEnumerable<EmptyKeyword>GetApparents()
+        {
+            return ReadOnlyList<EmptyKeyword>.Empty;
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void EmptyKeyword_CheckNullArg_cells()
+        {
+            var cells = new List<HtmlCell>{ HtmlCellTest.First }.ToReadOnlyList();
+
+            try
+            {
+                new EmptyKeyword(null);
+            }
+            catch(ArgumentNullException ex)
+            {
+                CheckArgumentExceptionParameter( "cells", ex.ParamName );
+
+                return;
+            }
+
+            Assert.Fail("Argument 'cells' isn't checked for null inputs");
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void EmptyKeyword_GetHashCodeTest()
+        {
+            BaseGetHashCodeTest(objects);
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void EmptyKeyword_EqualsTest()
+        {
+            BaseEqualsTest(objects);
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void EmptyKeyword_ToStringTest()
+        {
+            BaseToStringTest(objects);
+        }
+    }
+
+    [TestClass]
+    public sealed partial class UnknownKeywordTest : ReadOnlyObjectTest
+    {
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static readonly ObjectsCache<UnknownKeyword> objects = new ObjectsCache<UnknownKeyword>(GetInstances);
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static IEnumerable<UnknownKeyword[]> CreateNonEmptyObjectsArrays()
+        {
+            return new[]
+            {
+                UnknownKeywordTest.objects.Objects.Skip(1).ToArray(),
+                UnknownKeywordTest.objects.Objects.Take(2).ToArray(),
+                UnknownKeywordTest.objects.Objects.Take(1).ToArray()
+            };
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static UnknownKeyword First
+        {
+            get
+            {
+                return objects.Objects.First();
+            }
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static UnknownKeyword Second
+        {
+            get
+            {
+                return objects.Objects.Skip(1).First();
+            }
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static UnknownKeyword Third
+        {
+            get
+            {
+                return objects.Objects.Skip(2).First();
+            }
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        private static IEnumerable<UnknownKeyword> GetInstances()
+        {
+            return GetApparents().Concat(GetInstancesOfCurrentType());
+        }
+
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        private static IEnumerable<UnknownKeyword>GetApparents()
+        {
+            return ReadOnlyList<UnknownKeyword>.Empty;
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void UnknownKeyword_CheckNullArg_cells()
+        {
+            var cells = new List<HtmlCell>{ HtmlCellTest.First }.ToReadOnlyList();
+
+            try
+            {
+                new UnknownKeyword(null);
+            }
+            catch(ArgumentNullException ex)
+            {
+                CheckArgumentExceptionParameter( "cells", ex.ParamName );
+
+                return;
+            }
+
+            Assert.Fail("Argument 'cells' isn't checked for null inputs");
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void UnknownKeyword_GetHashCodeTest()
+        {
+            BaseGetHashCodeTest(objects);
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void UnknownKeyword_EqualsTest()
+        {
+            BaseEqualsTest(objects);
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void UnknownKeyword_ToStringTest()
         {
             BaseToStringTest(objects);
         }
@@ -2161,8 +2822,21 @@ namespace NetRunner.Executable.Tests.Invokation
     [TestClass]
     public sealed partial class FunctionExecutionResultTest : ReadOnlyObjectTest
     {
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static readonly ObjectsCache<FunctionExecutionResult> objects = new ObjectsCache<FunctionExecutionResult>(GetInstances);
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static IEnumerable<FunctionExecutionResult[]> CreateNonEmptyObjectsArrays()
+        {
+            return new[]
+            {
+                FunctionExecutionResultTest.objects.Objects.Skip(1).ToArray(),
+                FunctionExecutionResultTest.objects.Objects.Take(2).ToArray(),
+                FunctionExecutionResultTest.objects.Objects.Take(1).ToArray()
+            };
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static FunctionExecutionResult First
         {
             get
@@ -2171,6 +2845,7 @@ namespace NetRunner.Executable.Tests.Invokation
             }
         }
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static FunctionExecutionResult Second
         {
             get
@@ -2179,6 +2854,7 @@ namespace NetRunner.Executable.Tests.Invokation
             }
         }
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static FunctionExecutionResult Third
         {
             get
@@ -2187,12 +2863,14 @@ namespace NetRunner.Executable.Tests.Invokation
             }
         }
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         private static IEnumerable<FunctionExecutionResult> GetInstances()
         {
             return GetApparents().Concat(GetInstancesOfCurrentType());
         }
 
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         private static IEnumerable<FunctionExecutionResult>GetApparents()
         {
             return ReadOnlyList<FunctionExecutionResult>.Empty;
@@ -2219,6 +2897,7 @@ namespace NetRunner.Executable.Tests.Invokation
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void FunctionExecutionResult_CheckNullArg_tableChanges()
         {
             var resultType = Enum.GetValues(typeof(FunctionExecutionResult.FunctionRunResult)).Cast<FunctionExecutionResult.FunctionRunResult>().First();
@@ -2239,18 +2918,21 @@ namespace NetRunner.Executable.Tests.Invokation
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void FunctionExecutionResult_GetHashCodeTest()
         {
             BaseGetHashCodeTest(objects);
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void FunctionExecutionResult_EqualsTest()
         {
             BaseEqualsTest(objects);
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void FunctionExecutionResult_ToStringTest()
         {
             BaseToStringTest(objects);
@@ -2260,8 +2942,21 @@ namespace NetRunner.Executable.Tests.Invokation
     [TestClass]
     public sealed partial class FunctionHeaderTest : ReadOnlyObjectTest
     {
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static readonly ObjectsCache<FunctionHeader> objects = new ObjectsCache<FunctionHeader>(GetInstances);
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static IEnumerable<FunctionHeader[]> CreateNonEmptyObjectsArrays()
+        {
+            return new[]
+            {
+                FunctionHeaderTest.objects.Objects.Skip(1).ToArray(),
+                FunctionHeaderTest.objects.Objects.Take(2).ToArray(),
+                FunctionHeaderTest.objects.Objects.Take(1).ToArray()
+            };
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static FunctionHeader First
         {
             get
@@ -2270,6 +2965,7 @@ namespace NetRunner.Executable.Tests.Invokation
             }
         }
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static FunctionHeader Second
         {
             get
@@ -2278,6 +2974,7 @@ namespace NetRunner.Executable.Tests.Invokation
             }
         }
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static FunctionHeader Third
         {
             get
@@ -2286,12 +2983,14 @@ namespace NetRunner.Executable.Tests.Invokation
             }
         }
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         private static IEnumerable<FunctionHeader> GetInstances()
         {
             return GetApparents().Concat(GetInstancesOfCurrentType());
         }
 
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         private static IEnumerable<FunctionHeader>GetApparents()
         {
             return ReadOnlyList<FunctionHeader>.Empty;
@@ -2308,8 +3007,8 @@ namespace NetRunner.Executable.Tests.Invokation
 
         private void CheckEmptyStringArg_functionName(string stringArgument)
         {
-            var functionName = "text 135368";
-            var arguments = new List<String>{ "text 135369" }.ToReadOnlyList();
+            var functionName = "text 135371";
+            var arguments = new List<String>{ "text 135372" }.ToReadOnlyList();
             var rowReference = HtmlRowReferenceTest.First;
             var keyword = AbstractKeywordTest.First;
 
@@ -2328,10 +3027,11 @@ namespace NetRunner.Executable.Tests.Invokation
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void FunctionHeader_CheckNullArg_functionName()
         {
-            var functionName = "text 135368";
-            var arguments = new List<String>{ "text 135369" }.ToReadOnlyList();
+            var functionName = "text 135371";
+            var arguments = new List<String>{ "text 135372" }.ToReadOnlyList();
             var rowReference = HtmlRowReferenceTest.First;
             var keyword = AbstractKeywordTest.First;
 
@@ -2350,10 +3050,11 @@ namespace NetRunner.Executable.Tests.Invokation
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void FunctionHeader_CheckNullArg_arguments()
         {
-            var functionName = "text 135368";
-            var arguments = new List<String>{ "text 135369" }.ToReadOnlyList();
+            var functionName = "text 135371";
+            var arguments = new List<String>{ "text 135372" }.ToReadOnlyList();
             var rowReference = HtmlRowReferenceTest.First;
             var keyword = AbstractKeywordTest.First;
 
@@ -2372,10 +3073,11 @@ namespace NetRunner.Executable.Tests.Invokation
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void FunctionHeader_CheckNullArg_rowReference()
         {
-            var functionName = "text 135368";
-            var arguments = new List<String>{ "text 135369" }.ToReadOnlyList();
+            var functionName = "text 135371";
+            var arguments = new List<String>{ "text 135372" }.ToReadOnlyList();
             var rowReference = HtmlRowReferenceTest.First;
             var keyword = AbstractKeywordTest.First;
 
@@ -2394,10 +3096,11 @@ namespace NetRunner.Executable.Tests.Invokation
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void FunctionHeader_CheckNullArg_keyword()
         {
-            var functionName = "text 135368";
-            var arguments = new List<String>{ "text 135369" }.ToReadOnlyList();
+            var functionName = "text 135371";
+            var arguments = new List<String>{ "text 135372" }.ToReadOnlyList();
             var rowReference = HtmlRowReferenceTest.First;
             var keyword = AbstractKeywordTest.First;
 
@@ -2416,18 +3119,21 @@ namespace NetRunner.Executable.Tests.Invokation
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void FunctionHeader_GetHashCodeTest()
         {
             BaseGetHashCodeTest(objects);
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void FunctionHeader_EqualsTest()
         {
             BaseEqualsTest(objects);
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void FunctionHeader_ToStringTest()
         {
             BaseToStringTest(objects);
@@ -2437,8 +3143,21 @@ namespace NetRunner.Executable.Tests.Invokation
     [TestClass]
     public sealed partial class HtmlRowReferenceTest : ReadOnlyObjectTest
     {
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static readonly ObjectsCache<HtmlRowReference> objects = new ObjectsCache<HtmlRowReference>(GetInstances);
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static IEnumerable<HtmlRowReference[]> CreateNonEmptyObjectsArrays()
+        {
+            return new[]
+            {
+                HtmlRowReferenceTest.objects.Objects.Skip(1).ToArray(),
+                HtmlRowReferenceTest.objects.Objects.Take(2).ToArray(),
+                HtmlRowReferenceTest.objects.Objects.Take(1).ToArray()
+            };
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static HtmlRowReference First
         {
             get
@@ -2447,6 +3166,7 @@ namespace NetRunner.Executable.Tests.Invokation
             }
         }
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static HtmlRowReference Second
         {
             get
@@ -2455,6 +3175,7 @@ namespace NetRunner.Executable.Tests.Invokation
             }
         }
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static HtmlRowReference Third
         {
             get
@@ -2463,30 +3184,35 @@ namespace NetRunner.Executable.Tests.Invokation
             }
         }
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         private static IEnumerable<HtmlRowReference> GetInstances()
         {
             return GetApparents().Concat(GetInstancesOfCurrentType());
         }
 
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         private static IEnumerable<HtmlRowReference>GetApparents()
         {
             return ReadOnlyList<HtmlRowReference>.Empty;
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void HtmlRowReference_GetHashCodeTest()
         {
             BaseGetHashCodeTest(objects);
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void HtmlRowReference_EqualsTest()
         {
             BaseEqualsTest(objects);
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void HtmlRowReference_ToStringTest()
         {
             BaseToStringTest(objects);
@@ -2496,8 +3222,21 @@ namespace NetRunner.Executable.Tests.Invokation
     [TestClass]
     public sealed partial class TestFunctionReferenceTest : ReadOnlyObjectTest
     {
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static readonly ObjectsCache<TestFunctionReference> objects = new ObjectsCache<TestFunctionReference>(GetInstances);
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static IEnumerable<TestFunctionReference[]> CreateNonEmptyObjectsArrays()
+        {
+            return new[]
+            {
+                TestFunctionReferenceTest.objects.Objects.Skip(1).ToArray(),
+                TestFunctionReferenceTest.objects.Objects.Take(2).ToArray(),
+                TestFunctionReferenceTest.objects.Objects.Take(1).ToArray()
+            };
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static TestFunctionReference First
         {
             get
@@ -2506,6 +3245,7 @@ namespace NetRunner.Executable.Tests.Invokation
             }
         }
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static TestFunctionReference Second
         {
             get
@@ -2514,6 +3254,7 @@ namespace NetRunner.Executable.Tests.Invokation
             }
         }
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static TestFunctionReference Third
         {
             get
@@ -2522,18 +3263,21 @@ namespace NetRunner.Executable.Tests.Invokation
             }
         }
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         private static IEnumerable<TestFunctionReference> GetInstances()
         {
             return GetApparents().Concat(GetInstancesOfCurrentType());
         }
 
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         private static IEnumerable<TestFunctionReference>GetApparents()
         {
             return ReadOnlyList<TestFunctionReference>.Empty;
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void TestFunctionReference_CheckNullArg_method()
         {
             var method = GetType().GetMethods().First();
@@ -2554,6 +3298,7 @@ namespace NetRunner.Executable.Tests.Invokation
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void TestFunctionReference_CheckNullArg_targetObject()
         {
             var method = GetType().GetMethods().First();
@@ -2574,18 +3319,21 @@ namespace NetRunner.Executable.Tests.Invokation
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void TestFunctionReference_GetHashCodeTest()
         {
             BaseGetHashCodeTest(objects);
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void TestFunctionReference_EqualsTest()
         {
             BaseEqualsTest(objects);
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void TestFunctionReference_ToStringTest()
         {
             BaseToStringTest(objects);
@@ -2600,8 +3348,21 @@ namespace NetRunner.Executable.Tests.RawData
     [TestClass]
     public sealed partial class FitnesseHtmlDocumentTest : ReadOnlyObjectTest
     {
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static readonly ObjectsCache<FitnesseHtmlDocument> objects = new ObjectsCache<FitnesseHtmlDocument>(GetInstances);
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static IEnumerable<FitnesseHtmlDocument[]> CreateNonEmptyObjectsArrays()
+        {
+            return new[]
+            {
+                FitnesseHtmlDocumentTest.objects.Objects.Skip(1).ToArray(),
+                FitnesseHtmlDocumentTest.objects.Objects.Take(2).ToArray(),
+                FitnesseHtmlDocumentTest.objects.Objects.Take(1).ToArray()
+            };
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static FitnesseHtmlDocument First
         {
             get
@@ -2610,6 +3371,7 @@ namespace NetRunner.Executable.Tests.RawData
             }
         }
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static FitnesseHtmlDocument Second
         {
             get
@@ -2618,6 +3380,7 @@ namespace NetRunner.Executable.Tests.RawData
             }
         }
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static FitnesseHtmlDocument Third
         {
             get
@@ -2626,21 +3389,24 @@ namespace NetRunner.Executable.Tests.RawData
             }
         }
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         private static IEnumerable<FitnesseHtmlDocument> GetInstances()
         {
             return GetApparents().Concat(GetInstancesOfCurrentType());
         }
 
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         private static IEnumerable<FitnesseHtmlDocument>GetApparents()
         {
             return ReadOnlyList<FitnesseHtmlDocument>.Empty;
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void FitnesseHtmlDocument_CheckNullArg_textBeforeFirstTable()
         {
-            var textBeforeFirstTable = "text 135370";
+            var textBeforeFirstTable = "text 135373";
             var tables = new List<HtmlTable>{ HtmlTableTest.First }.ToReadOnlyList();
 
             try
@@ -2658,9 +3424,10 @@ namespace NetRunner.Executable.Tests.RawData
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void FitnesseHtmlDocument_CheckNullArg_tables()
         {
-            var textBeforeFirstTable = "text 135370";
+            var textBeforeFirstTable = "text 135373";
             var tables = new List<HtmlTable>{ HtmlTableTest.First }.ToReadOnlyList();
 
             try
@@ -2678,18 +3445,21 @@ namespace NetRunner.Executable.Tests.RawData
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void FitnesseHtmlDocument_GetHashCodeTest()
         {
             BaseGetHashCodeTest(objects);
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void FitnesseHtmlDocument_EqualsTest()
         {
             BaseEqualsTest(objects);
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void FitnesseHtmlDocument_ToStringTest()
         {
             BaseToStringTest(objects);
@@ -2699,8 +3469,21 @@ namespace NetRunner.Executable.Tests.RawData
     [TestClass]
     public sealed partial class HtmlCellTest : ReadOnlyObjectTest
     {
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static readonly ObjectsCache<HtmlCell> objects = new ObjectsCache<HtmlCell>(GetInstances);
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static IEnumerable<HtmlCell[]> CreateNonEmptyObjectsArrays()
+        {
+            return new[]
+            {
+                HtmlCellTest.objects.Objects.Skip(1).ToArray(),
+                HtmlCellTest.objects.Objects.Take(2).ToArray(),
+                HtmlCellTest.objects.Objects.Take(1).ToArray()
+            };
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static HtmlCell First
         {
             get
@@ -2709,6 +3492,7 @@ namespace NetRunner.Executable.Tests.RawData
             }
         }
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static HtmlCell Second
         {
             get
@@ -2717,6 +3501,7 @@ namespace NetRunner.Executable.Tests.RawData
             }
         }
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static HtmlCell Third
         {
             get
@@ -2725,18 +3510,21 @@ namespace NetRunner.Executable.Tests.RawData
             }
         }
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         private static IEnumerable<HtmlCell> GetInstances()
         {
             return GetApparents().Concat(GetInstancesOfCurrentType());
         }
 
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         private static IEnumerable<HtmlCell>GetApparents()
         {
             return ReadOnlyList<HtmlCell>.Empty;
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void HtmlCell_CheckNullArg_tableCell()
         {
             var tableCell = HtmlNode.CreateNode("<i>TEST<i/>");
@@ -2756,18 +3544,21 @@ namespace NetRunner.Executable.Tests.RawData
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void HtmlCell_GetHashCodeTest()
         {
             BaseGetHashCodeTest(objects);
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void HtmlCell_EqualsTest()
         {
             BaseEqualsTest(objects);
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void HtmlCell_ToStringTest()
         {
             BaseToStringTest(objects);
@@ -2777,8 +3568,21 @@ namespace NetRunner.Executable.Tests.RawData
     [TestClass]
     public sealed partial class HtmlRowTest : ReadOnlyObjectTest
     {
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static readonly ObjectsCache<HtmlRow> objects = new ObjectsCache<HtmlRow>(GetInstances);
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static IEnumerable<HtmlRow[]> CreateNonEmptyObjectsArrays()
+        {
+            return new[]
+            {
+                HtmlRowTest.objects.Objects.Skip(1).ToArray(),
+                HtmlRowTest.objects.Objects.Take(2).ToArray(),
+                HtmlRowTest.objects.Objects.Take(1).ToArray()
+            };
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static HtmlRow First
         {
             get
@@ -2787,6 +3591,7 @@ namespace NetRunner.Executable.Tests.RawData
             }
         }
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static HtmlRow Second
         {
             get
@@ -2795,6 +3600,7 @@ namespace NetRunner.Executable.Tests.RawData
             }
         }
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static HtmlRow Third
         {
             get
@@ -2803,18 +3609,21 @@ namespace NetRunner.Executable.Tests.RawData
             }
         }
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         private static IEnumerable<HtmlRow> GetInstances()
         {
             return GetApparents().Concat(GetInstancesOfCurrentType());
         }
 
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         private static IEnumerable<HtmlRow>GetApparents()
         {
             return ReadOnlyList<HtmlRow>.Empty;
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void HtmlRow_CheckNullArg_cellsEntries()
         {
             var cellsEntries = new List<HtmlCell>{ HtmlCellTest.First }.ToReadOnlyList();
@@ -2835,6 +3644,7 @@ namespace NetRunner.Executable.Tests.RawData
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void HtmlRow_CheckNullArg_rowReference()
         {
             var cellsEntries = new List<HtmlCell>{ HtmlCellTest.First }.ToReadOnlyList();
@@ -2855,18 +3665,21 @@ namespace NetRunner.Executable.Tests.RawData
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void HtmlRow_GetHashCodeTest()
         {
             BaseGetHashCodeTest(objects);
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void HtmlRow_EqualsTest()
         {
             BaseEqualsTest(objects);
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void HtmlRow_ToStringTest()
         {
             BaseToStringTest(objects);
@@ -2876,8 +3689,21 @@ namespace NetRunner.Executable.Tests.RawData
     [TestClass]
     public sealed partial class HtmlTableTest : ReadOnlyObjectTest
     {
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static readonly ObjectsCache<HtmlTable> objects = new ObjectsCache<HtmlTable>(GetInstances);
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static IEnumerable<HtmlTable[]> CreateNonEmptyObjectsArrays()
+        {
+            return new[]
+            {
+                HtmlTableTest.objects.Objects.Skip(1).ToArray(),
+                HtmlTableTest.objects.Objects.Take(2).ToArray(),
+                HtmlTableTest.objects.Objects.Take(1).ToArray()
+            };
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static HtmlTable First
         {
             get
@@ -2886,6 +3712,7 @@ namespace NetRunner.Executable.Tests.RawData
             }
         }
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static HtmlTable Second
         {
             get
@@ -2894,6 +3721,7 @@ namespace NetRunner.Executable.Tests.RawData
             }
         }
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         internal static HtmlTable Third
         {
             get
@@ -2902,23 +3730,26 @@ namespace NetRunner.Executable.Tests.RawData
             }
         }
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         private static IEnumerable<HtmlTable> GetInstances()
         {
             return GetApparents().Concat(GetInstancesOfCurrentType());
         }
 
 
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         private static IEnumerable<HtmlTable>GetApparents()
         {
             return ReadOnlyList<HtmlTable>.Empty;
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void HtmlTable_CheckNullArg_rows()
         {
             var rows = new List<HtmlRow>{ HtmlRowTest.First }.ToReadOnlyList();
             var tableNode = HtmlNode.CreateNode("<i>TEST<i/>");
-            var textAfterTable = "text 135371";
+            var textAfterTable = "text 135374";
 
             try
             {
@@ -2935,11 +3766,12 @@ namespace NetRunner.Executable.Tests.RawData
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void HtmlTable_CheckNullArg_tableNode()
         {
             var rows = new List<HtmlRow>{ HtmlRowTest.First }.ToReadOnlyList();
             var tableNode = HtmlNode.CreateNode("<i>TEST<i/>");
-            var textAfterTable = "text 135371";
+            var textAfterTable = "text 135374";
 
             try
             {
@@ -2956,11 +3788,12 @@ namespace NetRunner.Executable.Tests.RawData
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void HtmlTable_CheckNullArg_textAfterTable()
         {
             var rows = new List<HtmlRow>{ HtmlRowTest.First }.ToReadOnlyList();
             var tableNode = HtmlNode.CreateNode("<i>TEST<i/>");
-            var textAfterTable = "text 135371";
+            var textAfterTable = "text 135374";
 
             try
             {
@@ -2977,18 +3810,21 @@ namespace NetRunner.Executable.Tests.RawData
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void HtmlTable_GetHashCodeTest()
         {
             BaseGetHashCodeTest(objects);
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void HtmlTable_EqualsTest()
         {
             BaseEqualsTest(objects);
         }
 
         [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void HtmlTable_ToStringTest()
         {
             BaseToStringTest(objects);
@@ -3002,6 +3838,7 @@ namespace NetRunner.Executable.Tests.RawData
 #pragma warning restore 67
 #pragma warning restore 168
 
+// ReSharper restore RedundantNameQualifier
 // ReSharper restore MemberCanBePrivate.Global
 // ReSharper restore AssignNullToNotNullAttribute
 // ReSharper restore RedundantExplicitArrayCreation

@@ -1,7 +1,6 @@
 
 using HtmlAgilityPack;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NetRunner.Executable.Common;
 using NetRunner.Executable.Invokation;
 using NetRunner.Executable.Invokation.Functions;
 using NetRunner.Executable.Invokation.Keywords;
@@ -19,20 +18,19 @@ using System.Reflection;
 
 namespace NetRunner.Executable.Tests.Invokation.Functions
 {
-    partial class CollectionArgumentedFunctionTest
+    partial class TableResultFunctionTest
     {
-        private static IEnumerable<CollectionArgumentedFunction> GetInstancesOfCurrentType()
+        private static IEnumerable<TableResultFunction> GetInstancesOfCurrentType()
         {
-            foreach (var columnNames in new[] { new[] { "1", "2" }.ToReadOnlyList(), new[] { "2", "3" }.ToReadOnlyList() })
+            foreach (var functionHeader in FunctionHeaderTest.objects.Objects.Take(3))
             {
-                foreach (var rows in new[] { HtmlRowTest.objects.Objects.Skip(1).ToReadOnlyList(), HtmlRowTest.objects.Objects.Take(2).ToReadOnlyList() })
+                foreach (var functionReference in TestFunctionReferenceTest.objects.Objects.Take(3))
                 {
-                    foreach (FunctionHeader function in FunctionHeaderTest.objects.Objects)
+                    foreach (var header in HtmlRowTest.objects.Objects.Take(3))
                     {
-                        foreach (TestFunctionReference testFunctionReference in TestFunctionReferenceTest.objects.Objects)
+                        foreach (var rows in HtmlRowTest.CreateNonEmptyObjectsArrays())
                         {
-                            yield return new CollectionArgumentedFunction(columnNames, rows, function, testFunctionReference);
-                           
+                            yield return new TableResultFunction(header, rows, functionHeader, functionReference);
                         }
                     }
                 }

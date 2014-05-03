@@ -1,3 +1,5 @@
 !path ..\binary\currentBuild\NetRunner.InternalTests.dll
 
+!define invokationWasSkippedText {Row invokation was skipped because of parser errors}
+
 !contents -R2 -g -p -f -h

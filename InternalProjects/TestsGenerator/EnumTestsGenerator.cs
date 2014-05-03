@@ -48,7 +48,7 @@ namespace {0}
             }
         }
 
-        public OutFile[] GetFileEntries(Assembly targetAssembly)
+        public OutFile[] GetFileEntries(Assembly targetAssembly, ConfigFile configFile)
         {
             var namespaces = new HashSet<string>(CommonNamespaces());
 
@@ -81,6 +81,14 @@ namespace {0}
                 FileName,
                 String.Format(FileTemplate, joinedNamespaces, result),
                 true) };
+        }
+
+        public string ConfigFileName
+        {
+            get
+            {
+                return "EnumTestGenerationConfig.txt";
+            }
         }
 
         private static IEnumerable<string> CommonNamespaces()

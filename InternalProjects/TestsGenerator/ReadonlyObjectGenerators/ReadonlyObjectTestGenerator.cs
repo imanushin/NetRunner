@@ -39,6 +39,7 @@ namespace TestsGenerator.ReadonlyObjectGenerators
 // ReSharper disable RedundantExplicitArrayCreation
 // ReSharper disable AssignNullToNotNullAttribute
 // ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable RedundantNameQualifier
 
 #pragma warning disable 67
 #pragma warning disable 219
@@ -50,6 +51,7 @@ namespace TestsGenerator.ReadonlyObjectGenerators
 #pragma warning restore 67
 #pragma warning restore 168
 
+// ReSharper restore RedundantNameQualifier
 // ReSharper restore MemberCanBePrivate.Global
 // ReSharper restore AssignNullToNotNullAttribute
 // ReSharper restore RedundantExplicitArrayCreation
@@ -78,8 +80,21 @@ namespace {0}
     [TestClass]
     public sealed partial class {0}Test : ReadOnlyObjectTest
     {{
+        [GeneratedCode(""TestGenerator"", ""1.0.0.0"")]
         internal static readonly ObjectsCache<{0}> objects = new ObjectsCache<{0}>(GetInstances);
 
+        [GeneratedCode(""TestGenerator"", ""1.0.0.0"")]
+        internal static IEnumerable<{0}[]> CreateNonEmptyObjectsArrays()
+        {{
+            return new[]
+            {{
+                {0}Test.objects.Objects.Skip(1).ToArray(),
+                {0}Test.objects.Objects.Take(2).ToArray(),
+                {0}Test.objects.Objects.Take(1).ToArray()
+            }};
+        }}
+
+        [GeneratedCode(""TestGenerator"", ""1.0.0.0"")]
         internal static {0} First
         {{
             get
@@ -88,6 +103,7 @@ namespace {0}
             }}
         }}
 
+        [GeneratedCode(""TestGenerator"", ""1.0.0.0"")]
         internal static {0} Second
         {{
             get
@@ -96,6 +112,7 @@ namespace {0}
             }}
         }}
 
+        [GeneratedCode(""TestGenerator"", ""1.0.0.0"")]
         internal static {0} Third
         {{
             get
@@ -104,6 +121,7 @@ namespace {0}
             }}
         }}
 
+        [GeneratedCode(""TestGenerator"", ""1.0.0.0"")]
         private static IEnumerable<{0}> GetInstances()
         {{
             return GetApparents().Concat(GetInstancesOfCurrentType());
@@ -114,18 +132,21 @@ namespace {0}
         private const string commonTestClassEnd =
             @"
         [TestMethod]
+        [GeneratedCode(""TestGenerator"", ""1.0.0.0"")]
         public void {0}_GetHashCodeTest()
         {{
             BaseGetHashCodeTest(objects);
         }}
 
         [TestMethod]
+        [GeneratedCode(""TestGenerator"", ""1.0.0.0"")]
         public void {0}_EqualsTest()
         {{
             BaseEqualsTest(objects);
         }}
 
         [TestMethod]
+        [GeneratedCode(""TestGenerator"", ""1.0.0.0"")]
         public void {0}_ToStringTest()
         {{
             BaseToStringTest(objects);
@@ -135,6 +156,7 @@ namespace {0}
 
         private const string sealedClassTemplate =
 @"
+        [GeneratedCode(""TestGenerator"", ""1.0.0.0"")]
         private static IEnumerable<{0}>GetApparents()
         {{
             return ReadOnlyList<{0}>.Empty;
@@ -142,14 +164,16 @@ namespace {0}
 ";
 
         private const string abstractClassTemplate = @"
+        [GeneratedCode(""TestGenerator"", ""1.0.0.0"")]
         private static IEnumerable<{0}> GetInstancesOfCurrentType()
         {{
             return ReadOnlyList<{0}>.Empty;
         }}
 ";
 
-        private const string GetApparentsTemplate =
+        private const string getApparentsTemplate =
 @"
+        [GeneratedCode(""TestGenerator"", ""1.0.0.0"")]
         private static IEnumerable<{0}>GetApparents()
         {{
             return
@@ -161,6 +185,7 @@ namespace {0}
         private const string checkNullArgConstructorTestTemplate =
 @"
         [TestMethod]
+        [GeneratedCode(""TestGenerator"", ""1.0.0.0"")]
         public void {2}_CheckNullArg_{0}{4}()
         {{
 {1}
@@ -188,6 +213,7 @@ namespace {1}
 {{
     partial class {2}Test
     {{
+        [GeneratedCode(""TestGenerator"", ""1.0.0.0"")]
         private static IEnumerable<{2}> GetInstancesOfCurrentType()
         {{
             #error Implement test class {2}Test to retrieve possible objects for type {2}
@@ -200,13 +226,15 @@ namespace {1}
         private const string UnionPartTemplate = @"{1}Test.objects";
 
 
-        public OutFile[] GetFileEntries(Assembly targetAssembly)
+        public OutFile[] GetFileEntries(Assembly targetAssembly, ConfigFile configFile)
         {
             ISet<Type> types = new HashSet<Type>(ReadonlyClassesFinder.FindTypes(targetAssembly));
 
             var typesByNamespace = types.ToLookup(type => type.Namespace);
 
             var importedNamespaces = GetNamespaces(types).ToList();
+
+            importedNamespaces.AddRange(configFile.GetSectionItems("namespaces"));
 
             importedNamespaces.Sort();
 
@@ -237,7 +265,7 @@ namespace {1}
 
                     if (!type.IsAbstract)
                     {
-                        string constructorNullArgumetnsCheck = GenerateTestForConstructors(type);
+                        string constructorNullArgumetnsCheck = GenerateTestForConstructors(type, configFile);
                         namespaceEntry.Append(constructorNullArgumetnsCheck);
                     }
                     else
@@ -291,6 +319,7 @@ namespace {1}
                 "System.Linq",
                 "Microsoft.VisualStudio.TestTools.UnitTesting",
                 "NetRunner.Executable.Tests",
+                "System.CodeDom.Compiler"
             };
 
             importedNamespaces =
@@ -324,7 +353,7 @@ namespace {1}
             }
         }
 
-        private static string GenerateTestForConstructors(Type targetType)
+        private string GenerateTestForConstructors(Type targetType, ConfigFile configFile)
         {
             var result = new StringBuilder();
 
@@ -337,7 +366,7 @@ namespace {1}
 
                 var parameters = constructor.GetParameters();
 
-                IEnumerable<string> initializers = parameters.Select(GenerateParameterInitialization);
+                IEnumerable<string> initializers = parameters.Select(parameter => GenerateParameterInitialization(parameter, configFile));
 
                 string initialization = string.Join(Environment.NewLine, initializers);
 
@@ -423,18 +452,18 @@ namespace {1}
             return sb.ToString();
         }
 
-        private static string GenerateParameterInitialization(ParameterInfo parameter)
+        private string GenerateParameterInitialization(ParameterInfo parameter, ConfigFile configFile)
         {
             const string template = "            var {0} = {1};";
 
             Type parameterType = parameter.ParameterType;
 
-            string initializer = CreateTypeInitializer(parameterType, parameter.Member);
+            string initializer = CreateTypeInitializer(parameterType, parameter.Member, configFile);
 
             return string.Format(template, parameter.Name, initializer);
         }
 
-        private static string CreateTypeInitializer(Type enumType, MemberInfo owner)
+        private string CreateTypeInitializer(Type enumType, MemberInfo owner, ConfigFile configFile)
         {
             if (ReadonlyClassesFinder.IsTypeReadOnly(enumType))
             {
@@ -452,39 +481,19 @@ namespace {1}
             }
             if (typeof(bool) == enumType)
             {
-                return "true";
+                return ((indexer++) % 2 == 0).ToString();
             }
             if (typeof(string) == enumType)
             {
                 return string.Format(@"""text {0}""", indexer++);
             }
-            if (typeof(IntPtr) == enumType)
-            {
-                return string.Format(@"+memory");
-            }
             if (typeof(long) == enumType)
             {
                 return string.Format((indexer++).ToString());
             }
-            if (typeof(DirectoryEntry) == enumType)
-            {
-                return "new DirectoryEntry()";
-            }
-            if (typeof(X509Certificate2) == enumType)
-            {
-                return "new X509Certificate2()";
-            }
-            if (typeof(SecurityIdentifier) == enumType)
-            {
-                return string.Format(@"new SecurityIdentifier(WellKnownSidType.NullSid, null)");
-            }
             if (typeof(Guid) == enumType)
             {
-                return string.Format(@"new Guid(""{0}"")", new Guid("{C556EA1B-20B8-4E2D-BB3F-8C1A9A691C73}"));
-            }
-            if (enumType.Name == "IScopeObject")
-            {
-                return "DomainAccountTest.First";
+                return @"new Guid(""{{C556EA1B-20B8-4E2D-BB3F-8C1A9A691C73}}"")";
             }
             if (enumType.Name.StartsWith("IDictionary`") || enumType.Name.StartsWith("Dictionary`"))
             {
@@ -504,7 +513,7 @@ namespace {1}
 
                 return string.Format("new Func<{2}>(({0})=>default({1}))", parameters, resultType, allArguments);
             }
-            if (typeof(DateTime) == enumType)//Всё равно упадет в другом тесте
+            if (typeof(DateTime) == enumType)//Any value because expected fail result will be because of null argument
             {
                 DateTime result = startDate.AddSeconds(indexer++).AddMinutes(indexer++).AddHours(indexer++);
 
@@ -528,32 +537,17 @@ namespace {1}
 
             if (typeof(byte[]) == enumType)
             {
-                return string.Format("new byte[]{{ 1, 2, 3 }}");
+                return string.Format("new byte[]{{ {0}, {1}, {2} }}", (byte)indexer++, (byte)indexer++, (byte)indexer++);
             }
 
             if (typeof(Exception) == enumType)
             {
-                return string.Format("new Exception(\"Text exception\")");
+                return string.Format("new Exception(\"Text exception {0}\")", indexer++);
             }
 
             if (typeof(Object) == enumType)
             {
                 return string.Format("new object()");
-            }
-
-            if (typeof(MethodInfo) == enumType)
-            {
-                return string.Format("GetType().GetMethods().First()");
-            }
-
-            if (string.Equals(enumType.Name, "FunctionContainer", StringComparison.Ordinal))
-            {
-                return string.Format("new FakeFunctionContainer(1)");
-            }
-
-            if (string.Equals(enumType.Name, "HtmlNode", StringComparison.Ordinal))
-            {
-                return string.Format("HtmlNode.CreateNode(\"<i>TEST<i/>\")");
             }
 
             if (enumType.IsArray)
@@ -562,7 +556,7 @@ namespace {1}
 
                 var innerType = Type.GetType(enumType.FullName.Replace("[]", string.Empty), true);
 
-                string innerInitializer = CreateTypeInitializer(innerType, enumType);
+                string innerInitializer = CreateTypeInitializer(innerType, enumType, configFile);
 
                 return string.Format(initializerTemplate, innerType.Name, innerInitializer);
             }
@@ -574,12 +568,21 @@ namespace {1}
                 var genericArguments = enumType.GetGenericArguments();
 
                 Type genericArg = genericArguments[0];
-                string innerInitializer = CreateTypeInitializer(genericArg, enumType);
+                string innerInitializer = CreateTypeInitializer(genericArg, enumType, configFile);
 
                 return string.Format(initializerTemplate, genericArg.Name, innerInitializer);
             }
 
-            throw new InvalidOperationException(string.Format("Unable to generate initializer for the type {0} (member of {1}.{2})", enumType, owner.DeclaringType, owner.Name));
+            var propertyString = configFile.GetSectionItems("fakeTypes").FirstOrDefault(s => s.StartsWith(enumType.FullName + "=>"));
+
+            if (!string.IsNullOrWhiteSpace(propertyString))
+            {
+                int start = propertyString.IndexOf("=>", StringComparison.OrdinalIgnoreCase) + "=>".Length;
+
+                return propertyString.Substring(start);
+            }
+
+            throw new InvalidOperationException(string.Format("Unable to generate initializer for the type {0} (member of {1}.{2}). Try to add fake implementation to the file {3}", enumType, owner.DeclaringType, owner.Name, ConfigFileName));
         }
 
         private static bool IsCollection(Type classType)
@@ -595,7 +598,15 @@ namespace {1}
 
             string resultUnion = string.Join(").Union(" + Environment.NewLine, unions);
 
-            namespaceEntry.AppendFormat(GetApparentsTemplate, type.Name, resultUnion);
+            namespaceEntry.AppendFormat(getApparentsTemplate, type.Name, resultUnion);
+        }
+
+        public string ConfigFileName
+        {
+            get
+            {
+                return "TestsGenerationConfig.txt";
+            }
         }
     }
 }

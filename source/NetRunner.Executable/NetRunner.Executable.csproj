@@ -53,7 +53,10 @@
     <Compile Include="Common\Validate.cs" />
     <Compile Include="FitExecutable.cs" />
     <Compile Include="FitnesseCommunicator.cs" />
+    <Compile Include="Invokation\Functions\CollectionResultFunction.cs" />
+    <Compile Include="Invokation\Functions\ComplexArgumentedFunction.cs" />
     <Compile Include="Invokation\Functions\InvokationResult.cs" />
+    <Compile Include="Invokation\Functions\TableResultFunction.cs" />
     <Compile Include="Invokation\InternalException.cs" />
     <Compile Include="Invokation\Keywords\AbstractKeyword.cs" />
     <Compile Include="Invokation\Functions\AbstractTableChange.cs" />
@@ -64,7 +67,6 @@
     <Compile Include="Invokation\Functions\AddTraceLine.cs" />
     <Compile Include="Invokation\Functions\AppendRowWithCells.cs" />
     <Compile Include="Invokation\Functions\CssClassCellChange.cs" />
-    <Compile Include="Invokation\Functions\CollectionArgumentedFunction.cs" />
     <Compile Include="Invokation\Functions\EmptyTestFunction.cs" />
     <Compile Include="Invokation\FunctionExecutionResult.cs" />
     <Compile Include="Invokation\FunctionHeader.cs" />
@@ -102,6 +104,9 @@
       <Project>{19d01e12-2663-4bd7-8d71-425bd4f1643c}</Project>
       <Name>NetRunner.ExternalLibrary</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="TestsGenerationConfig.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

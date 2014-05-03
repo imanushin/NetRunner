@@ -271,7 +271,7 @@ namespace NetRunner.Executable.Invokation
                 propertyType = null;
                 return false;
             }
-
+            
             resultValue = property.GetValue(targetObject);
             propertyType = property.PropertyType;
 
