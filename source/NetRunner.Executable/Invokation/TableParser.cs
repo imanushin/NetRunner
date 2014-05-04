@@ -17,18 +17,30 @@ namespace NetRunner.Executable.Invokation
         {
             Validate.CollectionArgumentHasElements(table.Rows, "table");
 
-            var header = ParseHeader(table.Rows.First());
+            var headerRow = table.Rows.First();
+
+            var header = ParseHeader(headerRow);
 
             if (header == null)
                 return EmptyTestFunction.Instance;
 
             var functionToExecute = ReflectionLoader.Instance.FindFunction(header.FunctionName, header.Arguments.Count);
 
-            Validate.IsNotNull(functionToExecute, "Unable to find function {0}", header.FunctionName);
+            if (functionToExecute == null)
+            {
+                var startCell = headerRow.FirstBold;
+
+                var errorHeader = string.Format("Unable to find function {0}", header.FunctionName);
+                var errorInfo = string.Format("Unable to find function {0}", header.FunctionName);
+
+                var tableChange = new AddCellExpandableInfo(startCell, errorHeader, errorInfo);
+
+                return new ProblematicFunction(new[] { tableChange }, table.Rows);
+            }
 
             if (table.Rows.Count == 1)
             {
-                return new SimpleTestFunction(header, functionToExecute);
+                return new SimpleTestFunction(header, functionToExecute, headerRow);
             }
 
             var result = ParseTableValuedFunction(table, header, functionToExecute);
@@ -71,7 +83,7 @@ namespace NetRunner.Executable.Invokation
 
             Validate.IsNotNull(functionReference, "Unable to find function {0}", header.FunctionName);
 
-            return new SimpleTestFunction(header, functionReference);
+            return new SimpleTestFunction(header, functionReference, row);
         }
 
         [CanBeNull]

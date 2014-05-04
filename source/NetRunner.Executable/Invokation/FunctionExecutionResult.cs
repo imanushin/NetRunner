@@ -13,6 +13,11 @@ namespace NetRunner.Executable.Invokation
     [ImmutableObject(true)]
     internal sealed class FunctionExecutionResult : BaseReadOnlyObject
     {
+        public FunctionExecutionResult(FunctionRunResult resultType, params AbstractTableChange[] tableChanges)
+            : this(resultType, tableChanges.ToReadOnlyList())
+        {
+        }
+
         public FunctionExecutionResult(FunctionRunResult resultType, IEnumerable<AbstractTableChange> tableChanges)
         {
             Validate.ArgumentIsNotNull(tableChanges, "tableChanges");

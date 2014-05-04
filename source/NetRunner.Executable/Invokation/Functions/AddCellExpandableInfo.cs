@@ -10,7 +10,7 @@ using NetRunner.Executable.RawData;
 
 namespace NetRunner.Executable.Invokation.Functions
 {
-    internal sealed class AddCellExpandableInfo : AbstractTableChange
+    internal class AddCellExpandableInfo : AbstractTableChange
     {
         private readonly HtmlCell cell;
         private readonly string header;

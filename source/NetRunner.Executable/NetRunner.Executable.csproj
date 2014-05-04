@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -53,9 +54,11 @@
     <Compile Include="Common\Validate.cs" />
     <Compile Include="FitExecutable.cs" />
     <Compile Include="FitnesseCommunicator.cs" />
+    <Compile Include="Invokation\Functions\AddCellExpandableException.cs" />
     <Compile Include="Invokation\Functions\CollectionResultFunction.cs" />
     <Compile Include="Invokation\Functions\ComplexArgumentedFunction.cs" />
     <Compile Include="Invokation\Functions\InvokationResult.cs" />
+    <Compile Include="Invokation\Functions\ProblematicFunction.cs" />
     <Compile Include="Invokation\Functions\TableResultFunction.cs" />
     <Compile Include="Invokation\InternalException.cs" />
     <Compile Include="Invokation\Keywords\AbstractKeyword.cs" />

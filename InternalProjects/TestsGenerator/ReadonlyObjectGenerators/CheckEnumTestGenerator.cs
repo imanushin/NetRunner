@@ -7,10 +7,10 @@ namespace TestsGenerator.ReadonlyObjectGenerators
 {
     internal static class CheckEnumTestGenerator
     {
-        private const string CheckWrongEnumConstructorTestTemplate =
+        private const string checkWrongEnumConstructorTestTemplate =
 @"
         [TestMethod]
-        public void {2}_CheckWrongEnumArg_{0}()
+        public void {2}_CheckWrongEnumArg_{0}{4}()
         {{
 {1}
 
@@ -30,10 +30,7 @@ namespace TestsGenerator.ReadonlyObjectGenerators
 ";
 
 
-        internal static string CreateWrongEnumConstructor(
-            ParameterInfo param,
-            string argumentsList,
-            string initialization)
+        internal static string CreateWrongEnumConstructor(bool skipOverloading, ParameterInfo param, string argumentsList, string initialization)
         {
             Type parameterType = param.ParameterType;
 
@@ -47,7 +44,14 @@ namespace TestsGenerator.ReadonlyObjectGenerators
 
             string currentArgs = argumentsList.Replace(param.Name, replacement);
 
-            return string.Format(CheckWrongEnumConstructorTestTemplate, param.Name, initialization, targetType.Name, currentArgs);
+            var methodSuffix = string.Empty;
+
+            if (!skipOverloading)
+            {
+                methodSuffix = "_" + ReadonlyObjectTestGenerator.GetIndexerValue();
+            }
+
+            return string.Format(checkWrongEnumConstructorTestTemplate, param.Name, initialization, targetType.Name, currentArgs, methodSuffix);
         }
 
     }

@@ -375,7 +375,7 @@ namespace {1}
                 foreach (ParameterInfo param in parameters)
                 {
                     if (param.ParameterType.IsEnum)
-                        result.Append(CheckEnumTestGenerator.CreateWrongEnumConstructor(param, argumentsList, initialization));
+                        result.Append(CheckEnumTestGenerator.CreateWrongEnumConstructor(skipOverloading, param, argumentsList, initialization));
 
                     if (typeof(string) == param.ParameterType && !CanBeEmpty(param))
                         result.Append(StringTestGenerator.CreateEmptyStringConstructor(skipOverloading, param, argumentsList, initialization));
@@ -554,7 +554,7 @@ namespace {1}
             {
                 const string initializerTemplate = "new {0}[] {{ {1}, {1} }}";
 
-                var innerType = Type.GetType(enumType.FullName.Replace("[]", string.Empty), true);
+                var innerType = enumType.GetElementType();
 
                 string innerInitializer = CreateTypeInitializer(innerType, enumType, configFile);
 
@@ -607,6 +607,11 @@ namespace {1}
             {
                 return "TestsGenerationConfig.txt";
             }
+        }
+
+        public static int GetIndexerValue()
+        {
+            return indexer++;
         }
     }
 }

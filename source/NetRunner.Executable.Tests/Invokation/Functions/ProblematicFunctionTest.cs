@@ -13,28 +13,25 @@ using NetRunner.Executable.Tests.Invokation.Keywords;
 using NetRunner.Executable.Tests.RawData;
 using NetRunner.ExternalLibrary;
 using System;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace NetRunner.Executable.Tests.Invokation
+namespace NetRunner.Executable.Tests.Invokation.Functions
 {
-    partial class FunctionExecutionResultTest
+    partial class ProblematicFunctionTest
     {
-        private static IEnumerable<FunctionExecutionResult> GetInstancesOfCurrentType()
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        private static IEnumerable<ProblematicFunction> GetInstancesOfCurrentType()
         {
-            foreach (FunctionExecutionResult.FunctionRunResult result in Enum.GetValues(typeof(FunctionExecutionResult.FunctionRunResult)))
+            foreach (AbstractTableChange[] tableChanges in AbstractTableChangeTest.CreateNonEmptyObjectsArrays())
             {
-                foreach (var changes in new[] { AbstractTableChangeTest.objects.Objects.Skip(1), AbstractTableChangeTest.objects.Take(2) })
+                foreach (HtmlRow[] rows in HtmlRowTest.CreateNonEmptyObjectsArrays())
                 {
-                    yield return new FunctionExecutionResult(result, changes);
+                    yield return new ProblematicFunction(tableChanges, rows);
                 }
             }
-        }
-
-        protected override void CheckArgumentExceptionParameter(string expectedParameterName, string actualParameterName)
-        {
-            
         }
     }
 }

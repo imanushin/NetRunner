@@ -51,15 +51,6 @@ namespace NetRunner.Executable.Invokation
             private set;
         }
 
-        public bool HasStrongResult
-        {
-            get
-            {
-                return typeof(IEnumerable).IsAssignableFrom(method.ReturnType)
-                    || typeof(BaseTableArgument).IsAssignableFrom(method.ReturnType);
-            }
-        }
-
         protected override IEnumerable<object> GetInnerObjects()
         {
             yield return Name;

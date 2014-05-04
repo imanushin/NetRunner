@@ -66,10 +66,12 @@ namespace NetRunner.Executable.Invokation.Functions
                     exceptionsOccurred = true;
                     allIsOk = false;
 
-                    var header = string.Format("Function '{0}' execution was failed with error: {1}", functionToExecute.Name, rowResult.Exception.GetType().Name);
-                    var info = string.Format("Exception:{0}{1}", Environment.NewLine, rowResult.Exception);
-
-                    var exceptionInfo = new AddCellExpandableInfo(row.Cells.First(), header, info);
+                    var exceptionInfo = new AddCellExpandableException(
+                        row.Cells.First(), 
+                        rowResult.Exception,
+                        "Function '{0}' execution was failed with error: {1}",
+                        functionToExecute.Name, 
+                        rowResult.Exception.GetType().Name);
 
                     changes.Add(exceptionInfo);
                     changes.Add(new AddRowCssClass(row.RowReference, HtmlParser.ErrorCssClass));

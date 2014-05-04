@@ -59,6 +59,7 @@
     <Compile Include="FakeFunctionContainer.cs" />
     <Compile Include="Invokation\FunctionExecutionResultTest.cs" />
     <Compile Include="Invokation\FunctionHeaderTest.cs" />
+    <Compile Include="Invokation\Functions\AddCellExpandableExceptionTest.cs" />
     <Compile Include="Invokation\Functions\AddCellExpandableInfoTest.cs" />
     <Compile Include="Invokation\Functions\AddExceptionLineTest.cs" />
     <Compile Include="Invokation\Functions\AddRowCssClassTest.cs" />
@@ -68,6 +69,7 @@
     <Compile Include="Invokation\Functions\CssClassCellChangeTest.cs" />
     <Compile Include="Invokation\Functions\EmptyTestFunctionTest.cs" />
     <Compile Include="Invokation\Functions\ExecutionFailedMessageTest.cs" />
+    <Compile Include="Invokation\Functions\ProblematicFunctionTest.cs" />
     <Compile Include="Invokation\Functions\ShowActualValueCellChangeTest.cs" />
     <Compile Include="Invokation\Functions\SimpleTestFunctionTest.cs" />
     <Compile Include="Invokation\Functions\TableResultFunctionTest.cs" />

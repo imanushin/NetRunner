@@ -27,7 +27,10 @@ namespace NetRunner.Executable.Tests.Invokation.Functions
             {
                 foreach (TestFunctionReference testFunctionReference in TestFunctionReferenceTest.objects.Objects)
                 {
-                    yield return new SimpleTestFunction(functionHeader, testFunctionReference);
+                    foreach (HtmlRow row in HtmlRowTest.objects.Objects)
+                    {
+                        yield return new SimpleTestFunction(functionHeader, testFunctionReference, row);
+                    }
                 }
             }
         }

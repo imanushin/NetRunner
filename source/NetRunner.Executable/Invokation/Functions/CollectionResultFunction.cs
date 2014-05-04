@@ -83,7 +83,7 @@ namespace NetRunner.Executable.Invokation.Functions
                     {
                         tableChanges.Add(new CssClassCellChange(currentRow.Cells[columnIndex], HtmlParser.ErrorCssClass));
 
-                        tableChanges.Add(new AddCellExpandableInfo(currentRow.Cells[columnIndex], "Unable to parse cell", ex.ToString()));
+                        tableChanges.Add(new AddCellExpandableException(currentRow.Cells[columnIndex], ex, "Unable to parse cell"));
 
                         allRight = false;
                     }

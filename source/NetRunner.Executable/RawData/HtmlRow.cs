@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NetRunner.Executable.Common;
 using NetRunner.Executable.Invokation;
+using NetRunner.ExternalLibrary.Properties;
 
 namespace NetRunner.Executable.RawData
 {
@@ -29,6 +30,20 @@ namespace NetRunner.Executable.RawData
         {
             get;
             private set;
+        }
+
+        [NotNull]
+        public HtmlCell FirstBold
+        {
+            [Pure]
+            get
+            {
+                var result = Cells.FirstOrDefault(c => c.IsBold);
+
+                Validate.IsNotNull(result, "Unable to find bold cell: row contains only non-bold children: {0}", Cells);
+
+                return result;
+            }
         }
 
         protected override IEnumerable<object> GetInnerObjects()

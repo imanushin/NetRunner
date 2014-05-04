@@ -1,1 +1,13 @@
-<test page>
+| '''missing method call''' |
+
+| check | '''Summ''' | non-integer | '''And ''' | 2 | ''' Will Be''' | 3 |
+
+| check | '''Summ''' | 1 | '''And ''' | non-integer | ''' Will Be''' | 3 |
+
+| check | '''Summ''' | 1 | '''And ''' | 2 | ''' Will Be''' | non-integer |
+
+
+| check | '''Summ''' | non-integer | '''And ''' | 2 | ''' Will Be''' | 3 |
+| check | '''Summ''' | 1 | '''And ''' | non-integer | ''' Will Be''' | 3 |
+| check | '''Summ''' | 1 | '''And ''' | 2 | ''' Will Be''' | non-integer |
+| '''missing method call''' |

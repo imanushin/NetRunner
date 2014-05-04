@@ -10,55 +10,50 @@ namespace NetRunner.Executable.Invokation.Functions
 {
     internal sealed class SimpleTestFunction : AbstractTestFunction
     {
-        public SimpleTestFunction([NotNull] FunctionHeader header, [NotNull] TestFunctionReference functionToExecute)
+        private readonly HtmlRow targetRow;
+        private readonly TestFunctionReference functionReference;
+        private readonly FunctionHeader function;
+
+        public SimpleTestFunction([NotNull] FunctionHeader header, [NotNull] TestFunctionReference functionToExecute, [NotNull] HtmlRow targetRow)
         {
+            Validate.ArgumentIsNotNull(targetRow, "targetRow");
             Validate.ArgumentIsNotNull(header, "header");
             Validate.ArgumentIsNotNull(functionToExecute, "functionToExecute");
 
-            Function = header;
-            FunctionReference = functionToExecute;
-        }
-
-        public TestFunctionReference FunctionReference
-        {
-            get;
-            private set;
-        }
-
-        public FunctionHeader Function
-        {
-            get;
-            private set;
+            function = header;
+            functionReference = functionToExecute;
+            this.targetRow = targetRow;
         }
 
         protected override IEnumerable<object> GetInnerObjects()
         {
-            yield return Function;
-            yield return FunctionReference;
+            yield return function;
+            yield return functionReference;
+            yield return targetRow;
         }
 
         public override FunctionExecutionResult Invoke()
         {
             try
             {
-                var result = InvokeFunction(FunctionReference, Function);
+                var result = InvokeFunction(functionReference, function);
 
                 if (result.Exception != null)
                 {
-                    var errorChange = new AddExceptionLine(AddExceptionLine.FormatExceptionHeader(result.Exception), result.Exception, Function.RowReference);
-                    var rowCss = new AddRowCssClass(Function.RowReference, HtmlParser.ErrorCssClass);
+                    var errorChange = new AddExceptionLine(AddExceptionLine.FormatExceptionHeader(result.Exception), result.Exception, function.RowReference);
+                    var rowCss = new AddRowCssClass(function.RowReference, HtmlParser.ErrorCssClass);
 
                     return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Exception, result.TableChanges.Concat(errorChange, rowCss));
                 }
 
                 if (Equals(false, result.Result))
                 {
-                    var falseResultMark = new AddRowCssClass(Function.RowReference, HtmlParser.FailCssClass);
+                    var falseResultMark = new AddRowCssClass(function.RowReference, HtmlParser.FailCssClass);
 
                     return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Fail, result.TableChanges.Concat(falseResultMark));
                 }
 
-                var trueResultMark = new AddRowCssClass(Function.RowReference, HtmlParser.PassCssClass);
+                var trueResultMark = new AddRowCssClass(function.RowReference, HtmlParser.PassCssClass);
 
                 return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Success, result.TableChanges.Concat(trueResultMark));
             }
@@ -66,21 +61,22 @@ namespace NetRunner.Executable.Invokation.Functions
             {
                 return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Exception, new[]
                 {
-                    new AddExceptionLine(ex.Message, ex.InnerException, Function.RowReference)
+                    new AddExceptionLine(ex.Message, ex.InnerException, function.RowReference)
                 });
             }
             catch (Exception ex)
             {
+                var errorChange = new AddCellExpandableException(targetRow.Cells.First(), ex, "Internal error function execution error");
                 return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Exception, new[]
                 {
-                    new AddExceptionLine(ex, Function.RowReference)
+                    errorChange
                 });
             }
         }
 
         protected override string GetString()
         {
-            return GetType().Name + ": " + Function;
+            return GetType().Name + ": " + function;
         }
     }
 }

@@ -13,28 +13,35 @@ using NetRunner.Executable.Tests.Invokation.Keywords;
 using NetRunner.Executable.Tests.RawData;
 using NetRunner.ExternalLibrary;
 using System;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace NetRunner.Executable.Tests.Invokation
+namespace NetRunner.Executable.Tests.Invokation.Functions
 {
-    partial class FunctionExecutionResultTest
+    partial class AddCellExpandableExceptionTest
     {
-        private static IEnumerable<FunctionExecutionResult> GetInstancesOfCurrentType()
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        private static IEnumerable<AddCellExpandableException> GetInstancesOfCurrentType()
         {
-            foreach (FunctionExecutionResult.FunctionRunResult result in Enum.GetValues(typeof(FunctionExecutionResult.FunctionRunResult)))
+            foreach (var htmlCell in HtmlCellTest.objects.Objects)
             {
-                foreach (var changes in new[] { AbstractTableChangeTest.objects.Objects.Skip(1), AbstractTableChangeTest.objects.Take(2) })
+                foreach (var exception in new[] { new Exception("1"), new Exception("2") })
                 {
-                    yield return new FunctionExecutionResult(result, changes);
+                    foreach (var headerFormat in new[] { "123 {0}", "{0} 123" })
+                    {
+                        foreach (var argument in new[] { 567, 890 })
+                        {
+                            yield return new AddCellExpandableException(htmlCell, exception, headerFormat, argument);
+                        }
+                    }
                 }
             }
         }
 
         protected override void CheckArgumentExceptionParameter(string expectedParameterName, string actualParameterName)
         {
-            
         }
     }
 }
