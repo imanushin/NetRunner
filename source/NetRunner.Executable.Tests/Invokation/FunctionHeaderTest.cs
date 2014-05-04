@@ -25,7 +25,7 @@ namespace NetRunner.Executable.Tests.Invokation
         {
             foreach (var name in new[] { "name1", "name2" })
             {
-                foreach (var args in new[] { new[] { "arg1", "arg2" }, new string[0] })
+                foreach (var args in HtmlCellTest.CreateNonEmptyObjectsArrays())
                 {
                     foreach (HtmlRowReference htmlRowReference in HtmlRowReferenceTest.objects.Objects)
                     {

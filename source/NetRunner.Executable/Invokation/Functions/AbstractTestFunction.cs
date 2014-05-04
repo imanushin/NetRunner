@@ -23,7 +23,7 @@ namespace NetRunner.Executable.Invokation.Functions
 
         protected InvokationResult InvokeFunction(
             TestFunctionReference functionReference,
-            ReadOnlyList<string> inputArguments)
+            ReadOnlyList<HtmlCell> inputArguments)
         {
             Validate.ArgumentIsNotNull(functionReference, "functionReference");
             Validate.ArgumentIsNotNull(inputArguments, "inputArguments");
@@ -33,7 +33,7 @@ namespace NetRunner.Executable.Invokation.Functions
 
             for (int i = 0; i < expectedTypes.Count; i++)
             {
-                actualTypes[i] = ParametersConverter.ConvertParameter(inputArguments[i], expectedTypes[i].ParameterType);
+                actualTypes[i] = ParametersConverter.ConvertParameter(inputArguments[i].CleanedContent, expectedTypes[i].ParameterType);
             }
 
             try

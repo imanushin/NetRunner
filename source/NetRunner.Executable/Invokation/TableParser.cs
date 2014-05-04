@@ -96,7 +96,7 @@ namespace NetRunner.Executable.Invokation
             cells = keyword.PatchedCells;
 
             string functionName = string.Concat(row.Cells.Where(c => c.IsBold).Select(c => c.CleanedContent));
-            string[] arguments = cells.Where(c => !c.IsBold).Select(c => c.CleanedContent).ToArray();
+            var arguments = cells.Where(c => !c.IsBold).ToReadOnlyList();
 
             if (string.IsNullOrWhiteSpace(functionName))
                 return null;

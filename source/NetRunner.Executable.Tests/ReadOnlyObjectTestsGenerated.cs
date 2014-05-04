@@ -3399,7 +3399,7 @@ namespace NetRunner.Executable.Tests.Invokation
         private void CheckEmptyStringArg_functionName(string stringArgument)
         {
             var functionName = "text 135377";
-            var arguments = new List<String>{ "text 135378" }.ToReadOnlyList();
+            var arguments = new List<HtmlCell>{ HtmlCellTest.First }.ToReadOnlyList();
             var rowReference = HtmlRowReferenceTest.First;
             var keyword = AbstractKeywordTest.First;
 
@@ -3422,7 +3422,7 @@ namespace NetRunner.Executable.Tests.Invokation
         public void FunctionHeader_CheckNullArg_functionName()
         {
             var functionName = "text 135377";
-            var arguments = new List<String>{ "text 135378" }.ToReadOnlyList();
+            var arguments = new List<HtmlCell>{ HtmlCellTest.First }.ToReadOnlyList();
             var rowReference = HtmlRowReferenceTest.First;
             var keyword = AbstractKeywordTest.First;
 
@@ -3445,7 +3445,7 @@ namespace NetRunner.Executable.Tests.Invokation
         public void FunctionHeader_CheckNullArg_arguments()
         {
             var functionName = "text 135377";
-            var arguments = new List<String>{ "text 135378" }.ToReadOnlyList();
+            var arguments = new List<HtmlCell>{ HtmlCellTest.First }.ToReadOnlyList();
             var rowReference = HtmlRowReferenceTest.First;
             var keyword = AbstractKeywordTest.First;
 
@@ -3468,7 +3468,7 @@ namespace NetRunner.Executable.Tests.Invokation
         public void FunctionHeader_CheckNullArg_rowReference()
         {
             var functionName = "text 135377";
-            var arguments = new List<String>{ "text 135378" }.ToReadOnlyList();
+            var arguments = new List<HtmlCell>{ HtmlCellTest.First }.ToReadOnlyList();
             var rowReference = HtmlRowReferenceTest.First;
             var keyword = AbstractKeywordTest.First;
 
@@ -3491,7 +3491,7 @@ namespace NetRunner.Executable.Tests.Invokation
         public void FunctionHeader_CheckNullArg_keyword()
         {
             var functionName = "text 135377";
-            var arguments = new List<String>{ "text 135378" }.ToReadOnlyList();
+            var arguments = new List<HtmlCell>{ HtmlCellTest.First }.ToReadOnlyList();
             var rowReference = HtmlRowReferenceTest.First;
             var keyword = AbstractKeywordTest.First;
 
@@ -3797,7 +3797,7 @@ namespace NetRunner.Executable.Tests.RawData
         [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void FitnesseHtmlDocument_CheckNullArg_textBeforeFirstTable()
         {
-            var textBeforeFirstTable = "text 135379";
+            var textBeforeFirstTable = "text 135378";
             var tables = new List<HtmlTable>{ HtmlTableTest.First }.ToReadOnlyList();
 
             try
@@ -3818,7 +3818,7 @@ namespace NetRunner.Executable.Tests.RawData
         [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void FitnesseHtmlDocument_CheckNullArg_tables()
         {
-            var textBeforeFirstTable = "text 135379";
+            var textBeforeFirstTable = "text 135378";
             var tables = new List<HtmlTable>{ HtmlTableTest.First }.ToReadOnlyList();
 
             try
@@ -4140,7 +4140,7 @@ namespace NetRunner.Executable.Tests.RawData
         {
             var rows = new List<HtmlRow>{ HtmlRowTest.First }.ToReadOnlyList();
             var tableNode = HtmlNode.CreateNode("<i>TEST<i/>");
-            var textAfterTable = "text 135380";
+            var textAfterTable = "text 135379";
 
             try
             {
@@ -4162,7 +4162,7 @@ namespace NetRunner.Executable.Tests.RawData
         {
             var rows = new List<HtmlRow>{ HtmlRowTest.First }.ToReadOnlyList();
             var tableNode = HtmlNode.CreateNode("<i>TEST<i/>");
-            var textAfterTable = "text 135380";
+            var textAfterTable = "text 135379";
 
             try
             {
@@ -4184,7 +4184,7 @@ namespace NetRunner.Executable.Tests.RawData
         {
             var rows = new List<HtmlRow>{ HtmlRowTest.First }.ToReadOnlyList();
             var tableNode = HtmlNode.CreateNode("<i>TEST<i/>");
-            var textAfterTable = "text 135380";
+            var textAfterTable = "text 135379";
 
             try
             {

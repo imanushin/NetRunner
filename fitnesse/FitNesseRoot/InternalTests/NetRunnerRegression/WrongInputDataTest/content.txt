@@ -22,6 +22,17 @@
 | 1..100 | 1..100 | Contains | class="error" |
 | 1..100 | 1..100 | Count | 1 |
 
+| check | '''Row Count Of Table''' | 2 | '''is''' | 1 | 
+
+| '''Analyse Table''' | 2 |
+| '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
+| 1 | 1 | Contains | non-integer |
+| 1 | 1 | Contains | convert |
+| 1 | 1 | Contains | argument |
+| 1 | 1 | Contains | first |
+| 1..100 | 1..100 | Contains | class="error" |
+| 1..100 | 1..100 | Count | 1 |
+
 *| check | '''Row Count Of Table''' | 2 | '''is''' | 4 | 
 
 

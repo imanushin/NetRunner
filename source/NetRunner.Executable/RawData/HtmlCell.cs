@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,7 @@ using NetRunner.ExternalLibrary.Properties;
 
 namespace NetRunner.Executable.RawData
 {
+    [ImmutableObject(true)]
     internal sealed class HtmlCell : BaseReadOnlyObject
     {
         private const string globalAttributeIndexName = "GlobalCellIndex";
@@ -54,6 +56,7 @@ namespace NetRunner.Executable.RawData
 
         public string CleanedContent
         {
+            [Pure]
             get
             {
                 return tableCell.InnerText;

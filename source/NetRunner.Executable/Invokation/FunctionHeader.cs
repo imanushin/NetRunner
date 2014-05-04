@@ -5,13 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using NetRunner.Executable.Common;
 using NetRunner.Executable.Invokation.Keywords;
+using NetRunner.Executable.RawData;
 using NetRunner.ExternalLibrary.Properties;
 
 namespace NetRunner.Executable.Invokation
 {
     internal sealed class FunctionHeader : BaseReadOnlyObject
     {
-        public FunctionHeader(string functionName, IReadOnlyCollection<string> arguments, HtmlRowReference rowReference, AbstractKeyword keyword)
+        public FunctionHeader(string functionName, IReadOnlyCollection<HtmlCell> arguments, HtmlRowReference rowReference, AbstractKeyword keyword)
         {
             Validate.ArgumentStringIsMeanful(functionName, "functionName");
             Validate.ArgumentIsNotNull(arguments, "arguments");
@@ -42,7 +43,7 @@ namespace NetRunner.Executable.Invokation
             private set;
         }
 
-        public ReadOnlyList<string> Arguments
+        public ReadOnlyList<HtmlCell> Arguments
         {
             get;
             private set;

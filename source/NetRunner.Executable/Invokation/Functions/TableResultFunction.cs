@@ -57,7 +57,7 @@ namespace NetRunner.Executable.Invokation.Functions
 
                 var rowResult = InvokeFunction(
                     functionToExecute,
-                    row.Cells.Select(c => c.CleanedContent).ToReadOnlyList());
+                    row.Cells);
 
                 changes.AddRange(rowResult.TableChanges);
 
