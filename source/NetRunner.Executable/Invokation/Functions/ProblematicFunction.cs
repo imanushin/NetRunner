@@ -10,7 +10,7 @@ namespace NetRunner.Executable.Invokation.Functions
 {
     internal sealed class ProblematicFunction : AbstractTestFunction
     {
-        private readonly IReadOnlyCollection<AbstractTableChange> tableChanges;
+        private readonly ReadOnlyList<AbstractTableChange> tableChanges;
         private readonly IReadOnlyCollection<HtmlRow> rows;
 
         public ProblematicFunction(IReadOnlyCollection<AbstractTableChange> tableChanges, IReadOnlyCollection<HtmlRow> rows)
@@ -18,7 +18,9 @@ namespace NetRunner.Executable.Invokation.Functions
             Validate.CollectionArgumentHasElements(tableChanges, "tableChanges");
             Validate.CollectionArgumentHasElements(rows, "rows");
 
-            this.tableChanges = tableChanges;
+            var rowsWithErrorsMarks = rows.Select(r => new AddRowCssClass(r.RowReference, HtmlParser.ErrorCssClass)).ToReadOnlyList();
+
+            this.tableChanges = tableChanges.Concat(rowsWithErrorsMarks).ToReadOnlyList();
             this.rows = rows;
         }
 

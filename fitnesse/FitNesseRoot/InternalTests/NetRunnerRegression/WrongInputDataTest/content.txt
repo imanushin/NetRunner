@@ -19,7 +19,7 @@
 | '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
 | 1 | 1 | Contains | missing method call |
 | 1 | 1 | Contains | function |
-| 1..100 | 1..100 | class="error" |
+| 1..100 | 1..100 | Contains | class="error" |
 | 1..100 | 1..100 | Count | 1 |
 
 *| check | '''Row Count Of Table''' | 2 | '''is''' | 4 | 
