@@ -85,6 +85,8 @@ namespace NetRunner.Executable.Invokation.Functions
 
                         tableChanges.Add(new AddCellExpandableException(currentRow.Cells[columnIndex], ex, "Unable to parse cell"));
 
+                        exceptionOccurred = true;
+
                         allRight = false;
                     }
                 }

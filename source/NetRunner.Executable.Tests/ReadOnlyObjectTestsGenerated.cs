@@ -3401,11 +3401,12 @@ namespace NetRunner.Executable.Tests.Invokation
             var functionName = "text 135377";
             var arguments = new List<HtmlCell>{ HtmlCellTest.First }.ToReadOnlyList();
             var rowReference = HtmlRowReferenceTest.First;
+            var firstFunctionCell = HtmlCellTest.First;
             var keyword = AbstractKeywordTest.First;
 
             try
             {
-                new FunctionHeader(stringArgument, arguments, rowReference, keyword);
+                new FunctionHeader(stringArgument, arguments, rowReference, firstFunctionCell, keyword);
             }
             catch(ArgumentException ex)
             {
@@ -3424,11 +3425,12 @@ namespace NetRunner.Executable.Tests.Invokation
             var functionName = "text 135377";
             var arguments = new List<HtmlCell>{ HtmlCellTest.First }.ToReadOnlyList();
             var rowReference = HtmlRowReferenceTest.First;
+            var firstFunctionCell = HtmlCellTest.First;
             var keyword = AbstractKeywordTest.First;
 
             try
             {
-                new FunctionHeader(null, arguments, rowReference, keyword);
+                new FunctionHeader(null, arguments, rowReference, firstFunctionCell, keyword);
             }
             catch(ArgumentNullException ex)
             {
@@ -3447,11 +3449,12 @@ namespace NetRunner.Executable.Tests.Invokation
             var functionName = "text 135377";
             var arguments = new List<HtmlCell>{ HtmlCellTest.First }.ToReadOnlyList();
             var rowReference = HtmlRowReferenceTest.First;
+            var firstFunctionCell = HtmlCellTest.First;
             var keyword = AbstractKeywordTest.First;
 
             try
             {
-                new FunctionHeader(functionName, null, rowReference, keyword);
+                new FunctionHeader(functionName, null, rowReference, firstFunctionCell, keyword);
             }
             catch(ArgumentNullException ex)
             {
@@ -3470,11 +3473,12 @@ namespace NetRunner.Executable.Tests.Invokation
             var functionName = "text 135377";
             var arguments = new List<HtmlCell>{ HtmlCellTest.First }.ToReadOnlyList();
             var rowReference = HtmlRowReferenceTest.First;
+            var firstFunctionCell = HtmlCellTest.First;
             var keyword = AbstractKeywordTest.First;
 
             try
             {
-                new FunctionHeader(functionName, arguments, null, keyword);
+                new FunctionHeader(functionName, arguments, null, firstFunctionCell, keyword);
             }
             catch(ArgumentNullException ex)
             {
@@ -3488,16 +3492,41 @@ namespace NetRunner.Executable.Tests.Invokation
 
         [TestMethod]
         [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void FunctionHeader_CheckNullArg_firstFunctionCell()
+        {
+            var functionName = "text 135377";
+            var arguments = new List<HtmlCell>{ HtmlCellTest.First }.ToReadOnlyList();
+            var rowReference = HtmlRowReferenceTest.First;
+            var firstFunctionCell = HtmlCellTest.First;
+            var keyword = AbstractKeywordTest.First;
+
+            try
+            {
+                new FunctionHeader(functionName, arguments, rowReference, null, keyword);
+            }
+            catch(ArgumentNullException ex)
+            {
+                CheckArgumentExceptionParameter( "firstFunctionCell", ex.ParamName );
+
+                return;
+            }
+
+            Assert.Fail("Argument 'firstFunctionCell' isn't checked for null inputs");
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void FunctionHeader_CheckNullArg_keyword()
         {
             var functionName = "text 135377";
             var arguments = new List<HtmlCell>{ HtmlCellTest.First }.ToReadOnlyList();
             var rowReference = HtmlRowReferenceTest.First;
+            var firstFunctionCell = HtmlCellTest.First;
             var keyword = AbstractKeywordTest.First;
 
             try
             {
-                new FunctionHeader(functionName, arguments, rowReference, null);
+                new FunctionHeader(functionName, arguments, rowReference, firstFunctionCell, null);
             }
             catch(ArgumentNullException ex)
             {

@@ -18,11 +18,12 @@ namespace NetRunner.Executable.Invokation.Functions
 
             var keyword = originalFunction.Keyword;
 
-            return keyword.InvokeFunction(() => InvokeFunction(functionReference, originalFunction.Arguments), functionReference);
+            return keyword.InvokeFunction(() => InvokeFunction(functionReference, originalFunction.FirstFunctionCell, originalFunction.Arguments), functionReference);
         }
 
         protected InvokationResult InvokeFunction(
             TestFunctionReference functionReference,
+            HtmlCell firstFunctionCell,
             ReadOnlyList<HtmlCell> inputArguments)
         {
             Validate.ArgumentIsNotNull(functionReference, "functionReference");
@@ -40,11 +41,17 @@ namespace NetRunner.Executable.Invokation.Functions
             {
                 var result = functionReference.Invoke(actualTypes);
 
-                return new InvokationResult(result, null);
+                return new InvokationResult(result);
             }
             catch (TargetInvocationException ex)
             {
-                return new InvokationResult(null, ex.InnerException);
+                var targetException = ex.InnerException;
+
+                Validate.IsNotNull(targetException, "Internal error: {0} should have inner exception", ex.GetType());
+
+                var errorData = new AddCellExpandableException(firstFunctionCell, targetException, "Function '{0}' execution was failed with error: {1}", functionReference.DisplayName, targetException.GetType().Name);
+
+                return new InvokationResult(null, true, new[] { errorData });
             }
         }
     }

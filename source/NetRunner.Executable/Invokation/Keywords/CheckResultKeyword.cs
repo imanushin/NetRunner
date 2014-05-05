@@ -36,7 +36,7 @@ namespace NetRunner.Executable.Invokation.Keywords
         {
             var result = base.InvokeFunction(func, targetFunction);
 
-            if (result.Exception != null)
+            if (result.ExecutedWithErrors)
                 return result;
 
             var resultObject = result.Result;
@@ -47,14 +47,12 @@ namespace NetRunner.Executable.Invokation.Keywords
 
             if (checkSucceded)
             {
-                return new InvokationResult(true, null);
+                return new InvokationResult(true);
             }
-            else
-            {
-                var showActualValueCellChange = new ShowActualValueCellChange(lastCell, resultObject);
+            
+            var showActualValueCellChange = new ShowActualValueCellChange(lastCell, resultObject);
 
-                return new InvokationResult(false, null, new[] { showActualValueCellChange });
-            }
+            return new InvokationResult(false, false, showActualValueCellChange);
         }
 
         /// <summary>

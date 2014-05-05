@@ -23,11 +23,11 @@ namespace NetRunner.Executable.Tests.Invokation.Functions
     {
         private static IEnumerable<SimpleTestFunction> GetInstancesOfCurrentType()
         {
-            foreach (var functionHeader in FunctionHeaderTest.objects.Objects)
+            foreach (var functionHeader in FunctionHeaderTest.objects.Objects.Take(3))
             {
-                foreach (TestFunctionReference testFunctionReference in TestFunctionReferenceTest.objects.Objects)
+                foreach (TestFunctionReference testFunctionReference in TestFunctionReferenceTest.objects.Objects.Take(3))
                 {
-                    foreach (HtmlRow row in HtmlRowTest.objects.Objects)
+                    foreach (HtmlRow row in HtmlRowTest.objects.Objects.Take(3))
                     {
                         yield return new SimpleTestFunction(functionHeader, testFunctionReference, row);
                     }

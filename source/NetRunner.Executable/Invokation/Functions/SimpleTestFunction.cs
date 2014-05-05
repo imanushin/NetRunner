@@ -38,12 +38,11 @@ namespace NetRunner.Executable.Invokation.Functions
             {
                 var result = InvokeFunction(functionReference, function);
 
-                if (result.Exception != null)
+                if (result.ExecutedWithErrors)
                 {
-                    var errorChange = new AddExceptionLine(AddExceptionLine.FormatExceptionHeader(result.Exception), result.Exception, function.RowReference);
                     var rowCss = new AddRowCssClass(function.RowReference, HtmlParser.ErrorCssClass);
 
-                    return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Exception, result.TableChanges.Concat(errorChange, rowCss));
+                    return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Exception, result.TableChanges.Concat(rowCss));
                 }
 
                 if (Equals(false, result.Result))

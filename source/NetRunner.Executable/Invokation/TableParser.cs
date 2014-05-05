@@ -95,13 +95,14 @@ namespace NetRunner.Executable.Invokation
 
             cells = keyword.PatchedCells;
 
-            string functionName = string.Concat(row.Cells.Where(c => c.IsBold).Select(c => c.CleanedContent));
+            var functionCells = row.Cells.Where(c => c.IsBold).ToReadOnlyList();
+            string functionName = string.Concat(functionCells.Select(c => c.CleanedContent));
             var arguments = cells.Where(c => !c.IsBold).ToReadOnlyList();
 
             if (string.IsNullOrWhiteSpace(functionName))
                 return null;
 
-            return new FunctionHeader(functionName, arguments, row.RowReference, keyword);
+            return new FunctionHeader(functionName, arguments, row.RowReference, functionCells.First(), keyword);
         }
 
     }

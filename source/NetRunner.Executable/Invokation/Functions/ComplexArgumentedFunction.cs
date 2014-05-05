@@ -67,14 +67,9 @@ namespace NetRunner.Executable.Invokation.Functions
 
             var result = InvokeFunction(functionReference, Function);
 
-            if (result.Exception != null)
+            if (result.ExecutedWithErrors)
             {
-                if (result.Exception != null)
-                {
-                    var errorChange = new AddExceptionLine(AddExceptionLine.FormatExceptionHeader(result.Exception), result.Exception, Function.RowReference);
-
-                    return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Exception, new[] { errorChange });
-                }
+                return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Exception, result.TableChanges);
             }
 
             var actualResult = ProcessResult(result.Result);

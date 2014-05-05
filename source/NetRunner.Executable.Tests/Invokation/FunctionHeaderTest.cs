@@ -27,11 +27,14 @@ namespace NetRunner.Executable.Tests.Invokation
             {
                 foreach (var args in HtmlCellTest.CreateNonEmptyObjectsArrays())
                 {
-                    foreach (HtmlRowReference htmlRowReference in HtmlRowReferenceTest.objects.Objects)
+                    foreach (HtmlRowReference htmlRowReference in HtmlRowReferenceTest.objects.Objects.Take(3))
                     {
-                        foreach (AbstractKeyword keyword in AbstractKeywordTest.objects.Objects)
+                        foreach (AbstractKeyword keyword in AbstractKeywordTest.objects.Objects.Take(3))
                         {
-                            yield return new FunctionHeader(name, args, htmlRowReference, keyword);
+                            foreach (var firstFunctionCell in HtmlCellTest.objects.Objects.Take(3))
+                            {
+                                yield return new FunctionHeader(name, args, htmlRowReference, firstFunctionCell, keyword);
+                            }
 
                         }
                     }

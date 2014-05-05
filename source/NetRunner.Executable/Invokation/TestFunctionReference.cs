@@ -51,6 +51,14 @@ namespace NetRunner.Executable.Invokation
             private set;
         }
 
+        public string DisplayName
+        {
+            get
+            {
+                return TargetObject.GetType().Name + '.' + Name;
+            }
+        }
+
         protected override IEnumerable<object> GetInnerObjects()
         {
             yield return Name;

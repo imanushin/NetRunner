@@ -12,17 +12,25 @@ namespace NetRunner.Executable.Invokation
 {
     internal sealed class FunctionHeader : BaseReadOnlyObject
     {
-        public FunctionHeader(string functionName, IReadOnlyCollection<HtmlCell> arguments, HtmlRowReference rowReference, AbstractKeyword keyword)
+        public FunctionHeader(string functionName, IReadOnlyCollection<HtmlCell> arguments, HtmlRowReference rowReference, HtmlCell firstFunctionCell, AbstractKeyword keyword)
         {
             Validate.ArgumentStringIsMeanful(functionName, "functionName");
             Validate.ArgumentIsNotNull(arguments, "arguments");
             Validate.ArgumentIsNotNull(keyword, "keyword");
             Validate.ArgumentIsNotNull(rowReference, "rowReference");
-
+            Validate.ArgumentIsNotNull(firstFunctionCell, "firstFunctionCell");
+            
             FunctionName = functionName.Replace(" ", string.Empty);
             Arguments = arguments.ToReadOnlyList();
             RowReference = rowReference;
             Keyword = keyword;
+            FirstFunctionCell = firstFunctionCell;
+        }
+
+        public HtmlCell FirstFunctionCell
+        {
+            get;
+            private set;
         }
 
         public HtmlRowReference RowReference

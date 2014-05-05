@@ -27,7 +27,7 @@ namespace NetRunner.Executable.Tests.Invokation.Functions
         {
             foreach (AbstractTableChange[] tableChanges in AbstractTableChangeTest.CreateNonEmptyObjectsArrays())
             {
-                foreach (HtmlRow[] rows in HtmlRowTest.CreateNonEmptyObjectsArrays())
+                foreach (HtmlRow[] rows in HtmlRowTest.CreateNonEmptyObjectsArrays().Take(3))
                 {
                     yield return new ProblematicFunction(tableChanges, rows);
                 }

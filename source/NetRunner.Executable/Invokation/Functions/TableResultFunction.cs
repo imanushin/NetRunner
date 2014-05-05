@@ -57,24 +57,16 @@ namespace NetRunner.Executable.Invokation.Functions
 
                 var rowResult = InvokeFunction(
                     functionToExecute,
+                    row.Cells.First(),
                     row.Cells);
 
                 changes.AddRange(rowResult.TableChanges);
 
-                if (rowResult.Exception != null)
+                if (rowResult.ExecutedWithErrors)
                 {
-                    exceptionsOccurred = true;
-                    allIsOk = false;
-
-                    var exceptionInfo = new AddCellExpandableException(
-                        row.Cells.First(), 
-                        rowResult.Exception,
-                        "Function '{0}' execution was failed with error: {1}",
-                        functionToExecute.Name, 
-                        rowResult.Exception.GetType().Name);
-
-                    changes.Add(exceptionInfo);
                     changes.Add(new AddRowCssClass(row.RowReference, HtmlParser.ErrorCssClass));
+
+                    exceptionsOccurred = true;
                 }
 
                 if (Equals(false, rowResult.Result))
