@@ -959,10 +959,11 @@ TableResultFunctionTest.objects);
         {
             var tableChanges = new List<AbstractTableChange>{ AbstractTableChangeTest.First }.ToReadOnlyList();
             var rows = new List<HtmlRow>{ HtmlRowTest.First }.ToReadOnlyList();
+            var keyword = AbstractKeywordTest.First;
 
             try
             {
-                new ProblematicFunction(null, rows);
+                new ProblematicFunction(null, rows, keyword);
             }
             catch(ArgumentNullException ex)
             {
@@ -980,10 +981,11 @@ TableResultFunctionTest.objects);
         {
             var tableChanges = new List<AbstractTableChange>{ AbstractTableChangeTest.First }.ToReadOnlyList();
             var rows = new List<HtmlRow>{ HtmlRowTest.First }.ToReadOnlyList();
+            var keyword = AbstractKeywordTest.First;
 
             try
             {
-                new ProblematicFunction(tableChanges, null);
+                new ProblematicFunction(tableChanges, null, keyword);
             }
             catch(ArgumentNullException ex)
             {
@@ -993,6 +995,28 @@ TableResultFunctionTest.objects);
             }
 
             Assert.Fail("Argument 'rows' isn't checked for null inputs");
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void ProblematicFunction_CheckNullArg_keyword()
+        {
+            var tableChanges = new List<AbstractTableChange>{ AbstractTableChangeTest.First }.ToReadOnlyList();
+            var rows = new List<HtmlRow>{ HtmlRowTest.First }.ToReadOnlyList();
+            var keyword = AbstractKeywordTest.First;
+
+            try
+            {
+                new ProblematicFunction(tableChanges, rows, null);
+            }
+            catch(ArgumentNullException ex)
+            {
+                CheckArgumentExceptionParameter( "keyword", ex.ParamName );
+
+                return;
+            }
+
+            Assert.Fail("Argument 'keyword' isn't checked for null inputs");
         }
 
         [TestMethod]

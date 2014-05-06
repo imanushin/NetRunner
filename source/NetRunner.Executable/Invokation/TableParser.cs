@@ -28,7 +28,7 @@ namespace NetRunner.Executable.Invokation
 
             if (functionToExecute == null)
             {
-                return CreateProblematicFunction(headerRow, header, table.Rows);
+                return CreateMissingFunction(headerRow, header, table.Rows);
             }
 
             if (table.Rows.Count == 1)
@@ -59,11 +59,11 @@ namespace NetRunner.Executable.Invokation
             return new TestFunctionsSequence(parsedRows);
         }
 
-        private static AbstractTestFunction CreateProblematicFunction(HtmlRow headerRow, FunctionHeader header, IReadOnlyCollection<HtmlRow> otherRows)
+        private static AbstractTestFunction CreateMissingFunction(HtmlRow headerRow, FunctionHeader header, IReadOnlyCollection<HtmlRow> otherRows)
         {
             var startCell = headerRow.FirstBold;
 
-            var errorHeader = string.Format("Unable to find function {0}", header.FunctionName);
+            var errorHeader = string.Format("Unable to find function {0} with {1} parameter(s)", header.FunctionName, header.Arguments.Count);
             var errorInfo = string.Format("Unable to find function {0}", header.FunctionName);
 
             var tableChange = new AddCellExpandableInfo(startCell, errorHeader, errorInfo);
@@ -71,7 +71,7 @@ namespace NetRunner.Executable.Invokation
             return new ProblematicFunction(new[]
             {
                 tableChange
-            }, otherRows);
+            }, otherRows, header.Keyword);
         }
 
         [CanBeNull]
@@ -91,7 +91,7 @@ namespace NetRunner.Executable.Invokation
 
             if (functionReference == null)
             {
-                return CreateProblematicFunction(row, header, new[] { row });
+                return CreateMissingFunction(row, header, new[] { row });
             }
 
             return new SimpleTestFunction(header, functionReference, row);
@@ -106,7 +106,7 @@ namespace NetRunner.Executable.Invokation
 
             cells = keyword.PatchedCells;
 
-            var functionCells = row.Cells.Where(c => c.IsBold).ToReadOnlyList();
+            var functionCells = cells.Where(c => c.IsBold).ToReadOnlyList();
             string functionName = string.Concat(functionCells.Select(c => c.CleanedContent));
             var arguments = cells.Where(c => !c.IsBold).ToReadOnlyList();
 

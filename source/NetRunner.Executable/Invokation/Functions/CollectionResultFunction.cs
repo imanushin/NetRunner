@@ -54,7 +54,7 @@ namespace NetRunner.Executable.Invokation.Functions
             var conversionSucceeded = resultValue.Equals(expectedObject.Result);
             var cellChange = conversionSucceeded
                  ? resultIsOkChange
-                 : new ShowActualValueCellChange(expectedResult, resultObject);
+                 : new ShowActualValueCellChange(expectedResult, resultValue);
 
             return new TableChangeCollection(conversionSucceeded, false, expectedObject.Changes.Changes.Concat(cellChange));
         }

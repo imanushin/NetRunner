@@ -14,14 +14,17 @@ namespace NetRunner.Executable.Invokation.Keywords
     {
         private readonly ReadOnlyList<HtmlCell> patchedCells;
         private readonly HtmlCell lastCell;
+        private readonly ReadOnlyList<AbstractTableChange> parsingErrors;
 
-        private CheckResultKeyword(ReadOnlyList<HtmlCell> patchedCells, HtmlCell lastCell)
+        private CheckResultKeyword(ReadOnlyList<HtmlCell> patchedCells, HtmlCell lastCell, ReadOnlyList<AbstractTableChange> parsingErrors)
         {
-            Validate.CollectionArgumentHasElements(patchedCells, "patchedCells");
+            Validate.ArgumentIsNotNull(patchedCells, "patchedCells");
             Validate.ArgumentIsNotNull(lastCell, "lastCell");
+            Validate.ArgumentIsNotNull(parsingErrors, "parsingErrors");
 
             this.patchedCells = patchedCells;
             this.lastCell = lastCell;
+            this.parsingErrors = parsingErrors;
         }
 
         public override ReadOnlyList<HtmlCell> PatchedCells
@@ -32,8 +35,21 @@ namespace NetRunner.Executable.Invokation.Keywords
             }
         }
 
+        public override ReadOnlyList<AbstractTableChange> ParsingErrors
+        {
+            get
+            {
+                return parsingErrors;
+            }
+        }
+
         public override InvokationResult InvokeFunction(Func<InvokationResult> func, TestFunctionReference targetFunction)
         {
+            if (parsingErrors.Any())
+            {
+                return new InvokationResult(null, new TableChangeCollection(false, true, parsingErrors));
+            }
+
             var result = base.InvokeFunction(func, targetFunction);
 
             if (result.Changes.WereExceptions)
@@ -85,17 +101,32 @@ namespace NetRunner.Executable.Invokation.Keywords
 
             var lastCell = inputCells.Last();
 
-            Validate.Condition(!lastCell.IsBold, "Last cell should have value (e.g. last cell should not be bold). Example: | check | '''int default result ''' | 0 |");
-
             var cellsInTheMiddle = inputCells.Skip(1).Take(inputCells.Count - 2).ToReadOnlyList();
 
-            return new CheckResultKeyword(cellsInTheMiddle, lastCell);
+            if (lastCell.IsBold)
+            {
+                const string header = "Last cell should not be bold";
+                const string info = "Last cell should have value (e.g. last cell should not be bold). Example: | check | '''int default result ''' | 0 |";
+
+                var cellInfo = new AddCellExpandableInfo(lastCell, header, info);
+
+                var changes = inputCells.Select(c => new CssClassCellChange(c, HtmlParser.ErrorCssClass)).Cast<AbstractTableChange>().ToList();
+
+                changes.Add(cellInfo);
+
+                return new CheckResultKeyword(cellsInTheMiddle, lastCell, changes.ToReadOnlyList());
+            }
+
+            Validate.CollectionHasElements(cellsInTheMiddle, "There are not any cells between check keyword and last cell");
+
+            return new CheckResultKeyword(cellsInTheMiddle, lastCell, ReadOnlyList<AbstractTableChange>.Empty);
         }
 
         protected override IEnumerable<object> GetInnerObjects()
         {
             yield return patchedCells;
             yield return lastCell;
+            yield return parsingErrors;
         }
     }
 }

@@ -17,5 +17,13 @@ namespace NetRunner.Executable.Invokation.Keywords
         {
             return func();
         }
+
+        public virtual ReadOnlyList<AbstractTableChange> ParsingErrors
+        {
+            get
+            {
+                return ReadOnlyList<AbstractTableChange>.Empty;
+            }
+        }
     }
 }

@@ -11,7 +11,7 @@
 | right | 0 |
 | wrong | 0 |
 | ignores | 0 |
-| exceptions | 5 |
+| exceptions | 7 |
 
 | check | '''Row Count Of Table''' | 1 | '''is''' | 1 | 
 
@@ -75,3 +75,17 @@
 | 1 | 4 | Contains | function |
 | 1..100 | 1..100 | Contains | class="error" |
 | 1..100 | 1..100 | Count | 22 |
+
+| check | '''Row Count Of Table''' | 6 | '''is''' | 1 | 
+
+| '''Analyse Table''' | 6 |
+| '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
+| 1..100 | 1..100 | Contains | class="error" |
+| 1..100 | 1..100 | Count | 3 |
+
+| check | '''Row Count Of Table''' | 7 | '''is''' | 1 | 
+
+| '''Analyse Table''' | 7 |
+| '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
+| 1..100 | 1..100 | Contains | class="error" |
+| 1..100 | 1..100 | Count | 6 |

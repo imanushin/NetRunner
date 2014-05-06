@@ -29,7 +29,10 @@ namespace NetRunner.Executable.Tests.Invokation.Functions
             {
                 foreach (HtmlRow[] rows in HtmlRowTest.CreateNonEmptyObjectsArrays().Take(3))
                 {
-                    yield return new ProblematicFunction(tableChanges, rows);
+                    foreach (AbstractKeyword keyword in AbstractKeywordTest.objects.Objects.Take(3))
+                    {
+                        yield return new ProblematicFunction(tableChanges, rows, keyword);
+                    }
                 }
             }
         }
