@@ -36,23 +36,32 @@ namespace NetRunner.Executable.Invokation.Keywords
         {
             var result = base.InvokeFunction(func, targetFunction);
 
-            if (result.ExecutedWithErrors)
+            if (result.Changes.WereExceptions)
                 return result;
 
             var resultObject = result.Result;
 
-            var expectedObject = ParametersConverter.ConvertParameter(lastCell.CleanedContent, targetFunction.ResultType);
+            var resultType = targetFunction.ResultType;
 
-            bool checkSucceded = Equals(expectedObject, resultObject);
+            string errorHeader = string.Format("Unable to convert result to '{0}'", resultType.Name);
+
+            var expectedObject = ParametersConverter.ConvertParameter(lastCell, resultType, errorHeader);
+
+            if (expectedObject.Changes.WereExceptions)
+            {
+                return expectedObject;
+            }
+
+            bool checkSucceded = Equals(expectedObject.Result, resultObject);
 
             if (checkSucceded)
             {
                 return new InvokationResult(true);
             }
-            
+
             var showActualValueCellChange = new ShowActualValueCellChange(lastCell, resultObject);
 
-            return new InvokationResult(false, false, showActualValueCellChange);
+            return new InvokationResult(false, new TableChangeCollection(false, false, showActualValueCellChange));
         }
 
         /// <summary>

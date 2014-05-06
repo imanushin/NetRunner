@@ -1018,6 +1018,129 @@ TableResultFunctionTest.objects);
     }
 
     [TestClass]
+    public sealed partial class TableChangeCollectionTest : ReadOnlyObjectTest
+    {
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static readonly ObjectsCache<TableChangeCollection> objects = new ObjectsCache<TableChangeCollection>(GetInstances);
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static IEnumerable<TableChangeCollection[]> CreateNonEmptyObjectsArrays()
+        {
+            return new[]
+            {
+                TableChangeCollectionTest.objects.Objects.Skip(1).ToArray(),
+                TableChangeCollectionTest.objects.Objects.Take(2).ToArray(),
+                TableChangeCollectionTest.objects.Objects.Take(1).ToArray()
+            };
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static TableChangeCollection First
+        {
+            get
+            {
+                return objects.Objects.First();
+            }
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static TableChangeCollection Second
+        {
+            get
+            {
+                return objects.Objects.Skip(1).First();
+            }
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static TableChangeCollection Third
+        {
+            get
+            {
+                return objects.Objects.Skip(2).First();
+            }
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        private static IEnumerable<TableChangeCollection> GetInstances()
+        {
+            return GetApparents().Concat(GetInstancesOfCurrentType());
+        }
+
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        private static IEnumerable<TableChangeCollection>GetApparents()
+        {
+            return ReadOnlyList<TableChangeCollection>.Empty;
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void TableChangeCollection_CheckNullArg_changes_135352()
+        {
+            var allWasOk = true;
+            var wereExceptions = false;
+            var changes = new AbstractTableChange[] { AbstractTableChangeTest.First, AbstractTableChangeTest.First };
+
+            try
+            {
+                new TableChangeCollection(allWasOk, wereExceptions, (AbstractTableChange[])null);
+            }
+            catch(ArgumentNullException ex)
+            {
+                CheckArgumentExceptionParameter( "changes", ex.ParamName );
+
+                return;
+            }
+
+            Assert.Fail("Argument 'changes' isn't checked for null inputs");
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void TableChangeCollection_CheckNullArg_changes_135355()
+        {
+            var allWasOk = false;
+            var wereExceptions = true;
+            var changes = new List<AbstractTableChange>{ AbstractTableChangeTest.First }.ToReadOnlyList();
+
+            try
+            {
+                new TableChangeCollection(allWasOk, wereExceptions, (IReadOnlyCollection<AbstractTableChange>)null);
+            }
+            catch(ArgumentNullException ex)
+            {
+                CheckArgumentExceptionParameter( "changes", ex.ParamName );
+
+                return;
+            }
+
+            Assert.Fail("Argument 'changes' isn't checked for null inputs");
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void TableChangeCollection_GetHashCodeTest()
+        {
+            BaseGetHashCodeTest(objects);
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void TableChangeCollection_EqualsTest()
+        {
+            BaseEqualsTest(objects);
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void TableChangeCollection_ToStringTest()
+        {
+            BaseToStringTest(objects);
+        }
+    }
+
+    [TestClass]
     public sealed partial class TableResultFunctionTest : ReadOnlyObjectTest
     {
         [GeneratedCode("TestGenerator", "1.0.0.0")]
@@ -1256,8 +1379,8 @@ TableResultFunctionTest.objects);
 
         private void CheckEmptyStringArg_header_0(string stringArgument)
         {
-            var header = "text 135350";
-            var exception = new Exception("Text exception 135351");
+            var header = "text 135356";
+            var exception = new Exception("Text exception 135357");
             var rowReference = HtmlRowReferenceTest.First;
 
             try
@@ -1276,10 +1399,10 @@ TableResultFunctionTest.objects);
 
         [TestMethod]
         [GeneratedCode("TestGenerator", "1.0.0.0")]
-        public void AddExceptionLine_CheckNullArg_header_135352()
+        public void AddExceptionLine_CheckNullArg_header_135358()
         {
-            var header = "text 135350";
-            var exception = new Exception("Text exception 135351");
+            var header = "text 135356";
+            var exception = new Exception("Text exception 135357");
             var rowReference = HtmlRowReferenceTest.First;
 
             try
@@ -1298,10 +1421,10 @@ TableResultFunctionTest.objects);
 
         [TestMethod]
         [GeneratedCode("TestGenerator", "1.0.0.0")]
-        public void AddExceptionLine_CheckNullArg_exception_135353()
+        public void AddExceptionLine_CheckNullArg_exception_135359()
         {
-            var header = "text 135350";
-            var exception = new Exception("Text exception 135351");
+            var header = "text 135356";
+            var exception = new Exception("Text exception 135357");
             var rowReference = HtmlRowReferenceTest.First;
 
             try
@@ -1320,10 +1443,10 @@ TableResultFunctionTest.objects);
 
         [TestMethod]
         [GeneratedCode("TestGenerator", "1.0.0.0")]
-        public void AddExceptionLine_CheckNullArg_rowReference_135354()
+        public void AddExceptionLine_CheckNullArg_rowReference_135360()
         {
-            var header = "text 135350";
-            var exception = new Exception("Text exception 135351");
+            var header = "text 135356";
+            var exception = new Exception("Text exception 135357");
             var rowReference = HtmlRowReferenceTest.First;
 
             try
@@ -1351,8 +1474,8 @@ TableResultFunctionTest.objects);
 
         private void CheckEmptyStringArg_header_1(string stringArgument)
         {
-            var header = "text 135355";
-            var exceptions = new List<Exception>{ new Exception("Text exception 135356") }.ToReadOnlyList();
+            var header = "text 135361";
+            var exceptions = new List<Exception>{ new Exception("Text exception 135362") }.ToReadOnlyList();
             var rowReference = HtmlRowReferenceTest.First;
 
             try
@@ -1371,10 +1494,10 @@ TableResultFunctionTest.objects);
 
         [TestMethod]
         [GeneratedCode("TestGenerator", "1.0.0.0")]
-        public void AddExceptionLine_CheckNullArg_header_135357()
+        public void AddExceptionLine_CheckNullArg_header_135363()
         {
-            var header = "text 135355";
-            var exceptions = new List<Exception>{ new Exception("Text exception 135356") }.ToReadOnlyList();
+            var header = "text 135361";
+            var exceptions = new List<Exception>{ new Exception("Text exception 135362") }.ToReadOnlyList();
             var rowReference = HtmlRowReferenceTest.First;
 
             try
@@ -1393,10 +1516,10 @@ TableResultFunctionTest.objects);
 
         [TestMethod]
         [GeneratedCode("TestGenerator", "1.0.0.0")]
-        public void AddExceptionLine_CheckNullArg_exceptions_135358()
+        public void AddExceptionLine_CheckNullArg_exceptions_135364()
         {
-            var header = "text 135355";
-            var exceptions = new List<Exception>{ new Exception("Text exception 135356") }.ToReadOnlyList();
+            var header = "text 135361";
+            var exceptions = new List<Exception>{ new Exception("Text exception 135362") }.ToReadOnlyList();
             var rowReference = HtmlRowReferenceTest.First;
 
             try
@@ -1415,10 +1538,10 @@ TableResultFunctionTest.objects);
 
         [TestMethod]
         [GeneratedCode("TestGenerator", "1.0.0.0")]
-        public void AddExceptionLine_CheckNullArg_rowReference_135359()
+        public void AddExceptionLine_CheckNullArg_rowReference_135365()
         {
-            var header = "text 135355";
-            var exceptions = new List<Exception>{ new Exception("Text exception 135356") }.ToReadOnlyList();
+            var header = "text 135361";
+            var exceptions = new List<Exception>{ new Exception("Text exception 135362") }.ToReadOnlyList();
             var rowReference = HtmlRowReferenceTest.First;
 
             try
@@ -1437,9 +1560,9 @@ TableResultFunctionTest.objects);
 
         [TestMethod]
         [GeneratedCode("TestGenerator", "1.0.0.0")]
-        public void AddExceptionLine_CheckNullArg_exception_135361()
+        public void AddExceptionLine_CheckNullArg_exception_135367()
         {
-            var exception = new Exception("Text exception 135360");
+            var exception = new Exception("Text exception 135366");
             var rowReference = HtmlRowReferenceTest.First;
 
             try
@@ -1458,9 +1581,9 @@ TableResultFunctionTest.objects);
 
         [TestMethod]
         [GeneratedCode("TestGenerator", "1.0.0.0")]
-        public void AddExceptionLine_CheckNullArg_rowReference_135362()
+        public void AddExceptionLine_CheckNullArg_rowReference_135368()
         {
-            var exception = new Exception("Text exception 135360");
+            var exception = new Exception("Text exception 135366");
             var rowReference = HtmlRowReferenceTest.First;
 
             try
@@ -1479,9 +1602,9 @@ TableResultFunctionTest.objects);
 
         [TestMethod]
         [GeneratedCode("TestGenerator", "1.0.0.0")]
-        public void AddExceptionLine_CheckNullArg_exceptions_135364()
+        public void AddExceptionLine_CheckNullArg_exceptions_135370()
         {
-            var exceptions = new List<Exception>{ new Exception("Text exception 135363") }.ToReadOnlyList();
+            var exceptions = new List<Exception>{ new Exception("Text exception 135369") }.ToReadOnlyList();
             var rowReference = HtmlRowReferenceTest.First;
 
             try
@@ -1500,9 +1623,9 @@ TableResultFunctionTest.objects);
 
         [TestMethod]
         [GeneratedCode("TestGenerator", "1.0.0.0")]
-        public void AddExceptionLine_CheckNullArg_rowReference_135365()
+        public void AddExceptionLine_CheckNullArg_rowReference_135371()
         {
-            var exceptions = new List<Exception>{ new Exception("Text exception 135363") }.ToReadOnlyList();
+            var exceptions = new List<Exception>{ new Exception("Text exception 135369") }.ToReadOnlyList();
             var rowReference = HtmlRowReferenceTest.First;
 
             try
@@ -1609,7 +1732,7 @@ TableResultFunctionTest.objects);
 
         private void CheckEmptyStringArg_text(string stringArgument)
         {
-            var text = "text 135366";
+            var text = "text 135372";
             var rowReference = HtmlRowReferenceTest.First;
 
             try
@@ -1630,7 +1753,7 @@ TableResultFunctionTest.objects);
         [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void AddTraceLine_CheckNullArg_text()
         {
-            var text = "text 135366";
+            var text = "text 135372";
             var rowReference = HtmlRowReferenceTest.First;
 
             try
@@ -1651,7 +1774,7 @@ TableResultFunctionTest.objects);
         [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void AddTraceLine_CheckNullArg_rowReference()
         {
-            var text = "text 135366";
+            var text = "text 135372";
             var rowReference = HtmlRowReferenceTest.First;
 
             try
@@ -1758,8 +1881,8 @@ TableResultFunctionTest.objects);
 
         private void CheckEmptyStringArg_cellClass(string stringArgument)
         {
-            var cellClass = "text 135367";
-            var cellHtmlDatas = new List<String>{ "text 135368" }.ToReadOnlyList();
+            var cellClass = "text 135373";
+            var cellHtmlDatas = new List<String>{ "text 135374" }.ToReadOnlyList();
 
             try
             {
@@ -1779,8 +1902,8 @@ TableResultFunctionTest.objects);
         [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void AppendRowWithCells_CheckNullArg_cellClass()
         {
-            var cellClass = "text 135367";
-            var cellHtmlDatas = new List<String>{ "text 135368" }.ToReadOnlyList();
+            var cellClass = "text 135373";
+            var cellHtmlDatas = new List<String>{ "text 135374" }.ToReadOnlyList();
 
             try
             {
@@ -1800,8 +1923,8 @@ TableResultFunctionTest.objects);
         [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void AppendRowWithCells_CheckNullArg_cellHtmlDatas()
         {
-            var cellClass = "text 135367";
-            var cellHtmlDatas = new List<String>{ "text 135368" }.ToReadOnlyList();
+            var cellClass = "text 135373";
+            var cellHtmlDatas = new List<String>{ "text 135374" }.ToReadOnlyList();
 
             try
             {
@@ -1903,7 +2026,7 @@ ShowActualValueCellChangeTest.objects);
         public void CssClassCellChange_CheckNullArg_cell()
         {
             var cell = HtmlCellTest.First;
-            var newClass = "text 135369";
+            var newClass = "text 135375";
 
             try
             {
@@ -1931,7 +2054,7 @@ ShowActualValueCellChangeTest.objects);
         private void CheckEmptyStringArg_newClass(string stringArgument)
         {
             var cell = HtmlCellTest.First;
-            var newClass = "text 135369";
+            var newClass = "text 135375";
 
             try
             {
@@ -1952,7 +2075,7 @@ ShowActualValueCellChangeTest.objects);
         public void CssClassCellChange_CheckNullArg_newClass()
         {
             var cell = HtmlCellTest.First;
-            var newClass = "text 135369";
+            var newClass = "text 135375";
 
             try
             {
@@ -2131,7 +2254,7 @@ ShowActualValueCellChangeTest.objects);
         public void AddRowCssClass_CheckNullArg_rowReference()
         {
             var rowReference = HtmlRowReferenceTest.First;
-            var targetCssClass = "text 135370";
+            var targetCssClass = "text 135376";
 
             try
             {
@@ -2159,7 +2282,7 @@ ShowActualValueCellChangeTest.objects);
         private void CheckEmptyStringArg_targetCssClass(string stringArgument)
         {
             var rowReference = HtmlRowReferenceTest.First;
-            var targetCssClass = "text 135370";
+            var targetCssClass = "text 135376";
 
             try
             {
@@ -2180,7 +2303,7 @@ ShowActualValueCellChangeTest.objects);
         public void AddRowCssClass_CheckNullArg_targetCssClass()
         {
             var rowReference = HtmlRowReferenceTest.First;
-            var targetCssClass = "text 135370";
+            var targetCssClass = "text 135376";
 
             try
             {
@@ -2280,8 +2403,8 @@ ShowActualValueCellChangeTest.objects);
         public void ExecutionFailedMessage_CheckNullArg_rowReference()
         {
             var rowReference = HtmlRowReferenceTest.First;
-            var header = "text 135371";
-            var messageFormat = "text 135372";
+            var header = "text 135377";
+            var messageFormat = "text 135378";
             var args = new Object[] { new object(), new object() };
 
             try
@@ -2310,8 +2433,8 @@ ShowActualValueCellChangeTest.objects);
         private void CheckEmptyStringArg_header(string stringArgument)
         {
             var rowReference = HtmlRowReferenceTest.First;
-            var header = "text 135371";
-            var messageFormat = "text 135372";
+            var header = "text 135377";
+            var messageFormat = "text 135378";
             var args = new Object[] { new object(), new object() };
 
             try
@@ -2333,8 +2456,8 @@ ShowActualValueCellChangeTest.objects);
         public void ExecutionFailedMessage_CheckNullArg_header()
         {
             var rowReference = HtmlRowReferenceTest.First;
-            var header = "text 135371";
-            var messageFormat = "text 135372";
+            var header = "text 135377";
+            var messageFormat = "text 135378";
             var args = new Object[] { new object(), new object() };
 
             try
@@ -2363,8 +2486,8 @@ ShowActualValueCellChangeTest.objects);
         private void CheckEmptyStringArg_messageFormat(string stringArgument)
         {
             var rowReference = HtmlRowReferenceTest.First;
-            var header = "text 135371";
-            var messageFormat = "text 135372";
+            var header = "text 135377";
+            var messageFormat = "text 135378";
             var args = new Object[] { new object(), new object() };
 
             try
@@ -2386,8 +2509,8 @@ ShowActualValueCellChangeTest.objects);
         public void ExecutionFailedMessage_CheckNullArg_messageFormat()
         {
             var rowReference = HtmlRowReferenceTest.First;
-            var header = "text 135371";
-            var messageFormat = "text 135372";
+            var header = "text 135377";
+            var messageFormat = "text 135378";
             var args = new Object[] { new object(), new object() };
 
             try
@@ -2409,8 +2532,8 @@ ShowActualValueCellChangeTest.objects);
         public void ExecutionFailedMessage_CheckNullArg_args()
         {
             var rowReference = HtmlRowReferenceTest.First;
-            var header = "text 135371";
-            var messageFormat = "text 135372";
+            var header = "text 135377";
+            var messageFormat = "text 135378";
             var args = new Object[] { new object(), new object() };
 
             try
@@ -3227,7 +3350,7 @@ namespace NetRunner.Executable.Tests.Invokation
         }
 
         [TestMethod]
-        public void FunctionExecutionResult_CheckWrongEnumArg_resultType_135373()
+        public void FunctionExecutionResult_CheckWrongEnumArg_resultType_135379()
         {
             var resultType = Enum.GetValues(typeof(FunctionExecutionResult.FunctionRunResult)).Cast<FunctionExecutionResult.FunctionRunResult>().First();
             var tableChanges = new AbstractTableChange[] { AbstractTableChangeTest.First, AbstractTableChangeTest.First };
@@ -3248,7 +3371,7 @@ namespace NetRunner.Executable.Tests.Invokation
 
         [TestMethod]
         [GeneratedCode("TestGenerator", "1.0.0.0")]
-        public void FunctionExecutionResult_CheckNullArg_tableChanges_135374()
+        public void FunctionExecutionResult_CheckNullArg_tableChanges_135380()
         {
             var resultType = Enum.GetValues(typeof(FunctionExecutionResult.FunctionRunResult)).Cast<FunctionExecutionResult.FunctionRunResult>().First();
             var tableChanges = new AbstractTableChange[] { AbstractTableChangeTest.First, AbstractTableChangeTest.First };
@@ -3268,7 +3391,7 @@ namespace NetRunner.Executable.Tests.Invokation
         }
 
         [TestMethod]
-        public void FunctionExecutionResult_CheckWrongEnumArg_resultType_135375()
+        public void FunctionExecutionResult_CheckWrongEnumArg_resultType_135381()
         {
             var resultType = Enum.GetValues(typeof(FunctionExecutionResult.FunctionRunResult)).Cast<FunctionExecutionResult.FunctionRunResult>().First();
             var tableChanges = new List<AbstractTableChange>{ AbstractTableChangeTest.First }.ToReadOnlyList();
@@ -3289,7 +3412,7 @@ namespace NetRunner.Executable.Tests.Invokation
 
         [TestMethod]
         [GeneratedCode("TestGenerator", "1.0.0.0")]
-        public void FunctionExecutionResult_CheckNullArg_tableChanges_135376()
+        public void FunctionExecutionResult_CheckNullArg_tableChanges_135382()
         {
             var resultType = Enum.GetValues(typeof(FunctionExecutionResult.FunctionRunResult)).Cast<FunctionExecutionResult.FunctionRunResult>().First();
             var tableChanges = new List<AbstractTableChange>{ AbstractTableChangeTest.First }.ToReadOnlyList();
@@ -3398,7 +3521,7 @@ namespace NetRunner.Executable.Tests.Invokation
 
         private void CheckEmptyStringArg_functionName(string stringArgument)
         {
-            var functionName = "text 135377";
+            var functionName = "text 135383";
             var arguments = new List<HtmlCell>{ HtmlCellTest.First }.ToReadOnlyList();
             var rowReference = HtmlRowReferenceTest.First;
             var firstFunctionCell = HtmlCellTest.First;
@@ -3422,7 +3545,7 @@ namespace NetRunner.Executable.Tests.Invokation
         [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void FunctionHeader_CheckNullArg_functionName()
         {
-            var functionName = "text 135377";
+            var functionName = "text 135383";
             var arguments = new List<HtmlCell>{ HtmlCellTest.First }.ToReadOnlyList();
             var rowReference = HtmlRowReferenceTest.First;
             var firstFunctionCell = HtmlCellTest.First;
@@ -3446,7 +3569,7 @@ namespace NetRunner.Executable.Tests.Invokation
         [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void FunctionHeader_CheckNullArg_arguments()
         {
-            var functionName = "text 135377";
+            var functionName = "text 135383";
             var arguments = new List<HtmlCell>{ HtmlCellTest.First }.ToReadOnlyList();
             var rowReference = HtmlRowReferenceTest.First;
             var firstFunctionCell = HtmlCellTest.First;
@@ -3470,7 +3593,7 @@ namespace NetRunner.Executable.Tests.Invokation
         [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void FunctionHeader_CheckNullArg_rowReference()
         {
-            var functionName = "text 135377";
+            var functionName = "text 135383";
             var arguments = new List<HtmlCell>{ HtmlCellTest.First }.ToReadOnlyList();
             var rowReference = HtmlRowReferenceTest.First;
             var firstFunctionCell = HtmlCellTest.First;
@@ -3494,7 +3617,7 @@ namespace NetRunner.Executable.Tests.Invokation
         [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void FunctionHeader_CheckNullArg_firstFunctionCell()
         {
-            var functionName = "text 135377";
+            var functionName = "text 135383";
             var arguments = new List<HtmlCell>{ HtmlCellTest.First }.ToReadOnlyList();
             var rowReference = HtmlRowReferenceTest.First;
             var firstFunctionCell = HtmlCellTest.First;
@@ -3518,7 +3641,7 @@ namespace NetRunner.Executable.Tests.Invokation
         [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void FunctionHeader_CheckNullArg_keyword()
         {
-            var functionName = "text 135377";
+            var functionName = "text 135383";
             var arguments = new List<HtmlCell>{ HtmlCellTest.First }.ToReadOnlyList();
             var rowReference = HtmlRowReferenceTest.First;
             var firstFunctionCell = HtmlCellTest.First;
@@ -3826,7 +3949,7 @@ namespace NetRunner.Executable.Tests.RawData
         [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void FitnesseHtmlDocument_CheckNullArg_textBeforeFirstTable()
         {
-            var textBeforeFirstTable = "text 135378";
+            var textBeforeFirstTable = "text 135384";
             var tables = new List<HtmlTable>{ HtmlTableTest.First }.ToReadOnlyList();
 
             try
@@ -3847,7 +3970,7 @@ namespace NetRunner.Executable.Tests.RawData
         [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void FitnesseHtmlDocument_CheckNullArg_tables()
         {
-            var textBeforeFirstTable = "text 135378";
+            var textBeforeFirstTable = "text 135384";
             var tables = new List<HtmlTable>{ HtmlTableTest.First }.ToReadOnlyList();
 
             try
@@ -4169,7 +4292,7 @@ namespace NetRunner.Executable.Tests.RawData
         {
             var rows = new List<HtmlRow>{ HtmlRowTest.First }.ToReadOnlyList();
             var tableNode = HtmlNode.CreateNode("<i>TEST<i/>");
-            var textAfterTable = "text 135379";
+            var textAfterTable = "text 135385";
 
             try
             {
@@ -4191,7 +4314,7 @@ namespace NetRunner.Executable.Tests.RawData
         {
             var rows = new List<HtmlRow>{ HtmlRowTest.First }.ToReadOnlyList();
             var tableNode = HtmlNode.CreateNode("<i>TEST<i/>");
-            var textAfterTable = "text 135379";
+            var textAfterTable = "text 135385";
 
             try
             {
@@ -4213,7 +4336,7 @@ namespace NetRunner.Executable.Tests.RawData
         {
             var rows = new List<HtmlRow>{ HtmlRowTest.First }.ToReadOnlyList();
             var tableNode = HtmlNode.CreateNode("<i>TEST<i/>");
-            var textAfterTable = "text 135379";
+            var textAfterTable = "text 135385";
 
             try
             {

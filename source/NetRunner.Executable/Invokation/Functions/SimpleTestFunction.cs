@@ -38,23 +38,23 @@ namespace NetRunner.Executable.Invokation.Functions
             {
                 var result = InvokeFunction(functionReference, function);
 
-                if (result.ExecutedWithErrors)
+                if (result.Changes.WereExceptions)
                 {
                     var rowCss = new AddRowCssClass(function.RowReference, HtmlParser.ErrorCssClass);
 
-                    return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Exception, result.TableChanges.Concat(rowCss));
+                    return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Exception, result.Changes.Changes.Concat(rowCss));
                 }
 
                 if (Equals(false, result.Result))
                 {
                     var falseResultMark = new AddRowCssClass(function.RowReference, HtmlParser.FailCssClass);
 
-                    return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Fail, result.TableChanges.Concat(falseResultMark));
+                    return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Fail, result.Changes.Changes.Concat(falseResultMark));
                 }
 
                 var trueResultMark = new AddRowCssClass(function.RowReference, HtmlParser.PassCssClass);
 
-                return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Success, result.TableChanges.Concat(trueResultMark));
+                return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Success, result.Changes.Changes.Concat(trueResultMark));
             }
             catch (InternalException ex)
             {

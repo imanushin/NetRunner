@@ -60,9 +60,9 @@ namespace NetRunner.Executable.Invokation.Functions
                     row.Cells.First(),
                     row.Cells);
 
-                changes.AddRange(rowResult.TableChanges);
+                changes.AddRange(rowResult.Changes.Changes);
 
-                if (rowResult.ExecutedWithErrors)
+                if (rowResult.Changes.WereExceptions)
                 {
                     changes.Add(new AddRowCssClass(row.RowReference, HtmlParser.ErrorCssClass));
 
@@ -93,14 +93,14 @@ namespace NetRunner.Executable.Invokation.Functions
                 {
                     changes.Add(new ExecutionFailedMessage(
                         Function.RowReference,
-                        string.Format("Unable to check table: function {0} return null", Function.FunctionName),
+                        string.Format("Unable to check table: function '{0}' return null", Function.FunctionName),
                         "Unable to build table"));
                 }
                 else
                 {
                     changes.Add(new ExecutionFailedMessage(
                         Function.RowReference,
-                        string.Format("Unable to check table: function {0} return object {1} instead of {2}", Function.FunctionName, mainFunctionResult.GetType(), typeof(BaseTableArgument)),
+                        string.Format("Unable to check table: function '{0}' return object '{1}' instead of '{2}'", Function.FunctionName, mainFunctionResult.GetType(), typeof(BaseTableArgument)),
                         "Unable to build table"));
                 }
 

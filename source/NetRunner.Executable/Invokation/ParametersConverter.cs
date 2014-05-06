@@ -5,7 +5,10 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using NetRunner.Executable.Common;
+using NetRunner.Executable.Invokation.Functions;
+using NetRunner.Executable.RawData;
 using NetRunner.ExternalLibrary;
+using NetRunner.ExternalLibrary.Properties;
 
 namespace NetRunner.Executable.Invokation
 {
@@ -14,47 +17,58 @@ namespace NetRunner.Executable.Invokation
         private static readonly Dictionary<Type, BaseParser> parsers = new Dictionary<Type, BaseParser>();
         private static readonly MethodInfo tryParseMethod = typeof(BaseParser).GetMethod("TryParse");
 
-        public static object ConvertParameter(string inputData, Type expectedType)
+        public static InvokationResult ConvertParameter(HtmlCell inputData, Type expectedType, string conversionErrorHeader)
         {
             BaseParser parser;
-            object result;
+
+            var errorCellMark = new CssClassCellChange(inputData, HtmlParser.ErrorCssClass);
 
             if (!parsers.TryGetValue(expectedType, out parser))
             {
                 foreach (var baseParser in ReflectionLoader.Instance.Parsers)
                 {
-                    try
-                    {
-                        if (TryParseData(inputData, expectedType, baseParser, out result))
-                        {
-                            parsers[expectedType] = baseParser;
+                    var parseResult = ParseData(inputData, expectedType, conversionErrorHeader, baseParser);
 
-                            return result;
-                        }
-                    }
-                    catch (TargetInvocationException ex)
-                    {
-                        throw new ConversionException(expectedType, inputData, ex.InnerException);
-                    }
+                    if (parseResult != null)
+                        return parseResult;
                 }
 
-                throw new InvalidOperationException(string.Format("Unable to find parser for type {0}. Parsers available: {1}", expectedType, ReflectionLoader.Instance.Parsers));
+                var parserNotFound = new AddCellExpandableInfo(inputData, conversionErrorHeader, string.Format("Unable to find parser for type {0}. Parsers available: {1}", expectedType, ReflectionLoader.Instance.Parsers));
+
+                return new InvokationResult(null, new TableChangeCollection(false, true, parserNotFound, errorCellMark));
             }
 
-            bool resultWasParsed;
+            var foundParserResult = ParseData(inputData, expectedType, conversionErrorHeader, parser);
 
+            if (foundParserResult != null)
+                return foundParserResult;
+
+            var noParserCellChange = new AddCellExpandableInfo(inputData, conversionErrorHeader, string.Format("Internal error: Object {0} parser type {1} earlier however it could not do this now.", parser, expectedType));
+
+            return new InvokationResult(null, new TableChangeCollection(false, true, noParserCellChange, errorCellMark));
+        }
+
+        [CanBeNull]
+        private static InvokationResult ParseData(HtmlCell inputData, Type expectedType, string conversionErrorHeader, BaseParser baseParser)
+        {
             try
             {
-                resultWasParsed = TryParseData(inputData, expectedType, parser, out result);
+                object result;
+
+                if (TryParseData(inputData.CleanedContent, expectedType, baseParser, out result))
+                {
+                    parsers[expectedType] = baseParser;
+
+                    return new InvokationResult(result);
+                }
             }
             catch (TargetInvocationException ex)
             {
-                throw new ConversionException(expectedType, inputData, ex.InnerException);
+                var cellChange = new AddCellExpandableException(inputData, ex.InnerException, conversionErrorHeader);
+
+                return new InvokationResult(null, new TableChangeCollection(false, true, cellChange));
             }
-
-            Validate.Condition(resultWasParsed, "Internal error: Object {0} parser type {1} earlier however it could not do this now.", parser, expectedType);
-
-            return result;
+            return null;
         }
 
         private static bool TryParseData(string inputData, Type expectedType, BaseParser parser, out object result)

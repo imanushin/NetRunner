@@ -59,6 +59,7 @@
     <Compile Include="Invokation\Functions\ComplexArgumentedFunction.cs" />
     <Compile Include="Invokation\Functions\InvokationResult.cs" />
     <Compile Include="Invokation\Functions\ProblematicFunction.cs" />
+    <Compile Include="Invokation\Functions\TableChangeCollection.cs" />
     <Compile Include="Invokation\Functions\TableResultFunction.cs" />
     <Compile Include="Invokation\InternalException.cs" />
     <Compile Include="Invokation\Keywords\AbstractKeyword.cs" />

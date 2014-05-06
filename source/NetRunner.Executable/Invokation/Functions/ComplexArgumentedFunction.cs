@@ -67,14 +67,14 @@ namespace NetRunner.Executable.Invokation.Functions
 
             var result = InvokeFunction(functionReference, Function);
 
-            if (result.ExecutedWithErrors)
+            if (result.Changes.WereExceptions)
             {
-                return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Exception, result.TableChanges);
+                return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Exception, result.Changes.Changes);
             }
 
             var actualResult = ProcessResult(result.Result);
 
-            return new FunctionExecutionResult(actualResult.ResultType, actualResult.TableChanges.Concat(result.TableChanges));
+            return new FunctionExecutionResult(actualResult.ResultType, actualResult.TableChanges.Concat(result.Changes.Changes));
         }
 
         protected abstract FunctionExecutionResult ProcessResult([CanBeNull] object mainFunctionResult);

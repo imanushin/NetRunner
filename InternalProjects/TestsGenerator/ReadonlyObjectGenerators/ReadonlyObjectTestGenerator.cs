@@ -481,7 +481,7 @@ namespace {1}
             }
             if (typeof(bool) == enumType)
             {
-                return ((indexer++) % 2 == 0).ToString();
+                return ((indexer++) % 2 == 0).ToString().ToLowerInvariant();
             }
             if (typeof(string) == enumType)
             {

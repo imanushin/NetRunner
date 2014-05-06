@@ -260,6 +260,7 @@ namespace NetRunner.Executable.Invokation
 
         public bool TryReadPropery(object targetObject, string propertyName, [CanBeNull]  out Type propertyType, [CanBeNull] out object resultValue)
         {
+#warning change to Table changes
             var targetType = targetObject.GetType();
 
             var property = targetType.GetProperties().FirstOrDefault(p => string.Equals(p.Name, propertyName, StringComparison.OrdinalIgnoreCase));

@@ -26,12 +26,12 @@
 
 | '''Analyse Table''' | 2 |
 | '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
-| 1 | 1 | Contains | non-integer |
-| 1 | 1 | Contains | convert |
-| 1 | 1 | Contains | argument |
-| 1 | 1 | Contains | first |
+| 3 | 1 | Contains | non-integer |
+| 3 | 1 | Contains | convert |
+| 3 | 1 | Contains | parameter |
+| 3 | 1 | Contains | first |
 | 1..100 | 1..100 | Contains | class="error" |
-| 1..100 | 1..100 | Count | 1 |
+| 1..100 | 1..100 | Count | 7 |
 
 *| check | '''Row Count Of Table''' | 2 | '''is''' | 4 | 
 

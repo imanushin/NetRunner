@@ -10,41 +10,27 @@ namespace NetRunner.Executable.Invokation.Functions
 {
     internal sealed class InvokationResult
     {
-        public InvokationResult([CanBeNull] object result, bool executedWithErrors, AbstractTableChange tableChange)
-            : this(result, executedWithErrors, new[] { tableChange })
+        public InvokationResult([CanBeNull] object result, [NotNull]TableChangeCollection changes)
         {
-
-        }
-
-        public InvokationResult([CanBeNull] object result, bool executedWithErrors, [NotNull]IEnumerable<AbstractTableChange> tableChanges)
-        {
-            Validate.ArgumentIsNotNull(tableChanges, "tableChanges");
+            Validate.ArgumentIsNotNull(changes, "changes");
 
             Result = result;
-            TableChanges = tableChanges.ToReadOnlyList();
-            ExecutedWithErrors = executedWithErrors;
+            Changes = changes;
         }
 
         public InvokationResult([CanBeNull]object result)
-            : this(result, false, ReadOnlyList<AbstractTableChange>.Empty)
+            : this(result, TableChangeCollection.AllIsOkNoChanges)
         {
         }
 
-        public ReadOnlyList<AbstractTableChange> TableChanges
+        public TableChangeCollection Changes
         {
             get;
             private set;
         }
-
 
         [CanBeNull]
         public object Result
-        {
-            get;
-            private set;
-        }
-
-        public bool ExecutedWithErrors
         {
             get;
             private set;

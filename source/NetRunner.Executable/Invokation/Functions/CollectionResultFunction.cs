@@ -11,7 +11,7 @@ namespace NetRunner.Executable.Invokation.Functions
 {
     internal sealed class CollectionResultFunction : BaseComplexArgumentedFunction
     {
-        public static readonly Type BaseType = typeof (IEnumerable);
+        public static readonly Type BaseType = typeof(IEnumerable);
 
         public CollectionResultFunction(
             HtmlRow columnsRow,
@@ -22,23 +22,41 @@ namespace NetRunner.Executable.Invokation.Functions
         {
         }
 
-        private static bool CompareItems(object resultObject, string expectedResult, string propertyName, out object resultValue)
+        private static TableChangeCollection CompareItems(object resultObject, HtmlCell expectedResult, string propertyName)
         {
             Type propertyType;
 
+            object resultValue;
+
+            var resultIsOkChange = new CssClassCellChange(expectedResult, HtmlParser.PassCssClass);
+
             if (!ReflectionLoader.Instance.TryReadPropery(resultObject, propertyName, out propertyType, out resultValue))
             {
-                return false;
+                return new TableChangeCollection(false, false, new ShowActualValueCellChange(expectedResult, resultObject));
             }
 
             if (ReferenceEquals(null, resultValue))
             {
-                return string.IsNullOrEmpty(expectedResult);
+                return new TableChangeCollection(true, false, resultIsOkChange);
             }
 
-            var expectedObject = ParametersConverter.ConvertParameter(expectedResult, propertyType);
+            Validate.IsNotNull(propertyType, "Internal error: type of property '{0}' is undefined", propertyName);
 
-            return resultValue.Equals(expectedObject);
+            string errorHeader = string.Format("Unable to convert value to type '{0}'", propertyType.Name);
+
+            var expectedObject = ParametersConverter.ConvertParameter(expectedResult, propertyType, errorHeader);
+
+            if (!expectedObject.Changes.AllWasOk)
+            {
+                return expectedObject.Changes;
+            }
+
+            var conversionSucceeded = resultValue.Equals(expectedObject.Result);
+            var cellChange = conversionSucceeded
+                 ? resultIsOkChange
+                 : new ShowActualValueCellChange(expectedResult, resultObject);
+
+            return new TableChangeCollection(conversionSucceeded, false, expectedObject.Changes.Changes.Concat(cellChange));
         }
 
 
@@ -63,32 +81,14 @@ namespace NetRunner.Executable.Invokation.Functions
 
                 for (int columnIndex = 0; columnIndex < CleanedColumnNames.Count; columnIndex++)
                 {
-                    try
-                    {
-                        var expectedResult = currentRow.Cells[columnIndex].CleanedContent;
+                    var expectedResult = currentRow.Cells[columnIndex];
+                    
+                    var changes = CompareItems(resultObject, expectedResult, CleanedColumnNames[columnIndex]);
 
-                        object actualValue;
+                    tableChanges.AddRange(changes.Changes);
 
-                        var currentIsOk = CompareItems(resultObject, expectedResult, CleanedColumnNames[columnIndex], out actualValue);
-
-                        var cellChange = currentIsOk
-                            ? new CssClassCellChange(currentRow.Cells[columnIndex], HtmlParser.PassCssClass)
-                            : new ShowActualValueCellChange(currentRow.Cells[columnIndex], actualValue);
-
-                        tableChanges.Add(cellChange);
-
-                        allRight &= currentIsOk;
-                    }
-                    catch (ConversionException ex)
-                    {
-                        tableChanges.Add(new CssClassCellChange(currentRow.Cells[columnIndex], HtmlParser.ErrorCssClass));
-
-                        tableChanges.Add(new AddCellExpandableException(currentRow.Cells[columnIndex], ex, "Unable to parse cell"));
-
-                        exceptionOccurred = true;
-
-                        allRight = false;
-                    }
+                    allRight &= changes.AllWasOk;
+                    exceptionOccurred |= changes.WereExceptions;
                 }
             }
 
@@ -123,7 +123,7 @@ namespace NetRunner.Executable.Invokation.Functions
             Type propertyType;
 
             if (!ReflectionLoader.Instance.TryReadPropery(resultObject, propertyName, out propertyType, out resultValue))
-                return string.Format("Unable to read property {0}", propertyName);
+                return string.Format("Unable to read property '{0}'", propertyName);
 
             return (resultValue ?? string.Empty).ToString();
         }

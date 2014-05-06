@@ -72,6 +72,7 @@
     <Compile Include="Invokation\Functions\ProblematicFunctionTest.cs" />
     <Compile Include="Invokation\Functions\ShowActualValueCellChangeTest.cs" />
     <Compile Include="Invokation\Functions\SimpleTestFunctionTest.cs" />
+    <Compile Include="Invokation\Functions\TableChangeCollectionTest.cs" />
     <Compile Include="Invokation\Functions\TableResultFunctionTest.cs" />
     <Compile Include="Invokation\Functions\TestFunctionsSequenceTest.cs" />
     <Compile Include="Invokation\HtmlRowReferenceTest.cs" />
