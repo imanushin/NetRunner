@@ -28,14 +28,7 @@ namespace NetRunner.Executable.Invokation
 
             if (functionToExecute == null)
             {
-                var startCell = headerRow.FirstBold;
-
-                var errorHeader = string.Format("Unable to find function {0}", header.FunctionName);
-                var errorInfo = string.Format("Unable to find function {0}", header.FunctionName);
-
-                var tableChange = new AddCellExpandableInfo(startCell, errorHeader, errorInfo);
-
-                return new ProblematicFunction(new[] { tableChange }, table.Rows);
+                return CreateProblematicFunction(headerRow, header, table.Rows);
             }
 
             if (table.Rows.Count == 1)
@@ -66,6 +59,21 @@ namespace NetRunner.Executable.Invokation
             return new TestFunctionsSequence(parsedRows);
         }
 
+        private static AbstractTestFunction CreateProblematicFunction(HtmlRow headerRow, FunctionHeader header, IReadOnlyCollection<HtmlRow> otherRows)
+        {
+            var startCell = headerRow.FirstBold;
+
+            var errorHeader = string.Format("Unable to find function {0}", header.FunctionName);
+            var errorInfo = string.Format("Unable to find function {0}", header.FunctionName);
+
+            var tableChange = new AddCellExpandableInfo(startCell, errorHeader, errorInfo);
+
+            return new ProblematicFunction(new[]
+            {
+                tableChange
+            }, otherRows);
+        }
+
         [CanBeNull]
         private static AbstractTestFunction ParseTableValuedFunction(HtmlTable table, FunctionHeader header, TestFunctionReference functionToExecute)
         {
@@ -81,7 +89,10 @@ namespace NetRunner.Executable.Invokation
 
             var functionReference = ReflectionLoader.Instance.FindFunction(header.FunctionName, header.Arguments.Count);
 
-            Validate.IsNotNull(functionReference, "Unable to find function {0}", header.FunctionName);
+            if (functionReference == null)
+            {
+                return CreateProblematicFunction(row, header, new[] { row });
+            }
 
             return new SimpleTestFunction(header, functionReference, row);
         }
