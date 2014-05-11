@@ -1,12 +1,12 @@
-|'''ping site'''|''https://google.com''|
+| '''is positive''' | 1 |
 
-|'''ping site'''|''https://google.com123''|
+| '''is positive''' | aaa |
 
-|'''ping site'''|!-https://google.com-!|
+| '''is positive''' | !-<a href="https://google.com">1</a>-! |
 
-| '''ping site''' | ''https://google.com2354235245'' | '''without exceptions''' |
+| '''try parse string''' | ''aaa'' |
 
-|'''ping site'''|''https://google.com''|
-|'''ping site'''|''https://google.com123''|
-|'''ping site'''|!-https://google.com-!|
-| '''ping site''' | ''https://google.com2354235245'' | '''without exceptions''' |
+| '''is positive''' | 1 |
+| '''is positive''' | aaa |
+| '''is positive''' | !-<a href="https://google.com">1</a>-! |
+| '''try parse string''' | ''aaa'' |

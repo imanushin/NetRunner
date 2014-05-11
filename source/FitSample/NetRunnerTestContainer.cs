@@ -23,6 +23,12 @@ namespace FitSample
             return value > 0;
         }
 
+        public bool TryParseString(string value)
+        {
+            int result;
+            return int.TryParse(value, out result);
+        }
+
         public bool PingSite(string url)
         {
             if (url == "http://error.com")
