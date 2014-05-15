@@ -19,6 +19,7 @@ namespace NetRunner.Executable.Invokation.Functions
         {
             Validate.CollectionArgumentHasElements(tableChanges, "tableChanges");
             Validate.CollectionArgumentHasElements(rows, "rows");
+            Validate.ArgumentIsNotNull(keyword, "keyword");
 
             var rowsWithErrorsMarks = rows.Select(r => new AddRowCssClass(r.RowReference, HtmlParser.ErrorCssClass)).ToReadOnlyList();
 

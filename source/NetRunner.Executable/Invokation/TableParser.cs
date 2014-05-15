@@ -13,8 +13,19 @@ namespace NetRunner.Executable.Invokation
 {
     internal static class TableParser
     {
-        public static AbstractTestFunction ParseTable(HtmlTable table, List<AbstractTableChange> tableParseInformation)
+        public static TestExecutionPlan GenerateTestExecutionPlan(FitnesseHtmlDocument document)
         {
+            var parsedTables = document.Tables.Select(ParseTable).ToReadOnlyList();
+
+            var textBeforeFirstTable = document.TextBeforeFirstTable;
+
+            return new TestExecutionPlan(textBeforeFirstTable, parsedTables);
+        }
+
+        public static ParsedTable ParseTable(HtmlTable table)
+        {
+            var tableParseInformation = new List<AbstractTableChange>();
+
             Validate.CollectionArgumentHasElements(table.Rows, "table");
 
             var headerRow = table.Rows.First();
@@ -22,41 +33,41 @@ namespace NetRunner.Executable.Invokation
             var header = ParseHeader(headerRow);
 
             if (header == null)
-                return EmptyTestFunction.Instance;
+                return new ParsedTable(table, EmptyTestFunction.Instance, ReadOnlyList<AbstractTableChange>.Empty);
 
             var functionToExecute = ReflectionLoader.FindFunction(header.FunctionName, header.Arguments.Count);
 
             if (functionToExecute == null)
             {
-                return CreateMissingFunction(headerRow, header, table.Rows);
+                return new ParsedTable(table, CreateMissingFunction(headerRow, header, table.Rows), ReadOnlyList<AbstractTableChange>.Empty);
             }
 
             if (table.Rows.Count == 1)
             {
-                return new SimpleTestFunction(header, functionToExecute, headerRow);
+                return new ParsedTable(table, new SimpleTestFunction(header, functionToExecute, headerRow), ReadOnlyList<AbstractTableChange>.Empty);
             }
 
             var result = ParseTableValuedFunction(table, header, functionToExecute);
 
             if (result != null)
-                return result;
+                return new ParsedTable(table, result, ReadOnlyList<AbstractTableChange>.Empty);
 
             var parsedRows = table.Rows.Select(row =>
+            {
+                try
                 {
-                    try
-                    {
-                        return ParseSimpleTestFunction(row);
-                    }
-                    catch (Exception ex)
-                    {
-                        tableParseInformation.Add(new AddExceptionLine("Unable to parse row", ex, row.RowReference));
-                    }
+                    return ParseSimpleTestFunction(row);
+                }
+                catch (Exception ex)
+                {
+                    tableParseInformation.Add(new AddExceptionLine("Unable to parse row", ex, row.RowReference));
+                }
 
-                    return null;
+                return null;
 
-                }).SkipNulls().ToReadOnlyList();
+            }).SkipNulls().ToReadOnlyList();
 
-            return new TestFunctionsSequence(parsedRows);
+            return new ParsedTable(table, new TestFunctionsSequence(parsedRows), tableParseInformation);
         }
 
         private static AbstractTestFunction CreateMissingFunction(HtmlRow headerRow, FunctionHeader header, IReadOnlyCollection<HtmlRow> otherRows)

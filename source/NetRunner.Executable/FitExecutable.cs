@@ -26,24 +26,26 @@ namespace NetRunner.Executable
             {
                 ','
             }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim()).ToReadOnlyList());
-            
+
             for (string document = communicator.ReceiveDocument(); document.Any(); document = communicator.ReceiveDocument())
             {
                 Trace.WriteLine("Processing document of size: " + document.Length);
 
+                var counts = new TestCounts();
+
                 try
                 {
-                    var counts = new TestCounts();
-
                     var parsedDocument = HtmlParser.Parse(document);
+
+                    var executionPlan = TableParser.GenerateTestExecutionPlan(parsedDocument);
 
                     communicator.SendDocument(parsedDocument.TextBeforeFirstTable);
 
-                    foreach (var table in parsedDocument.Tables)
+                    foreach (var test in executionPlan.FunctionsSequence)
                     {
-                        var result = RootInvoker.InvokeTable(table, counts);
+                        var result = RootInvoker.InvokeTable(test, counts);
 
-                        communicator.SendDocument(result + table.TextAfterTable);
+                        communicator.SendDocument(result + test.Table.TextAfterTable);
                     }
 
                     communicator.SendDocument(HtmlParser.LineBreak);
@@ -53,6 +55,17 @@ namespace NetRunner.Executable
                 catch (Exception e)
                 {
                     Trace.TraceError("Test execution exception: {0}", e);
+
+                    try
+                    {
+                        counts.IncrementExceptionCount();
+
+                        communicator.SendCounts(counts);
+                    }
+                    catch (Exception ex)
+                    {
+                        Trace.TraceError("Unable to send counts '{0}': {1}", counts, ex);
+                    }
                 }
             }
 

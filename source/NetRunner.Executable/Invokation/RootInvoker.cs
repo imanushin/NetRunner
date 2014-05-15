@@ -14,18 +14,16 @@ namespace NetRunner.Executable.Invokation
 {
     internal static class RootInvoker
     {
-        public static string InvokeTable(HtmlTable table, TestCounts currentStatistic)
+        public static string InvokeTable(ParsedTable table, TestCounts currentStatistic)
         {
             var changes = new List<AbstractTableChange>();
 
             FunctionExecutionResult result;
             try
             {
-                var functionToInvoke = TableParser.ParseTable(table, changes);
+                Trace.TraceInformation("Execute function {0}", table.TestFunction);
 
-                Trace.TraceInformation("Execute function {0}", functionToInvoke);
-
-                result = functionToInvoke.Invoke();
+                result = table.TestFunction.Invoke();
 
                 Trace.TraceInformation("Execution result: {0}", result);
             }
@@ -33,7 +31,7 @@ namespace NetRunner.Executable.Invokation
             {
                 Trace.TraceError("Unable to execute function because of error: {0}", ex);
 
-                var firstRow = table.Rows.FirstOrDefault();
+                var firstRow = table.Table.Rows.FirstOrDefault();
 
                 if (firstRow != null)
                 {
@@ -43,7 +41,7 @@ namespace NetRunner.Executable.Invokation
                 result = new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Exception, ReadOnlyList<AbstractTableChange>.Empty);
             }
 
-            return FormatResult(table, result, currentStatistic, changes);
+            return FormatResult(table.Table, result, currentStatistic, changes);
         }
 
         private static string FormatResult(HtmlTable table, FunctionExecutionResult result, TestCounts currentStatistic, IReadOnlyCollection<AbstractTableChange> tableParseInformation)

@@ -40,6 +40,868 @@ using System.Reflection;
 #pragma warning disable 168
 
 
+namespace NetRunner.Executable.Tests.Invokation
+{
+
+    [TestClass]
+    public sealed partial class ParsedTableTest : ReadOnlyObjectTest
+    {
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static readonly ObjectsCache<ParsedTable> objects = new ObjectsCache<ParsedTable>(GetInstances);
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static IEnumerable<ParsedTable[]> CreateNonEmptyObjectsArrays()
+        {
+            return new[]
+            {
+                ParsedTableTest.objects.Objects.Skip(1).ToArray(),
+                ParsedTableTest.objects.Objects.Take(2).ToArray(),
+                ParsedTableTest.objects.Objects.Take(1).ToArray()
+            };
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static ParsedTable First
+        {
+            get
+            {
+                return objects.Objects.First();
+            }
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static ParsedTable Second
+        {
+            get
+            {
+                return objects.Objects.Skip(1).First();
+            }
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static ParsedTable Third
+        {
+            get
+            {
+                return objects.Objects.Skip(2).First();
+            }
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        private static IEnumerable<ParsedTable> GetInstances()
+        {
+            return GetApparents().Concat(GetInstancesOfCurrentType());
+        }
+
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        private static IEnumerable<ParsedTable>GetApparents()
+        {
+            return ReadOnlyList<ParsedTable>.Empty;
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void ParsedTable_CheckNullArg_table()
+        {
+            var table = HtmlTableTest.First;
+            var testFunction = AbstractTestFunctionTest.First;
+            var tableParseInfo = new List<AbstractTableChange>{ AbstractTableChangeTest.First }.ToReadOnlyList();
+
+            try
+            {
+                new ParsedTable(null, testFunction, tableParseInfo);
+            }
+            catch(ArgumentNullException ex)
+            {
+                CheckArgumentExceptionParameter( "table", ex.ParamName );
+
+                return;
+            }
+
+            Assert.Fail("Argument 'table' isn't checked for null inputs");
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void ParsedTable_CheckNullArg_testFunction()
+        {
+            var table = HtmlTableTest.First;
+            var testFunction = AbstractTestFunctionTest.First;
+            var tableParseInfo = new List<AbstractTableChange>{ AbstractTableChangeTest.First }.ToReadOnlyList();
+
+            try
+            {
+                new ParsedTable(table, null, tableParseInfo);
+            }
+            catch(ArgumentNullException ex)
+            {
+                CheckArgumentExceptionParameter( "testFunction", ex.ParamName );
+
+                return;
+            }
+
+            Assert.Fail("Argument 'testFunction' isn't checked for null inputs");
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void ParsedTable_CheckNullArg_tableParseInfo()
+        {
+            var table = HtmlTableTest.First;
+            var testFunction = AbstractTestFunctionTest.First;
+            var tableParseInfo = new List<AbstractTableChange>{ AbstractTableChangeTest.First }.ToReadOnlyList();
+
+            try
+            {
+                new ParsedTable(table, testFunction, null);
+            }
+            catch(ArgumentNullException ex)
+            {
+                CheckArgumentExceptionParameter( "tableParseInfo", ex.ParamName );
+
+                return;
+            }
+
+            Assert.Fail("Argument 'tableParseInfo' isn't checked for null inputs");
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void ParsedTable_GetHashCodeTest()
+        {
+            BaseGetHashCodeTest(objects);
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void ParsedTable_EqualsTest()
+        {
+            BaseEqualsTest(objects);
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void ParsedTable_ToStringTest()
+        {
+            BaseToStringTest(objects);
+        }
+    }
+
+    [TestClass]
+    public sealed partial class TestExecutionPlanTest : ReadOnlyObjectTest
+    {
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static readonly ObjectsCache<TestExecutionPlan> objects = new ObjectsCache<TestExecutionPlan>(GetInstances);
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static IEnumerable<TestExecutionPlan[]> CreateNonEmptyObjectsArrays()
+        {
+            return new[]
+            {
+                TestExecutionPlanTest.objects.Objects.Skip(1).ToArray(),
+                TestExecutionPlanTest.objects.Objects.Take(2).ToArray(),
+                TestExecutionPlanTest.objects.Objects.Take(1).ToArray()
+            };
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static TestExecutionPlan First
+        {
+            get
+            {
+                return objects.Objects.First();
+            }
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static TestExecutionPlan Second
+        {
+            get
+            {
+                return objects.Objects.Skip(1).First();
+            }
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static TestExecutionPlan Third
+        {
+            get
+            {
+                return objects.Objects.Skip(2).First();
+            }
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        private static IEnumerable<TestExecutionPlan> GetInstances()
+        {
+            return GetApparents().Concat(GetInstancesOfCurrentType());
+        }
+
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        private static IEnumerable<TestExecutionPlan>GetApparents()
+        {
+            return ReadOnlyList<TestExecutionPlan>.Empty;
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void TestExecutionPlan_CheckNullArg_textBeforeFirstTable()
+        {
+            var textBeforeFirstTable = "text 135346";
+            var functionsSequence = new List<ParsedTable>{ ParsedTableTest.First }.ToReadOnlyList();
+
+            try
+            {
+                new TestExecutionPlan(null, functionsSequence);
+            }
+            catch(ArgumentNullException ex)
+            {
+                CheckArgumentExceptionParameter( "textBeforeFirstTable", ex.ParamName );
+
+                return;
+            }
+
+            Assert.Fail("Argument 'textBeforeFirstTable' isn't checked for null inputs");
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void TestExecutionPlan_CheckNullArg_functionsSequence()
+        {
+            var textBeforeFirstTable = "text 135346";
+            var functionsSequence = new List<ParsedTable>{ ParsedTableTest.First }.ToReadOnlyList();
+
+            try
+            {
+                new TestExecutionPlan(textBeforeFirstTable, null);
+            }
+            catch(ArgumentNullException ex)
+            {
+                CheckArgumentExceptionParameter( "functionsSequence", ex.ParamName );
+
+                return;
+            }
+
+            Assert.Fail("Argument 'functionsSequence' isn't checked for null inputs");
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void TestExecutionPlan_GetHashCodeTest()
+        {
+            BaseGetHashCodeTest(objects);
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void TestExecutionPlan_EqualsTest()
+        {
+            BaseEqualsTest(objects);
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void TestExecutionPlan_ToStringTest()
+        {
+            BaseToStringTest(objects);
+        }
+    }
+
+    [TestClass]
+    public sealed partial class FunctionExecutionResultTest : ReadOnlyObjectTest
+    {
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static readonly ObjectsCache<FunctionExecutionResult> objects = new ObjectsCache<FunctionExecutionResult>(GetInstances);
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static IEnumerable<FunctionExecutionResult[]> CreateNonEmptyObjectsArrays()
+        {
+            return new[]
+            {
+                FunctionExecutionResultTest.objects.Objects.Skip(1).ToArray(),
+                FunctionExecutionResultTest.objects.Objects.Take(2).ToArray(),
+                FunctionExecutionResultTest.objects.Objects.Take(1).ToArray()
+            };
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static FunctionExecutionResult First
+        {
+            get
+            {
+                return objects.Objects.First();
+            }
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static FunctionExecutionResult Second
+        {
+            get
+            {
+                return objects.Objects.Skip(1).First();
+            }
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static FunctionExecutionResult Third
+        {
+            get
+            {
+                return objects.Objects.Skip(2).First();
+            }
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        private static IEnumerable<FunctionExecutionResult> GetInstances()
+        {
+            return GetApparents().Concat(GetInstancesOfCurrentType());
+        }
+
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        private static IEnumerable<FunctionExecutionResult>GetApparents()
+        {
+            return ReadOnlyList<FunctionExecutionResult>.Empty;
+        }
+
+        [TestMethod]
+        public void FunctionExecutionResult_CheckWrongEnumArg_resultType_135347()
+        {
+            var resultType = Enum.GetValues(typeof(FunctionExecutionResult.FunctionRunResult)).Cast<FunctionExecutionResult.FunctionRunResult>().First();
+            var tableChanges = new AbstractTableChange[] { AbstractTableChangeTest.First, AbstractTableChangeTest.First };
+
+            try
+            {
+                new FunctionExecutionResult((FunctionExecutionResult.FunctionRunResult)4, tableChanges);
+            }
+            catch(ArgumentException ex)
+            {
+                CheckArgumentExceptionParameter( "resultType", ex.ParamName );
+
+                return;
+            }
+
+            Assert.Fail("Enumeration in the argument 'resultType' isn't checked for the not-defined values");
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void FunctionExecutionResult_CheckNullArg_tableChanges_135348()
+        {
+            var resultType = Enum.GetValues(typeof(FunctionExecutionResult.FunctionRunResult)).Cast<FunctionExecutionResult.FunctionRunResult>().First();
+            var tableChanges = new AbstractTableChange[] { AbstractTableChangeTest.First, AbstractTableChangeTest.First };
+
+            try
+            {
+                new FunctionExecutionResult(resultType, (AbstractTableChange[])null);
+            }
+            catch(ArgumentNullException ex)
+            {
+                CheckArgumentExceptionParameter( "tableChanges", ex.ParamName );
+
+                return;
+            }
+
+            Assert.Fail("Argument 'tableChanges' isn't checked for null inputs");
+        }
+
+        [TestMethod]
+        public void FunctionExecutionResult_CheckWrongEnumArg_resultType_135349()
+        {
+            var resultType = Enum.GetValues(typeof(FunctionExecutionResult.FunctionRunResult)).Cast<FunctionExecutionResult.FunctionRunResult>().First();
+            var tableChanges = new List<AbstractTableChange>{ AbstractTableChangeTest.First }.ToReadOnlyList();
+
+            try
+            {
+                new FunctionExecutionResult((FunctionExecutionResult.FunctionRunResult)4, tableChanges);
+            }
+            catch(ArgumentException ex)
+            {
+                CheckArgumentExceptionParameter( "resultType", ex.ParamName );
+
+                return;
+            }
+
+            Assert.Fail("Enumeration in the argument 'resultType' isn't checked for the not-defined values");
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void FunctionExecutionResult_CheckNullArg_tableChanges_135350()
+        {
+            var resultType = Enum.GetValues(typeof(FunctionExecutionResult.FunctionRunResult)).Cast<FunctionExecutionResult.FunctionRunResult>().First();
+            var tableChanges = new List<AbstractTableChange>{ AbstractTableChangeTest.First }.ToReadOnlyList();
+
+            try
+            {
+                new FunctionExecutionResult(resultType, (IEnumerable<AbstractTableChange>)null);
+            }
+            catch(ArgumentNullException ex)
+            {
+                CheckArgumentExceptionParameter( "tableChanges", ex.ParamName );
+
+                return;
+            }
+
+            Assert.Fail("Argument 'tableChanges' isn't checked for null inputs");
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void FunctionExecutionResult_GetHashCodeTest()
+        {
+            BaseGetHashCodeTest(objects);
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void FunctionExecutionResult_EqualsTest()
+        {
+            BaseEqualsTest(objects);
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void FunctionExecutionResult_ToStringTest()
+        {
+            BaseToStringTest(objects);
+        }
+    }
+
+    [TestClass]
+    public sealed partial class FunctionHeaderTest : ReadOnlyObjectTest
+    {
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static readonly ObjectsCache<FunctionHeader> objects = new ObjectsCache<FunctionHeader>(GetInstances);
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static IEnumerable<FunctionHeader[]> CreateNonEmptyObjectsArrays()
+        {
+            return new[]
+            {
+                FunctionHeaderTest.objects.Objects.Skip(1).ToArray(),
+                FunctionHeaderTest.objects.Objects.Take(2).ToArray(),
+                FunctionHeaderTest.objects.Objects.Take(1).ToArray()
+            };
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static FunctionHeader First
+        {
+            get
+            {
+                return objects.Objects.First();
+            }
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static FunctionHeader Second
+        {
+            get
+            {
+                return objects.Objects.Skip(1).First();
+            }
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static FunctionHeader Third
+        {
+            get
+            {
+                return objects.Objects.Skip(2).First();
+            }
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        private static IEnumerable<FunctionHeader> GetInstances()
+        {
+            return GetApparents().Concat(GetInstancesOfCurrentType());
+        }
+
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        private static IEnumerable<FunctionHeader>GetApparents()
+        {
+            return ReadOnlyList<FunctionHeader>.Empty;
+        }
+
+        [TestMethod]
+        public void FunctionHeader_CheckEmptyStringArg_functionName()
+        {
+            CheckEmptyStringArg_functionName(string.Empty);
+            CheckEmptyStringArg_functionName("    ");
+            CheckEmptyStringArg_functionName(Environment.NewLine);
+            CheckEmptyStringArg_functionName("\n\r");
+        }
+
+        private void CheckEmptyStringArg_functionName(string stringArgument)
+        {
+            var functionName = "text 135351";
+            var arguments = new List<HtmlCell>{ HtmlCellTest.First }.ToReadOnlyList();
+            var rowReference = HtmlRowReferenceTest.First;
+            var firstFunctionCell = HtmlCellTest.First;
+            var keyword = AbstractKeywordTest.First;
+
+            try
+            {
+                new FunctionHeader(stringArgument, arguments, rowReference, firstFunctionCell, keyword);
+            }
+            catch(ArgumentException ex)
+            {
+                CheckArgumentExceptionParameter( "functionName", ex.ParamName );
+
+                return;
+            }
+
+            Assert.Fail("String in the argument 'functionName' isn't checked for emply values");
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void FunctionHeader_CheckNullArg_functionName()
+        {
+            var functionName = "text 135351";
+            var arguments = new List<HtmlCell>{ HtmlCellTest.First }.ToReadOnlyList();
+            var rowReference = HtmlRowReferenceTest.First;
+            var firstFunctionCell = HtmlCellTest.First;
+            var keyword = AbstractKeywordTest.First;
+
+            try
+            {
+                new FunctionHeader(null, arguments, rowReference, firstFunctionCell, keyword);
+            }
+            catch(ArgumentNullException ex)
+            {
+                CheckArgumentExceptionParameter( "functionName", ex.ParamName );
+
+                return;
+            }
+
+            Assert.Fail("Argument 'functionName' isn't checked for null inputs");
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void FunctionHeader_CheckNullArg_arguments()
+        {
+            var functionName = "text 135351";
+            var arguments = new List<HtmlCell>{ HtmlCellTest.First }.ToReadOnlyList();
+            var rowReference = HtmlRowReferenceTest.First;
+            var firstFunctionCell = HtmlCellTest.First;
+            var keyword = AbstractKeywordTest.First;
+
+            try
+            {
+                new FunctionHeader(functionName, null, rowReference, firstFunctionCell, keyword);
+            }
+            catch(ArgumentNullException ex)
+            {
+                CheckArgumentExceptionParameter( "arguments", ex.ParamName );
+
+                return;
+            }
+
+            Assert.Fail("Argument 'arguments' isn't checked for null inputs");
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void FunctionHeader_CheckNullArg_rowReference()
+        {
+            var functionName = "text 135351";
+            var arguments = new List<HtmlCell>{ HtmlCellTest.First }.ToReadOnlyList();
+            var rowReference = HtmlRowReferenceTest.First;
+            var firstFunctionCell = HtmlCellTest.First;
+            var keyword = AbstractKeywordTest.First;
+
+            try
+            {
+                new FunctionHeader(functionName, arguments, null, firstFunctionCell, keyword);
+            }
+            catch(ArgumentNullException ex)
+            {
+                CheckArgumentExceptionParameter( "rowReference", ex.ParamName );
+
+                return;
+            }
+
+            Assert.Fail("Argument 'rowReference' isn't checked for null inputs");
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void FunctionHeader_CheckNullArg_firstFunctionCell()
+        {
+            var functionName = "text 135351";
+            var arguments = new List<HtmlCell>{ HtmlCellTest.First }.ToReadOnlyList();
+            var rowReference = HtmlRowReferenceTest.First;
+            var firstFunctionCell = HtmlCellTest.First;
+            var keyword = AbstractKeywordTest.First;
+
+            try
+            {
+                new FunctionHeader(functionName, arguments, rowReference, null, keyword);
+            }
+            catch(ArgumentNullException ex)
+            {
+                CheckArgumentExceptionParameter( "firstFunctionCell", ex.ParamName );
+
+                return;
+            }
+
+            Assert.Fail("Argument 'firstFunctionCell' isn't checked for null inputs");
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void FunctionHeader_CheckNullArg_keyword()
+        {
+            var functionName = "text 135351";
+            var arguments = new List<HtmlCell>{ HtmlCellTest.First }.ToReadOnlyList();
+            var rowReference = HtmlRowReferenceTest.First;
+            var firstFunctionCell = HtmlCellTest.First;
+            var keyword = AbstractKeywordTest.First;
+
+            try
+            {
+                new FunctionHeader(functionName, arguments, rowReference, firstFunctionCell, null);
+            }
+            catch(ArgumentNullException ex)
+            {
+                CheckArgumentExceptionParameter( "keyword", ex.ParamName );
+
+                return;
+            }
+
+            Assert.Fail("Argument 'keyword' isn't checked for null inputs");
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void FunctionHeader_GetHashCodeTest()
+        {
+            BaseGetHashCodeTest(objects);
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void FunctionHeader_EqualsTest()
+        {
+            BaseEqualsTest(objects);
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void FunctionHeader_ToStringTest()
+        {
+            BaseToStringTest(objects);
+        }
+    }
+
+    [TestClass]
+    public sealed partial class HtmlRowReferenceTest : ReadOnlyObjectTest
+    {
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static readonly ObjectsCache<HtmlRowReference> objects = new ObjectsCache<HtmlRowReference>(GetInstances);
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static IEnumerable<HtmlRowReference[]> CreateNonEmptyObjectsArrays()
+        {
+            return new[]
+            {
+                HtmlRowReferenceTest.objects.Objects.Skip(1).ToArray(),
+                HtmlRowReferenceTest.objects.Objects.Take(2).ToArray(),
+                HtmlRowReferenceTest.objects.Objects.Take(1).ToArray()
+            };
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static HtmlRowReference First
+        {
+            get
+            {
+                return objects.Objects.First();
+            }
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static HtmlRowReference Second
+        {
+            get
+            {
+                return objects.Objects.Skip(1).First();
+            }
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static HtmlRowReference Third
+        {
+            get
+            {
+                return objects.Objects.Skip(2).First();
+            }
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        private static IEnumerable<HtmlRowReference> GetInstances()
+        {
+            return GetApparents().Concat(GetInstancesOfCurrentType());
+        }
+
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        private static IEnumerable<HtmlRowReference>GetApparents()
+        {
+            return ReadOnlyList<HtmlRowReference>.Empty;
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void HtmlRowReference_GetHashCodeTest()
+        {
+            BaseGetHashCodeTest(objects);
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void HtmlRowReference_EqualsTest()
+        {
+            BaseEqualsTest(objects);
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void HtmlRowReference_ToStringTest()
+        {
+            BaseToStringTest(objects);
+        }
+    }
+
+    [TestClass]
+    public sealed partial class TestFunctionReferenceTest : ReadOnlyObjectTest
+    {
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static readonly ObjectsCache<TestFunctionReference> objects = new ObjectsCache<TestFunctionReference>(GetInstances);
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static IEnumerable<TestFunctionReference[]> CreateNonEmptyObjectsArrays()
+        {
+            return new[]
+            {
+                TestFunctionReferenceTest.objects.Objects.Skip(1).ToArray(),
+                TestFunctionReferenceTest.objects.Objects.Take(2).ToArray(),
+                TestFunctionReferenceTest.objects.Objects.Take(1).ToArray()
+            };
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static TestFunctionReference First
+        {
+            get
+            {
+                return objects.Objects.First();
+            }
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static TestFunctionReference Second
+        {
+            get
+            {
+                return objects.Objects.Skip(1).First();
+            }
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        internal static TestFunctionReference Third
+        {
+            get
+            {
+                return objects.Objects.Skip(2).First();
+            }
+        }
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        private static IEnumerable<TestFunctionReference> GetInstances()
+        {
+            return GetApparents().Concat(GetInstancesOfCurrentType());
+        }
+
+
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        private static IEnumerable<TestFunctionReference>GetApparents()
+        {
+            return ReadOnlyList<TestFunctionReference>.Empty;
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void TestFunctionReference_CheckNullArg_method()
+        {
+            var method = GetType().GetMethods().First();
+            var targetObject = new FakeFunctionContainer(1);
+
+            try
+            {
+                new TestFunctionReference(null, targetObject);
+            }
+            catch(ArgumentNullException ex)
+            {
+                CheckArgumentExceptionParameter( "method", ex.ParamName );
+
+                return;
+            }
+
+            Assert.Fail("Argument 'method' isn't checked for null inputs");
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void TestFunctionReference_CheckNullArg_targetObject()
+        {
+            var method = GetType().GetMethods().First();
+            var targetObject = new FakeFunctionContainer(1);
+
+            try
+            {
+                new TestFunctionReference(method, null);
+            }
+            catch(ArgumentNullException ex)
+            {
+                CheckArgumentExceptionParameter( "targetObject", ex.ParamName );
+
+                return;
+            }
+
+            Assert.Fail("Argument 'targetObject' isn't checked for null inputs");
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void TestFunctionReference_GetHashCodeTest()
+        {
+            BaseGetHashCodeTest(objects);
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void TestFunctionReference_EqualsTest()
+        {
+            BaseEqualsTest(objects);
+        }
+
+        [TestMethod]
+        [GeneratedCode("TestGenerator", "1.0.0.0")]
+        public void TestFunctionReference_ToStringTest()
+        {
+            BaseToStringTest(objects);
+        }
+    }
+
+}
+
 namespace NetRunner.Executable.Tests.Invokation.Functions
 {
 
@@ -202,8 +1064,8 @@ AddCellExpandableExceptionTest.objects);
         public void AddCellExpandableInfo_CheckNullArg_cell()
         {
             var cell = HtmlCellTest.First;
-            var header = "text 135346";
-            var info = "text 135347";
+            var header = "text 135352";
+            var info = "text 135353";
 
             try
             {
@@ -231,8 +1093,8 @@ AddCellExpandableExceptionTest.objects);
         private void CheckEmptyStringArg_header(string stringArgument)
         {
             var cell = HtmlCellTest.First;
-            var header = "text 135346";
-            var info = "text 135347";
+            var header = "text 135352";
+            var info = "text 135353";
 
             try
             {
@@ -253,8 +1115,8 @@ AddCellExpandableExceptionTest.objects);
         public void AddCellExpandableInfo_CheckNullArg_header()
         {
             var cell = HtmlCellTest.First;
-            var header = "text 135346";
-            var info = "text 135347";
+            var header = "text 135352";
+            var info = "text 135353";
 
             try
             {
@@ -282,8 +1144,8 @@ AddCellExpandableExceptionTest.objects);
         private void CheckEmptyStringArg_info(string stringArgument)
         {
             var cell = HtmlCellTest.First;
-            var header = "text 135346";
-            var info = "text 135347";
+            var header = "text 135352";
+            var info = "text 135353";
 
             try
             {
@@ -304,8 +1166,8 @@ AddCellExpandableExceptionTest.objects);
         public void AddCellExpandableInfo_CheckNullArg_info()
         {
             var cell = HtmlCellTest.First;
-            var header = "text 135346";
-            var info = "text 135347";
+            var header = "text 135352";
+            var info = "text 135353";
 
             try
             {
@@ -405,8 +1267,8 @@ AddCellExpandableExceptionTest.objects);
         public void AddCellExpandableException_CheckNullArg_cell()
         {
             var cell = HtmlCellTest.First;
-            var exception = new Exception("Text exception 135348");
-            var headerFormat = "text 135349";
+            var exception = new Exception("Text exception 135354");
+            var headerFormat = "text 135355";
             var args = new Object[] { new object(), new object() };
 
             try
@@ -428,8 +1290,8 @@ AddCellExpandableExceptionTest.objects);
         public void AddCellExpandableException_CheckNullArg_exception()
         {
             var cell = HtmlCellTest.First;
-            var exception = new Exception("Text exception 135348");
-            var headerFormat = "text 135349";
+            var exception = new Exception("Text exception 135354");
+            var headerFormat = "text 135355";
             var args = new Object[] { new object(), new object() };
 
             try
@@ -458,8 +1320,8 @@ AddCellExpandableExceptionTest.objects);
         private void CheckEmptyStringArg_headerFormat(string stringArgument)
         {
             var cell = HtmlCellTest.First;
-            var exception = new Exception("Text exception 135348");
-            var headerFormat = "text 135349";
+            var exception = new Exception("Text exception 135354");
+            var headerFormat = "text 135355";
             var args = new Object[] { new object(), new object() };
 
             try
@@ -481,8 +1343,8 @@ AddCellExpandableExceptionTest.objects);
         public void AddCellExpandableException_CheckNullArg_headerFormat()
         {
             var cell = HtmlCellTest.First;
-            var exception = new Exception("Text exception 135348");
-            var headerFormat = "text 135349";
+            var exception = new Exception("Text exception 135354");
+            var headerFormat = "text 135355";
             var args = new Object[] { new object(), new object() };
 
             try
@@ -504,8 +1366,8 @@ AddCellExpandableExceptionTest.objects);
         public void AddCellExpandableException_CheckNullArg_args()
         {
             var cell = HtmlCellTest.First;
-            var exception = new Exception("Text exception 135348");
-            var headerFormat = "text 135349";
+            var exception = new Exception("Text exception 135354");
+            var headerFormat = "text 135355";
             var args = new Object[] { new object(), new object() };
 
             try
@@ -1100,7 +1962,7 @@ TableResultFunctionTest.objects);
 
         [TestMethod]
         [GeneratedCode("TestGenerator", "1.0.0.0")]
-        public void TableChangeCollection_CheckNullArg_changes_135352()
+        public void TableChangeCollection_CheckNullArg_changes_135358()
         {
             var allWasOk = true;
             var wereExceptions = false;
@@ -1122,7 +1984,7 @@ TableResultFunctionTest.objects);
 
         [TestMethod]
         [GeneratedCode("TestGenerator", "1.0.0.0")]
-        public void TableChangeCollection_CheckNullArg_changes_135355()
+        public void TableChangeCollection_CheckNullArg_changes_135361()
         {
             var allWasOk = false;
             var wereExceptions = true;
@@ -1403,8 +2265,8 @@ TableResultFunctionTest.objects);
 
         private void CheckEmptyStringArg_header_0(string stringArgument)
         {
-            var header = "text 135356";
-            var exception = new Exception("Text exception 135357");
+            var header = "text 135362";
+            var exception = new Exception("Text exception 135363");
             var rowReference = HtmlRowReferenceTest.First;
 
             try
@@ -1423,10 +2285,10 @@ TableResultFunctionTest.objects);
 
         [TestMethod]
         [GeneratedCode("TestGenerator", "1.0.0.0")]
-        public void AddExceptionLine_CheckNullArg_header_135358()
+        public void AddExceptionLine_CheckNullArg_header_135364()
         {
-            var header = "text 135356";
-            var exception = new Exception("Text exception 135357");
+            var header = "text 135362";
+            var exception = new Exception("Text exception 135363");
             var rowReference = HtmlRowReferenceTest.First;
 
             try
@@ -1445,10 +2307,10 @@ TableResultFunctionTest.objects);
 
         [TestMethod]
         [GeneratedCode("TestGenerator", "1.0.0.0")]
-        public void AddExceptionLine_CheckNullArg_exception_135359()
+        public void AddExceptionLine_CheckNullArg_exception_135365()
         {
-            var header = "text 135356";
-            var exception = new Exception("Text exception 135357");
+            var header = "text 135362";
+            var exception = new Exception("Text exception 135363");
             var rowReference = HtmlRowReferenceTest.First;
 
             try
@@ -1467,10 +2329,10 @@ TableResultFunctionTest.objects);
 
         [TestMethod]
         [GeneratedCode("TestGenerator", "1.0.0.0")]
-        public void AddExceptionLine_CheckNullArg_rowReference_135360()
+        public void AddExceptionLine_CheckNullArg_rowReference_135366()
         {
-            var header = "text 135356";
-            var exception = new Exception("Text exception 135357");
+            var header = "text 135362";
+            var exception = new Exception("Text exception 135363");
             var rowReference = HtmlRowReferenceTest.First;
 
             try
@@ -1498,8 +2360,8 @@ TableResultFunctionTest.objects);
 
         private void CheckEmptyStringArg_header_1(string stringArgument)
         {
-            var header = "text 135361";
-            var exceptions = new List<Exception>{ new Exception("Text exception 135362") }.ToReadOnlyList();
+            var header = "text 135367";
+            var exceptions = new List<Exception>{ new Exception("Text exception 135368") }.ToReadOnlyList();
             var rowReference = HtmlRowReferenceTest.First;
 
             try
@@ -1518,10 +2380,10 @@ TableResultFunctionTest.objects);
 
         [TestMethod]
         [GeneratedCode("TestGenerator", "1.0.0.0")]
-        public void AddExceptionLine_CheckNullArg_header_135363()
+        public void AddExceptionLine_CheckNullArg_header_135369()
         {
-            var header = "text 135361";
-            var exceptions = new List<Exception>{ new Exception("Text exception 135362") }.ToReadOnlyList();
+            var header = "text 135367";
+            var exceptions = new List<Exception>{ new Exception("Text exception 135368") }.ToReadOnlyList();
             var rowReference = HtmlRowReferenceTest.First;
 
             try
@@ -1540,10 +2402,10 @@ TableResultFunctionTest.objects);
 
         [TestMethod]
         [GeneratedCode("TestGenerator", "1.0.0.0")]
-        public void AddExceptionLine_CheckNullArg_exceptions_135364()
+        public void AddExceptionLine_CheckNullArg_exceptions_135370()
         {
-            var header = "text 135361";
-            var exceptions = new List<Exception>{ new Exception("Text exception 135362") }.ToReadOnlyList();
+            var header = "text 135367";
+            var exceptions = new List<Exception>{ new Exception("Text exception 135368") }.ToReadOnlyList();
             var rowReference = HtmlRowReferenceTest.First;
 
             try
@@ -1562,10 +2424,10 @@ TableResultFunctionTest.objects);
 
         [TestMethod]
         [GeneratedCode("TestGenerator", "1.0.0.0")]
-        public void AddExceptionLine_CheckNullArg_rowReference_135365()
+        public void AddExceptionLine_CheckNullArg_rowReference_135371()
         {
-            var header = "text 135361";
-            var exceptions = new List<Exception>{ new Exception("Text exception 135362") }.ToReadOnlyList();
+            var header = "text 135367";
+            var exceptions = new List<Exception>{ new Exception("Text exception 135368") }.ToReadOnlyList();
             var rowReference = HtmlRowReferenceTest.First;
 
             try
@@ -1584,9 +2446,9 @@ TableResultFunctionTest.objects);
 
         [TestMethod]
         [GeneratedCode("TestGenerator", "1.0.0.0")]
-        public void AddExceptionLine_CheckNullArg_exception_135367()
+        public void AddExceptionLine_CheckNullArg_exception_135373()
         {
-            var exception = new Exception("Text exception 135366");
+            var exception = new Exception("Text exception 135372");
             var rowReference = HtmlRowReferenceTest.First;
 
             try
@@ -1605,9 +2467,9 @@ TableResultFunctionTest.objects);
 
         [TestMethod]
         [GeneratedCode("TestGenerator", "1.0.0.0")]
-        public void AddExceptionLine_CheckNullArg_rowReference_135368()
+        public void AddExceptionLine_CheckNullArg_rowReference_135374()
         {
-            var exception = new Exception("Text exception 135366");
+            var exception = new Exception("Text exception 135372");
             var rowReference = HtmlRowReferenceTest.First;
 
             try
@@ -1626,9 +2488,9 @@ TableResultFunctionTest.objects);
 
         [TestMethod]
         [GeneratedCode("TestGenerator", "1.0.0.0")]
-        public void AddExceptionLine_CheckNullArg_exceptions_135370()
+        public void AddExceptionLine_CheckNullArg_exceptions_135376()
         {
-            var exceptions = new List<Exception>{ new Exception("Text exception 135369") }.ToReadOnlyList();
+            var exceptions = new List<Exception>{ new Exception("Text exception 135375") }.ToReadOnlyList();
             var rowReference = HtmlRowReferenceTest.First;
 
             try
@@ -1647,9 +2509,9 @@ TableResultFunctionTest.objects);
 
         [TestMethod]
         [GeneratedCode("TestGenerator", "1.0.0.0")]
-        public void AddExceptionLine_CheckNullArg_rowReference_135371()
+        public void AddExceptionLine_CheckNullArg_rowReference_135377()
         {
-            var exceptions = new List<Exception>{ new Exception("Text exception 135369") }.ToReadOnlyList();
+            var exceptions = new List<Exception>{ new Exception("Text exception 135375") }.ToReadOnlyList();
             var rowReference = HtmlRowReferenceTest.First;
 
             try
@@ -1756,7 +2618,7 @@ TableResultFunctionTest.objects);
 
         private void CheckEmptyStringArg_text(string stringArgument)
         {
-            var text = "text 135372";
+            var text = "text 135378";
             var rowReference = HtmlRowReferenceTest.First;
 
             try
@@ -1777,7 +2639,7 @@ TableResultFunctionTest.objects);
         [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void AddTraceLine_CheckNullArg_text()
         {
-            var text = "text 135372";
+            var text = "text 135378";
             var rowReference = HtmlRowReferenceTest.First;
 
             try
@@ -1798,7 +2660,7 @@ TableResultFunctionTest.objects);
         [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void AddTraceLine_CheckNullArg_rowReference()
         {
-            var text = "text 135372";
+            var text = "text 135378";
             var rowReference = HtmlRowReferenceTest.First;
 
             try
@@ -1905,8 +2767,8 @@ TableResultFunctionTest.objects);
 
         private void CheckEmptyStringArg_cellClass(string stringArgument)
         {
-            var cellClass = "text 135373";
-            var cellHtmlDatas = new List<String>{ "text 135374" }.ToReadOnlyList();
+            var cellClass = "text 135379";
+            var cellHtmlDatas = new List<String>{ "text 135380" }.ToReadOnlyList();
 
             try
             {
@@ -1926,8 +2788,8 @@ TableResultFunctionTest.objects);
         [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void AppendRowWithCells_CheckNullArg_cellClass()
         {
-            var cellClass = "text 135373";
-            var cellHtmlDatas = new List<String>{ "text 135374" }.ToReadOnlyList();
+            var cellClass = "text 135379";
+            var cellHtmlDatas = new List<String>{ "text 135380" }.ToReadOnlyList();
 
             try
             {
@@ -1947,8 +2809,8 @@ TableResultFunctionTest.objects);
         [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void AppendRowWithCells_CheckNullArg_cellHtmlDatas()
         {
-            var cellClass = "text 135373";
-            var cellHtmlDatas = new List<String>{ "text 135374" }.ToReadOnlyList();
+            var cellClass = "text 135379";
+            var cellHtmlDatas = new List<String>{ "text 135380" }.ToReadOnlyList();
 
             try
             {
@@ -2050,7 +2912,7 @@ ShowActualValueCellChangeTest.objects);
         public void CssClassCellChange_CheckNullArg_cell()
         {
             var cell = HtmlCellTest.First;
-            var newClass = "text 135375";
+            var newClass = "text 135381";
 
             try
             {
@@ -2078,7 +2940,7 @@ ShowActualValueCellChangeTest.objects);
         private void CheckEmptyStringArg_newClass(string stringArgument)
         {
             var cell = HtmlCellTest.First;
-            var newClass = "text 135375";
+            var newClass = "text 135381";
 
             try
             {
@@ -2099,7 +2961,7 @@ ShowActualValueCellChangeTest.objects);
         public void CssClassCellChange_CheckNullArg_newClass()
         {
             var cell = HtmlCellTest.First;
-            var newClass = "text 135375";
+            var newClass = "text 135381";
 
             try
             {
@@ -2278,7 +3140,7 @@ ShowActualValueCellChangeTest.objects);
         public void AddRowCssClass_CheckNullArg_rowReference()
         {
             var rowReference = HtmlRowReferenceTest.First;
-            var targetCssClass = "text 135376";
+            var targetCssClass = "text 135382";
 
             try
             {
@@ -2306,7 +3168,7 @@ ShowActualValueCellChangeTest.objects);
         private void CheckEmptyStringArg_targetCssClass(string stringArgument)
         {
             var rowReference = HtmlRowReferenceTest.First;
-            var targetCssClass = "text 135376";
+            var targetCssClass = "text 135382";
 
             try
             {
@@ -2327,7 +3189,7 @@ ShowActualValueCellChangeTest.objects);
         public void AddRowCssClass_CheckNullArg_targetCssClass()
         {
             var rowReference = HtmlRowReferenceTest.First;
-            var targetCssClass = "text 135376";
+            var targetCssClass = "text 135382";
 
             try
             {
@@ -2427,8 +3289,8 @@ ShowActualValueCellChangeTest.objects);
         public void ExecutionFailedMessage_CheckNullArg_rowReference()
         {
             var rowReference = HtmlRowReferenceTest.First;
-            var header = "text 135377";
-            var messageFormat = "text 135378";
+            var header = "text 135383";
+            var messageFormat = "text 135384";
             var args = new Object[] { new object(), new object() };
 
             try
@@ -2457,8 +3319,8 @@ ShowActualValueCellChangeTest.objects);
         private void CheckEmptyStringArg_header(string stringArgument)
         {
             var rowReference = HtmlRowReferenceTest.First;
-            var header = "text 135377";
-            var messageFormat = "text 135378";
+            var header = "text 135383";
+            var messageFormat = "text 135384";
             var args = new Object[] { new object(), new object() };
 
             try
@@ -2480,8 +3342,8 @@ ShowActualValueCellChangeTest.objects);
         public void ExecutionFailedMessage_CheckNullArg_header()
         {
             var rowReference = HtmlRowReferenceTest.First;
-            var header = "text 135377";
-            var messageFormat = "text 135378";
+            var header = "text 135383";
+            var messageFormat = "text 135384";
             var args = new Object[] { new object(), new object() };
 
             try
@@ -2510,8 +3372,8 @@ ShowActualValueCellChangeTest.objects);
         private void CheckEmptyStringArg_messageFormat(string stringArgument)
         {
             var rowReference = HtmlRowReferenceTest.First;
-            var header = "text 135377";
-            var messageFormat = "text 135378";
+            var header = "text 135383";
+            var messageFormat = "text 135384";
             var args = new Object[] { new object(), new object() };
 
             try
@@ -2533,8 +3395,8 @@ ShowActualValueCellChangeTest.objects);
         public void ExecutionFailedMessage_CheckNullArg_messageFormat()
         {
             var rowReference = HtmlRowReferenceTest.First;
-            var header = "text 135377";
-            var messageFormat = "text 135378";
+            var header = "text 135383";
+            var messageFormat = "text 135384";
             var args = new Object[] { new object(), new object() };
 
             try
@@ -2556,8 +3418,8 @@ ShowActualValueCellChangeTest.objects);
         public void ExecutionFailedMessage_CheckNullArg_args()
         {
             var rowReference = HtmlRowReferenceTest.First;
-            var header = "text 135377";
-            var messageFormat = "text 135378";
+            var header = "text 135383";
+            var messageFormat = "text 135384";
             var args = new Object[] { new object(), new object() };
 
             try
@@ -3313,602 +4175,6 @@ UnknownKeywordTest.objects);
 
 }
 
-namespace NetRunner.Executable.Tests.Invokation
-{
-
-    [TestClass]
-    public sealed partial class FunctionExecutionResultTest : ReadOnlyObjectTest
-    {
-        [GeneratedCode("TestGenerator", "1.0.0.0")]
-        internal static readonly ObjectsCache<FunctionExecutionResult> objects = new ObjectsCache<FunctionExecutionResult>(GetInstances);
-
-        [GeneratedCode("TestGenerator", "1.0.0.0")]
-        internal static IEnumerable<FunctionExecutionResult[]> CreateNonEmptyObjectsArrays()
-        {
-            return new[]
-            {
-                FunctionExecutionResultTest.objects.Objects.Skip(1).ToArray(),
-                FunctionExecutionResultTest.objects.Objects.Take(2).ToArray(),
-                FunctionExecutionResultTest.objects.Objects.Take(1).ToArray()
-            };
-        }
-
-        [GeneratedCode("TestGenerator", "1.0.0.0")]
-        internal static FunctionExecutionResult First
-        {
-            get
-            {
-                return objects.Objects.First();
-            }
-        }
-
-        [GeneratedCode("TestGenerator", "1.0.0.0")]
-        internal static FunctionExecutionResult Second
-        {
-            get
-            {
-                return objects.Objects.Skip(1).First();
-            }
-        }
-
-        [GeneratedCode("TestGenerator", "1.0.0.0")]
-        internal static FunctionExecutionResult Third
-        {
-            get
-            {
-                return objects.Objects.Skip(2).First();
-            }
-        }
-
-        [GeneratedCode("TestGenerator", "1.0.0.0")]
-        private static IEnumerable<FunctionExecutionResult> GetInstances()
-        {
-            return GetApparents().Concat(GetInstancesOfCurrentType());
-        }
-
-
-        [GeneratedCode("TestGenerator", "1.0.0.0")]
-        private static IEnumerable<FunctionExecutionResult>GetApparents()
-        {
-            return ReadOnlyList<FunctionExecutionResult>.Empty;
-        }
-
-        [TestMethod]
-        public void FunctionExecutionResult_CheckWrongEnumArg_resultType_135379()
-        {
-            var resultType = Enum.GetValues(typeof(FunctionExecutionResult.FunctionRunResult)).Cast<FunctionExecutionResult.FunctionRunResult>().First();
-            var tableChanges = new AbstractTableChange[] { AbstractTableChangeTest.First, AbstractTableChangeTest.First };
-
-            try
-            {
-                new FunctionExecutionResult((FunctionExecutionResult.FunctionRunResult)4, tableChanges);
-            }
-            catch(ArgumentException ex)
-            {
-                CheckArgumentExceptionParameter( "resultType", ex.ParamName );
-
-                return;
-            }
-
-            Assert.Fail("Enumeration in the argument 'resultType' isn't checked for the not-defined values");
-        }
-
-        [TestMethod]
-        [GeneratedCode("TestGenerator", "1.0.0.0")]
-        public void FunctionExecutionResult_CheckNullArg_tableChanges_135380()
-        {
-            var resultType = Enum.GetValues(typeof(FunctionExecutionResult.FunctionRunResult)).Cast<FunctionExecutionResult.FunctionRunResult>().First();
-            var tableChanges = new AbstractTableChange[] { AbstractTableChangeTest.First, AbstractTableChangeTest.First };
-
-            try
-            {
-                new FunctionExecutionResult(resultType, (AbstractTableChange[])null);
-            }
-            catch(ArgumentNullException ex)
-            {
-                CheckArgumentExceptionParameter( "tableChanges", ex.ParamName );
-
-                return;
-            }
-
-            Assert.Fail("Argument 'tableChanges' isn't checked for null inputs");
-        }
-
-        [TestMethod]
-        public void FunctionExecutionResult_CheckWrongEnumArg_resultType_135381()
-        {
-            var resultType = Enum.GetValues(typeof(FunctionExecutionResult.FunctionRunResult)).Cast<FunctionExecutionResult.FunctionRunResult>().First();
-            var tableChanges = new List<AbstractTableChange>{ AbstractTableChangeTest.First }.ToReadOnlyList();
-
-            try
-            {
-                new FunctionExecutionResult((FunctionExecutionResult.FunctionRunResult)4, tableChanges);
-            }
-            catch(ArgumentException ex)
-            {
-                CheckArgumentExceptionParameter( "resultType", ex.ParamName );
-
-                return;
-            }
-
-            Assert.Fail("Enumeration in the argument 'resultType' isn't checked for the not-defined values");
-        }
-
-        [TestMethod]
-        [GeneratedCode("TestGenerator", "1.0.0.0")]
-        public void FunctionExecutionResult_CheckNullArg_tableChanges_135382()
-        {
-            var resultType = Enum.GetValues(typeof(FunctionExecutionResult.FunctionRunResult)).Cast<FunctionExecutionResult.FunctionRunResult>().First();
-            var tableChanges = new List<AbstractTableChange>{ AbstractTableChangeTest.First }.ToReadOnlyList();
-
-            try
-            {
-                new FunctionExecutionResult(resultType, (IEnumerable<AbstractTableChange>)null);
-            }
-            catch(ArgumentNullException ex)
-            {
-                CheckArgumentExceptionParameter( "tableChanges", ex.ParamName );
-
-                return;
-            }
-
-            Assert.Fail("Argument 'tableChanges' isn't checked for null inputs");
-        }
-
-        [TestMethod]
-        [GeneratedCode("TestGenerator", "1.0.0.0")]
-        public void FunctionExecutionResult_GetHashCodeTest()
-        {
-            BaseGetHashCodeTest(objects);
-        }
-
-        [TestMethod]
-        [GeneratedCode("TestGenerator", "1.0.0.0")]
-        public void FunctionExecutionResult_EqualsTest()
-        {
-            BaseEqualsTest(objects);
-        }
-
-        [TestMethod]
-        [GeneratedCode("TestGenerator", "1.0.0.0")]
-        public void FunctionExecutionResult_ToStringTest()
-        {
-            BaseToStringTest(objects);
-        }
-    }
-
-    [TestClass]
-    public sealed partial class FunctionHeaderTest : ReadOnlyObjectTest
-    {
-        [GeneratedCode("TestGenerator", "1.0.0.0")]
-        internal static readonly ObjectsCache<FunctionHeader> objects = new ObjectsCache<FunctionHeader>(GetInstances);
-
-        [GeneratedCode("TestGenerator", "1.0.0.0")]
-        internal static IEnumerable<FunctionHeader[]> CreateNonEmptyObjectsArrays()
-        {
-            return new[]
-            {
-                FunctionHeaderTest.objects.Objects.Skip(1).ToArray(),
-                FunctionHeaderTest.objects.Objects.Take(2).ToArray(),
-                FunctionHeaderTest.objects.Objects.Take(1).ToArray()
-            };
-        }
-
-        [GeneratedCode("TestGenerator", "1.0.0.0")]
-        internal static FunctionHeader First
-        {
-            get
-            {
-                return objects.Objects.First();
-            }
-        }
-
-        [GeneratedCode("TestGenerator", "1.0.0.0")]
-        internal static FunctionHeader Second
-        {
-            get
-            {
-                return objects.Objects.Skip(1).First();
-            }
-        }
-
-        [GeneratedCode("TestGenerator", "1.0.0.0")]
-        internal static FunctionHeader Third
-        {
-            get
-            {
-                return objects.Objects.Skip(2).First();
-            }
-        }
-
-        [GeneratedCode("TestGenerator", "1.0.0.0")]
-        private static IEnumerable<FunctionHeader> GetInstances()
-        {
-            return GetApparents().Concat(GetInstancesOfCurrentType());
-        }
-
-
-        [GeneratedCode("TestGenerator", "1.0.0.0")]
-        private static IEnumerable<FunctionHeader>GetApparents()
-        {
-            return ReadOnlyList<FunctionHeader>.Empty;
-        }
-
-        [TestMethod]
-        public void FunctionHeader_CheckEmptyStringArg_functionName()
-        {
-            CheckEmptyStringArg_functionName(string.Empty);
-            CheckEmptyStringArg_functionName("    ");
-            CheckEmptyStringArg_functionName(Environment.NewLine);
-            CheckEmptyStringArg_functionName("\n\r");
-        }
-
-        private void CheckEmptyStringArg_functionName(string stringArgument)
-        {
-            var functionName = "text 135383";
-            var arguments = new List<HtmlCell>{ HtmlCellTest.First }.ToReadOnlyList();
-            var rowReference = HtmlRowReferenceTest.First;
-            var firstFunctionCell = HtmlCellTest.First;
-            var keyword = AbstractKeywordTest.First;
-
-            try
-            {
-                new FunctionHeader(stringArgument, arguments, rowReference, firstFunctionCell, keyword);
-            }
-            catch(ArgumentException ex)
-            {
-                CheckArgumentExceptionParameter( "functionName", ex.ParamName );
-
-                return;
-            }
-
-            Assert.Fail("String in the argument 'functionName' isn't checked for emply values");
-        }
-
-        [TestMethod]
-        [GeneratedCode("TestGenerator", "1.0.0.0")]
-        public void FunctionHeader_CheckNullArg_functionName()
-        {
-            var functionName = "text 135383";
-            var arguments = new List<HtmlCell>{ HtmlCellTest.First }.ToReadOnlyList();
-            var rowReference = HtmlRowReferenceTest.First;
-            var firstFunctionCell = HtmlCellTest.First;
-            var keyword = AbstractKeywordTest.First;
-
-            try
-            {
-                new FunctionHeader(null, arguments, rowReference, firstFunctionCell, keyword);
-            }
-            catch(ArgumentNullException ex)
-            {
-                CheckArgumentExceptionParameter( "functionName", ex.ParamName );
-
-                return;
-            }
-
-            Assert.Fail("Argument 'functionName' isn't checked for null inputs");
-        }
-
-        [TestMethod]
-        [GeneratedCode("TestGenerator", "1.0.0.0")]
-        public void FunctionHeader_CheckNullArg_arguments()
-        {
-            var functionName = "text 135383";
-            var arguments = new List<HtmlCell>{ HtmlCellTest.First }.ToReadOnlyList();
-            var rowReference = HtmlRowReferenceTest.First;
-            var firstFunctionCell = HtmlCellTest.First;
-            var keyword = AbstractKeywordTest.First;
-
-            try
-            {
-                new FunctionHeader(functionName, null, rowReference, firstFunctionCell, keyword);
-            }
-            catch(ArgumentNullException ex)
-            {
-                CheckArgumentExceptionParameter( "arguments", ex.ParamName );
-
-                return;
-            }
-
-            Assert.Fail("Argument 'arguments' isn't checked for null inputs");
-        }
-
-        [TestMethod]
-        [GeneratedCode("TestGenerator", "1.0.0.0")]
-        public void FunctionHeader_CheckNullArg_rowReference()
-        {
-            var functionName = "text 135383";
-            var arguments = new List<HtmlCell>{ HtmlCellTest.First }.ToReadOnlyList();
-            var rowReference = HtmlRowReferenceTest.First;
-            var firstFunctionCell = HtmlCellTest.First;
-            var keyword = AbstractKeywordTest.First;
-
-            try
-            {
-                new FunctionHeader(functionName, arguments, null, firstFunctionCell, keyword);
-            }
-            catch(ArgumentNullException ex)
-            {
-                CheckArgumentExceptionParameter( "rowReference", ex.ParamName );
-
-                return;
-            }
-
-            Assert.Fail("Argument 'rowReference' isn't checked for null inputs");
-        }
-
-        [TestMethod]
-        [GeneratedCode("TestGenerator", "1.0.0.0")]
-        public void FunctionHeader_CheckNullArg_firstFunctionCell()
-        {
-            var functionName = "text 135383";
-            var arguments = new List<HtmlCell>{ HtmlCellTest.First }.ToReadOnlyList();
-            var rowReference = HtmlRowReferenceTest.First;
-            var firstFunctionCell = HtmlCellTest.First;
-            var keyword = AbstractKeywordTest.First;
-
-            try
-            {
-                new FunctionHeader(functionName, arguments, rowReference, null, keyword);
-            }
-            catch(ArgumentNullException ex)
-            {
-                CheckArgumentExceptionParameter( "firstFunctionCell", ex.ParamName );
-
-                return;
-            }
-
-            Assert.Fail("Argument 'firstFunctionCell' isn't checked for null inputs");
-        }
-
-        [TestMethod]
-        [GeneratedCode("TestGenerator", "1.0.0.0")]
-        public void FunctionHeader_CheckNullArg_keyword()
-        {
-            var functionName = "text 135383";
-            var arguments = new List<HtmlCell>{ HtmlCellTest.First }.ToReadOnlyList();
-            var rowReference = HtmlRowReferenceTest.First;
-            var firstFunctionCell = HtmlCellTest.First;
-            var keyword = AbstractKeywordTest.First;
-
-            try
-            {
-                new FunctionHeader(functionName, arguments, rowReference, firstFunctionCell, null);
-            }
-            catch(ArgumentNullException ex)
-            {
-                CheckArgumentExceptionParameter( "keyword", ex.ParamName );
-
-                return;
-            }
-
-            Assert.Fail("Argument 'keyword' isn't checked for null inputs");
-        }
-
-        [TestMethod]
-        [GeneratedCode("TestGenerator", "1.0.0.0")]
-        public void FunctionHeader_GetHashCodeTest()
-        {
-            BaseGetHashCodeTest(objects);
-        }
-
-        [TestMethod]
-        [GeneratedCode("TestGenerator", "1.0.0.0")]
-        public void FunctionHeader_EqualsTest()
-        {
-            BaseEqualsTest(objects);
-        }
-
-        [TestMethod]
-        [GeneratedCode("TestGenerator", "1.0.0.0")]
-        public void FunctionHeader_ToStringTest()
-        {
-            BaseToStringTest(objects);
-        }
-    }
-
-    [TestClass]
-    public sealed partial class HtmlRowReferenceTest : ReadOnlyObjectTest
-    {
-        [GeneratedCode("TestGenerator", "1.0.0.0")]
-        internal static readonly ObjectsCache<HtmlRowReference> objects = new ObjectsCache<HtmlRowReference>(GetInstances);
-
-        [GeneratedCode("TestGenerator", "1.0.0.0")]
-        internal static IEnumerable<HtmlRowReference[]> CreateNonEmptyObjectsArrays()
-        {
-            return new[]
-            {
-                HtmlRowReferenceTest.objects.Objects.Skip(1).ToArray(),
-                HtmlRowReferenceTest.objects.Objects.Take(2).ToArray(),
-                HtmlRowReferenceTest.objects.Objects.Take(1).ToArray()
-            };
-        }
-
-        [GeneratedCode("TestGenerator", "1.0.0.0")]
-        internal static HtmlRowReference First
-        {
-            get
-            {
-                return objects.Objects.First();
-            }
-        }
-
-        [GeneratedCode("TestGenerator", "1.0.0.0")]
-        internal static HtmlRowReference Second
-        {
-            get
-            {
-                return objects.Objects.Skip(1).First();
-            }
-        }
-
-        [GeneratedCode("TestGenerator", "1.0.0.0")]
-        internal static HtmlRowReference Third
-        {
-            get
-            {
-                return objects.Objects.Skip(2).First();
-            }
-        }
-
-        [GeneratedCode("TestGenerator", "1.0.0.0")]
-        private static IEnumerable<HtmlRowReference> GetInstances()
-        {
-            return GetApparents().Concat(GetInstancesOfCurrentType());
-        }
-
-
-        [GeneratedCode("TestGenerator", "1.0.0.0")]
-        private static IEnumerable<HtmlRowReference>GetApparents()
-        {
-            return ReadOnlyList<HtmlRowReference>.Empty;
-        }
-
-        [TestMethod]
-        [GeneratedCode("TestGenerator", "1.0.0.0")]
-        public void HtmlRowReference_GetHashCodeTest()
-        {
-            BaseGetHashCodeTest(objects);
-        }
-
-        [TestMethod]
-        [GeneratedCode("TestGenerator", "1.0.0.0")]
-        public void HtmlRowReference_EqualsTest()
-        {
-            BaseEqualsTest(objects);
-        }
-
-        [TestMethod]
-        [GeneratedCode("TestGenerator", "1.0.0.0")]
-        public void HtmlRowReference_ToStringTest()
-        {
-            BaseToStringTest(objects);
-        }
-    }
-
-    [TestClass]
-    public sealed partial class TestFunctionReferenceTest : ReadOnlyObjectTest
-    {
-        [GeneratedCode("TestGenerator", "1.0.0.0")]
-        internal static readonly ObjectsCache<TestFunctionReference> objects = new ObjectsCache<TestFunctionReference>(GetInstances);
-
-        [GeneratedCode("TestGenerator", "1.0.0.0")]
-        internal static IEnumerable<TestFunctionReference[]> CreateNonEmptyObjectsArrays()
-        {
-            return new[]
-            {
-                TestFunctionReferenceTest.objects.Objects.Skip(1).ToArray(),
-                TestFunctionReferenceTest.objects.Objects.Take(2).ToArray(),
-                TestFunctionReferenceTest.objects.Objects.Take(1).ToArray()
-            };
-        }
-
-        [GeneratedCode("TestGenerator", "1.0.0.0")]
-        internal static TestFunctionReference First
-        {
-            get
-            {
-                return objects.Objects.First();
-            }
-        }
-
-        [GeneratedCode("TestGenerator", "1.0.0.0")]
-        internal static TestFunctionReference Second
-        {
-            get
-            {
-                return objects.Objects.Skip(1).First();
-            }
-        }
-
-        [GeneratedCode("TestGenerator", "1.0.0.0")]
-        internal static TestFunctionReference Third
-        {
-            get
-            {
-                return objects.Objects.Skip(2).First();
-            }
-        }
-
-        [GeneratedCode("TestGenerator", "1.0.0.0")]
-        private static IEnumerable<TestFunctionReference> GetInstances()
-        {
-            return GetApparents().Concat(GetInstancesOfCurrentType());
-        }
-
-
-        [GeneratedCode("TestGenerator", "1.0.0.0")]
-        private static IEnumerable<TestFunctionReference>GetApparents()
-        {
-            return ReadOnlyList<TestFunctionReference>.Empty;
-        }
-
-        [TestMethod]
-        [GeneratedCode("TestGenerator", "1.0.0.0")]
-        public void TestFunctionReference_CheckNullArg_method()
-        {
-            var method = GetType().GetMethods().First();
-            var targetObject = new FakeFunctionContainer(1);
-
-            try
-            {
-                new TestFunctionReference(null, targetObject);
-            }
-            catch(ArgumentNullException ex)
-            {
-                CheckArgumentExceptionParameter( "method", ex.ParamName );
-
-                return;
-            }
-
-            Assert.Fail("Argument 'method' isn't checked for null inputs");
-        }
-
-        [TestMethod]
-        [GeneratedCode("TestGenerator", "1.0.0.0")]
-        public void TestFunctionReference_CheckNullArg_targetObject()
-        {
-            var method = GetType().GetMethods().First();
-            var targetObject = new FakeFunctionContainer(1);
-
-            try
-            {
-                new TestFunctionReference(method, null);
-            }
-            catch(ArgumentNullException ex)
-            {
-                CheckArgumentExceptionParameter( "targetObject", ex.ParamName );
-
-                return;
-            }
-
-            Assert.Fail("Argument 'targetObject' isn't checked for null inputs");
-        }
-
-        [TestMethod]
-        [GeneratedCode("TestGenerator", "1.0.0.0")]
-        public void TestFunctionReference_GetHashCodeTest()
-        {
-            BaseGetHashCodeTest(objects);
-        }
-
-        [TestMethod]
-        [GeneratedCode("TestGenerator", "1.0.0.0")]
-        public void TestFunctionReference_EqualsTest()
-        {
-            BaseEqualsTest(objects);
-        }
-
-        [TestMethod]
-        [GeneratedCode("TestGenerator", "1.0.0.0")]
-        public void TestFunctionReference_ToStringTest()
-        {
-            BaseToStringTest(objects);
-        }
-    }
-
-}
-
 namespace NetRunner.Executable.Tests.RawData
 {
 
@@ -3973,7 +4239,7 @@ namespace NetRunner.Executable.Tests.RawData
         [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void FitnesseHtmlDocument_CheckNullArg_textBeforeFirstTable()
         {
-            var textBeforeFirstTable = "text 135384";
+            var textBeforeFirstTable = "text 135385";
             var tables = new List<HtmlTable>{ HtmlTableTest.First }.ToReadOnlyList();
 
             try
@@ -3994,7 +4260,7 @@ namespace NetRunner.Executable.Tests.RawData
         [GeneratedCode("TestGenerator", "1.0.0.0")]
         public void FitnesseHtmlDocument_CheckNullArg_tables()
         {
-            var textBeforeFirstTable = "text 135384";
+            var textBeforeFirstTable = "text 135385";
             var tables = new List<HtmlTable>{ HtmlTableTest.First }.ToReadOnlyList();
 
             try
@@ -4316,7 +4582,7 @@ namespace NetRunner.Executable.Tests.RawData
         {
             var rows = new List<HtmlRow>{ HtmlRowTest.First }.ToReadOnlyList();
             var tableNode = HtmlNode.CreateNode("<i>TEST<i/>");
-            var textAfterTable = "text 135385";
+            var textAfterTable = "text 135386";
 
             try
             {
@@ -4338,7 +4604,7 @@ namespace NetRunner.Executable.Tests.RawData
         {
             var rows = new List<HtmlRow>{ HtmlRowTest.First }.ToReadOnlyList();
             var tableNode = HtmlNode.CreateNode("<i>TEST<i/>");
-            var textAfterTable = "text 135385";
+            var textAfterTable = "text 135386";
 
             try
             {
@@ -4360,7 +4626,7 @@ namespace NetRunner.Executable.Tests.RawData
         {
             var rows = new List<HtmlRow>{ HtmlRowTest.First }.ToReadOnlyList();
             var tableNode = HtmlNode.CreateNode("<i>TEST<i/>");
-            var textAfterTable = "text 135385";
+            var textAfterTable = "text 135386";
 
             try
             {
