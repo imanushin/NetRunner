@@ -11,6 +11,7 @@ namespace NetRunner.Executable.Common
 {
     internal static class CollectionExtensions
     {
+        [NotNull]
         public static ReadOnlyList<TValue> ToReadOnlyList<TValue>(this IEnumerable<TValue> items)
         {
             var list = items as ReadOnlyList<TValue>;

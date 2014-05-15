@@ -25,7 +25,7 @@ namespace NetRunner.Executable.Invokation
 
             if (!parsers.TryGetValue(expectedType, out parser))
             {
-                foreach (var baseParser in ReflectionLoader.Instance.Parsers)
+                foreach (var baseParser in ReflectionLoader.Parsers)
                 {
                     var parseResult = ParseData(inputData, expectedType, conversionErrorHeader, baseParser);
 
@@ -33,7 +33,7 @@ namespace NetRunner.Executable.Invokation
                         return parseResult;
                 }
 
-                var parserNotFound = new AddCellExpandableInfo(inputData, conversionErrorHeader, string.Format("Unable to find parser for type {0}. Parsers available: {1}", expectedType, ReflectionLoader.Instance.Parsers));
+                var parserNotFound = new AddCellExpandableInfo(inputData, conversionErrorHeader, string.Format("Unable to find parser for type {0}. Parsers available: {1}", expectedType, ReflectionLoader.Parsers));
 
                 return new InvokationResult(null, new TableChangeCollection(false, true, parserNotFound, errorCellMark));
             }

@@ -30,7 +30,7 @@ namespace NetRunner.Executable.Invokation.Functions
 
             var resultIsOkChange = new CssClassCellChange(expectedResult, HtmlParser.PassCssClass);
 
-            if (!ReflectionLoader.Instance.TryReadPropery(resultObject, propertyName, out propertyType, out resultValue))
+            if (!ReflectionLoader.TryReadPropery(resultObject, propertyName, out propertyType, out resultValue))
             {
                 return new TableChangeCollection(false, false, new ShowActualValueCellChange(expectedResult, resultObject));
             }
@@ -122,7 +122,7 @@ namespace NetRunner.Executable.Invokation.Functions
             object resultValue;
             Type propertyType;
 
-            if (!ReflectionLoader.Instance.TryReadPropery(resultObject, propertyName, out propertyType, out resultValue))
+            if (!ReflectionLoader.TryReadPropery(resultObject, propertyName, out propertyType, out resultValue))
                 return string.Format("Unable to read property '{0}'", propertyName);
 
             return (resultValue ?? string.Empty).ToString();

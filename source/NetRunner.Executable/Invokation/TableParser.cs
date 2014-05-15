@@ -24,7 +24,7 @@ namespace NetRunner.Executable.Invokation
             if (header == null)
                 return EmptyTestFunction.Instance;
 
-            var functionToExecute = ReflectionLoader.Instance.FindFunction(header.FunctionName, header.Arguments.Count);
+            var functionToExecute = ReflectionLoader.FindFunction(header.FunctionName, header.Arguments.Count);
 
             if (functionToExecute == null)
             {
@@ -87,7 +87,7 @@ namespace NetRunner.Executable.Invokation
             if (header == null)
                 return EmptyTestFunction.Instance;
 
-            var functionReference = ReflectionLoader.Instance.FindFunction(header.FunctionName, header.Arguments.Count);
+            var functionReference = ReflectionLoader.FindFunction(header.FunctionName, header.Arguments.Count);
 
             if (functionReference == null)
             {

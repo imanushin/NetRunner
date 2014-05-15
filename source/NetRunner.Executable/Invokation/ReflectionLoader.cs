@@ -12,75 +12,86 @@ using NetRunner.ExternalLibrary.Properties;
 
 namespace NetRunner.Executable.Invokation
 {
-    internal sealed class ReflectionLoader
+    internal static class ReflectionLoader
     {
         private static readonly Type testContainerType = typeof(BaseTestContainer);
 
-        private readonly ReadOnlyList<TestFunctionReference> functions;
+        [NotNull]
+        private static ReadOnlyList<string> assemblyList = ReadOnlyList<string>.Empty;
 
-        private static ReflectionLoader instance;
+        [NotNull]
+        private static ReadOnlyList<string> assemblyFolders = ReadOnlyList<string>.Empty;
 
-        public static ReflectionLoader Instance
-        {
-            get
-            {
-                Validate.IsNotNull(instance, "{0} had not been initialized yet", typeof(ReflectionLoader).Name);
-
-                return instance;
-            }
-        }
+        private static ReadOnlyList<TestFunctionReference> functions = ReadOnlyList<TestFunctionReference>.Empty;
 
         private static readonly string[] ignoredFunctions =
         {
             "ToString", "GetHashCode", "Equals", "GetType"
         };
 
-        private ReflectionLoader()
+        static ReflectionLoader()
         {
+            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomainOnAssemblyResolve;
         }
 
-        private ReflectionLoader(ReadOnlyList<TestFunctionReference> testFunctionReferences, ReadOnlyList<BaseParser> parsers)
+        private static Assembly CurrentDomainOnAssemblyResolve(object sender, ResolveEventArgs args)
         {
-            functions = testFunctionReferences;
-            Parsers = parsers;
+            var targetLocation = args.RequestingAssembly.Location;
+
+            var targetFileName = Path.GetFileNameWithoutExtension(targetLocation) + ".dll";
+
+            var filesCandidates = assemblyFolders.Select(f => Path.Combine(f, targetFileName)).Where(File.Exists);
+
+            foreach (var candidate in filesCandidates)
+            {
+                try
+                {
+                    return Assembly.LoadFrom(candidate);
+                }
+                catch (Exception ex)
+                {
+                    Trace.TraceError("Unable to load assembly {0} from file {1}: {2}", args.Name, candidate, ex);
+                }
+            }
+
+            return null;
         }
 
-        public static void Initialize(IReadOnlyCollection<string> assemblyPathes)
+        public static void AddAssemblies(IReadOnlyCollection<string> assemblyPathes)
         {
-            var pathes = assemblyPathes.ToReadOnlyList();
+            var allAssemblyFiles = assemblyList.Concat(assemblyPathes).Distinct(StringComparer.OrdinalIgnoreCase).Where(af => !string.IsNullOrWhiteSpace(af)).ToReadOnlyList();
 
-            Trace.TraceInformation("Start assembly loading from list: {0}", pathes);
+            assemblyList = allAssemblyFiles.Where(File.Exists).ToReadOnlyList();
 
-            var loadedAssemblies = LoadAssemblies(pathes);
+            var missingFiles = allAssemblyFiles.Where(af => !File.Exists(af)).ToReadOnlyList();
 
-            var assemblyFolders = assemblyPathes
-                .Select(Path.GetDirectoryName)
-                .Distinct(StringComparer.OrdinalIgnoreCase)
-                .ToReadOnlyList();
+            Trace.TraceWarning("Unable to find some of assembly files: {0}", missingFiles);
 
-            AppDomain.CurrentDomain.AssemblyResolve += (sender, args) => LoadFrom(assemblyFolders, args);
+            Trace.TraceInformation("Start assembly loading from list: {0}", assemblyList);
+
+            assemblyFolders = assemblyList.Select(Path.GetDirectoryName).Distinct(StringComparer.OrdinalIgnoreCase).ToReadOnlyList();
 
             Trace.TraceInformation("Additional folder for assembly loading: {0}", assemblyFolders.JoinToStringLazy("; "));
-            
+
+            var loadedAssemblies = LoadAssemblies(assemblyList);
+
             var testTypes = FindTestTypes(loadedAssemblies);
             var parserTypes = FindParsersAvailable(loadedAssemblies).ToReadOnlyList();
 
             var testContainers = CreateTypeInstances<BaseTestContainer>(testTypes);
 
-            var functions = FindFunctionsAvailable(testContainers.ToReadOnlyList());
+            functions = FindFunctionsAvailable(testContainers.ToReadOnlyList());
 
             var parsersFound = CreateTypeInstances<BaseParser>(parserTypes);
 
             parsersFound.Sort((first, second) => second.Priority - first.Priority);
 
-            var parsers = parsersFound.ToReadOnlyList();
+            Parsers = parsersFound.ToReadOnlyList();
 
             Trace.TraceInformation("All available functions: {0}", functions.JoinToStringLazy(Environment.NewLine));
-
-            instance = new ReflectionLoader(functions, parsers);
         }
 
-        public ReadOnlyList<BaseParser> Parsers
+        public static ReadOnlyList<BaseParser> Parsers
         {
             get;
             private set;
@@ -94,7 +105,7 @@ namespace NetRunner.Executable.Invokation
         }
 
         [CanBeNull]
-        public TestFunctionReference FindFunction(ReadOnlyList<string> argumentNames, BaseTableArgument targetObject)
+        public static TestFunctionReference FindFunction(ReadOnlyList<string> argumentNames, BaseTableArgument targetObject)
         {
             var targetType = targetObject.GetType();
 
@@ -112,7 +123,7 @@ namespace NetRunner.Executable.Invokation
         }
 
         [CanBeNull]
-        public TestFunctionReference FindFunction(string name, int argumentCount)
+        public static TestFunctionReference FindFunction(string name, int argumentCount)
         {
             return functions.FirstOrDefault(f => f.ArgumentTypes.Count == argumentCount && string.Equals(f.Name, name, StringComparison.OrdinalIgnoreCase));
         }
@@ -163,29 +174,6 @@ namespace NetRunner.Executable.Invokation
             }
 
             return result;
-        }
-
-        private static Assembly LoadFrom(ReadOnlyList<string> assemblyFolders, ResolveEventArgs args)
-        {
-            var targetLocation = args.RequestingAssembly.Location;
-
-            var targetFileName = Path.GetFileNameWithoutExtension(targetLocation) + ".dll";
-
-            var filesCandidates = assemblyFolders.Select(f => Path.Combine(f, targetFileName)).Where(File.Exists);
-
-            foreach (var candidate in filesCandidates)
-            {
-                try
-                {
-                    return Assembly.LoadFrom(candidate);
-                }
-                catch (Exception ex)
-                {
-                    Trace.TraceError("Unable to load assembly {0} from file {1}: {2}", args.Name, candidate, ex);
-                }
-            }
-
-            return null;
         }
 
         private static ReadOnlyList<Type> FindTestTypes(List<Assembly> loadedAssemblies)
@@ -258,7 +246,7 @@ namespace NetRunner.Executable.Invokation
             return loadedAssemblies;
         }
 
-        public bool TryReadPropery(object targetObject, string propertyName, [CanBeNull]  out Type propertyType, [CanBeNull] out object resultValue)
+        public static bool TryReadPropery(object targetObject, string propertyName, [CanBeNull]  out Type propertyType, [CanBeNull] out object resultValue)
         {
 #warning change to Table changes
             var targetType = targetObject.GetType();
@@ -272,7 +260,7 @@ namespace NetRunner.Executable.Invokation
                 propertyType = null;
                 return false;
             }
-            
+
             resultValue = property.GetValue(targetObject);
             propertyType = property.PropertyType;
 

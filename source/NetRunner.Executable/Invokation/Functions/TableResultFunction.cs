@@ -39,7 +39,7 @@ namespace NetRunner.Executable.Invokation.Functions
 
             foreach (var row in Rows)
             {
-                var functionToExecute = ReflectionLoader.Instance.FindFunction(CleanedColumnNames, tableResult);
+                var functionToExecute = ReflectionLoader.FindFunction(CleanedColumnNames, tableResult);
 
                 if (functionToExecute == null)
                 {

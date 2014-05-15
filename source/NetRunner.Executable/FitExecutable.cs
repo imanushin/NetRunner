@@ -22,7 +22,7 @@ namespace NetRunner.Executable
 
         private static void ProcessTestDocuments(FitnesseCommunicator communicator, string assemblylist)
         {
-            ReflectionLoader.Initialize(assemblylist.Split(new[]
+            ReflectionLoader.AddAssemblies(assemblylist.Split(new[]
             {
                 ','
             }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim()).ToReadOnlyList());
