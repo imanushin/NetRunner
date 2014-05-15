@@ -10,7 +10,7 @@
 | '''Type''' | '''Count''' |
 | right | 0 |
 | wrong | 0 |
-| ignores | 0 |
+| ignores | 2 |
 | exceptions | 7 |
 
 | check | '''Row Count Of Table''' | 1 | '''is''' | 1 | 
@@ -89,3 +89,20 @@
 | '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
 | 1..100 | 1..100 | Contains | class="error" |
 | 1..100 | 1..100 | Count | 6 |
+
+
+| check | '''Row Count Of Table''' | 8 | '''is''' | 1 | 
+
+| '''Analyse Table''' | 8 |
+| '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
+| 1..100 | 1..100 | Not Contain | class="error" |
+| 1..100 | 1..100 | Count | 1 |
+
+
+| check | '''Row Count Of Table''' | 9 | '''is''' | 1 | 
+
+| '''Analyse Table''' | 9 |
+| '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
+| 1..100 | 1..100 | Not Contain | class="error" |
+| 1..100 | 1..100 | Count | 1 |
+
