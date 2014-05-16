@@ -22,7 +22,11 @@ namespace NetRunner.Executable.Invokation
         [NotNull]
         private static ReadOnlyList<string> assemblyFolders = ReadOnlyList<string>.Empty;
 
+        [NotNull]
         private static ReadOnlyList<TestFunctionReference> functions = ReadOnlyList<TestFunctionReference>.Empty;
+
+        [NotNull]
+        private static ReadOnlyList<BaseTestContainer> testContainers = ReadOnlyList<BaseTestContainer>.Empty;
 
         private static readonly string[] ignoredFunctions =
         {
@@ -78,7 +82,7 @@ namespace NetRunner.Executable.Invokation
             var testTypes = FindTestTypes(loadedAssemblies);
             var parserTypes = FindParsersAvailable(loadedAssemblies).ToReadOnlyList();
 
-            var testContainers = CreateTypeInstances<BaseTestContainer>(testTypes);
+            testContainers = CreateTypeInstances<BaseTestContainer>(testTypes).ToReadOnlyList();
 
             functions = FindFunctionsAvailable(testContainers.ToReadOnlyList());
 
@@ -95,6 +99,22 @@ namespace NetRunner.Executable.Invokation
         {
             get;
             private set;
+        }
+
+        public static ReadOnlyList<string> TestContainerNames
+        {
+            get
+            {
+                return testContainers.Select(tc => tc.GetType().Name).ToReadOnlyList();
+            }
+        }
+
+        public static ReadOnlyList<string> AssemblyPathes
+        {
+            get
+            {
+                return assemblyList;
+            }
         }
 
         private static IEnumerable<Type> FindParsersAvailable(List<Assembly> assemblies)
