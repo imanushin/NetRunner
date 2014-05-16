@@ -21,5 +21,10 @@ namespace NetRunner.Executable.Invokation.Functions
         {
             return functionExecutionResult;
         }
+
+        public override ReadOnlyList<TestFunctionReference> GetInnerFunctions()
+        {
+            return ReadOnlyList<TestFunctionReference>.Empty;
+        }
     }
 }

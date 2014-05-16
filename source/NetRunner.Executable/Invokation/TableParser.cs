@@ -22,7 +22,7 @@ namespace NetRunner.Executable.Invokation
             return new TestExecutionPlan(textBeforeFirstTable, parsedTables);
         }
 
-        public static ParsedTable ParseTable(HtmlTable table)
+        private static ParsedTable ParseTable(HtmlTable table)
         {
             var tableParseInformation = new List<AbstractTableChange>();
 

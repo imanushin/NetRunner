@@ -111,7 +111,5 @@ namespace NetRunner.Executable.Invokation.Functions
 
             return null;
         }
-
-
     }
 }

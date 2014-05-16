@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using NetRunner.Executable.Common;
 
@@ -55,6 +56,11 @@ namespace NetRunner.Executable.Invokation.Functions
             }
 
             return new FunctionExecutionResult(finalResult, changes);
+        }
+
+        public override ReadOnlyList<TestFunctionReference> GetInnerFunctions()
+        {
+            return InnerFunctions.SelectMany(f => f.GetInnerFunctions()).ToReadOnlyList();
         }
     }
 }

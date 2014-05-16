@@ -101,5 +101,13 @@ namespace NetRunner.Executable.Common
         {
             return this[1];
         }
+
+        public void ForEach(Action<TValue> action)
+        {
+            foreach (TValue innerValue in innerValues)
+            {
+                action(innerValue);
+            }
+        }
     }
 }

@@ -39,6 +39,8 @@ namespace NetRunner.Executable
 
                     var executionPlan = TableParser.GenerateTestExecutionPlan(parsedDocument);
 
+                    communicator.SendDocument(executionPlan.FormatExecutionPlan());
+
                     communicator.SendDocument(parsedDocument.TextBeforeFirstTable);
 
                     foreach (var test in executionPlan.FunctionsSequence)

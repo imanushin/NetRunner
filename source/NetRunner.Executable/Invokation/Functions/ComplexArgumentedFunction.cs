@@ -13,8 +13,8 @@ namespace NetRunner.Executable.Invokation.Functions
 {
     internal abstract class BaseComplexArgumentedFunction : AbstractTestFunction
     {
-        private readonly TestFunctionReference functionReference;
         private readonly HtmlRow columnsRow;
+        private readonly TestFunctionReference functionReference;
 
         protected BaseComplexArgumentedFunction(HtmlRow columnsRow, IEnumerable<HtmlRow> rows, FunctionHeader function, TestFunctionReference functionToExecute)
         {
@@ -208,6 +208,14 @@ namespace NetRunner.Executable.Invokation.Functions
                 resultType, 
                 CollectionResultFunction.BaseType, 
                 TableResultFunction.BaseType));*/
+        }
+
+        public override ReadOnlyList<TestFunctionReference> GetInnerFunctions()
+        {
+            return new[]
+            {
+                functionReference
+            }.ToReadOnlyList();
         }
     }
 }

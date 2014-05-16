@@ -73,6 +73,14 @@ namespace NetRunner.Executable.Invokation.Functions
             }
         }
 
+        public override ReadOnlyList<TestFunctionReference> GetInnerFunctions()
+        {
+            return new[]
+            {
+                functionReference
+            }.ToReadOnlyList();
+        }
+
         protected override string GetString()
         {
             return GetType().Name + ": " + function;

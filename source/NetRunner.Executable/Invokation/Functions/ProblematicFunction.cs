@@ -39,5 +39,10 @@ namespace NetRunner.Executable.Invokation.Functions
         {
             return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Exception, tableChanges.Concat(keyword.ParsingErrors));
         }
+
+        public override ReadOnlyList<TestFunctionReference> GetInnerFunctions()
+        {
+            return ReadOnlyList<TestFunctionReference>.Empty;
+        }
     }
 }

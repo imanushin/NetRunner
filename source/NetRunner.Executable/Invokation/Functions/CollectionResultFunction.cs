@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HtmlAgilityPack;
 using NetRunner.Executable.Common;
 using NetRunner.Executable.RawData;
 
@@ -82,7 +83,7 @@ namespace NetRunner.Executable.Invokation.Functions
                 for (int columnIndex = 0; columnIndex < CleanedColumnNames.Count; columnIndex++)
                 {
                     var expectedResult = currentRow.Cells[columnIndex];
-                    
+
                     var changes = CompareItems(resultObject, expectedResult, CleanedColumnNames[columnIndex]);
 
                     tableChanges.AddRange(changes.Changes);
@@ -127,6 +128,5 @@ namespace NetRunner.Executable.Invokation.Functions
 
             return (resultValue ?? string.Empty).ToString();
         }
-
     }
 }

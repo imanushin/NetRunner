@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using HtmlAgilityPack;
 using NetRunner.Executable.Common;
 using NetRunner.Executable.RawData;
 
@@ -71,5 +72,7 @@ namespace NetRunner.Executable.Invokation.Functions
                 return new InvokationResult(null, new TableChangeCollection(false, true, errorData));
             }
         }
+
+        public abstract ReadOnlyList<TestFunctionReference> GetInnerFunctions();
     }
 }
