@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using NetRunner.Executable.Common;
+using NetRunner.Executable.Properties;
 using NetRunner.ExternalLibrary;
 using NetRunner.ExternalLibrary.Properties;
 
@@ -66,6 +67,11 @@ namespace NetRunner.Executable.Invokation
                     {
                         Trace.TraceError("Unable to load assembly {0} from file {1}: {2}.", args.Name, candidate, ex);
                     }
+                }
+
+                if (string.Equals(assemblyName, "HtmlAgilityPack", StringComparison.OrdinalIgnoreCase))
+                {
+                    return Assembly.Load(Resources.HtmlAgilityPack);
                 }
 
                 Trace.TraceInformation(loadLog.ToString());

@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NetRunner.Executable
 {
@@ -22,7 +19,7 @@ namespace NetRunner.Executable
                 Trace.AutoFlush = true;
 
                 //Debugger.Launch();
-
+                
                 var settings = ParseArguments(args);
 
                 FitExecutable.Execute(settings);
