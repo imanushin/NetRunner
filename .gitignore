@@ -38,3 +38,5 @@ document/FitnesseRoot/files/testResults/
 /binary/currentBuild
 /TestResults
 /fitnesse/FitNesseRoot/files/testProgress
+/binary/testBuild
+/binary/tools/TestsGenerator/HtmlAgilityPack.xml
