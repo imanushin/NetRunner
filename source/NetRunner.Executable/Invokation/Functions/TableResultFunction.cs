@@ -41,23 +41,21 @@ namespace NetRunner.Executable.Invokation.Functions
 
             var functionToExecute = ReflectionLoader.FindFunction(CleanedColumnNames, tableResult);
 
-            var headersRow = Rows.Second().RowReference;
-
             if (functionToExecute == null)
             {
                 changes.Add(new ExecutionFailedMessage(
-                    headersRow,
+                    ColumnsRow.RowReference,
                     string.Format("Unable to find function with these parameters: {0}", CleanedColumnNames),
                     "Unable to find function"));
 
-                changes.Add(new AddRowCssClass(headersRow, HtmlParser.FailCssClass));
+                changes.Add(new AddRowCssClass(ColumnsRow.RowReference, HtmlParser.FailCssClass));
 
                 return FormatResult(false, false, changes);
             }
 
             var notificationException = tableResult.NotifyBeforeFunctionCall(functionToExecute.DisplayName);
 
-            AddExceptionLineIfNeeded(notificationException, changes, headersRow);
+            AddExceptionLineIfNeeded(notificationException, changes);
 
             foreach (var row in Rows)
             {
@@ -89,23 +87,25 @@ namespace NetRunner.Executable.Invokation.Functions
 
             notificationException = tableResult.NotifyAfterFunctionCall(functionToExecute.DisplayName);
 
-            AddExceptionLineIfNeeded(notificationException, changes, headersRow);
+            AddExceptionLineIfNeeded(notificationException, changes);
 
             return FormatResult(exceptionsOccurred, allIsOk, changes);
         }
 
-        private static void AddExceptionLineIfNeeded(Exception notificationException, List<AbstractTableChange> changes, HtmlRowReference headersRow)
+        private void AddExceptionLineIfNeeded(Exception notificationException, List<AbstractTableChange> changes)
         {
-            if (notificationException != null)
+            if (notificationException == null)
             {
-                changes.Add(new ExecutionFailedMessage(
-                                headersRow,
-                                string.Format("Exception during handler invokation"),
-                                "Argument handler executed with error: {0}",
-                                notificationException));
-
-                changes.Add(new AddRowCssClass(headersRow, HtmlParser.FailCssClass));
+                return;
             }
+
+            changes.Add(new ExecutionFailedMessage(
+                ColumnsRow.RowReference,
+                string.Format("Exception during handler invokation"),
+                "Argument handler executed with error: {0}",
+                notificationException));
+
+            changes.Add(new AddRowCssClass(ColumnsRow.RowReference, HtmlParser.FailCssClass));
         }
 
         [CanBeNull]

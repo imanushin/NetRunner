@@ -13,7 +13,6 @@ namespace NetRunner.Executable.Invokation.Functions
 {
     internal abstract class BaseComplexArgumentedFunction : AbstractTestFunction
     {
-        private readonly HtmlRow columnsRow;
         private readonly TestFunctionReference functionReference;
 
         protected BaseComplexArgumentedFunction(HtmlRow columnsRow, IEnumerable<HtmlRow> rows, FunctionHeader function, TestFunctionReference functionToExecute)
@@ -26,8 +25,14 @@ namespace NetRunner.Executable.Invokation.Functions
             this.Function = function;
             this.Rows = rows.ToReadOnlyList();
             functionReference = functionToExecute;
-            this.columnsRow = columnsRow;
+            this.ColumnsRow = columnsRow;
             CleanedColumnNames = columnsRow.Cells.Select(c => c.CleanedContent.Replace(" ", string.Empty)).ToReadOnlyList();
+        }
+
+        protected HtmlRow ColumnsRow
+        {
+            get;
+            private set;
         }
 
         protected ReadOnlyList<string> CleanedColumnNames
@@ -51,7 +56,7 @@ namespace NetRunner.Executable.Invokation.Functions
         protected sealed override IEnumerable<object> GetInnerObjects()
         {
             yield return Function;
-            yield return columnsRow;
+            yield return ColumnsRow;
             yield return Rows;
             yield return functionReference;
         }
@@ -84,26 +89,26 @@ namespace NetRunner.Executable.Invokation.Functions
         {
             var errors = new List<AbstractTableChange>();
 
-            if (!columnsRow.Cells.Any())
+            if (!ColumnsRow.Cells.Any())
             {
                 errors.Add(new ExecutionFailedMessage(
-                    columnsRow.RowReference,
+                    ColumnsRow.RowReference,
                     string.Format("Wrong header: second row should have at least one column. They are used to retrieve result property names"),
                     "There are no any values in the second row in function {0}. Please add header row to match table values and function result/input",
                     Function.FunctionName));
 
-                errors.Add(new AddRowCssClass(columnsRow.RowReference, HtmlParser.FailCssClass));
+                errors.Add(new AddRowCssClass(ColumnsRow.RowReference, HtmlParser.FailCssClass));
             }
 
-            if (!columnsRow.Cells.All(c => c.IsBold))
+            if (!ColumnsRow.Cells.All(c => c.IsBold))
             {
                 errors.Add(new ExecutionFailedMessage(
-                    columnsRow.RowReference,
+                    ColumnsRow.RowReference,
                     string.Format("Wrong header: all elements should be bold"),
                     "All elements on second row (named 'headers') should be bold. These values are used in the function {0} to match internal field name and table column name.",
                     Function.FunctionName));
 
-                errors.Add(new AddRowCssClass(columnsRow.RowReference, HtmlParser.FailCssClass));
+                errors.Add(new AddRowCssClass(ColumnsRow.RowReference, HtmlParser.FailCssClass));
             }
 
             foreach (HtmlRow htmlRow in Rows)

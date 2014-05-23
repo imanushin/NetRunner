@@ -1,5 +1,5 @@
 !1 Tests which will be executed from other other 
 
-!path ..\binary\currentBuild\FitSample.dll
+!path ..\binary\testBuild\FitSample.dll
 
 !contents -R2 -g -p -f -h

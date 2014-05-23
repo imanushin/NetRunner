@@ -54,7 +54,7 @@ namespace NetRunner.InternalTests
 
             foreach (HtmlNode childNode in currentNode.ChildNodes)
             {
-                if (String.Equals(childNode.Name, "table", StringComparison.OrdinalIgnoreCase))
+                if (String.Equals(childNode.Name, "table", StringComparison.OrdinalIgnoreCase) && !childNode.Attributes.Any())
                 {
                     tablesFound.Add(childNode);
 
