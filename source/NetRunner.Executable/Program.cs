@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Reflection;
+using NetRunner.Executable.Properties;
 
 namespace NetRunner.Executable
 {
@@ -19,7 +21,9 @@ namespace NetRunner.Executable
                 Trace.AutoFlush = true;
 
                 Debugger.Launch();
-                
+
+                InMemoryAssemblyLoader.SubscribeDomain(AppDomain.CurrentDomain);
+
                 var settings = ParseArguments(args);
 
                 FitExecutable.Execute(settings);

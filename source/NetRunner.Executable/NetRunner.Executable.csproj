@@ -56,6 +56,7 @@
     <Compile Include="Common\Validate.cs" />
     <Compile Include="FitExecutable.cs" />
     <Compile Include="FitnesseCommunicator.cs" />
+    <Compile Include="InMemoryAssemblyLoader.cs" />
     <Compile Include="Invokation\ParsedTable.cs" />
     <Compile Include="Invokation\TestExecutionPlan.cs" />
     <Compile Include="Invokation\Functions\AddCellExpandableException.cs" />

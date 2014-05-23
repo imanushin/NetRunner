@@ -12,12 +12,14 @@ using NetRunner.Executable.Common;
 using NetRunner.Executable.Properties;
 using NetRunner.ExternalLibrary;
 using NetRunner.ExternalLibrary.Properties;
+using NetRunner.TestExecutionProxy;
 
 namespace NetRunner.Executable.Invokation
 {
     internal static class ReflectionLoader
     {
         private static readonly Type testContainerType = typeof(BaseTestContainer);
+        private static readonly Type reflectionInvokerType = typeof(ReflectionInvoker);
 
         private static AppDomain currentTestDomain;
 
@@ -37,6 +39,9 @@ namespace NetRunner.Executable.Invokation
         {
             "ToString", "GetHashCode", "Equals", "GetType"
         };
+
+        [CanBeNull]
+        private static ReflectionInvoker reflectionInvoker;
 
         static ReflectionLoader()
         {
@@ -65,17 +70,12 @@ namespace NetRunner.Executable.Invokation
                 {
                     try
                     {
-                        return Assembly.LoadFrom(candidate);
+                        return Assembly.ReflectionOnlyLoad(candidate);
                     }
                     catch (Exception ex)
                     {
                         Trace.TraceError("Unable to load assembly {0} from file {1}: {2}.", args.Name, candidate, ex);
                     }
-                }
-
-                if (string.Equals(assemblyName, "HtmlAgilityPack", StringComparison.OrdinalIgnoreCase))
-                {
-                    return Assembly.Load(Resources.HtmlAgilityPack);
                 }
 
                 Trace.TraceInformation(loadLog.ToString());
@@ -113,6 +113,10 @@ namespace NetRunner.Executable.Invokation
         private static void ReloadAssemblies()
         {
             Trace.TraceInformation("Start assembly loading from list: {0}", assemblyList);
+
+            Validate.IsNotNull(reflectionInvoker, "Test domain was not initialized");
+
+            reflectionInvoker.AddAssemblyLoadFolders(assemblyFolders.ToArray());
 
             var loadedAssemblies = LoadAssemblies(assemblyList);
 
@@ -370,12 +374,11 @@ namespace NetRunner.Executable.Invokation
 
             currentTestDomain = AppDomain.CreateDomain("Test execution domain", evidence, setupInformation);
 
-            ReloadAssemblies();
-        }
+            InMemoryAssemblyLoader.SubscribeDomain(currentTestDomain);
 
-        public static object ExecuteInTestDomain(Func<object> targetFunction)
-        {
-            throw new NotImplementedException();
+            reflectionInvoker = (ReflectionInvoker)currentTestDomain.CreateInstanceAndUnwrap(reflectionInvokerType.Assembly.FullName, reflectionInvokerType.FullName);
+
+            ReloadAssemblies();
         }
     }
 }
