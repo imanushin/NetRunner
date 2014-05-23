@@ -118,7 +118,7 @@ namespace NetRunner.Executable.Invokation
 
             var testTypes = FindTestTypes(loadedAssemblies);
             var parserTypes = FindParsersAvailable(loadedAssemblies).ToReadOnlyList();
-            
+
             testContainers = CreateTypeInstances<BaseTestContainer>(testTypes).ToReadOnlyList();
 
             functions = FindFunctionsAvailable(testContainers.ToReadOnlyList());
@@ -143,7 +143,7 @@ namespace NetRunner.Executable.Invokation
 
             if (configurationsAvailable.Count > 1)
             {
-                Trace.TraceInformation("Load configuration step skipped because more than one (actually - {0}) configuration files are available: {1}", configurationsAvailable);
+                Trace.TraceInformation("Load configuration step skipped because more than one (actually - {0}) configuration files are available: {1}", configurationsAvailable.Count, configurationsAvailable);
 
                 return string.Empty;
             }
@@ -371,6 +371,11 @@ namespace NetRunner.Executable.Invokation
             currentTestDomain = AppDomain.CreateDomain("Test execution domain", evidence, setupInformation);
 
             ReloadAssemblies();
+        }
+
+        public static object ExecuteInTestDomain(Func<object> targetFunction)
+        {
+            throw new NotImplementedException();
         }
     }
 }

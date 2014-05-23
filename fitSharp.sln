@@ -5,12 +5,19 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetRunner.ExternalLibrary", "source\NetRunner.ExternalLibrary\NetRunner.ExternalLibrary.csproj", "{19D01E12-2663-4BD7-8D71-425BD4F1643C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetRunner.Executable", "source\NetRunner.Executable\NetRunner.Executable.csproj", "{B76F3618-7D3B-4A34-B7B9-85F15B7F26F3}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6FBCB205-7F29-4814-8875-23B21B673EC9} = {6FBCB205-7F29-4814-8875-23B21B673EC9}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FitSample", "source\FitSample\FitSample.csproj", "{35FF772A-4163-433D-BA64-3F94381EF19E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetRunner.Executable.Tests", "source\NetRunner.Executable.Tests\NetRunner.Executable.Tests.csproj", "{D1D07315-BEB3-4C28-BB46-2871100D6688}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetRunner.InternalTests", "source\NetRunner.InternalTests\NetRunner.InternalTests.csproj", "{50030B05-BB2E-4FDF-8F83-331E050E9A2F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetRunner.TestExecutionProxy", "source\NetRunner.TestExecutionProxy\NetRunner.TestExecutionProxy.csproj", "{9EE217F0-617D-42C7-B49F-FBDB7C72BDD0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetRunner.TestExecutor", "source\NetRunner.TestExecutor\NetRunner.TestExecutor.csproj", "{6FBCB205-7F29-4814-8875-23B21B673EC9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,6 +45,14 @@ Global
 		{50030B05-BB2E-4FDF-8F83-331E050E9A2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{50030B05-BB2E-4FDF-8F83-331E050E9A2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{50030B05-BB2E-4FDF-8F83-331E050E9A2F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9EE217F0-617D-42C7-B49F-FBDB7C72BDD0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9EE217F0-617D-42C7-B49F-FBDB7C72BDD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9EE217F0-617D-42C7-B49F-FBDB7C72BDD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9EE217F0-617D-42C7-B49F-FBDB7C72BDD0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6FBCB205-7F29-4814-8875-23B21B673EC9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6FBCB205-7F29-4814-8875-23B21B673EC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6FBCB205-7F29-4814-8875-23B21B673EC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6FBCB205-7F29-4814-8875-23B21B673EC9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
