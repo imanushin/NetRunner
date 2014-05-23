@@ -27,6 +27,8 @@ namespace NetRunner.Executable.Invokation.Functions
         {
             var tableResult = mainFunctionResult as BaseTableArgument;
 
+            Validate.IsNotNull(tableResult, "Table result parameter should not be null and should be inherited from {0}", typeof(BaseTableArgument));
+
             var changes = new List<AbstractTableChange>();
 
             var functionExecutionResult = CheckTableFunctionResult(mainFunctionResult, tableResult, changes);
@@ -37,24 +39,28 @@ namespace NetRunner.Executable.Invokation.Functions
             bool allIsOk = true;
             bool exceptionsOccurred = false;
 
+            var functionToExecute = ReflectionLoader.FindFunction(CleanedColumnNames, tableResult);
+
+            var headersRow = Rows.Second().RowReference;
+
+            if (functionToExecute == null)
+            {
+                changes.Add(new ExecutionFailedMessage(
+                    headersRow,
+                    string.Format("Unable to find function with these parameters: {0}", CleanedColumnNames),
+                    "Unable to find function"));
+
+                changes.Add(new AddRowCssClass(headersRow, HtmlParser.FailCssClass));
+
+                return FormatResult(false, false, changes);
+            }
+
+            var notificationException = tableResult.NotifyBeforeFunctionCall(functionToExecute.DisplayName);
+
+            AddExceptionLineIfNeeded(notificationException, changes, headersRow);
+
             foreach (var row in Rows)
             {
-                var functionToExecute = ReflectionLoader.FindFunction(CleanedColumnNames, tableResult);
-
-                if (functionToExecute == null)
-                {
-                    changes.Add(new ExecutionFailedMessage(
-                        row.RowReference,
-                        string.Format("Unable to find function with these parameters: {0}", CleanedColumnNames),
-                        "Unable to find function"));
-
-                    changes.Add(new AddRowCssClass(row.RowReference, HtmlParser.FailCssClass));
-
-                    allIsOk = false;
-
-                    continue;
-                }
-
                 var rowResult = InvokeFunction(
                     functionToExecute,
                     row.Cells.First(),
@@ -81,7 +87,25 @@ namespace NetRunner.Executable.Invokation.Functions
                 }
             }
 
+            notificationException = tableResult.NotifyAfterFunctionCall(functionToExecute.DisplayName);
+
+            AddExceptionLineIfNeeded(notificationException, changes, headersRow);
+
             return FormatResult(exceptionsOccurred, allIsOk, changes);
+        }
+
+        private static void AddExceptionLineIfNeeded(Exception notificationException, List<AbstractTableChange> changes, HtmlRowReference headersRow)
+        {
+            if (notificationException != null)
+            {
+                changes.Add(new ExecutionFailedMessage(
+                                headersRow,
+                                string.Format("Exception during handler invokation"),
+                                "Argument handler executed with error: {0}",
+                                notificationException));
+
+                changes.Add(new AddRowCssClass(headersRow, HtmlParser.FailCssClass));
+            }
         }
 
         [CanBeNull]

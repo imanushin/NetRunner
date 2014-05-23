@@ -40,22 +40,41 @@ namespace NetRunner.Executable.Invokation
 
         private static Assembly CurrentDomainOnAssemblyResolve(object sender, ResolveEventArgs args)
         {
-            var targetLocation = args.RequestingAssembly.Location;
-
-            var targetFileName = Path.GetFileNameWithoutExtension(targetLocation) + ".dll";
-
-            var filesCandidates = assemblyFolders.Select(f => Path.Combine(f, targetFileName)).Where(File.Exists);
-
-            foreach (var candidate in filesCandidates)
+            try
             {
-                try
+                var loadLog = new StringBuilder();
+
+                var assemblyName = new AssemblyName(args.Name).Name;
+
+                loadLog.AppendFormat("Try to find assembly '{0}' from the custom locations: {1}", assemblyName, assemblyFolders);
+                loadLog.AppendLine();
+
+                var targetFileName = assemblyName + ".dll";
+
+                var filesCandidates = assemblyFolders.Select(f => Path.Combine(f, targetFileName)).Where(File.Exists).ToReadOnlyList();
+
+                loadLog.AppendFormat("Existing files with '{0}': {1}", assemblyName, filesCandidates);
+                loadLog.AppendLine();
+
+                foreach (var candidate in filesCandidates)
                 {
-                    return Assembly.LoadFrom(candidate);
+                    try
+                    {
+                        return Assembly.LoadFrom(candidate);
+                    }
+                    catch (Exception ex)
+                    {
+                        Trace.TraceError("Unable to load assembly {0} from file {1}: {2}.", args.Name, candidate, ex);
+                    }
                 }
-                catch (Exception ex)
-                {
-                    Trace.TraceError("Unable to load assembly {0} from file {1}: {2}", args.Name, candidate, ex);
-                }
+
+                Trace.TraceInformation(loadLog.ToString());
+
+                Trace.TraceError("Unable to load assembly {0}. Files candidates: {1}, ", args.Name, filesCandidates);
+            }
+            catch (Exception ex)
+            {
+                Trace.TraceError("General assembly found error: {0}", ex);
             }
 
             return null;
@@ -69,7 +88,10 @@ namespace NetRunner.Executable.Invokation
 
             var missingFiles = allAssemblyFiles.Where(af => !File.Exists(af)).ToReadOnlyList();
 
-            Trace.TraceWarning("Unable to find some of assembly files: {0}", missingFiles);
+            if (missingFiles.Any())
+            {
+                Trace.TraceWarning("Unable to find some of assembly files: {0}", missingFiles);
+            }
 
             Trace.TraceInformation("Start assembly loading from list: {0}", assemblyList);
 
