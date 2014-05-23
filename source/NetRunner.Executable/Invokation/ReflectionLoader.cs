@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using NetRunner.Executable.Common;
@@ -16,6 +18,8 @@ namespace NetRunner.Executable.Invokation
     internal static class ReflectionLoader
     {
         private static readonly Type testContainerType = typeof(BaseTestContainer);
+
+        private static AppDomain currentTestDomain;
 
         [NotNull]
         private static ReadOnlyList<string> assemblyList = ReadOnlyList<string>.Empty;
@@ -99,17 +103,22 @@ namespace NetRunner.Executable.Invokation
                 Trace.TraceWarning("Unable to find some of assembly files: {0}", missingFiles);
             }
 
-            Trace.TraceInformation("Start assembly loading from list: {0}", assemblyList);
-
             assemblyFolders = assemblyList.Select(Path.GetDirectoryName).Distinct(StringComparer.OrdinalIgnoreCase).ToReadOnlyList();
 
             Trace.TraceInformation("Additional folder for assembly loading: {0}", assemblyFolders.JoinToStringLazy("; "));
+
+            //ToDo: inject them into the test domain
+        }
+
+        private static void ReloadAssemblies()
+        {
+            Trace.TraceInformation("Start assembly loading from list: {0}", assemblyList);
 
             var loadedAssemblies = LoadAssemblies(assemblyList);
 
             var testTypes = FindTestTypes(loadedAssemblies);
             var parserTypes = FindParsersAvailable(loadedAssemblies).ToReadOnlyList();
-
+            
             testContainers = CreateTypeInstances<BaseTestContainer>(testTypes).ToReadOnlyList();
 
             functions = FindFunctionsAvailable(testContainers.ToReadOnlyList());
@@ -121,6 +130,30 @@ namespace NetRunner.Executable.Invokation
             Parsers = parsersFound.ToReadOnlyList();
 
             Trace.TraceInformation("All available functions: {0}", functions.JoinToStringLazy(Environment.NewLine));
+        }
+
+        private static string LoadConfigurationIfNeeded()
+        {
+            const string configSuffix = ".config";
+
+            var configurationsAvailable = assemblyList.Select(path => path + configSuffix).Where(File.Exists).ToReadOnlyList();
+
+            if (!configurationsAvailable.Any())
+                return string.Empty;
+
+            if (configurationsAvailable.Count > 1)
+            {
+                Trace.TraceInformation("Load configuration step skipped because more than one (actually - {0}) configuration files are available: {1}", configurationsAvailable);
+
+                return string.Empty;
+            }
+
+            string configurationFile = configurationsAvailable.First();
+            string targetAssemblyFile = configurationFile.Substring(0, configurationFile.Length - configSuffix.Length);
+
+            Trace.TraceInformation("Configuration will be loaded for assembly '{0}' (file '{1}')", targetAssemblyFile, configurationFile);
+
+            return configurationFile;
         }
 
         public static ReadOnlyList<BaseParser> Parsers
@@ -267,6 +300,8 @@ namespace NetRunner.Executable.Invokation
 
         private static List<Assembly> LoadAssemblies(ReadOnlyList<string> pathes)
         {
+            Validate.IsNotNull(currentTestDomain, "Test domain was not initialized");
+
             var loadedAssemblies = new List<Assembly>() { testContainerType.Assembly };
 
             foreach (string assemblyPath in pathes)
@@ -280,7 +315,7 @@ namespace NetRunner.Executable.Invokation
                         continue;
                     }
 
-                    var loadedAssembly = Assembly.Load(File.ReadAllBytes(assemblyPath));
+                    var loadedAssembly = currentTestDomain.Load(File.ReadAllBytes(assemblyPath));
 
                     Trace.TraceInformation("Assembly {0} was loaded", loadedAssembly);
 
@@ -313,6 +348,29 @@ namespace NetRunner.Executable.Invokation
             propertyType = property.PropertyType;
 
             return true;
+        }
+
+        public static void CreateNewApplicationDomain()
+        {
+            if (currentTestDomain != null)
+            {
+                AppDomain.Unload(currentTestDomain);
+            }
+
+            var evidence = new Evidence();
+
+            var setupInformation = new AppDomainSetup();
+
+            var configFileCandidate = LoadConfigurationIfNeeded();
+
+            if (!string.IsNullOrWhiteSpace(configFileCandidate))
+            {
+                setupInformation.ConfigurationFile = configFileCandidate;
+            }
+
+            currentTestDomain = AppDomain.CreateDomain("Test execution domain", evidence, setupInformation);
+
+            ReloadAssemblies();
         }
     }
 }

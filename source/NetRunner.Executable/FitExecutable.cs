@@ -27,6 +27,8 @@ namespace NetRunner.Executable
                 ','
             }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim()).ToReadOnlyList());
 
+            ReflectionLoader.CreateNewApplicationDomain();
+
             for (string document = communicator.ReceiveDocument(); document.Any(); document = communicator.ReceiveDocument())
             {
                 Trace.WriteLine("Processing document of size: " + document.Length);
