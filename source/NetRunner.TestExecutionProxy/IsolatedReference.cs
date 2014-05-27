@@ -10,7 +10,7 @@ namespace NetRunner.TestExecutionProxy
 {
     public sealed class IsolatedReference<TType> : MarshalByRefObject
     {
-        public IsolatedReference(TType value)
+        public IsolatedReference([CanBeNull]TType value)
         {
             Value = value;
         }
@@ -71,7 +71,7 @@ namespace NetRunner.TestExecutionProxy
         }
 
         public IsolatedReference<T> Cast<T>()
-            where T : class 
+            where T : class
         {
             if (ReferenceEquals(null, Value))
             {
@@ -86,6 +86,21 @@ namespace NetRunner.TestExecutionProxy
             }
 
             return result;
+        }
+
+        public string GetTypeName()
+        {
+            if (ReferenceEquals(Value, null))
+            {
+                return typeof(TType).Name;
+            }
+
+            return Value.GetType().Name;
+        }
+
+        public override string ToString()
+        {
+            return ReferenceEquals(Value, null) ? string.Empty : Value.ToString();
         }
     }
 }

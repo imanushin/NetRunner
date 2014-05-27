@@ -36,6 +36,14 @@ namespace NetRunner.TestExecutionProxy
             }
         }
 
+        public string FullName
+        {
+            get
+            {
+                return TargetType.FullName;
+            }
+        }
+
         public override string ToString()
         {
             return TargetType.ToString();
@@ -44,6 +52,23 @@ namespace NetRunner.TestExecutionProxy
         public bool IsAssignableFrom(TypeReference otherType)
         {
             return TargetType.IsAssignableFrom(otherType.TargetType);
+        }
+
+        public override bool Equals(object obj)
+        {
+            var other = obj as TypeReference;
+
+            if (ReferenceEquals(null, other))
+            {
+                return false;
+            }
+
+            return TargetType == other.TargetType;
+        }
+
+        public override int GetHashCode()
+        {
+            return TargetType.GetHashCode();
         }
     }
 }

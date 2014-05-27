@@ -56,7 +56,7 @@ namespace NetRunner.Executable.Invokation
         {
             get
             {
-                return TargetObject.GetType().Name + '.' + Name;
+                return TargetObject.GetTypeName() + '.' + Name;
             }
         }
 
@@ -70,7 +70,7 @@ namespace NetRunner.Executable.Invokation
 
         protected override string GetString()
         {
-            return string.Format("Method: {0}; target object type: {1}; Parameters: {2}; Result type: {3}", Name, TargetObject.GetType().Name, ArgumentTypes, ResultType);
+            return string.Format("Method: {0}; target object type: {1}; Parameters: {2}; Result type: {3}", Name, TargetObject.GetTypeName(), ArgumentTypes, ResultType);
         }
 
         public ExecutionResult Invoke(IEnumerable<IsolatedReference<object>> parameters)

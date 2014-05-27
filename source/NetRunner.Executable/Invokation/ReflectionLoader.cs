@@ -111,7 +111,7 @@ namespace NetRunner.Executable.Invokation
 
             reflectionInvoker.AddAssemblyLoadFolders(assemblyFolders.ToArray());
 
-            var loadedAssemblies = LoadAssemblies(assemblyList).ToReadOnlyList();
+            assemblyList.ForEach(reflectionInvoker.LoadTestAssembly);
 
             var testTypes = reflectionInvoker.FindTestTypes().ToReadOnlyList();
             var parserTypes = reflectionInvoker.FindParsersAvailable().ToReadOnlyList();
