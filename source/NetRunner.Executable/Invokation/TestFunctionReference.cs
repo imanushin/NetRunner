@@ -7,14 +7,15 @@ using System.Text;
 using System.Threading.Tasks;
 using NetRunner.Executable.Common;
 using NetRunner.ExternalLibrary;
+using NetRunner.TestExecutionProxy;
 
 namespace NetRunner.Executable.Invokation
 {
     internal sealed class TestFunctionReference : BaseReadOnlyObject
     {
-        private readonly MethodInfo method;
+        private readonly FunctionMetaData method;
 
-        public TestFunctionReference(MethodInfo method, FunctionContainer targetObject)
+        public TestFunctionReference(FunctionMetaData method, IsolatedReference<FunctionContainer> targetObject)
         {
             Validate.ArgumentIsNotNull(method, "method");
             Validate.ArgumentIsNotNull(targetObject, "targetObject");
@@ -27,7 +28,7 @@ namespace NetRunner.Executable.Invokation
             ResultType = method.ReturnType;
         }
 
-        public FunctionContainer TargetObject
+        public IsolatedReference<FunctionContainer> TargetObject
         {
             get;
             private set;
@@ -39,13 +40,13 @@ namespace NetRunner.Executable.Invokation
             private set;
         }
 
-        public ReadOnlyList<ParameterInfo> ArgumentTypes
+        public ReadOnlyList<ParameterInfoReference> ArgumentTypes
         {
             get;
             private set;
         }
 
-        public Type ResultType
+        public TypeReference ResultType
         {
             get;
             private set;
@@ -72,9 +73,9 @@ namespace NetRunner.Executable.Invokation
             return string.Format("Method: {0}; target object type: {1}; Parameters: {2}; Result type: {3}", Name, TargetObject.GetType().Name, ArgumentTypes, ResultType);
         }
 
-        public object Invoke(object[] parameters)
+        public ExecutionResult Invoke(IEnumerable<IsolatedReference<object>> parameters)
         {
-            return method.Invoke(TargetObject, parameters);
-        }
+            return method.Invoke(TargetObject, parameters.ToArray());
+        } 
     }
 }

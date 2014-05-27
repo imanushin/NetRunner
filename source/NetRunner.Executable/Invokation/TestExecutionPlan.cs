@@ -70,7 +70,7 @@ namespace NetRunner.Executable.Invokation
             StringsToSequence(textNode, ReflectionLoader.TestContainerNames);
 
             AddTitle(textNode, "Parsers:");
-            StringsToSequence(textNode, ReflectionLoader.Parsers.Select(p => string.Format("{0}; priority: {1}", p.GetType().Name, p.Priority)));
+            StringsToSequence(textNode, ReflectionLoader.Parsers.Select(p => string.Format("{0}; priority: {1}", p.GetType().Name, p.ExecuteProperty<int>("Priority"))));
 
             AddTitle(textNode, "Test assemblies:");
             StringsToSequence(textNode, ReflectionLoader.AssemblyPathes);

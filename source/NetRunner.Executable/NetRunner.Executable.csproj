@@ -121,7 +121,7 @@
     <ProjectReference Include="..\NetRunner.TestExecutionProxy\NetRunner.TestExecutionProxy.csproj">
       <Project>{9ee217f0-617d-42c7-b49f-fbdb7c72bdd0}</Project>
       <Name>NetRunner.TestExecutionProxy</Name>
-      <Private>False</Private>
+      <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -135,7 +135,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>$(SolutionDir)\binary\tools\TestsGenerator\TestsGenerator.exe "$(ProjectDir) "</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

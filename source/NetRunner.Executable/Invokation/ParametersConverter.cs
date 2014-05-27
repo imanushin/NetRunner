@@ -9,17 +9,23 @@ using NetRunner.Executable.Invokation.Functions;
 using NetRunner.Executable.RawData;
 using NetRunner.ExternalLibrary;
 using NetRunner.ExternalLibrary.Properties;
+using NetRunner.TestExecutionProxy;
 
 namespace NetRunner.Executable.Invokation
 {
     internal static class ParametersConverter
     {
-        private static readonly Dictionary<Type, BaseParser> parsers = new Dictionary<Type, BaseParser>();
+        private static readonly Dictionary<TypeReference, IsolatedReference<BaseParser>> parsers = new Dictionary<TypeReference, IsolatedReference<BaseParser>>();
         private static readonly MethodInfo tryParseMethod = typeof(BaseParser).GetMethod("TryParse");
 
-        public static InvokationResult ConvertParameter(HtmlCell inputData, Type expectedType, string conversionErrorHeader)
+        public static void ResetParsers()
         {
-            BaseParser parser;
+            parsers.Clear();
+        }
+
+        public static InvokationResult ConvertParameter(HtmlCell inputData, TypeReference expectedType, string conversionErrorHeader)
+        {
+            IsolatedReference<BaseParser> parser;
 
             var errorCellMark = new CssClassCellChange(inputData, HtmlParser.ErrorCssClass);
 
@@ -49,11 +55,11 @@ namespace NetRunner.Executable.Invokation
         }
 
         [CanBeNull]
-        private static InvokationResult ParseData(HtmlCell inputData, Type expectedType, string conversionErrorHeader, BaseParser baseParser)
+        private static InvokationResult ParseData(HtmlCell inputData, TypeReference expectedType, string conversionErrorHeader, IsolatedReference<BaseParser> baseParser)
         {
             try
             {
-                object result;
+                IsolatedReference<object> result;
 
                 if (TryParseData(inputData.CleanedContent, expectedType, baseParser, out result))
                 {
@@ -71,20 +77,21 @@ namespace NetRunner.Executable.Invokation
             return null;
         }
 
-        private static bool TryParseData(string inputData, Type expectedType, BaseParser parser, out object result)
+        private static bool TryParseData(string inputData, TypeReference expectedType, IsolatedReference<BaseParser> parser, out IsolatedReference<object> result)
         {
-            MethodInfo generic = tryParseMethod.MakeGenericMethod(expectedType);
+          /*  MethodInfo generic = tryParseMethod.MakeGenericMethod(expectedType);
 
             var args = new object[]
             {
                 inputData, null
             };
 
-            var parseResult = (bool)generic.Invoke(parser, args);
+            var parseResult = (bool)generic.Invoke(parser, args);*/
 
-            result = args[1];
+            throw new NotImplementedException();
+            //result = args[1];
 
-            return parseResult;
+           // return parseResult;
         }
     }
 }

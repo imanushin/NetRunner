@@ -7,12 +7,13 @@ using NetRunner.Executable.Common;
 using NetRunner.Executable.RawData;
 using NetRunner.ExternalLibrary;
 using NetRunner.ExternalLibrary.Properties;
+using NetRunner.TestExecutionProxy;
 
 namespace NetRunner.Executable.Invokation.Functions
 {
     internal sealed class TableResultFunction : BaseComplexArgumentedFunction
     {
-        public static readonly Type BaseType = typeof(BaseTableArgument);
+        public static readonly TypeReference BaseType = new TypeReference(typeof (BaseTableArgument));
 
         public TableResultFunction(
             HtmlRow columnsRow,
@@ -23,11 +24,9 @@ namespace NetRunner.Executable.Invokation.Functions
         {
         }
 
-        protected override FunctionExecutionResult ProcessResult(object mainFunctionResult)
+        protected override FunctionExecutionResult ProcessResult(IsolatedReference<object> mainFunctionResult)
         {
-            var tableResult = mainFunctionResult as BaseTableArgument;
-
-            Validate.IsNotNull(tableResult, "Table result parameter should not be null and should be inherited from {0}", typeof(BaseTableArgument));
+            var tableResult = mainFunctionResult.As<BaseTableArgument>();
 
             var changes = new List<AbstractTableChange>();
 
@@ -53,7 +52,7 @@ namespace NetRunner.Executable.Invokation.Functions
                 return FormatResult(false, false, changes);
             }
 
-            var notificationException = tableResult.NotifyBeforeFunctionCall(functionToExecute.DisplayName);
+            var notificationException = tableResult.ExecuteMethod("NotifyBeforeFunctionCall", functionToExecute.DisplayName);
 
             AddExceptionLineIfNeeded(notificationException, changes);
 
@@ -85,14 +84,14 @@ namespace NetRunner.Executable.Invokation.Functions
                 }
             }
 
-            notificationException = tableResult.NotifyAfterFunctionCall(functionToExecute.DisplayName);
+            notificationException = tableResult.ExecuteMethod("NotifyAfterFunctionCall", functionToExecute.DisplayName);
 
             AddExceptionLineIfNeeded(notificationException, changes);
 
             return FormatResult(exceptionsOccurred, allIsOk, changes);
         }
 
-        private void AddExceptionLineIfNeeded(Exception notificationException, List<AbstractTableChange> changes)
+        private void AddExceptionLineIfNeeded(string notificationException, List<AbstractTableChange> changes)
         {
             if (notificationException == null)
             {
@@ -109,11 +108,11 @@ namespace NetRunner.Executable.Invokation.Functions
         }
 
         [CanBeNull]
-        private FunctionExecutionResult CheckTableFunctionResult(object mainFunctionResult, BaseTableArgument tableResult, List<AbstractTableChange> changes)
+        private FunctionExecutionResult CheckTableFunctionResult(IsolatedReference<object> mainFunctionResult, IsolatedReference<BaseTableArgument> tableResult, List<AbstractTableChange> changes)
         {
             if (tableResult == null)
             {
-                if (ReferenceEquals(null, mainFunctionResult))
+                if (mainFunctionResult.IsNull)
                 {
                     changes.Add(new ExecutionFailedMessage(
                         Function.RowReference,

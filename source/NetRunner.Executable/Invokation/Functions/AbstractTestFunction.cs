@@ -5,6 +5,7 @@ using System.Reflection;
 using HtmlAgilityPack;
 using NetRunner.Executable.Common;
 using NetRunner.Executable.RawData;
+using NetRunner.TestExecutionProxy;
 
 namespace NetRunner.Executable.Invokation.Functions
 {
@@ -33,7 +34,7 @@ namespace NetRunner.Executable.Invokation.Functions
             Validate.ArgumentIsNotNull(inputArguments, "inputArguments");
 
             var expectedTypes = functionReference.ArgumentTypes;
-            var actualTypes = new object[expectedTypes.Count];
+            var actualTypes = new IsolatedReference<object>[expectedTypes.Count];
 
             var conversionErrors = new List<AbstractTableChange>();
 
@@ -59,7 +60,7 @@ namespace NetRunner.Executable.Invokation.Functions
             {
                 var result = functionReference.Invoke(actualTypes);
 
-                return new InvokationResult(result);
+                return new InvokationResult(null);
             }
             catch (TargetInvocationException ex)
             {

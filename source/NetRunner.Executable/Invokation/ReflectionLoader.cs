@@ -33,7 +33,7 @@ namespace NetRunner.Executable.Invokation
         private static ReadOnlyList<TestFunctionReference> functions = ReadOnlyList<TestFunctionReference>.Empty;
 
         [NotNull]
-        private static ReadOnlyList<BaseTestContainer> testContainers = ReadOnlyList<BaseTestContainer>.Empty;
+        private static ReadOnlyList<IsolatedReference<BaseTestContainer>> testContainers = ReadOnlyList<IsolatedReference<BaseTestContainer>>.Empty;
 
         private static readonly string[] ignoredFunctions =
         {
@@ -118,18 +118,18 @@ namespace NetRunner.Executable.Invokation
 
             reflectionInvoker.AddAssemblyLoadFolders(assemblyFolders.ToArray());
 
-            var loadedAssemblies = LoadAssemblies(assemblyList);
+            var loadedAssemblies = LoadAssemblies(assemblyList).ToReadOnlyList();
 
-            var testTypes = FindTestTypes(loadedAssemblies);
-            var parserTypes = FindParsersAvailable(loadedAssemblies).ToReadOnlyList();
+            var testTypes = reflectionInvoker.FindTestTypes().ToReadOnlyList();
+            var parserTypes = reflectionInvoker.FindParsersAvailable().ToReadOnlyList();
 
-            testContainers = CreateTypeInstances<BaseTestContainer>(testTypes).ToReadOnlyList();
+            testContainers = reflectionInvoker.CreateTypeInstances<BaseTestContainer>(testTypes.ToArray()).ToReadOnlyList();
 
-            functions = FindFunctionsAvailable(testContainers.ToReadOnlyList());
+            var functionsLoaded = reflectionInvoker.FindFunctionsAvailable().ToReadOnlyList();
 
-            var parsersFound = CreateTypeInstances<BaseParser>(parserTypes);
-
-            parsersFound.Sort((first, second) => second.Priority - first.Priority);
+            var parsersFound = reflectionInvoker.CreateTypeInstances<BaseParser>(parserTypes.ToArray()).ToList();
+            
+            parsersFound.Sort((first, second) => second.ExecuteProperty<int>("Priority") - first.ExecuteProperty<int>("Priority"));
 
             Parsers = parsersFound.ToReadOnlyList();
 
@@ -160,7 +160,7 @@ namespace NetRunner.Executable.Invokation
             return configurationFile;
         }
 
-        public static ReadOnlyList<BaseParser> Parsers
+        public static ReadOnlyList<IsolatedReference<BaseParser>> Parsers
         {
             get;
             private set;
@@ -182,19 +182,12 @@ namespace NetRunner.Executable.Invokation
             }
         }
 
-        private static IEnumerable<Type> FindParsersAvailable(List<Assembly> assemblies)
-        {
-            return assemblies.SelectMany(a => a.GetTypes())
-                        .Where(CanBeConstructed)
-                        .Where(t => t.IsSubclassOf(typeof(BaseParser))).ToReadOnlyList();
-        }
-
         [CanBeNull]
-        public static TestFunctionReference FindFunction(ReadOnlyList<string> argumentNames, BaseTableArgument targetObject)
+        public static TestFunctionReference FindFunction(ReadOnlyList<string> argumentNames, IsolatedReference<BaseTableArgument> targetObject)
         {
             var targetType = targetObject.GetType();
 
-            var allMethods = targetType.GetMethods();
+            var allMethods = targetObject.GetMethods();
 
             var methodCandidates =
                 allMethods.Where(m => m.GetParameters().Select(p => p.Name).SequenceEqual(argumentNames, StringComparer.OrdinalIgnoreCase));
@@ -204,7 +197,7 @@ namespace NetRunner.Executable.Invokation
             if (firstCandidate == null)
                 return null;
 
-            return new TestFunctionReference(firstCandidate, targetObject);
+            return new TestFunctionReference(firstCandidate, targetObject.Cast<FunctionContainer>());
         }
 
         [CanBeNull]
@@ -213,100 +206,12 @@ namespace NetRunner.Executable.Invokation
             return functions.FirstOrDefault(f => f.ArgumentTypes.Count == argumentCount && string.Equals(f.Name, name, StringComparison.OrdinalIgnoreCase));
         }
 
-        private static ReadOnlyList<TestFunctionReference> FindFunctionsAvailable(ReadOnlyList<BaseTestContainer> testContainers)
-        {
-            var functions = new List<TestFunctionReference>();
-
-            foreach (BaseTestContainer container in testContainers)
-            {
-                var targetType = container.GetType();
-
-                var availableTests = targetType.GetMethods(BindingFlags.Public | BindingFlags.Instance)
-                    .Where(f => !ignoredFunctions.Contains(f.Name));
-
-                BaseTestContainer localContainer = container;
-
-                var availableFunctions = availableTests.Select(t => new TestFunctionReference(t, localContainer)).ToReadOnlyList();
-
-                Trace.TraceInformation("Type {0} contains following public functions: {1}", targetType.Name, availableFunctions);
-
-                functions.AddRange(availableFunctions);
-            }
-
-            return functions.ToReadOnlyList();
-        }
-
-        private static List<TResultType> CreateTypeInstances<TResultType>(ReadOnlyList<Type> testTypes)
-        {
-            var result = new List<TResultType>();
-
-            foreach (Type testType in testTypes)
-            {
-                try
-                {
-                    var constructor = testType.GetConstructors().FirstOrDefault(ct => !ct.GetParameters().Any());
-
-                    Validate.IsNotNull(constructor, "Unable to find constructor without parameters for type {0}", testType.Name);
-
-                    var targetObject = (TResultType)constructor.Invoke(new object[0]);
-
-                    result.Add(targetObject);
-                }
-                catch (Exception ex)
-                {
-                    Trace.TraceError("Unable to create instance of type {0} because of error: {1}", testType, ex);
-                }
-            }
-
-            return result;
-        }
-
-        private static ReadOnlyList<Type> FindTestTypes(List<Assembly> loadedAssemblies)
-        {
-            var testContainers = new List<Type>();
-
-            foreach (Assembly assembly in loadedAssemblies)
-            {
-                try
-                {
-                    var types = assembly.GetTypes()
-                        .Where(CanBeConstructed)
-                        .Where(t => t.IsSubclassOf(testContainerType)).ToReadOnlyList();
-
-                    Trace.TraceInformation("Test containers from assembly {1}: {0}", types, assembly);
-
-                    testContainers.AddRange(types);
-                }
-                catch (ReflectionTypeLoadException ex)
-                {
-                    Trace.TraceError(
-                        "Unable to retrieve types from assembly {0} because of error {1}. Inner exceptions: {2}",
-                        assembly,
-                        ex.Message,
-                        string.Join(Environment.NewLine, ex.LoaderExceptions.Cast<Exception>()));
-                }
-                catch (Exception ex)
-                {
-                    Trace.TraceError("Unable to retrieve types from assembly {0} because of error {1}", assembly, ex);
-                }
-            }
-
-            var result = testContainers.Distinct().ToReadOnlyList();
-
-            Trace.TraceInformation("All test containers: {0}", string.Join(", ", result.Select(t => t.Name)));
-            return result;
-        }
-
-        private static bool CanBeConstructed(Type t)
-        {
-            return !(t.IsGenericType || t.IsAbstract || t.IsValueType);
-        }
-
-        private static List<Assembly> LoadAssemblies(ReadOnlyList<string> pathes)
+        private static List<string> LoadAssemblies(ReadOnlyList<string> pathes)
         {
             Validate.IsNotNull(currentTestDomain, "Test domain was not initialized");
+            Validate.IsNotNull(reflectionInvoker, "Test domain was not initialized");
 
-            var loadedAssemblies = new List<Assembly>() { testContainerType.Assembly };
+            var loadedAssemblies = new List<string>() { testContainerType.Assembly.Location };
 
             foreach (string assemblyPath in pathes)
             {
@@ -319,11 +224,11 @@ namespace NetRunner.Executable.Invokation
                         continue;
                     }
 
-                    var loadedAssembly = currentTestDomain.Load(File.ReadAllBytes(assemblyPath));
+                    reflectionInvoker.LoadTestAssembly(assemblyPath);
 
-                    Trace.TraceInformation("Assembly {0} was loaded", loadedAssembly);
+                    Trace.TraceInformation("Assembly {0} was loaded", assemblyPath);
 
-                    loadedAssemblies.Add(loadedAssembly);
+                    loadedAssemblies.Add(assemblyPath);
                 }
                 catch (Exception ex)
                 {
@@ -333,7 +238,7 @@ namespace NetRunner.Executable.Invokation
             return loadedAssemblies;
         }
 
-        public static bool TryReadPropery(object targetObject, string propertyName, [CanBeNull]  out Type propertyType, [CanBeNull] out object resultValue)
+        public static bool TryReadPropery(object targetObject, string propertyName, [CanBeNull]  out TypeReference propertyType, [CanBeNull] out IsolatedReference<object> resultValue)
         {
 #warning change to Table changes
             var targetType = targetObject.GetType();
@@ -348,8 +253,8 @@ namespace NetRunner.Executable.Invokation
                 return false;
             }
 
-            resultValue = property.GetValue(targetObject);
-            propertyType = property.PropertyType;
+            resultValue = new IsolatedReference<object>( property.GetValue(targetObject));
+            propertyType = new TypeReference(property.PropertyType);
 
             return true;
         }
@@ -359,11 +264,12 @@ namespace NetRunner.Executable.Invokation
             if (currentTestDomain != null)
             {
                 AppDomain.Unload(currentTestDomain);
+                ParametersConverter.ResetParsers();
             }
 
-            var evidence = new Evidence();
+            var evidence = AppDomain.CurrentDomain.Evidence;
 
-            var setupInformation = new AppDomainSetup();
+            var setupInformation = AppDomain.CurrentDomain.SetupInformation;
 
             var configFileCandidate = LoadConfigurationIfNeeded();
 

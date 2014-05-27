@@ -7,6 +7,7 @@ using NetRunner.Executable.Common;
 using NetRunner.Executable.Invokation.Functions;
 using NetRunner.Executable.RawData;
 using NetRunner.ExternalLibrary.Properties;
+using NetRunner.TestExecutionProxy;
 
 namespace NetRunner.Executable.Invokation.Keywords
 {
@@ -72,12 +73,12 @@ namespace NetRunner.Executable.Invokation.Keywords
 
             if (checkSucceded)
             {
-                return new InvokationResult(true);
+                return new InvokationResult(new IsolatedReference<object>(true));
             }
 
             var showActualValueCellChange = new ShowActualValueCellChange(lastCell, resultObject);
 
-            return new InvokationResult(false, new TableChangeCollection(false, false, showActualValueCellChange));
+            return new InvokationResult(new IsolatedReference<object>(false), new TableChangeCollection(false, false, showActualValueCellChange));
         }
 
         /// <summary>

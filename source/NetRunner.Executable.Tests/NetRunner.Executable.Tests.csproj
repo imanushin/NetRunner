@@ -99,6 +99,10 @@
       <Project>{19d01e12-2663-4bd7-8d71-425bd4f1643c}</Project>
       <Name>NetRunner.ExternalLibrary</Name>
     </ProjectReference>
+    <ProjectReference Include="..\NetRunner.TestExecutionProxy\NetRunner.TestExecutionProxy.csproj">
+      <Project>{9ee217f0-617d-42c7-b49f-fbdb7c72bdd0}</Project>
+      <Name>NetRunner.TestExecutionProxy</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -7,12 +7,14 @@ using System.Threading.Tasks;
 using HtmlAgilityPack;
 using NetRunner.Executable.Common;
 using NetRunner.Executable.RawData;
+using NetRunner.ExternalLibrary.Properties;
+using NetRunner.TestExecutionProxy;
 
 namespace NetRunner.Executable.Invokation.Functions
 {
     internal sealed class CollectionResultFunction : BaseComplexArgumentedFunction
     {
-        public static readonly Type BaseType = typeof(IEnumerable);
+        public static readonly TypeReference BaseType = new TypeReference(typeof(IEnumerable));
 
         public CollectionResultFunction(
             HtmlRow columnsRow,
@@ -23,11 +25,11 @@ namespace NetRunner.Executable.Invokation.Functions
         {
         }
 
-        private static TableChangeCollection CompareItems(object resultObject, HtmlCell expectedResult, string propertyName)
+        private static TableChangeCollection CompareItems(IsolatedReference<object> resultObject, HtmlCell expectedResult, string propertyName)
         {
-            Type propertyType;
+            TypeReference propertyType;
 
-            object resultValue;
+            IsolatedReference<object> resultValue;
 
             var resultIsOkChange = new CssClassCellChange(expectedResult, HtmlParser.PassCssClass);
 
@@ -61,13 +63,13 @@ namespace NetRunner.Executable.Invokation.Functions
         }
 
 
-        protected override FunctionExecutionResult ProcessResult(object mainFunctionResult)
+        protected override FunctionExecutionResult ProcessResult(IsolatedReference<object> mainFunctionResult)
         {
-            var collectionResult = (IEnumerable)mainFunctionResult;
+            var collectionResult = mainFunctionResult.As<IEnumerable>();
 
-            collectionResult = collectionResult ?? new object[0];
+            collectionResult = collectionResult.IsNull ? new IsolatedReference<IEnumerable>(new Object[0]) : collectionResult;
 
-            var orderedResult = collectionResult.Cast<object>().ToArray();
+            var orderedResult = collectionResult.ToArray();
 
             var allRight = true;
             var exceptionOccurred = false;
@@ -118,15 +120,15 @@ namespace NetRunner.Executable.Invokation.Functions
             return FormatResult(exceptionOccurred, allRight, tableChanges);
         }
 
-        private static string ReadProperty(string propertyName, object resultObject)
+        private static string ReadProperty(string propertyName, IsolatedReference<object> resultObject)
         {
-            object resultValue;
-            Type propertyType;
+            IsolatedReference<object> resultValue;
+            TypeReference propertyType;
 
             if (!ReflectionLoader.TryReadPropery(resultObject, propertyName, out propertyType, out resultValue))
                 return string.Format("Unable to read property '{0}'", propertyName);
 
-            return (resultValue ?? string.Empty).ToString();
+            return (resultValue.IsNull ? string.Empty : resultValue.ToString()).ToString();
         }
     }
 }

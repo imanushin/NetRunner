@@ -6,3 +6,5 @@ NetRunner.Executable.Common
 System.Reflection.MethodInfo=>GetType().GetMethods().First()
 HtmlAgilityPack.HtmlNode=>HtmlNode.CreateNode("<i>TEST<i/>")
 NetRunner.ExternalLibrary.FunctionContainer=>new FakeFunctionContainer(1)
+NetRunner.TestExecutionProxy.FunctionMetaData=> new FunctionMetaData( GetType().GetMethods().First() );
+NetRunner.TestExecutionProxy.IsolatedReference=> new IsolatedReference()

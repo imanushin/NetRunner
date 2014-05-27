@@ -5,12 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using NetRunner.Executable.Common;
 using NetRunner.ExternalLibrary.Properties;
+using NetRunner.TestExecutionProxy;
 
 namespace NetRunner.Executable.Invokation.Functions
 {
     internal sealed class InvokationResult
     {
-        public InvokationResult([CanBeNull] object result, [NotNull]TableChangeCollection changes)
+        public InvokationResult(IsolatedReference<object> result, [NotNull]TableChangeCollection changes)
         {
             Validate.ArgumentIsNotNull(changes, "changes");
 
@@ -18,7 +19,7 @@ namespace NetRunner.Executable.Invokation.Functions
             Changes = changes;
         }
 
-        public InvokationResult([CanBeNull]object result)
+        public InvokationResult(IsolatedReference<object> result)
             : this(result, TableChangeCollection.AllIsOkNoChanges)
         {
         }
@@ -29,8 +30,7 @@ namespace NetRunner.Executable.Invokation.Functions
             private set;
         }
 
-        [CanBeNull]
-        public object Result
+        public IsolatedReference<object> Result
         {
             get;
             private set;

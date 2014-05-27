@@ -39,8 +39,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExecutionResult.cs" />
+    <Compile Include="FunctionMetaData.cs" />
+    <Compile Include="IsolatedReference.cs" />
+    <Compile Include="ParameterInfoReference.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReflectionInvoker.cs" />
+    <Compile Include="TypeReference.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NetRunner.ExternalLibrary\NetRunner.ExternalLibrary.csproj">
+      <Project>{19d01e12-2663-4bd7-8d71-425bd4f1643c}</Project>
+      <Name>NetRunner.ExternalLibrary</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

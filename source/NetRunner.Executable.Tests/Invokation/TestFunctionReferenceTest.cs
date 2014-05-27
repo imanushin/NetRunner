@@ -16,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using NetRunner.TestExecutionProxy;
 
 namespace NetRunner.Executable.Tests.Invokation
 {
@@ -23,9 +24,9 @@ namespace NetRunner.Executable.Tests.Invokation
     {
         private static IEnumerable<TestFunctionReference> GetInstancesOfCurrentType()
         {
-            foreach (var methodInfo in typeof(TestFunctionReferenceTest).GetMethods())
+            foreach (var methodInfo in typeof(TestFunctionReferenceTest).GetMethods().Select(m => new FunctionMetaData(m)))
             {
-                foreach (var container in new[] { new FakeFunctionContainer(1), new FakeFunctionContainer(1) })
+                foreach (var container in new[] { new FakeFunctionContainer(1), new FakeFunctionContainer(1) }.Select(c=>new IsolatedReference<FunctionContainer>(c)))
                 {
                     yield return new TestFunctionReference(methodInfo, container);
                 }

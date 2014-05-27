@@ -845,7 +845,7 @@ namespace NetRunner.Executable.Tests.Invokation
 
             try
             {
-                new TestFunctionReference(null, targetObject);
+                new TestFunctionReference(null, null/*targetObject*/);
             }
             catch(ArgumentNullException ex)
             {
@@ -866,7 +866,7 @@ namespace NetRunner.Executable.Tests.Invokation
 
             try
             {
-                new TestFunctionReference(method, null);
+                new TestFunctionReference(/*method*/null, null);
             }
             catch(ArgumentNullException ex)
             {

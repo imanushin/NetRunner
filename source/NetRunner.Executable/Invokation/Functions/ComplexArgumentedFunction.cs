@@ -8,6 +8,7 @@ using NetRunner.Executable.Common;
 using NetRunner.Executable.RawData;
 using NetRunner.ExternalLibrary;
 using NetRunner.ExternalLibrary.Properties;
+using NetRunner.TestExecutionProxy;
 
 namespace NetRunner.Executable.Invokation.Functions
 {
@@ -82,7 +83,7 @@ namespace NetRunner.Executable.Invokation.Functions
             return new FunctionExecutionResult(actualResult.ResultType, actualResult.TableChanges.Concat(result.Changes.Changes));
         }
 
-        protected abstract FunctionExecutionResult ProcessResult([CanBeNull] object mainFunctionResult);
+        protected abstract FunctionExecutionResult ProcessResult([NotNull] IsolatedReference<object> mainFunctionResult);
 
         [CanBeNull]
         private FunctionExecutionResult CheckInputData()
