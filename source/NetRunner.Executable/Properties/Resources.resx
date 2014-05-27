@@ -124,7 +124,4 @@
   <data name="NetRunner_TestExecutionProxy" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\..\..\binary\tempBuild\NetRunner.TestExecutionProxy.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="NetRunner_TestExecutor" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\..\..\binary\tempBuild\NetRunner.TestExecutor.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
 </root>
