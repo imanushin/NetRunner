@@ -35,11 +35,6 @@ namespace NetRunner.Executable.Invokation
         [NotNull]
         private static ReadOnlyList<IsolatedReference<BaseTestContainer>> testContainers = ReadOnlyList<IsolatedReference<BaseTestContainer>>.Empty;
 
-        private static readonly string[] ignoredFunctions =
-        {
-            "ToString", "GetHashCode", "Equals", "GetType"
-        };
-
         [CanBeNull]
         private static ReflectionInvoker reflectionInvoker;
 
@@ -125,7 +120,7 @@ namespace NetRunner.Executable.Invokation
 
             testContainers = reflectionInvoker.CreateTypeInstances<BaseTestContainer>(testTypes.ToArray()).ToReadOnlyList();
 
-            var functionsLoaded = reflectionInvoker.FindFunctionsAvailable().ToReadOnlyList();
+            var functionsLoaded = reflectionInvoker.FindFunctionsAvailable(testContainers.ToArray()).ToReadOnlyList();
 
             var parsersFound = reflectionInvoker.CreateTypeInstances<BaseParser>(parserTypes.ToArray()).ToList();
             

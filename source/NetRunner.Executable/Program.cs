@@ -34,6 +34,8 @@ namespace NetRunner.Executable
             {
                 Trace.TraceError("Unhandled exception: {0}", ex);
 
+                Trace.Flush();
+
                 return 1;
             }
         }

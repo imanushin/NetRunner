@@ -17,6 +17,11 @@ namespace NetRunner.TestExecutionProxy
         private string[] assemblyFolders = new string[0];
         private readonly List<Assembly> testAssemblies = new List<Assembly>();
 
+        private static readonly string[] ignoredFunctions =
+        {
+            "ToString", "GetHashCode", "Equals", "GetType"
+        };
+
         public ReflectionInvoker()
         {
             if (Trace.Listeners.Count == 0)
@@ -88,14 +93,76 @@ namespace NetRunner.TestExecutionProxy
             return !(t.IsGenericType || t.IsAbstract || t.IsValueType);
         }
 
-        public IsolatedReference<T>[] CreateTypeInstances<T>(TypeReference[] toArray)
+        public IsolatedReference<T>[] CreateTypeInstances<T>(TypeReference[] targetTypes)
         {
-            throw new NotImplementedException();
+            var result = new List<IsolatedReference<T>>();
+
+            foreach (var typeReference in targetTypes)
+            {
+                try
+                {
+                    var constructor = typeReference.TargetType.GetConstructor(new Type[0]);
+
+                    if (constructor == null)
+                    {
+                        Trace.TraceError("Unable to create type {0}: unable to find any constructor without parameters", typeReference.TargetType);
+
+                        continue;
+                    }
+
+                    var newObject = (T)constructor.Invoke(new object[0]);
+
+                    result.Add(new IsolatedReference<T>(newObject));
+                }
+                catch (TargetInvocationException ex)
+                {
+                    Trace.TraceError("Unable to create instance of type {0} because of error: {1}", typeReference.TargetType, ex.InnerException);
+                }
+                catch (Exception ex)
+                {
+                    Trace.TraceError("Unable to create instance of type {0} because of error: {1}", typeReference.TargetType, ex);
+                }
+            }
+
+            return result.ToArray();
         }
 
-        public FunctionMetaData[] FindFunctionsAvailable()
+        public FunctionMetaData[] FindFunctionsAvailable(IReadOnlyCollection<IsolatedReference<BaseTestContainer>> testContainers)
         {
-            throw new NotImplementedException();
+            var functions = new List<FunctionMetaData>();
+
+            foreach (var container in testContainers)
+            {
+                if (container.IsNull)
+                {
+                    Trace.TraceError("Internal error: unable to get items from container, because it is null");
+
+                    continue;
+                }
+
+                BaseTestContainer localContainer = container.Value;
+
+                var targetType = localContainer.GetType();
+
+                try
+                {
+                    var availableTests = targetType.GetMethods(BindingFlags.Public | BindingFlags.Instance)
+                                                   .Where(f => !ignoredFunctions.Contains(f.Name));
+
+                    var availableFunctions = availableTests.Select(t => new FunctionMetaData(t));
+
+                    Trace.TraceInformation("Type {0} contains following public functions: {1}", targetType.Name, availableFunctions);
+
+                    functions.AddRange(availableFunctions);
+                }
+                catch (Exception ex)
+                {
+                    Trace.TraceError("Unable to list functions of type {0} because of errors: {1}", targetType.Name, ex);
+                    Trace.Flush();
+                }
+            }
+
+            return functions.ToArray();
         }
     }
 }

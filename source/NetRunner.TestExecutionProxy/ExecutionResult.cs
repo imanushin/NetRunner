@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NetRunner.TestExecutionProxy
 {
-    public sealed class ExecutionResult
+    public sealed class ExecutionResult : MarshalByRefObject
     {
         public ExecutionResult(IsolatedReference<object> result)
         {

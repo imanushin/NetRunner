@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace NetRunner.TestExecutionProxy
 {
-    public sealed class ParameterInfoReference
+    public sealed class ParameterInfoReference : MarshalByRefObject
     {
         public ParameterInfoReference(ParameterInfo parameter)
         {

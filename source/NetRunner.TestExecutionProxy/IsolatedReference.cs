@@ -15,6 +15,7 @@ namespace NetRunner.TestExecutionProxy
             Value = value;
         }
 
+        [CanBeNull]
         internal TType Value
         {
             get;

@@ -116,7 +116,15 @@ namespace NetRunner.Executable
         {
             if (socket != null && !isDisposed)
             {
-                socket.Dispose();
+                try
+                {
+                    socket.Dispose();
+                }
+                catch (Exception ex)
+                {
+                    Trace.TraceError("Unable to close socket: {0}", ex);
+                }
+
                 isDisposed = true;
             }
                 
