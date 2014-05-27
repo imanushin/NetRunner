@@ -165,7 +165,7 @@ namespace NetRunner.Executable.Invokation
         {
             get
             {
-                return testContainers.Select(tc => tc.GetType().Name).ToReadOnlyList();
+                return testContainers.Select(tc => tc.GetTypeFullName()).ToReadOnlyList();
             }
         }
 

@@ -88,19 +88,27 @@ namespace NetRunner.TestExecutionProxy
             return result;
         }
 
+        private Type ValueType
+        {
+            get
+            {
+                return ReferenceEquals(null, Value) ? typeof (TType) : Value.GetType();
+            }
+        }
+
         public string GetTypeName()
         {
-            if (ReferenceEquals(Value, null))
-            {
-                return typeof(TType).Name;
-            }
-
-            return Value.GetType().Name;
+            return ValueType.Name;
         }
 
         public override string ToString()
         {
             return ReferenceEquals(Value, null) ? string.Empty : Value.ToString();
+        }
+
+        public string GetTypeFullName()
+        {
+            return ValueType.FullName;
         }
     }
 }
