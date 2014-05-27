@@ -101,8 +101,6 @@ namespace NetRunner.Executable.Invokation
             assemblyFolders = assemblyList.Select(Path.GetDirectoryName).Distinct(StringComparer.OrdinalIgnoreCase).ToReadOnlyList();
 
             Trace.TraceInformation("Additional folder for assembly loading: {0}", assemblyFolders.JoinToStringLazy("; "));
-
-            //ToDo: inject them into the test domain
         }
 
         private static void ReloadAssemblies()
@@ -120,10 +118,12 @@ namespace NetRunner.Executable.Invokation
 
             testContainers = reflectionInvoker.CreateTypeInstances<BaseTestContainer>(testTypes.ToArray()).ToReadOnlyList();
 
-            var functionsLoaded = reflectionInvoker.FindFunctionsAvailable(testContainers.ToArray()).ToReadOnlyList();
+            functions = testContainers
+                .SelectMany(tc => reflectionInvoker.FindFunctionsAvailable(tc).Select(f => new TestFunctionReference(f, tc.Cast<FunctionContainer>())))
+                .ToReadOnlyList();
 
             var parsersFound = reflectionInvoker.CreateTypeInstances<BaseParser>(parserTypes.ToArray()).ToList();
-            
+
             parsersFound.Sort((first, second) => second.ExecuteProperty<int>("Priority") - first.ExecuteProperty<int>("Priority"));
 
             Parsers = parsersFound.ToReadOnlyList();
@@ -248,7 +248,7 @@ namespace NetRunner.Executable.Invokation
                 return false;
             }
 
-            resultValue = new IsolatedReference<object>( property.GetValue(targetObject));
+            resultValue = new IsolatedReference<object>(property.GetValue(targetObject));
             propertyType = new TypeReference(property.PropertyType);
 
             return true;

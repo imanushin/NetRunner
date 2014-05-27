@@ -127,39 +127,36 @@ namespace NetRunner.TestExecutionProxy
             return result.ToArray();
         }
 
-        public FunctionMetaData[] FindFunctionsAvailable(IReadOnlyCollection<IsolatedReference<BaseTestContainer>> testContainers)
+        public FunctionMetaData[] FindFunctionsAvailable(IsolatedReference<BaseTestContainer> testContainer)
         {
             var functions = new List<FunctionMetaData>();
 
-            foreach (var container in testContainers)
+            if (testContainer.IsNull)
             {
-                if (container.IsNull)
-                {
-                    Trace.TraceError("Internal error: unable to get items from container, because it is null");
+                Trace.TraceError("Internal error: unable to get items from container, because it is null");
 
-                    continue;
-                }
+                return functions.ToArray();
+            }
 
-                BaseTestContainer localContainer = container.Value;
+            BaseTestContainer localContainer = testContainer.Value;
 
-                var targetType = localContainer.GetType();
+            var targetType = localContainer.GetType();
 
-                try
-                {
-                    var availableTests = targetType.GetMethods(BindingFlags.Public | BindingFlags.Instance)
-                                                   .Where(f => !ignoredFunctions.Contains(f.Name));
+            try
+            {
+                var availableTests = targetType.GetMethods(BindingFlags.Public | BindingFlags.Instance)
+                                               .Where(f => !ignoredFunctions.Contains(f.Name));
 
-                    var availableFunctions = availableTests.Select(t => new FunctionMetaData(t));
+                var availableFunctions = availableTests.Select(t => new FunctionMetaData(t));
 
-                    Trace.TraceInformation("Type {0} contains following public functions: {1}", targetType.Name, availableFunctions);
+                Trace.TraceInformation("Type {0} contains following public functions: {1}", targetType.Name, availableFunctions);
 
-                    functions.AddRange(availableFunctions);
-                }
-                catch (Exception ex)
-                {
-                    Trace.TraceError("Unable to list functions of type {0} because of errors: {1}", targetType.Name, ex);
-                    Trace.Flush();
-                }
+                functions.AddRange(availableFunctions);
+            }
+            catch (Exception ex)
+            {
+                Trace.TraceError("Unable to list functions of type {0} because of errors: {1}", targetType.Name, ex);
+                Trace.Flush();
             }
 
             return functions.ToArray();

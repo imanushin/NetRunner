@@ -55,7 +55,7 @@ namespace NetRunner.Executable
             {
                 String errorMessage = ReadBytes(statusSize);
                 Trace.WriteLine("...failed because: " + errorMessage);
-                Console.WriteLine("An error occured while connecting to client.");
+                Trace.WriteLine("An error occured while connecting to client.");
 
                 throw new InvalidOperationException("Communication error: " + errorMessage);
             }
