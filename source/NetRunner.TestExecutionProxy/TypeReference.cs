@@ -44,6 +44,14 @@ namespace NetRunner.TestExecutionProxy
             }
         }
 
+        public PropertyReference[] GetProperties
+        {
+            get
+            {
+                return TargetType.GetProperties().Select(p => new PropertyReference(p)).ToArray();
+            }
+        }
+
         public override string ToString()
         {
             return TargetType.ToString();
@@ -69,6 +77,21 @@ namespace NetRunner.TestExecutionProxy
         public override int GetHashCode()
         {
             return TargetType.GetHashCode();
+        }
+
+        public PropertyReference GetProperty(string propertyName)
+        {
+            var result =
+                TargetType
+                    .GetProperties()
+                    .FirstOrDefault(p => String.Equals(p.Name, propertyName, StringComparison.OrdinalIgnoreCase));
+
+            if (result != null)
+            {
+                return new PropertyReference(result);
+            }
+
+            return null;
         }
     }
 }

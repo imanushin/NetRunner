@@ -29,7 +29,7 @@ namespace NetRunner.Executable.Invokation.Functions
         {
             TypeReference propertyType;
 
-            IsolatedReference<object> resultValue;
+            GeneralIsolatedReference resultValue;
 
             var resultIsOkChange = new CssClassCellChange(expectedResult, HtmlParser.PassCssClass);
 
@@ -67,7 +67,9 @@ namespace NetRunner.Executable.Invokation.Functions
         {
             var collectionResult = mainFunctionResult.As<IEnumerable>();
 
-            collectionResult = collectionResult.IsNull ? new IsolatedReference<IEnumerable>(new Object[0]) : collectionResult;
+            collectionResult = collectionResult.IsNull ?
+                ReflectionLoader.CreateOnTestDomain((IEnumerable)ReadOnlyList<object>.Empty) :
+                collectionResult;
 
             var orderedResult = collectionResult.ToArray();
 
@@ -122,7 +124,7 @@ namespace NetRunner.Executable.Invokation.Functions
 
         private static string ReadProperty(string propertyName, IsolatedReference<object> resultObject)
         {
-            IsolatedReference<object> resultValue;
+            GeneralIsolatedReference resultValue;
             TypeReference propertyType;
 
             if (!ReflectionLoader.TryReadPropery(resultObject, propertyName, out propertyType, out resultValue))

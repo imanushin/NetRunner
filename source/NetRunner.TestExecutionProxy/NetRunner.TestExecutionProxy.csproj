@@ -46,6 +46,7 @@
     <Compile Include="IsolatedReference.cs" />
     <Compile Include="ParameterInfoReference.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PropertyReference.cs" />
     <Compile Include="ReflectionInvoker.cs" />
     <Compile Include="TypeReference.cs" />
   </ItemGroup>

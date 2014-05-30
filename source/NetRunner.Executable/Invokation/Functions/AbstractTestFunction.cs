@@ -41,14 +41,14 @@ namespace NetRunner.Executable.Invokation.Functions
             for (int i = 0; i < expectedTypes.Count; i++)
             {
                 var inputArgument = inputArguments[i];
-                
+
                 var conversionErrorHeader = string.Format(
                     "Unable to convert value '{2}' of parameter '{0}' of function '{1}'",
                     functionReference.ArgumentTypes[i].Name,
                     functionReference.DisplayName,
                     inputArgument.CleanedContent);
 
-                
+
                 var conversionResult = ParametersConverter.ConvertParameter(inputArgument, expectedTypes[i].ParameterType, conversionErrorHeader);
                 actualTypes[i] = conversionResult.Result;
 
@@ -60,22 +60,21 @@ namespace NetRunner.Executable.Invokation.Functions
                 return new InvokationResult(null, new TableChangeCollection(false, true, conversionErrors));
             }
 
-            try
+            var result = functionReference.Invoke(actualTypes);
+
+            if (result.HasError)
             {
-                var result = functionReference.Invoke(actualTypes);
-
-                return new InvokationResult(null);
-            }
-            catch (TargetInvocationException ex)
-            {
-                var targetException = ex.InnerException;
-
-                Validate.IsNotNull(targetException, "Internal error: {0} should have inner exception", ex.GetType());
-
-                var errorData = new AddCellExpandableException(firstFunctionCell, targetException, "Function '{0}' execution was failed with error: {1}", functionReference.DisplayName, targetException.GetType().Name);
+                var errorData = new AddCellExpandableException(
+                    firstFunctionCell,
+                    result,
+                    "Function '{0}' execution was failed with error: {1}",
+                    functionReference.DisplayName,
+                    result.ExceptionType);
 
                 return new InvokationResult(null, new TableChangeCollection(false, true, errorData));
             }
+
+            return new InvokationResult(result.Result);
         }
 
         public abstract ReadOnlyList<TestFunctionReference> GetInnerFunctions();

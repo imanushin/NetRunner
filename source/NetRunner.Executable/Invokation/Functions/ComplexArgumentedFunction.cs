@@ -23,10 +23,10 @@ namespace NetRunner.Executable.Invokation.Functions
             Validate.ArgumentIsNotNull(functionToExecute, "functionToExecute");
             Validate.ArgumentIsNotNull(columnsRow, "columnsRow");
 
-            this.Function = function;
-            this.Rows = rows.ToReadOnlyList();
+            Function = function;
+            Rows = rows.ToReadOnlyList();
             functionReference = functionToExecute;
-            this.ColumnsRow = columnsRow;
+            ColumnsRow = columnsRow;
             CleanedColumnNames = columnsRow.Cells.Select(c => c.CleanedContent.Replace(" ", string.Empty)).ToReadOnlyList();
         }
 
@@ -77,6 +77,10 @@ namespace NetRunner.Executable.Invokation.Functions
             {
                 return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Exception, result.Changes.Changes);
             }
+
+            Validate.IsNotNull(result.Result, "Function result should not be null");
+
+            Validate.Condition(!result.Result.IsNull, "Null result is not supported yet");
 
             var actualResult = ProcessResult(result.Result);
 

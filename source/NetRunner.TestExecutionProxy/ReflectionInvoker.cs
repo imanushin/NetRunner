@@ -212,7 +212,7 @@ namespace NetRunner.TestExecutionProxy
                 var availableTests = targetType.GetMethods(BindingFlags.Public | BindingFlags.Instance)
                                                .Where(f => !ignoredFunctions.Contains(f.Name));
 
-                var availableFunctions = availableTests.Select(t => new FunctionMetaData(t));
+                var availableFunctions = availableTests.Select(t => new FunctionMetaData(t, localContainer));
 
                 Trace.TraceInformation("Type {0} contains following public functions: {1}", targetType.Name, availableFunctions);
 

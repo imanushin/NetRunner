@@ -8,16 +8,38 @@ namespace NetRunner.TestExecutionProxy
 {
     public class GeneralIsolatedReference : MarshalByRefObject
     {
-        private readonly object value;
-
         public GeneralIsolatedReference(object value)
         {
-            this.value = value;
+            this.Value = value;
+        }
+
+        internal object Value
+        {
+            get;
+            private set;
+        }
+
+        public bool IsNull
+        {
+            get
+            {
+                return ReferenceEquals(null, Value);
+            }
         }
 
         public override int GetHashCode()
         {
-            return ReferenceEquals(null, value) ? 0 : value.GetHashCode();
+            return ReferenceEquals(null, Value) ? 0 : Value.GetHashCode();
+        }
+
+        public FunctionMetaData[] GetMethods()
+        {
+            return Value.GetType().GetMethods().Select(m => new FunctionMetaData(m, Value)).ToArray();
+        }
+
+        public new TypeReference GetType()
+        {
+            return new TypeReference(Value.GetType());
         }
 
         public override bool Equals(object obj)
@@ -29,17 +51,22 @@ namespace NetRunner.TestExecutionProxy
                 return false;
             }
 
-            if (ReferenceEquals(value, other.value))
+            if (ReferenceEquals(Value, other.Value))
             {
                 return true;
             }
 
-            if (ReferenceEquals(null, other.value) || ReferenceEquals(null, value))
+            if (ReferenceEquals(null, other.Value) || ReferenceEquals(null, Value))
             {
                 return false;
             }
 
-            return value.Equals(other.value);
+            return Value.Equals(other.Value);
+        }
+
+        public override string ToString()
+        {
+            return ReferenceEquals(Value, null) ? string.Empty : Value.ToString();
         }
     }
 }

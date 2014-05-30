@@ -11,20 +11,12 @@ namespace NetRunner.TestExecutionProxy
 {
     public sealed class FunctionMetaData : MarshalByRefObject
     {
-        private readonly BaseTestContainer targetObject;
+        private readonly object targetObject;
 
-        public FunctionMetaData(MethodInfo method)
+        public FunctionMetaData(MethodInfo method, object targetObject)
         {
             this.targetObject = targetObject;
             Method = method;
-        }
-
-        public IsolatedReference<BaseTestContainer> TargetObject
-        {
-            get
-            {
-                return new IsolatedReference<BaseTestContainer>(targetObject);
-            }
         }
 
         internal MethodInfo Method

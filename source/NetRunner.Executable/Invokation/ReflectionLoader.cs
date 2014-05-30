@@ -189,12 +189,12 @@ namespace NetRunner.Executable.Invokation
             return loadedAssemblies;
         }
 
-        public static bool TryReadPropery(object targetObject, string propertyName, [CanBeNull]  out TypeReference propertyType, [CanBeNull] out IsolatedReference<object> resultValue)
+        public static bool TryReadPropery(GeneralIsolatedReference targetObject, string propertyName, [CanBeNull]  out TypeReference propertyType, [CanBeNull] out GeneralIsolatedReference resultValue)
         {
 #warning change to Table changes
             var targetType = targetObject.GetType();
 
-            var property = targetType.GetProperties().FirstOrDefault(p => String.Equals(p.Name, propertyName, StringComparison.OrdinalIgnoreCase));
+            var property = targetType.GetProperty(propertyName);
 
             if (property == null)
             {
@@ -204,8 +204,8 @@ namespace NetRunner.Executable.Invokation
                 return false;
             }
 
-            resultValue = new IsolatedReference<object>(property.GetValue(targetObject));
-            propertyType = new TypeReference(property.PropertyType);
+            resultValue = property.GetValue(targetObject);
+            propertyType = property.PropertyType;
 
             return true;
         }

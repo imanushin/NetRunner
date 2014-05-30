@@ -24,24 +24,11 @@ namespace NetRunner.TestExecutionProxy
             private set;
         }
 
-        public bool IsNull
-        {
-            get
-            {
-                return ReferenceEquals(null, Value);
-            }
-        }
-
         public TResult ExecuteProperty<TResult>(string propertyName)
         {
             var targetProperty = Value.GetType().GetProperty(propertyName);
 
             return (TResult)targetProperty.GetValue(Value);
-        }
-
-        public FunctionMetaData[] GetMethods()
-        {
-            return Value.GetType().GetMethods().Select(m => new FunctionMetaData(m)).ToArray();
         }
 
         public IsolatedReference<object>[] ToArray()
@@ -121,11 +108,6 @@ namespace NetRunner.TestExecutionProxy
         public string GetTypeName()
         {
             return ValueType.Name;
-        }
-
-        public override string ToString()
-        {
-            return ReferenceEquals(Value, null) ? string.Empty : Value.ToString();
         }
 
         public string GetTypeFullName()
