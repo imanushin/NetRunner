@@ -48,7 +48,7 @@ namespace NetRunner.Executable.Invokation
             if (foundParserResult != null)
                 return foundParserResult;
 
-            var noParserCellChange = new AddCellExpandableInfo(inputData, conversionErrorHeader, string.Format("Internal error: Object {0} parser type {1} earlier however it could not do this now.", parser, expectedType));
+            var noParserCellChange = new AddCellExpandableInfo(inputData, conversionErrorHeader, string.Format("Internal error: Object {0} parsed type {1} earlier however it could not do this now.", parser, expectedType));
 
             return new InvokationResult(null, new TableChangeCollection(false, true, noParserCellChange, errorCellMark));
         }
@@ -58,13 +58,22 @@ namespace NetRunner.Executable.Invokation
         {
             try
             {
-                IsolatedReference<object> result;
+                ExecutionResult result;
 
-                if (baseParser.TryParse(inputData.CleanedContent, expectedType, out result))
+                var parseSucceeded = baseParser.TryParse(inputData.CleanedContent, expectedType, out result);
+
+                if (result.HasError)
+                {
+                    var cellChange = new AddCellExpandableException(inputData, result, conversionErrorHeader);
+
+                    return new InvokationResult(null, new TableChangeCollection(false, true, cellChange));
+                }
+
+                if (parseSucceeded)
                 {
                     parsers[expectedType] = baseParser;
 
-                    return new InvokationResult(result);
+                    return new InvokationResult(result.Result);
                 }
             }
             catch (TargetInvocationException ex)

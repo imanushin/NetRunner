@@ -40,12 +40,16 @@ namespace NetRunner.Executable.Invokation.Functions
 
             for (int i = 0; i < expectedTypes.Count; i++)
             {
+                var inputArgument = inputArguments[i];
+                
                 var conversionErrorHeader = string.Format(
-                    "Unable to convert parameter '{0}' of function '{1}'",
+                    "Unable to convert value '{2}' of parameter '{0}' of function '{1}'",
                     functionReference.ArgumentTypes[i].Name,
-                    functionReference.DisplayName);
+                    functionReference.DisplayName,
+                    inputArgument.CleanedContent);
 
-                var conversionResult = ParametersConverter.ConvertParameter(inputArguments[i], expectedTypes[i].ParameterType, conversionErrorHeader);
+                
+                var conversionResult = ParametersConverter.ConvertParameter(inputArgument, expectedTypes[i].ParameterType, conversionErrorHeader);
                 actualTypes[i] = conversionResult.Result;
 
                 conversionErrors.AddRange(conversionResult.Changes.Changes);
