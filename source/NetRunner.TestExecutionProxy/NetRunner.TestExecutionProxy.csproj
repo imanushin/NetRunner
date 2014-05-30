@@ -41,6 +41,8 @@
   <ItemGroup>
     <Compile Include="ExecutionResult.cs" />
     <Compile Include="FunctionMetaData.cs" />
+    <Compile Include="GeneralIsolatedReference.cs" />
+    <Compile Include="IsolatedParser.cs" />
     <Compile Include="IsolatedReference.cs" />
     <Compile Include="ParameterInfoReference.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

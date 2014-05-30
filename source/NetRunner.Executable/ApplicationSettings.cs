@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NetRunner.Executable.Common;
 
 namespace NetRunner.Executable
 {
-    internal sealed class ApplicationSettings
+    internal sealed class ApplicationSettings : BaseReadOnlyObject
     {
         public ApplicationSettings(string assemblylist, string host, int port, string socketToken)
         {
@@ -36,6 +37,14 @@ namespace NetRunner.Executable
         {
             get;
             private set;
+        }
+
+        protected override IEnumerable<object> GetInnerObjects()
+        {
+            yield return Assemblylist;
+            yield return Host;
+            yield return Port;
+            yield return SocketToken;
         }
     }
 }

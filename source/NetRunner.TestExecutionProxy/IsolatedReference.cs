@@ -2,15 +2,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using NetRunner.ExternalLibrary.Properties;
 
 namespace NetRunner.TestExecutionProxy
 {
-    public sealed class IsolatedReference<TType> : MarshalByRefObject
+    public class IsolatedReference<TType> : GeneralIsolatedReference
     {
         public IsolatedReference([CanBeNull]TType value)
+            :base(value)
         {
             Value = value;
         }
@@ -60,14 +62,34 @@ namespace NetRunner.TestExecutionProxy
             return new IsolatedReference<T>(Value as T);
         }
 
-        [CanBeNull]
-        public string ExecuteMethod(string methodName, string displayName)
+        public ExecutionResult ExecuteMethod<TResult>(Func<TType, TResult> method)
         {
-            var targetMethod = Value.GetType().GetMethod(methodName);
+            try
+            {
+                var result = method(Value);
 
-            targetMethod.Invoke(Value, new object[] { displayName });
+                return new ExecutionResult(new IsolatedReference<object>(result));
+            }
+            catch (Exception ex)
+            {
+                return ExecutionResult.FromException(ex);
+            }
+        }
 
-            return string.Empty;
+        public ExecutionResult ExecuteMethod(string methodName, string displayName)
+        {
+            try
+            {
+                var targetMethod = Value.GetType().GetMethod(methodName);
+
+                var result = targetMethod.Invoke(Value, new object[] { displayName });
+
+                return new ExecutionResult(new IsolatedReference<object>(result));
+            }
+            catch (Exception ex)
+            {
+                return ExecutionResult.FromException(ex);
+            }
         }
 
         public IsolatedReference<T> Cast<T>()
@@ -92,7 +114,7 @@ namespace NetRunner.TestExecutionProxy
         {
             get
             {
-                return ReferenceEquals(null, Value) ? typeof (TType) : Value.GetType();
+                return ReferenceEquals(null, Value) ? typeof(TType) : Value.GetType();
             }
         }
 

@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using NetRunner.ExternalLibrary;
+using NetRunner.ExternalLibrary.Properties;
 
 namespace NetRunner.TestExecutionProxy
 {
@@ -53,17 +54,17 @@ namespace NetRunner.TestExecutionProxy
             return Method.GetParameters().Select(p => new ParameterInfoReference(p)).ToArray();
         }
 
-        public ExecutionResult Invoke(IsolatedReference<FunctionContainer> targetObject, IsolatedReference<object>[] parameters)
+        public ExecutionResult Invoke( IsolatedReference<object>[] parameters)
         {
             try
             {
-                var result = Method.Invoke(targetObject.Value, parameters.Select(p => p.Value).ToArray());
+                var result = Method.Invoke(targetObject, parameters.Select(p => p.Value).ToArray());
 
                 return new ExecutionResult(new IsolatedReference<object>(result));
             }
             catch (Exception ex)
             {
-                return new ExecutionResult(ex.Message, ex.GetType().Name, ex.ToString());
+                return ExecutionResult.FromException(ex);
             }
         }
     }

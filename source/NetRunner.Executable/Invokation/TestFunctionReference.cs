@@ -75,7 +75,7 @@ namespace NetRunner.Executable.Invokation
 
         public ExecutionResult Invoke(IEnumerable<IsolatedReference<object>> parameters)
         {
-            return method.Invoke(TargetObject, parameters.ToArray());
+            return method.Invoke(parameters.ToArray());
         } 
     }
 }

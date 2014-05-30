@@ -45,7 +45,7 @@ namespace NetRunner.Executable.Invokation.Functions
                     return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Exception, result.Changes.Changes.Concat(rowCss));
                 }
 
-                if (Equals(false, result.Result))
+                if (ReflectionLoader.FalseResult.Equals(result.Result))
                 {
                     var falseResultMark = new AddRowCssClass(function.RowReference, HtmlParser.FailCssClass);
 

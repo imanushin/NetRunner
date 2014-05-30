@@ -52,9 +52,9 @@ namespace NetRunner.Executable.Invokation.Functions
                 return FormatResult(false, false, changes);
             }
 
-            var notificationException = tableResult.ExecuteMethod("NotifyBeforeFunctionCall", functionToExecute.DisplayName);
+            var notificationResult = tableResult.ExecuteMethod("NotifyBeforeFunctionCall", functionToExecute.DisplayName);
 
-            AddExceptionLineIfNeeded(notificationException, changes);
+            AddExceptionLineIfNeeded(notificationResult, changes);
 
             foreach (var row in Rows)
             {
@@ -84,16 +84,16 @@ namespace NetRunner.Executable.Invokation.Functions
                 }
             }
 
-            notificationException = tableResult.ExecuteMethod("NotifyAfterFunctionCall", functionToExecute.DisplayName);
+            notificationResult = tableResult.ExecuteMethod("NotifyAfterFunctionCall", functionToExecute.DisplayName);
 
-            AddExceptionLineIfNeeded(notificationException, changes);
+            AddExceptionLineIfNeeded(notificationResult, changes);
 
             return FormatResult(exceptionsOccurred, allIsOk, changes);
         }
 
-        private void AddExceptionLineIfNeeded(string notificationException, List<AbstractTableChange> changes)
+        private void AddExceptionLineIfNeeded(ExecutionResult notificationException, List<AbstractTableChange> changes)
         {
-            if (notificationException == null)
+            if (!notificationException.HasError)
             {
                 return;
             }

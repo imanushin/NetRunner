@@ -26,6 +26,50 @@ namespace NetRunner.TestExecutionProxy
             {
                 Trace.Listeners.Add(new ConsoleTraceListener());
             }
+
+            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomainOnAssemblyResolve;
+        }
+
+        private Assembly CurrentDomainOnAssemblyResolve(object sender, ResolveEventArgs args)
+        {
+            try
+            {
+                var loadLog = new StringBuilder();
+
+                var assemblyName = new AssemblyName(args.Name).Name;
+
+                loadLog.AppendFormat("Try to find assembly '{0}' from the custom locations: {1}", assemblyName, assemblyFolders);
+                loadLog.AppendLine();
+
+                var targetFileName = assemblyName + ".dll";
+
+                var filesCandidates = assemblyFolders.Select(f => Path.Combine(f, targetFileName)).Where(File.Exists);
+
+                loadLog.AppendFormat("Existing files with '{0}': {1}", assemblyName, filesCandidates);
+                loadLog.AppendLine();
+
+                foreach (var candidate in filesCandidates)
+                {
+                    try
+                    {
+                        return Assembly.ReflectionOnlyLoad(candidate);
+                    }
+                    catch (Exception ex)
+                    {
+                        Trace.TraceError("Unable to load assembly {0} from file {1}: {2}.", args.Name, candidate, ex);
+                    }
+                }
+
+                Trace.TraceInformation(loadLog.ToString());
+
+                Trace.TraceError("Unable to load assembly {0}. Files candidates: {1}, ", args.Name, filesCandidates);
+            }
+            catch (Exception ex)
+            {
+                Trace.TraceError("General assembly found error: {0}", ex);
+            }
+
+            return null;
         }
 
         public void AddAssemblyLoadFolders(string[] newAssemblyFolders)
@@ -38,6 +82,13 @@ namespace NetRunner.TestExecutionProxy
             if (!testAssemblies.Any())
             {
                 testAssemblies.Add(BaseParserType.Assembly);
+            }
+
+            if (!File.Exists(assemblyPath))
+            {
+                Trace.TraceError("Unable to load assembly from the path '{0}'. Current domain directory: '{1}'", assemblyPath, AppDomain.CurrentDomain.BaseDirectory);
+
+                return;
             }
 
             var assemblyContent = File.ReadAllBytes(assemblyPath);
@@ -100,6 +151,11 @@ namespace NetRunner.TestExecutionProxy
         private static bool CanBeConstructed(Type t)
         {
             return !(t.IsGenericType || t.IsAbstract || t.IsValueType);
+        }
+
+        public IsolatedParser[] CreateParsers(TypeReference[] types)
+        {
+            return CreateTypeInstances<BaseParser>(types).Select(r => new IsolatedParser(r.Value)).ToArray();
         }
 
         public IsolatedReference<T>[] CreateTypeInstances<T>(TypeReference[] targetTypes)
@@ -169,6 +225,11 @@ namespace NetRunner.TestExecutionProxy
             }
 
             return functions.ToArray();
+        }
+
+        public IsolatedReference<TType> CreateOnTestDomain<TType>(TType value)
+        {
+            return new IsolatedReference<TType>(value);
         }
     }
 }

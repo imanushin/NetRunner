@@ -38,56 +38,9 @@ namespace NetRunner.Executable.Invokation
         [CanBeNull]
         private static ReflectionInvoker reflectionInvoker;
 
-        static ReflectionLoader()
-        {
-            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomainOnAssemblyResolve;
-        }
-
-        private static Assembly CurrentDomainOnAssemblyResolve(object sender, ResolveEventArgs args)
-        {
-            try
-            {
-                var loadLog = new StringBuilder();
-
-                var assemblyName = new AssemblyName(args.Name).Name;
-
-                loadLog.AppendFormat("Try to find assembly '{0}' from the custom locations: {1}", assemblyName, assemblyFolders);
-                loadLog.AppendLine();
-
-                var targetFileName = assemblyName + ".dll";
-
-                var filesCandidates = assemblyFolders.Select(f => Path.Combine(f, targetFileName)).Where(File.Exists).ToReadOnlyList();
-
-                loadLog.AppendFormat("Existing files with '{0}': {1}", assemblyName, filesCandidates);
-                loadLog.AppendLine();
-
-                foreach (var candidate in filesCandidates)
-                {
-                    try
-                    {
-                        return Assembly.ReflectionOnlyLoad(candidate);
-                    }
-                    catch (Exception ex)
-                    {
-                        Trace.TraceError("Unable to load assembly {0} from file {1}: {2}.", args.Name, candidate, ex);
-                    }
-                }
-
-                Trace.TraceInformation(loadLog.ToString());
-
-                Trace.TraceError("Unable to load assembly {0}. Files candidates: {1}, ", args.Name, filesCandidates);
-            }
-            catch (Exception ex)
-            {
-                Trace.TraceError("General assembly found error: {0}", ex);
-            }
-
-            return null;
-        }
-
         public static void AddAssemblies(IReadOnlyCollection<string> assemblyPathes)
         {
-            var allAssemblyFiles = assemblyList.Concat(assemblyPathes).Distinct(StringComparer.OrdinalIgnoreCase).Where(af => !string.IsNullOrWhiteSpace(af)).ToReadOnlyList();
+            var allAssemblyFiles = assemblyList.Concat(assemblyPathes).Distinct(StringComparer.OrdinalIgnoreCase).Where(af => !String.IsNullOrWhiteSpace(af)).ToReadOnlyList();
 
             assemblyList = allAssemblyFiles.Where(File.Exists).ToReadOnlyList();
 
@@ -122,13 +75,16 @@ namespace NetRunner.Executable.Invokation
                 .SelectMany(tc => reflectionInvoker.FindFunctionsAvailable(tc).Select(f => new TestFunctionReference(f, tc.Cast<FunctionContainer>())))
                 .ToReadOnlyList();
 
-            var parsersFound = reflectionInvoker.CreateTypeInstances<BaseParser>(parserTypes.ToArray()).ToList();
+            var parsersFound = reflectionInvoker.CreateParsers(parserTypes.ToArray()).ToList();
 
             parsersFound.Sort((first, second) => second.ExecuteProperty<int>("Priority") - first.ExecuteProperty<int>("Priority"));
 
             Parsers = parsersFound.ToReadOnlyList();
 
             Trace.TraceInformation("All available functions: {0}", functions.JoinToStringLazy(Environment.NewLine));
+
+            TrueResult = reflectionInvoker.CreateOnTestDomain(true);
+            FalseResult = reflectionInvoker.CreateOnTestDomain(false);
         }
 
         private static string LoadConfigurationIfNeeded()
@@ -138,13 +94,13 @@ namespace NetRunner.Executable.Invokation
             var configurationsAvailable = assemblyList.Select(path => path + configSuffix).Where(File.Exists).ToReadOnlyList();
 
             if (!configurationsAvailable.Any())
-                return string.Empty;
+                return String.Empty;
 
             if (configurationsAvailable.Count > 1)
             {
                 Trace.TraceInformation("Load configuration step skipped because more than one (actually - {0}) configuration files are available: {1}", configurationsAvailable.Count, configurationsAvailable);
 
-                return string.Empty;
+                return String.Empty;
             }
 
             string configurationFile = configurationsAvailable.First();
@@ -155,7 +111,7 @@ namespace NetRunner.Executable.Invokation
             return configurationFile;
         }
 
-        public static ReadOnlyList<IsolatedReference<BaseParser>> Parsers
+        public static ReadOnlyList<IsolatedParser> Parsers
         {
             get;
             private set;
@@ -198,7 +154,7 @@ namespace NetRunner.Executable.Invokation
         [CanBeNull]
         public static TestFunctionReference FindFunction(string name, int argumentCount)
         {
-            return functions.FirstOrDefault(f => f.ArgumentTypes.Count == argumentCount && string.Equals(f.Name, name, StringComparison.OrdinalIgnoreCase));
+            return functions.FirstOrDefault(f => f.ArgumentTypes.Count == argumentCount && String.Equals(f.Name, name, StringComparison.OrdinalIgnoreCase));
         }
 
         private static List<string> LoadAssemblies(ReadOnlyList<string> pathes)
@@ -238,7 +194,7 @@ namespace NetRunner.Executable.Invokation
 #warning change to Table changes
             var targetType = targetObject.GetType();
 
-            var property = targetType.GetProperties().FirstOrDefault(p => string.Equals(p.Name, propertyName, StringComparison.OrdinalIgnoreCase));
+            var property = targetType.GetProperties().FirstOrDefault(p => String.Equals(p.Name, propertyName, StringComparison.OrdinalIgnoreCase));
 
             if (property == null)
             {
@@ -268,7 +224,7 @@ namespace NetRunner.Executable.Invokation
 
             var configFileCandidate = LoadConfigurationIfNeeded();
 
-            if (!string.IsNullOrWhiteSpace(configFileCandidate))
+            if (!String.IsNullOrWhiteSpace(configFileCandidate))
             {
                 setupInformation.ConfigurationFile = configFileCandidate;
             }
@@ -280,6 +236,24 @@ namespace NetRunner.Executable.Invokation
             reflectionInvoker = (ReflectionInvoker)currentTestDomain.CreateInstanceAndUnwrap(reflectionInvokerType.Assembly.FullName, reflectionInvokerType.FullName);
 
             ReloadAssemblies();
+        }
+
+        public static IsolatedReference<bool> TrueResult
+        {
+            get;
+            private set;
+        }
+
+        public static IsolatedReference<bool> FalseResult
+        {
+            get;
+            private set;
+        }
+
+
+        public static IsolatedReference<TType> CreateOnTestDomain<TType>([CanBeNull] TType value)
+        {
+            return reflectionInvoker.CreateOnTestDomain(value);
         }
     }
 }
