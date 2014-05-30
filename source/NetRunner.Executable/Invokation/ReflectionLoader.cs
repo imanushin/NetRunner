@@ -144,7 +144,8 @@ namespace NetRunner.Executable.Invokation
             var allMethods = targetObject.GetMethods();
 
             var methodCandidates =
-                allMethods.Where(m => m.GetParameters().Select(p => p.Name).SequenceEqual(argumentNames, StringComparer.OrdinalIgnoreCase));
+                allMethods.Where(m => m.GetParameters().Select(p => p.Name)
+                    .SequenceEqual(argumentNames, StringComparer.OrdinalIgnoreCase));
 
             var firstCandidate = methodCandidates.FirstOrDefault();
 
