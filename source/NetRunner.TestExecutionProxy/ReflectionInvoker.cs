@@ -231,5 +231,10 @@ namespace NetRunner.TestExecutionProxy
         {
             return new IsolatedReference<TType>(value);
         }
+
+        public TypeReference CreateTypeOnTestDomain(Type type)
+        {
+            return new TypeReference(type);
+        }
     }
 }

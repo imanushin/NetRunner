@@ -8,7 +8,7 @@ namespace NetRunner.TestExecutionProxy
 {
     public sealed class TypeReference : MarshalByRefObject
     {
-        public TypeReference(Type targetType)
+        internal TypeReference(Type targetType)
         {
             if(targetType == null)
                 throw new ArgumentNullException("targetType");

@@ -13,8 +13,6 @@ namespace NetRunner.Executable.Invokation.Functions
 {
     internal sealed class TableResultFunction : BaseComplexArgumentedFunction
     {
-        public static readonly TypeReference BaseType = new TypeReference(typeof (BaseTableArgument));
-
         public TableResultFunction(
             HtmlRow columnsRow,
             IEnumerable<HtmlRow> rows,
@@ -26,7 +24,7 @@ namespace NetRunner.Executable.Invokation.Functions
 
         protected override FunctionExecutionResult ProcessResult(IsolatedReference<object> mainFunctionResult)
         {
-            var tableResult = mainFunctionResult.As<BaseTableArgument>();
+            var tableResult = mainFunctionResult.AsTableResultReference();
 
             var changes = new List<AbstractTableChange>();
 
@@ -52,7 +50,7 @@ namespace NetRunner.Executable.Invokation.Functions
                 return FormatResult(false, false, changes);
             }
 
-            var notificationResult = tableResult.ExecuteMethod("NotifyBeforeFunctionCall", functionToExecute.DisplayName);
+            var notificationResult = tableResult.ExecuteBeforeFunctionCallMethod(functionToExecute.DisplayName);
 
             AddExceptionLineIfNeeded(notificationResult, changes);
 
@@ -72,19 +70,19 @@ namespace NetRunner.Executable.Invokation.Functions
                     exceptionsOccurred = true;
                 }
 
-                if (Equals(false, rowResult.Result))
+                if (ReflectionLoader.FalseResult.Equals(rowResult.Result))
                 {
                     changes.Add(new AddRowCssClass(row.RowReference, HtmlParser.FailCssClass));
 
                     allIsOk = false;
                 }
-                else if (Equals(true, rowResult.Result))
+                else if (ReflectionLoader.TrueResult.Equals(rowResult.Result))
                 {
                     changes.Add(new AddRowCssClass(row.RowReference, HtmlParser.PassCssClass));
                 }
             }
 
-            notificationResult = tableResult.ExecuteMethod("NotifyAfterFunctionCall", functionToExecute.DisplayName);
+            notificationResult = tableResult.ExecuteAfterFunctionCallMethod(functionToExecute.DisplayName);
 
             AddExceptionLineIfNeeded(notificationResult, changes);
 
@@ -108,9 +106,9 @@ namespace NetRunner.Executable.Invokation.Functions
         }
 
         [CanBeNull]
-        private FunctionExecutionResult CheckTableFunctionResult(IsolatedReference<object> mainFunctionResult, IsolatedReference<BaseTableArgument> tableResult, List<AbstractTableChange> changes)
+        private FunctionExecutionResult CheckTableFunctionResult(GeneralIsolatedReference mainFunctionResult, TableResultReference tableResult, List<AbstractTableChange> changes)
         {
-            if (tableResult == null)
+            if (tableResult.IsNull)
             {
                 if (mainFunctionResult.IsNull)
                 {

@@ -17,7 +17,8 @@ namespace NetRunner.ExternalLibrary
         public event AfterFunctionCallHandler AfterFunctionCall;
 
         [CanBeNull]
-        internal Exception NotifyAfterFunctionCall(string functionCalledName)
+        [UsedImplicitly]
+        public Exception NotifyAfterFunctionCall(string functionCalledName)
         {
             if (AfterFunctionCall == null)
                 return null;
@@ -35,7 +36,8 @@ namespace NetRunner.ExternalLibrary
         }
 
         [CanBeNull]
-        internal Exception NotifyBeforeFunctionCall(string expectedFunctionName)
+        [UsedImplicitly]
+        public Exception NotifyBeforeFunctionCall(string expectedFunctionName)
         {
             if (BeforeFunctionCall == null)
                 return null;

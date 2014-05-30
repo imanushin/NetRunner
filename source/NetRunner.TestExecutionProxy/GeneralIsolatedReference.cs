@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NetRunner.ExternalLibrary;
 
 namespace NetRunner.TestExecutionProxy
 {
@@ -25,6 +26,11 @@ namespace NetRunner.TestExecutionProxy
             {
                 return ReferenceEquals(null, Value);
             }
+        }
+
+        public TableResultReference AsTableResultReference()
+        {
+            return new TableResultReference(Value as BaseTableArgument);
         }
 
         public override int GetHashCode()

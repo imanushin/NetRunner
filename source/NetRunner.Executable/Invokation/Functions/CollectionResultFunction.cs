@@ -14,8 +14,6 @@ namespace NetRunner.Executable.Invokation.Functions
 {
     internal sealed class CollectionResultFunction : BaseComplexArgumentedFunction
     {
-        public static readonly TypeReference BaseType = new TypeReference(typeof(IEnumerable));
-
         public CollectionResultFunction(
             HtmlRow columnsRow,
             IEnumerable<HtmlRow> rows,

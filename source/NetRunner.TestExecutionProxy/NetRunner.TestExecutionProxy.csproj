@@ -48,6 +48,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PropertyReference.cs" />
     <Compile Include="ReflectionInvoker.cs" />
+    <Compile Include="TableResultReference.cs" />
     <Compile Include="TypeReference.cs" />
   </ItemGroup>
   <ItemGroup>

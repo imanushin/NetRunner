@@ -15,7 +15,7 @@ namespace NetRunner.Executable.Invokation
     {
         private readonly FunctionMetaData method;
 
-        public TestFunctionReference(FunctionMetaData method, IsolatedReference<FunctionContainer> targetObject)
+        public TestFunctionReference(FunctionMetaData method, GeneralIsolatedReference targetObject)
         {
             Validate.ArgumentIsNotNull(method, "method");
             Validate.ArgumentIsNotNull(targetObject, "targetObject");
@@ -28,7 +28,7 @@ namespace NetRunner.Executable.Invokation
             ResultType = method.ReturnType;
         }
 
-        public IsolatedReference<FunctionContainer> TargetObject
+        public GeneralIsolatedReference TargetObject
         {
             get;
             private set;
@@ -56,7 +56,7 @@ namespace NetRunner.Executable.Invokation
         {
             get
             {
-                return TargetObject.GetTypeName() + '.' + Name;
+                return TargetObject.GetType().Name + '.' + Name;
             }
         }
 
@@ -70,7 +70,7 @@ namespace NetRunner.Executable.Invokation
 
         protected override string GetString()
         {
-            return string.Format("Method: {0}; target object type: {1}; Parameters: {2}; Result type: {3}", Name, TargetObject.GetTypeName(), ArgumentTypes, ResultType);
+            return string.Format("Method: {0}; target object type: {1}; Parameters: {2}; Result type: {3}", Name, TargetObject.GetType().Name, ArgumentTypes, ResultType);
         }
 
         public ExecutionResult Invoke(IEnumerable<IsolatedReference<object>> parameters)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
@@ -85,6 +86,8 @@ namespace NetRunner.Executable.Invokation
 
             TrueResult = reflectionInvoker.CreateOnTestDomain(true);
             FalseResult = reflectionInvoker.CreateOnTestDomain(false);
+            EnumerableType = reflectionInvoker.CreateTypeOnTestDomain(typeof (IEnumerable));
+            TestContainerType = reflectionInvoker.CreateTypeOnTestDomain(typeof (BaseTestContainer));
         }
 
         private static string LoadConfigurationIfNeeded()
@@ -134,7 +137,7 @@ namespace NetRunner.Executable.Invokation
         }
 
         [CanBeNull]
-        public static TestFunctionReference FindFunction(ReadOnlyList<string> argumentNames, IsolatedReference<BaseTableArgument> targetObject)
+        public static TestFunctionReference FindFunction(ReadOnlyList<string> argumentNames, TableResultReference targetObject)
         {
             var targetType = targetObject.GetType();
 
@@ -148,7 +151,7 @@ namespace NetRunner.Executable.Invokation
             if (firstCandidate == null)
                 return null;
 
-            return new TestFunctionReference(firstCandidate, targetObject.Cast<FunctionContainer>());
+            return new TestFunctionReference(firstCandidate, targetObject);
         }
 
         [CanBeNull]
@@ -250,6 +253,17 @@ namespace NetRunner.Executable.Invokation
             private set;
         }
 
+        public static TypeReference EnumerableType
+        {
+            get;
+            private set;
+        }
+
+        public static TypeReference TestContainerType
+        {
+            get;
+            private set;
+        }
 
         public static IsolatedReference<TType> CreateOnTestDomain<TType>([CanBeNull] TType value)
         {

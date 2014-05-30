@@ -201,12 +201,12 @@ namespace NetRunner.Executable.Invokation.Functions
         {
             var resultType = functionToExecute.ResultType;
 
-            if (CollectionResultFunction.BaseType.IsAssignableFrom(resultType))
+            if (ReflectionLoader.EnumerableType.IsAssignableFrom(resultType))
             {
                 return new CollectionResultFunction(columnNames, cells, header, functionToExecute);
             }
 
-            if (TableResultFunction.BaseType.IsAssignableFrom(resultType))
+            if (ReflectionLoader.TestContainerType.IsAssignableFrom(resultType))
             {
                 return new TableResultFunction(columnNames, cells, header, functionToExecute);
             }
