@@ -206,7 +206,7 @@ namespace NetRunner.Executable.Invokation.Functions
                 return new CollectionResultFunction(columnNames, cells, header, functionToExecute);
             }
 
-            if (ReflectionLoader.TestContainerType.IsAssignableFrom(resultType))
+            if (ReflectionLoader.TableArgumentType.IsAssignableFrom(resultType))
             {
                 return new TableResultFunction(columnNames, cells, header, functionToExecute);
             }

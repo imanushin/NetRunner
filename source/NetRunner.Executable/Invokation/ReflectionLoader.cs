@@ -87,7 +87,7 @@ namespace NetRunner.Executable.Invokation
             TrueResult = reflectionInvoker.CreateOnTestDomain(true);
             FalseResult = reflectionInvoker.CreateOnTestDomain(false);
             EnumerableType = reflectionInvoker.CreateTypeOnTestDomain(typeof (IEnumerable));
-            TestContainerType = reflectionInvoker.CreateTypeOnTestDomain(typeof (BaseTestContainer));
+            TableArgumentType = reflectionInvoker.CreateTypeOnTestDomain(typeof (BaseTableArgument));
         }
 
         private static string LoadConfigurationIfNeeded()
@@ -260,7 +260,7 @@ namespace NetRunner.Executable.Invokation
             private set;
         }
 
-        public static TypeReference TestContainerType
+        public static TypeReference TableArgumentType
         {
             get;
             private set;
