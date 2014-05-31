@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DomainCheckContainer.cs" />
     <Compile Include="IndexRange.cs" />
     <Compile Include="MainTestContainer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
