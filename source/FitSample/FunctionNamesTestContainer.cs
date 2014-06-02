@@ -15,7 +15,7 @@ namespace FitSample
         {
         }
 
-        [AdditionalFunctionName("SomeTestFunction2")]
+        [AdditionalFunctionName("Some Test Fu n \ncti\ton\n\r2")]
         [ExcludeDefaultFunctionName(false)]
         public void TestFunction2()
         {

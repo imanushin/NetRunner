@@ -1,4 +1,5 @@
-
 | check | ''' Summ ''' | 1 | '''And ''' | ''2'' |  '''Will Be''' | 3 |
 
 | check | ''' Summ ''' | 1 | '''And ''' | ''2'' |  '''Will Be''' | 4 |
+
+| '''NetRunner:Launch Debugger'''|

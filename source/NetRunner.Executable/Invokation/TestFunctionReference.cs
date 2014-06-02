@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NetRunner.Executable.Common;
 using NetRunner.ExternalLibrary;
+using NetRunner.ExternalLibrary.Properties;
 using NetRunner.TestExecutionProxy;
 
 namespace NetRunner.Executable.Invokation
@@ -26,7 +27,7 @@ namespace NetRunner.Executable.Invokation
             Name = method.SystemName;
             ArgumentTypes = method.GetParameters().ToReadOnlyList();
             ResultType = method.ReturnType;
-            AvailableFunctionNames = method.AvailableFunctionNames.ToReadOnlyList();
+            AvailableFunctionNames = method.AvailableFunctionNames.Select(CleanFunctionName).ToReadOnlyList();
         }
 
         public ReadOnlyList<string> AvailableFunctionNames
@@ -84,6 +85,18 @@ namespace NetRunner.Executable.Invokation
         public ExecutionResult Invoke(IEnumerable<IsolatedReference<object>> parameters)
         {
             return method.Invoke(parameters.ToArray());
-        } 
+        }
+
+        [NotNull, Pure]
+        public static string CleanFunctionName([NotNull]string functionName)
+        {
+            Validate.ArgumentStringIsMeanful(functionName, "functionName");
+
+            return functionName
+                .Replace(" ", string.Empty)
+                .Replace("\n", string.Empty)
+                .Replace("\r", string.Empty)
+                .Replace("\t", string.Empty);
+        }
     }
 }

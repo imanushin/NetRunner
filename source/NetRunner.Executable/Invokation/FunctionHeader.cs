@@ -20,8 +20,8 @@ namespace NetRunner.Executable.Invokation
             Validate.ArgumentIsNotNull(keyword, "keyword");
             Validate.ArgumentIsNotNull(rowReference, "rowReference");
             Validate.ArgumentIsNotNull(firstFunctionCell, "firstFunctionCell");
-            
-            FunctionName = functionName.Replace(" ", string.Empty);
+
+            FunctionName = TestFunctionReference.CleanFunctionName(functionName);
             Arguments = arguments.ToReadOnlyList();
             RowReference = rowReference;
             Keyword = keyword;

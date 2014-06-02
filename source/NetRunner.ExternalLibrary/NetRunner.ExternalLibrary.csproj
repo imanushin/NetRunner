@@ -44,6 +44,7 @@
     <Compile Include="BaseTestContainer.cs" />
     <Compile Include="ConverterParser.cs" />
     <Compile Include="DefaultParser.cs" />
+    <Compile Include="EmbeddedTestContainer.cs" />
     <Compile Include="EnumParser.cs" />
     <Compile Include="ExcludeDefaultFunctionNameAttribute.cs" />
     <Compile Include="FunctionContainer.cs" />
