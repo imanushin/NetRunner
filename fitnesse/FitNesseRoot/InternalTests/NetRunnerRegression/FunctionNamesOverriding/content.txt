@@ -1,0 +1,50 @@
+!define testName {''.InternalTests.TestScenarios.FunctionNamesOverriding''}
+
+| '''execute page''' | ${testName} |
+
+| check | '''tests count''' | 1 |
+
+
+| '''Init Test''' | ${testName} |
+
+| '''Current Test Results''' |
+| '''Type''' | '''Count''' |
+| right | 3 |
+| wrong | 0 |
+| ignores | 0 |
+| exceptions | 1 |
+
+
+| check | '''Row Count Of Table''' | 1 | '''is''' | 1 | 
+
+| '''Analyse Table''' | 1 |
+| '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
+| 1 | 1 | Contains | Unable to find function |
+| 1 | 1 | Contains | Test Function 1  |
+| 1 | 1 | Contains | !-TestFunction1-!  |
+| 1..100 | 1..100 | Contains | class="error" |
+| 1..100 | 1..100 | Count | 1 |
+
+| check | '''Row Count Of Table''' | 2 | '''is''' | 1 | 
+
+| '''Analyse Table''' | 2 |
+| '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
+| 1 | 1 | Contains | !-Some Test Function 1-!  |
+| 1..100 | 1..100 | Contains | class="pass" |
+| 1..100 | 1..100 | Count | 1 |
+
+| check | '''Row Count Of Table''' | 3 | '''is''' | 1 | 
+
+| '''Analyse Table''' | 3 |
+| '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
+| 1 | 1 | Contains | !-Test Function 2-!  |
+| 1..100 | 1..100 | Contains | class="pass" |
+| 1..100 | 1..100 | Count | 1 |
+
+| check | '''Row Count Of Table''' | 4 | '''is''' | 1 | 
+
+| '''Analyse Table''' | 4 |
+| '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
+| 1 | 1 | Contains | !-Some Test Function 2-!  |
+| 1..100 | 1..100 | Contains | class="pass" |
+| 1..100 | 1..100 | Count | 1 |

@@ -23,9 +23,16 @@ namespace NetRunner.Executable.Invokation
             this.method = method;
             TargetObject = targetObject;
 
-            Name = method.Name;
+            Name = method.SystemName;
             ArgumentTypes = method.GetParameters().ToReadOnlyList();
             ResultType = method.ReturnType;
+            AvailableFunctionNames = method.AvailableFunctionNames.ToReadOnlyList();
+        }
+
+        public ReadOnlyList<string> AvailableFunctionNames
+        {
+            get;
+            private set;
         }
 
         public GeneralIsolatedReference TargetObject
@@ -66,11 +73,12 @@ namespace NetRunner.Executable.Invokation
             yield return ArgumentTypes;
             yield return TargetObject;
             yield return ResultType;
+            yield return AvailableFunctionNames;
         }
 
         protected override string GetString()
         {
-            return string.Format("Method: {0}; target object type: {1}; Parameters: {2}; Result type: {3}", Name, TargetObject.GetType().Name, ArgumentTypes, ResultType);
+            return string.Format("Method: {0}; target object type: {1}; Parameters: {2}; Result type: {3}; AvailableFunctionNames: {4}", Name, TargetObject.GetType().Name, ArgumentTypes, ResultType, AvailableFunctionNames);
         }
 
         public ExecutionResult Invoke(IEnumerable<IsolatedReference<object>> parameters)

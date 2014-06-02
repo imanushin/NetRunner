@@ -86,8 +86,8 @@ namespace NetRunner.Executable.Invokation
 
             TrueResult = reflectionInvoker.CreateOnTestDomain(true);
             FalseResult = reflectionInvoker.CreateOnTestDomain(false);
-            EnumerableType = reflectionInvoker.CreateTypeOnTestDomain(typeof (IEnumerable));
-            TableArgumentType = reflectionInvoker.CreateTypeOnTestDomain(typeof (BaseTableArgument));
+            EnumerableType = reflectionInvoker.CreateTypeOnTestDomain(typeof(IEnumerable));
+            TableArgumentType = reflectionInvoker.CreateTypeOnTestDomain(typeof(BaseTableArgument));
         }
 
         private static string LoadConfigurationIfNeeded()
@@ -158,7 +158,10 @@ namespace NetRunner.Executable.Invokation
         [CanBeNull]
         public static TestFunctionReference FindFunction(string name, int argumentCount)
         {
-            return functions.FirstOrDefault(f => f.ArgumentTypes.Count == argumentCount && String.Equals(f.Name, name, StringComparison.OrdinalIgnoreCase));
+            //ToDo: Change to dictionary to avoid multiple enumerations
+            return functions.FirstOrDefault(f =>
+                f.ArgumentTypes.Count == argumentCount &&
+                f.AvailableFunctionNames.Any(fn => string.Equals(fn, name, StringComparison.OrdinalIgnoreCase)));
         }
 
         private static List<string> LoadAssemblies(ReadOnlyList<string> pathes)

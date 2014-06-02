@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -17,6 +18,32 @@ namespace NetRunner.TestExecutionProxy
         {
             this.targetObject = targetObject;
             Method = method;
+
+            AvailableFunctionNames = GetFunctionNamesAvailable(method);
+        }
+
+        private static ReadOnlyCollection<string> GetFunctionNamesAvailable(MethodInfo method)
+        {
+            var result = new List<string>();
+
+            var allMarkers = method.GetCustomAttributes<AdditionalFunctionNameAttribute>().ToArray();
+
+            result.AddRange(allMarkers.OfType<AdditionalFunctionNameAttribute>().Select(a => a.Name));
+
+            var parentType = method.DeclaringType;
+            var assembly = parentType.Assembly;
+
+            var excludeDefaultName = method.GetCustomAttributes<ExcludeDefaultFunctionNameAttribute>()
+                .Concat(parentType.GetCustomAttributes<ExcludeDefaultFunctionNameAttribute>())
+                .Concat(assembly.GetCustomAttributes<ExcludeDefaultFunctionNameAttribute>())
+                .FirstOrDefault();
+
+            if (excludeDefaultName == null || !excludeDefaultName.ExcludeDefaultFunctionName)
+            {
+                result.Add(method.Name);
+            }
+
+            return result.AsReadOnly();
         }
 
         internal MethodInfo Method
@@ -25,7 +52,13 @@ namespace NetRunner.TestExecutionProxy
             private set;
         }
 
-        public string Name
+        public ReadOnlyCollection<string> AvailableFunctionNames
+        {
+            get;
+            private set;
+        }
+
+        public string SystemName
         {
             get
             {
