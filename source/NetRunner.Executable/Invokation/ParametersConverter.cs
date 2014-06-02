@@ -21,7 +21,7 @@ namespace NetRunner.Executable.Invokation
         {
             parsers.Clear();
         }
-
+        
         public static InvokationResult ConvertParameter(HtmlCell inputData, TypeReference expectedType, string conversionErrorHeader)
         {
             IsolatedParser parser;

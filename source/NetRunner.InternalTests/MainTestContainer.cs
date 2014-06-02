@@ -21,6 +21,11 @@ namespace NetRunner.InternalTests
         private TestResults testResult;
         private SingleTest currentTest;
 
+        public MainTestContainer()
+        {
+            GlobalSettings.TrimAllInputLines = true;
+        }
+
         public bool SetFitnessePath(Uri pathToRoot)
         {
             try

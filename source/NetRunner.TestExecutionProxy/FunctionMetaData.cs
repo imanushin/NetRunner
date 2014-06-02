@@ -79,11 +79,11 @@ namespace NetRunner.TestExecutionProxy
             return Method.GetParameters().Select(p => new ParameterInfoReference(p)).ToArray();
         }
 
-        public ExecutionResult Invoke( IsolatedReference<object>[] parameters)
+        public ExecutionResult Invoke(IsolatedReference<object>[] parameters)
         {
             try
             {
-                var result = Method.Invoke(targetObject, parameters.Select(p => p.Value).ToArray());
+                var result = Method.Invoke(targetObject, parameters.Select(p => TrimStrings(p.Value)).ToArray());
 
                 return new ExecutionResult(new IsolatedReference<object>(result));
             }
@@ -91,6 +91,18 @@ namespace NetRunner.TestExecutionProxy
             {
                 return ExecutionResult.FromException(ex);
             }
+        }
+
+        private static object TrimStrings(object value)
+        {
+            var strValue = value as string;
+
+            if (GlobalSettings.TrimAllInputLines && strValue != null)
+            {
+                return strValue.Trim();
+            }
+
+            return value;
         }
     }
 }
