@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,6 +21,11 @@ namespace NetRunner.InternalTests
         public bool CurrentDomainIdentityNotEqual(int identity)
         {
             return AppDomain.CurrentDomain.Id != identity;
+        }
+
+        public string SettingIs(string testKey)
+        {
+            return ConfigurationManager.AppSettings[testKey];
         }
     }
 }

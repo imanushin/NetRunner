@@ -1,4 +1,4 @@
-*| '''current domain does not contain library ''' | ''!-.Executable-!'' |
-*| '''current domain does not contain library ''' | ''!-NetRunner.InternalTests-!'' |
 
 | '''current domain identity not equal ''' | 1 |
+
+| check | '''setting''' | testKey | '''is'''  | testValue |

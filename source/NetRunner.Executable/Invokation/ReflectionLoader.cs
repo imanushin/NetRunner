@@ -94,7 +94,7 @@ namespace NetRunner.Executable.Invokation
         {
             const string configSuffix = ".config";
 
-            var configurationsAvailable = assemblyList.Select(path => path + configSuffix).Where(File.Exists).ToReadOnlyList();
+            var configurationsAvailable = assemblyList.Select(path => new FileInfo(path + configSuffix)).Where(f => f.Exists).ToReadOnlyList();
 
             if (!configurationsAvailable.Any())
                 return String.Empty;
@@ -106,7 +106,7 @@ namespace NetRunner.Executable.Invokation
                 return String.Empty;
             }
 
-            string configurationFile = configurationsAvailable.First();
+            var configurationFile = configurationsAvailable.First().FullName;
             string targetAssemblyFile = configurationFile.Substring(0, configurationFile.Length - configSuffix.Length);
 
             Trace.TraceInformation("Configuration will be loaded for assembly '{0}' (file '{1}')", targetAssemblyFile, configurationFile);
