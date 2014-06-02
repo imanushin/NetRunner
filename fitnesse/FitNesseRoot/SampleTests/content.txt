@@ -1,4 +1,4 @@
-!path ..\binary\currentBuild\FitSample.dll
+!path ..\binary\testBuild\FitSample.dll
 
 !define COMMAND_PATTERN {%m %p}
 !define TEST_RUNNER {..\binary\currentBuild\NetRunner.Executable.exe}
