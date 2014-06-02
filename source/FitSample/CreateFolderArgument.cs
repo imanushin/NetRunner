@@ -14,6 +14,11 @@ namespace FitSample
 
         public CreateFolderArgument(string baseDirectoryPath)
         {
+            if (string.IsNullOrWhiteSpace(baseDirectoryPath))
+            {
+                throw new ArgumentException("Argument is empty", "baseDirectoryPath");
+            }
+
             this.baseDirectoryPath = baseDirectoryPath;
 
             Directory.Exists(baseDirectoryPath);

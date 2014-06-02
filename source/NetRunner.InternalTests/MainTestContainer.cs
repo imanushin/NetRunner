@@ -134,7 +134,14 @@ namespace NetRunner.InternalTests
 
         public TableAnalyser AnalyseAllTablesInAllTests()
         {
-            return new TableAnalyser(testResult.Tests.SelectMany(t => t.Tables).ToArray());
+            var nodes = new HtmlNode[0];
+
+            if (testResult != null)
+            {
+                nodes = testResult.Tests.SelectMany(t => t.Tables).ToArray();
+            }
+
+            return new TableAnalyser(nodes);
         }
 
         public int RowCountOfTableIs(int tableIndex)

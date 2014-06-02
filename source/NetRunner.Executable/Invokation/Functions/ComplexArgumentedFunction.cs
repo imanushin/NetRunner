@@ -75,7 +75,9 @@ namespace NetRunner.Executable.Invokation.Functions
 
             if (result.Changes.WereExceptions)
             {
-                return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Exception, result.Changes.Changes);
+                var rowCss = new AddRowCssClass(Function.RowReference, HtmlParser.ErrorCssClass);
+
+                return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Exception, result.Changes.Changes.Concat(rowCss));
             }
 
             Validate.IsNotNull(result.Result, "Function result should not be null");

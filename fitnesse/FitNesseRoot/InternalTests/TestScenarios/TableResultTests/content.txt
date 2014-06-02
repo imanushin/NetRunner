@@ -1,4 +1,3 @@
-
 !note proper execution
 | '''create subfolders in ''' | ''./'' |
 | '''folder name''' |
@@ -39,3 +38,8 @@
 | 123 |
 | :: |
 | 321 |
+
+!note empty parameter exception
+| '''create subfolders in ''' |  |
+| '''folder name''' |
+| test 2 |

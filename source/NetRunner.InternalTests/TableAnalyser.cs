@@ -32,6 +32,11 @@ namespace NetRunner.InternalTests
 
         public bool CellMatching(IndexRange column, IndexRange row, Operation operation, string parameter)
         {
+            if (!table.Any())
+            {
+                return true;
+            }
+
             var actualCells = GetAllCells(column, row);
 
             switch (operation)

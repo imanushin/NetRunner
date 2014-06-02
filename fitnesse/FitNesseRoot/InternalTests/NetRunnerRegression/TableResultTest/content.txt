@@ -12,7 +12,7 @@
 | right | 2 |
 | wrong | 3 |
 | ignores | 0 |
-| exceptions | 2 |
+| exceptions | 3 |
 
 | check | '''Row Count Of Table''' | 1 | '''is''' | 4 | 
 
@@ -100,3 +100,16 @@
 | 1..100 | 3,5 | Contains | class="pass" |
 | 1..100 | 4 | Contains | class="fail" |
 | 1..100 | 1..100 | Count | 6 |
+
+
+| check | '''Row Count Of Table''' | 8 | '''is''' | 3 | 
+
+| '''Analyse Table''' | 8 |
+| '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
+| 1 | 1 | Contains | create subfolders in |
+| 1 | 1 | Contains | !-ArgumentException-! |
+| 1..100 | 1 | Contains | class="error" |
+| 1..100 | 2..100 | Not Contain | class="fail" |
+| 1..100 | 2..100 | Not Contain | class="error" |
+| 1..100 | 1..100 | Count | 4 |
+
