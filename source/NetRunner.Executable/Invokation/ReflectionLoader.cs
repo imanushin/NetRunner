@@ -70,6 +70,9 @@ namespace NetRunner.Executable.Invokation
             var testTypes = reflectionInvoker.FindTestTypes().ToReadOnlyList();
             var parserTypes = reflectionInvoker.FindParsersAvailable().ToReadOnlyList();
 
+            Trace.TraceInformation("Test types found: {0}", testTypes);
+            Trace.TraceInformation("Parsers found: {0}", parserTypes);
+
             testContainers = reflectionInvoker.CreateTypeInstances<BaseTestContainer>(testTypes.ToArray()).ToReadOnlyList();
 
             functions = testContainers

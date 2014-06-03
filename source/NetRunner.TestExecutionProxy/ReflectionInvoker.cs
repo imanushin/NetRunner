@@ -20,11 +20,13 @@ namespace NetRunner.TestExecutionProxy
             "ToString", "GetHashCode", "Equals", "GetType"
         };
 
+        private static readonly ConsoleTraceListener consoleTraceListener = new ConsoleTraceListener();
+
         public ReflectionInvoker()
         {
-            if (Trace.Listeners.Count == 0)
+            if (!Trace.Listeners.Contains(consoleTraceListener))
             {
-                Trace.Listeners.Add(new ConsoleTraceListener());
+                Trace.Listeners.Add(consoleTraceListener);
             }
 
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomainOnAssemblyResolve;
@@ -38,7 +40,7 @@ namespace NetRunner.TestExecutionProxy
 
                 var assemblyName = new AssemblyName(args.Name).Name;
 
-                loadLog.AppendFormat("Try to find assembly '{0}' from the custom locations: {1}", assemblyName, assemblyFolders);
+                loadLog.AppendFormat("Try to find assembly '{0}' from the custom locations: {1}", assemblyName, string.Join(", ", assemblyFolders));
                 loadLog.AppendLine();
 
                 var targetFileName = assemblyName + ".dll";
@@ -52,7 +54,7 @@ namespace NetRunner.TestExecutionProxy
                 {
                     try
                     {
-                        return Assembly.ReflectionOnlyLoad(candidate);
+                        return Assembly.LoadFile(candidate);
                     }
                     catch (Exception ex)
                     {
@@ -116,11 +118,17 @@ namespace NetRunner.TestExecutionProxy
         {
             try
             {
-                return testAssemblies.SelectMany(a => a.GetTypes())
-                                     .Where(CanBeConstructed)
-                                     .Where(t => t.IsSubclassOf(baseType))
-                                     .Select(t => new TypeReference(t))
-                                     .ToArray();
+                Trace.TraceInformation("Start type finding (all types which derrived from type {0} in {1} assemblies)", baseType.Name, testAssemblies.Count);
+
+                var nonAbstractTypes = testAssemblies.SelectMany(a => a.GetTypes()).Where(CanBeConstructed).ToArray();
+
+                Trace.TraceInformation("Non-abstract types: {0}", string.Join(", ", nonAbstractTypes.Select(t => t.Name)));
+
+                var subclasses = nonAbstractTypes.Where(t => t.IsSubclassOf(baseType)).ToArray();
+
+                Trace.TraceInformation("Subclasses of {1}: {0}", string.Join(", ", subclasses.Select(t => t.Name)), baseType.Name);
+
+                return subclasses.Select(t => new TypeReference(t)).ToArray();
             }
             catch (ReflectionTypeLoadException ex)
             {
