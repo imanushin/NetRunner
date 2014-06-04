@@ -164,38 +164,6 @@ namespace NetRunner.Executable.Invokation
                 f.AvailableFunctionNames.Any(fn => string.Equals(fn, name, StringComparison.OrdinalIgnoreCase)));
         }
 
-        private static List<string> LoadAssemblies(ReadOnlyList<string> pathes)
-        {
-            Validate.IsNotNull(currentTestDomain, "Test domain was not initialized");
-            Validate.IsNotNull(reflectionInvoker, "Test domain was not initialized");
-
-            var loadedAssemblies = new List<string>() { testContainerType.Assembly.Location };
-
-            foreach (string assemblyPath in pathes)
-            {
-                try
-                {
-                    if (!File.Exists(assemblyPath))
-                    {
-                        Trace.TraceError("Unable to load assembly because it does not exist: '{0}'", assemblyPath);
-
-                        continue;
-                    }
-
-                    reflectionInvoker.LoadTestAssembly(assemblyPath);
-
-                    Trace.TraceInformation("Assembly {0} was loaded", assemblyPath);
-
-                    loadedAssemblies.Add(assemblyPath);
-                }
-                catch (Exception ex)
-                {
-                    Trace.TraceError("Unable to load assembly {0} because of error: {1}", assemblyPath, ex);
-                }
-            }
-            return loadedAssemblies;
-        }
-
         public static bool TryReadPropery(GeneralIsolatedReference targetObject, string propertyName, [CanBeNull]  out TypeReference propertyType, [CanBeNull] out GeneralIsolatedReference resultValue)
         {
 #warning change to Table changes
