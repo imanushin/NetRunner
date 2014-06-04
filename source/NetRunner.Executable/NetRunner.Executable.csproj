@@ -108,7 +108,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="StringCanBeEmptyAttribute.cs" />
-    <Compile Include="TestCounts.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

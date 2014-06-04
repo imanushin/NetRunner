@@ -217,7 +217,7 @@ namespace NetRunner.Executable.Invokation
             var createdInstance = (InMemoryAssemblyLoader)currentTestDomain.CreateInstanceFrom(currentAssembly.Location, loadingType.FullName).Unwrap();
 
             Validate.IsNotNull(createdInstance, "Unable to create instance of type {0} in the test domain", loadingType);
-            
+
             createdInstance.SubscribeDomain(currentTestDomain);
 
             reflectionInvoker = (ReflectionInvoker)currentTestDomain.CreateInstanceAndUnwrap(reflectionInvokerType.Assembly.FullName, reflectionInvokerType.FullName);
@@ -227,7 +227,11 @@ namespace NetRunner.Executable.Invokation
 
         private static string GetFolderRoot()
         {
-            var existingAssembly = assemblyList.Where(File.Exists).Select(a => new FileInfo(a).Directory.FullName).FirstOrDefault();
+            var existingAssembly = assemblyList.Where(File.Exists)
+                .Select(a => new FileInfo(a).Directory)
+                .SkipNulls()
+                .Select(d => d.FullName)
+                .FirstOrDefault();
 
             return existingAssembly ?? Environment.CurrentDirectory;
         }
@@ -259,6 +263,14 @@ namespace NetRunner.Executable.Invokation
         public static IsolatedReference<TType> CreateOnTestDomain<TType>([CanBeNull] TType value)
         {
             return reflectionInvoker.CreateOnTestDomain(value);
+        }
+
+        public static void UpdateCounts(TestCounts counts)
+        {
+            Validate.ArgumentIsNotNull(counts, "counts");
+            Validate.IsNotNull(reflectionInvoker, "Test domain does not initialized");
+
+            reflectionInvoker.SendStatistic(counts);
         }
     }
 }

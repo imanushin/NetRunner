@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using NetRunner.Executable.Common;
 using NetRunner.Executable.Invokation;
 using NetRunner.Executable.RawData;
+using NetRunner.TestExecutionProxy;
 
 namespace NetRunner.Executable
 {
@@ -48,6 +49,8 @@ namespace NetRunner.Executable
                     foreach (var test in executionPlan.FunctionsSequence)
                     {
                         var result = RootInvoker.InvokeTable(test, counts);
+
+                        ReflectionLoader.UpdateCounts(counts);
 
                         communicator.SendDocument(result + test.Table.TextAfterTable);
                     }

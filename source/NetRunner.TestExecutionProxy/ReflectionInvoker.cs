@@ -236,5 +236,10 @@ namespace NetRunner.TestExecutionProxy
         {
             return new TypeReference(type);
         }
+
+        public void SendStatistic(TestCounts counts)
+        {
+            TestStatistic.GlobalStatisticInternal = counts.ToTestStatistic();
+        }
     }
 }

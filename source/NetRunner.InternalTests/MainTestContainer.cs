@@ -154,6 +154,25 @@ namespace NetRunner.InternalTests
             return currentTest.Tables[tableIndex - 1].ChildNodes.Count(n => string.Equals(n.Name, "tr", StringComparison.OrdinalIgnoreCase));
         }
 
+        public int ExceptionCountIs()
+        {
+            return TestStatistic.GlobalStatistic.Errors;
+        }
+
+        public int FailCountIs()
+        {
+            return TestStatistic.GlobalStatistic.Wrong;
+        }
+
+        public int IgnoresCountIs()
+        {
+            return TestStatistic.GlobalStatistic.Skipped;
+        }
+
+        public bool SuccessGreaterThanZero()
+        {
+            return TestStatistic.GlobalStatistic.Right > 0;
+        }
 
     }
 }
