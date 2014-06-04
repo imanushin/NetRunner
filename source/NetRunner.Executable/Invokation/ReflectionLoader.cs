@@ -204,13 +204,32 @@ namespace NetRunner.Executable.Invokation
                 setupInformation.ConfigurationFile = configFileCandidate;
             }
 
+            setupInformation.ApplicationBase = GetFolderRoot();
+
             currentTestDomain = AppDomain.CreateDomain("Test execution domain", evidence, setupInformation);
 
-            InMemoryAssemblyLoader.SubscribeDomain(currentTestDomain);
+            var currentAssembly = Assembly.GetExecutingAssembly();
+
+            var loadingType = typeof(InMemoryAssemblyLoader);
+
+            Validate.Condition(loadingType.Assembly == currentAssembly, "Assembly of type '{0}' is '{1}' which is not equal with current '{2}'", loadingType, loadingType.Assembly, currentAssembly);
+
+            var createdInstance = (InMemoryAssemblyLoader)currentTestDomain.CreateInstanceFrom(currentAssembly.Location, loadingType.FullName).Unwrap();
+
+            Validate.IsNotNull(createdInstance, "Unable to create instance of type {0} in the test domain", loadingType);
+            
+            createdInstance.SubscribeDomain(currentTestDomain);
 
             reflectionInvoker = (ReflectionInvoker)currentTestDomain.CreateInstanceAndUnwrap(reflectionInvokerType.Assembly.FullName, reflectionInvokerType.FullName);
 
             ReloadAssemblies();
+        }
+
+        private static string GetFolderRoot()
+        {
+            var existingAssembly = assemblyList.Where(File.Exists).Select(a => new FileInfo(a).Directory.FullName).FirstOrDefault();
+
+            return existingAssembly ?? Environment.CurrentDirectory;
         }
 
         public static IsolatedReference<bool> TrueResult
