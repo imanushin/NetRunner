@@ -27,6 +27,7 @@ namespace NetRunner.TestExecutionProxy
             if (!Trace.Listeners.Contains(consoleTraceListener))
             {
                 Trace.Listeners.Add(consoleTraceListener);
+                Environment.CurrentDirectory = AppDomain.CurrentDomain.BaseDirectory;
             }
 
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomainOnAssemblyResolve;

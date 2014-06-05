@@ -212,9 +212,13 @@ namespace NetRunner.Executable.Invokation
                 setupInformation.ConfigurationFile = configFileCandidate;
             }
 
-            setupInformation.ApplicationBase = GetFolderRoot();
+            var folderRoot = GetFolderRoot();
+
+            setupInformation.ApplicationBase = folderRoot;
 
             currentTestDomain = AppDomain.CreateDomain("Test execution domain", evidence, setupInformation);
+
+            Trace.TraceInformation("Test domain base directory: {0}", currentTestDomain.BaseDirectory);
 
             var currentAssembly = Assembly.GetExecutingAssembly();
 
