@@ -43,6 +43,7 @@
     <Compile Include="CreateFolderArgument.cs" />
     <Compile Include="FunctionNamesTestContainer.cs" />
     <Compile Include="NetRunnerTestContainer.cs" />
+    <Compile Include="ProblematicBeforeFunctionContainer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RemoveFolderArgument.cs" />
   </ItemGroup>

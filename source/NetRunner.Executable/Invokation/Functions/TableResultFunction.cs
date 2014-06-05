@@ -52,6 +52,9 @@ namespace NetRunner.Executable.Invokation.Functions
 
             var notificationResult = tableResult.ExecuteBeforeAllFunctionsCallMethod(functionToExecute.Method);
 
+            allIsOk &= !notificationResult.HasError;
+            exceptionsOccurred |= notificationResult.HasError;
+
             AddExceptionLineIfNeeded(notificationResult, changes);
             
             foreach (var row in Rows)
@@ -84,6 +87,9 @@ namespace NetRunner.Executable.Invokation.Functions
 
             notificationResult = tableResult.ExecuteAfterAllFunctionsCallMethod(functionToExecute.Method);
 
+            allIsOk &= !notificationResult.HasError;
+            exceptionsOccurred |= notificationResult.HasError;
+
             AddExceptionLineIfNeeded(notificationResult, changes);
 
             return FormatResult(exceptionsOccurred, allIsOk, changes);
@@ -98,11 +104,11 @@ namespace NetRunner.Executable.Invokation.Functions
 
             changes.Add(new ExecutionFailedMessage(
                 ColumnsRow.RowReference,
-                string.Format("Exception during handler invokation"),
+                string.Format("Exception during handler invokation: {0}", notificationException.ExceptionType),
                 "Argument handler executed with error: {0}",
-                notificationException));
+                notificationException.ExceptionToString));
 
-            changes.Add(new AddRowCssClass(ColumnsRow.RowReference, HtmlParser.FailCssClass));
+            changes.Add(new AddRowCssClass(ColumnsRow.RowReference, HtmlParser.ErrorCssClass));
         }
 
         [CanBeNull]
