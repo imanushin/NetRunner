@@ -11,7 +11,7 @@ namespace NetRunner.TestExecutionProxy
 {
     public class IsolatedReference<TType> : GeneralIsolatedReference
     {
-        public IsolatedReference([CanBeNull]TType value)
+        internal IsolatedReference([CanBeNull]TType value)
             :base(value)
         {
             Value = value;

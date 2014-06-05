@@ -14,7 +14,7 @@ namespace NetRunner.TestExecutionProxy
     {
         private readonly object targetObject;
 
-        public FunctionMetaData(MethodInfo method, object targetObject)
+        internal FunctionMetaData(MethodInfo method, object targetObject)
         {
             this.targetObject = targetObject;
             Method = method;
@@ -143,7 +143,7 @@ namespace NetRunner.TestExecutionProxy
 
             if (ReferenceEquals(objectForExecute, null))
             {
-                return new ExecutionResult(new GeneralIsolatedReference(null));
+                return ExecutionResult.Empty;
             }
 
             var result = function(objectForExecute, argument);
@@ -153,7 +153,7 @@ namespace NetRunner.TestExecutionProxy
                 return ExecutionResult.FromException(result);
             }
 
-            return new ExecutionResult(new GeneralIsolatedReference(null));
+            return ExecutionResult.Empty;
         }
 
         private ExecutionResult Execute(Func<FunctionContainer, MethodInfo, Exception> function)

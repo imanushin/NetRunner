@@ -10,7 +10,9 @@ namespace NetRunner.TestExecutionProxy
 {
     public class GeneralIsolatedReference : MarshalByRefObject
     {
-        public GeneralIsolatedReference(object value)
+        public static readonly GeneralIsolatedReference Empty = new GeneralIsolatedReference(null);
+
+        internal GeneralIsolatedReference(object value)
         {
             this.Value = value;
         }
