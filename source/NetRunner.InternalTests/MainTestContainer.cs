@@ -55,7 +55,7 @@ namespace NetRunner.InternalTests
             return true;
         }
 
-        public void ExecutePage(string pageLocalUrl)
+        public void ExecutePageOnPort(string pageLocalUrl, int port)
         {
             pageLocalUrl = pageLocalUrl.Trim();
 

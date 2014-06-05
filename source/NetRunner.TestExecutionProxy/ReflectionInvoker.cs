@@ -128,7 +128,7 @@ namespace NetRunner.TestExecutionProxy
 
                 Trace.TraceInformation("Subclasses of {1}: {0}", string.Join(", ", subclasses.Select(t => t.Name)), baseType.Name);
 
-                return subclasses.Select(t => new TypeReference(t)).ToArray();
+                return subclasses.Select(TypeReference.GetType).ToArray();
             }
             catch (ReflectionTypeLoadException ex)
             {

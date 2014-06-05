@@ -1,2 +1,1 @@
-
-| '''set fitnesse path''' | http://localhost:8080 |
+| '''set fitnesse path''' | http://localhost:${FITNESSE_PORT} |
