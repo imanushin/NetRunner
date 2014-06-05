@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,11 +9,31 @@ namespace NetRunner.TestExecutionProxy
 {
     public sealed class TypeReference : MarshalByRefObject
     {
-        internal TypeReference(Type targetType)
-        {
-            if(targetType == null)
-                throw new ArgumentNullException("targetType");
+        private static readonly object syncRoot = new object();
 
+        private static readonly Dictionary<Type, TypeReference> references = new Dictionary<Type, TypeReference>();
+
+        public static TypeReference GetType(Type type)
+        {
+            if (type == null)
+                throw new ArgumentNullException("type");
+
+            TypeReference result;
+
+            lock (syncRoot)
+            {
+                if (!references.TryGetValue(type, out result))
+                {
+                    result = new TypeReference(type);
+                    references[type] = result;
+                }
+            }
+
+            return result;
+        }
+
+        private TypeReference(Type targetType)
+        {
             TargetType = targetType;
         }
 

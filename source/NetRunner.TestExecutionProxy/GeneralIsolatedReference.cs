@@ -58,7 +58,7 @@ namespace NetRunner.TestExecutionProxy
 
         public new TypeReference GetType()
         {
-            return new TypeReference(Value.GetType());
+            return TypeReference.GetType(Value.GetType());
         }
 
         public override bool Equals(object obj)

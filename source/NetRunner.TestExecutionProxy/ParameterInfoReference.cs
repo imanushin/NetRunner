@@ -32,7 +32,7 @@ namespace NetRunner.TestExecutionProxy
         {
             get
             {
-                return new TypeReference(Parameter.ParameterType);
+                return TypeReference.GetType(Parameter.ParameterType);
             }
         }
     }

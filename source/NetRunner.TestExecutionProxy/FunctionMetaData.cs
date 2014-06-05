@@ -74,7 +74,7 @@ namespace NetRunner.TestExecutionProxy
             [Pure]
             get
             {
-                return new TypeReference(Method.ReturnType);
+                return TypeReference.GetType(Method.ReturnType);
             }
         }
 
@@ -135,7 +135,7 @@ namespace NetRunner.TestExecutionProxy
 
         [NotNull]
         internal ExecutionResult ExecuteHandler<TArg, TTargetType>(
-            Func<TTargetType, TArg, Exception> function, 
+            Func<TTargetType, TArg, Exception> function,
             TArg argument)
             where TTargetType : FunctionContainer
         {

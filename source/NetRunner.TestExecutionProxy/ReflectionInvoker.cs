@@ -119,7 +119,7 @@ namespace NetRunner.TestExecutionProxy
                 return testAssemblies.SelectMany(a => a.GetTypes())
                                      .Where(CanBeConstructed)
                                      .Where(t => t.IsSubclassOf(baseType))
-                                     .Select(t => new TypeReference(t))
+                                     .Select(TypeReference.GetType)
                                      .ToArray();
             }
             catch (ReflectionTypeLoadException ex)
@@ -234,7 +234,7 @@ namespace NetRunner.TestExecutionProxy
 
         public TypeReference CreateTypeOnTestDomain(Type type)
         {
-            return new TypeReference(type);
+            return TypeReference.GetType(type);
         }
 
         public void SendStatistic(TestCounts counts)
