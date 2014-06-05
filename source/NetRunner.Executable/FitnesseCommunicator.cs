@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Net.Sockets;
 using System.Text;
 using NetRunner.Executable.Common;
+using NetRunner.TestExecutionProxy;
 
 namespace NetRunner.Executable
 {

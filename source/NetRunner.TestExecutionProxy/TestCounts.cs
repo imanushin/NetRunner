@@ -1,5 +1,9 @@
-﻿namespace NetRunner.Executable
+﻿using System;
+using NetRunner.ExternalLibrary;
+
+namespace NetRunner.TestExecutionProxy
 {
+    [Serializable]
     public sealed class TestCounts
     {
         public int SuccessCount
@@ -44,6 +48,11 @@
         public void IncrementIgnoreCount()
         {
             IgnoreCount++;
+        }
+
+        public TestStatistic ToTestStatistic()
+        {
+            return new TestStatistic(SuccessCount, FailCount, ExceptionCount, ExceptionCount);
         }
     }
 }

@@ -10,7 +10,9 @@ namespace NetRunner.TestExecutionProxy
 {
     public sealed class ExecutionResult : MarshalByRefObject
     {
-        public ExecutionResult([CanBeNull]IsolatedReference<object> result)
+        public static readonly ExecutionResult Empty = new ExecutionResult(GeneralIsolatedReference.Empty);
+
+        internal ExecutionResult([CanBeNull]GeneralIsolatedReference result)
         {
             Result = result;
         }
@@ -22,7 +24,7 @@ namespace NetRunner.TestExecutionProxy
             ExceptionToString = exceptionToString;
         }
 
-        public IsolatedReference<object> Result
+        public GeneralIsolatedReference Result
         {
             get;
             private set;

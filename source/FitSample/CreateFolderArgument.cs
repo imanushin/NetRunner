@@ -23,7 +23,7 @@ namespace FitSample
 
             Directory.Exists(baseDirectoryPath);
         }
-
+        
         public void CreateFolder(string folderName)
         {
             Directory.CreateDirectory(Path.Combine(baseDirectoryPath, folderName));

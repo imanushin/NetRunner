@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using NetRunner.ExternalLibrary;
@@ -17,26 +18,14 @@ namespace NetRunner.TestExecutionProxy
             this.baseTableArgument = baseTableArgument;
         }
 
-        public ExecutionResult ExecuteAfterFunctionCallMethod(string displayName)
+        public ExecutionResult ExecuteBeforeAllFunctionsCallMethod(FunctionMetaData method)
         {
-            return Execute(displayName, baseTableArgument.NotifyAfterFunctionCall);
+            return method.ExecuteHandler<MethodInfo, BaseTableArgument>((ta, m) => ta.NotifyBeforeAllFunctionsCall(method.Method), method.Method);
         }
 
-        public ExecutionResult ExecuteBeforeFunctionCallMethod(string displayName)
+        public ExecutionResult ExecuteAfterAllFunctionsCallMethod(FunctionMetaData method)
         {
-            return Execute(displayName, baseTableArgument.NotifyBeforeFunctionCall);
-        }
-
-        private ExecutionResult Execute(string displayName, Func<string, Exception> function)
-        {
-            var result = function(displayName);
-
-            if (result != null)
-            {
-                return ExecutionResult.FromException(result);
-            }
-
-            return new ExecutionResult(new IsolatedReference<object>(null));
+            return method.ExecuteHandler<MethodInfo, BaseTableArgument>((ta, m) => ta.NotifyAfterAllFunctionsCall(method.Method), method.Method);
         }
     }
 }

@@ -34,7 +34,7 @@ namespace NetRunner.Executable.Invokation.Functions
             Validate.ArgumentIsNotNull(inputArguments, "inputArguments");
 
             var expectedTypes = functionReference.ArgumentTypes;
-            var actualTypes = new IsolatedReference<object>[expectedTypes.Count];
+            var actualTypes = new GeneralIsolatedReference[expectedTypes.Count];
 
             var conversionErrors = new List<AbstractTableChange>();
 

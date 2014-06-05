@@ -9,7 +9,7 @@ namespace NetRunner.TestExecutionProxy
 {
     public sealed class ParameterInfoReference : MarshalByRefObject
     {
-        public ParameterInfoReference(ParameterInfo parameter)
+        internal ParameterInfoReference(ParameterInfo parameter)
         {
             Parameter = parameter;
         }
@@ -32,7 +32,7 @@ namespace NetRunner.TestExecutionProxy
         {
             get
             {
-                return new TypeReference(Parameter.ParameterType);
+                return TypeReference.GetType(Parameter.ParameterType);
             }
         }
     }

@@ -9,6 +9,7 @@ using HtmlAgilityPack;
 using NetRunner.Executable.Common;
 using NetRunner.Executable.Invokation.Functions;
 using NetRunner.Executable.RawData;
+using NetRunner.TestExecutionProxy;
 
 namespace NetRunner.Executable.Invokation
 {

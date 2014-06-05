@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +10,9 @@ namespace NetRunner.TestExecutionProxy
 {
     public class GeneralIsolatedReference : MarshalByRefObject
     {
-        public GeneralIsolatedReference(object value)
+        public static readonly GeneralIsolatedReference Empty = new GeneralIsolatedReference(null);
+
+        internal GeneralIsolatedReference(object value)
         {
             this.Value = value;
         }
@@ -33,6 +36,16 @@ namespace NetRunner.TestExecutionProxy
             return new TableResultReference(Value as BaseTableArgument);
         }
 
+        public IsolatedReference<IEnumerable> AsIEnumerable()
+        {
+            return new IsolatedReference<IEnumerable>(Value as IEnumerable);
+        }
+
+        public IsolatedReference<FunctionContainer> CastToFunctionContainer()
+        {
+            return new IsolatedReference<FunctionContainer>((FunctionContainer)Value);
+        }
+
         public override int GetHashCode()
         {
             return ReferenceEquals(null, Value) ? 0 : Value.GetHashCode();
@@ -45,7 +58,7 @@ namespace NetRunner.TestExecutionProxy
 
         public new TypeReference GetType()
         {
-            return new TypeReference(Value.GetType());
+            return TypeReference.GetType(Value.GetType());
         }
 
         public override bool Equals(object obj)

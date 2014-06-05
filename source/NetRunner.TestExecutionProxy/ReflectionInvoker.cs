@@ -242,7 +242,12 @@ namespace NetRunner.TestExecutionProxy
 
         public TypeReference CreateTypeOnTestDomain(Type type)
         {
-            return new TypeReference(type);
+            return TypeReference.GetType(type);
+        }
+
+        public void SendStatistic(TestCounts counts)
+        {
+            TestStatistic.GlobalStatisticInternal = counts.ToTestStatistic();
         }
     }
 }

@@ -76,7 +76,7 @@ namespace NetRunner.Executable.Invokation
             testContainers = reflectionInvoker.CreateTypeInstances<BaseTestContainer>(testTypes.ToArray()).ToReadOnlyList();
 
             functions = testContainers
-                .SelectMany(tc => reflectionInvoker.FindFunctionsAvailable(tc).Select(f => new TestFunctionReference(f, tc.Cast<FunctionContainer>())))
+                .SelectMany(tc => reflectionInvoker.FindFunctionsAvailable(tc).Select(f => new TestFunctionReference(f, tc.CastToFunctionContainer())))
                 .ToReadOnlyList();
 
             var parsersFound = reflectionInvoker.CreateParsers(parserTypes.ToArray()).ToList();
@@ -142,13 +142,18 @@ namespace NetRunner.Executable.Invokation
         [CanBeNull]
         public static TestFunctionReference FindFunction(ReadOnlyList<string> argumentNames, TableResultReference targetObject)
         {
-            var targetType = targetObject.GetType();
-
             var allMethods = targetObject.GetMethods();
 
             var methodCandidates =
                 allMethods.Where(m => m.GetParameters().Select(p => p.Name)
                     .SequenceEqual(argumentNames, StringComparer.OrdinalIgnoreCase));
+
+            string joinedNames = TestFunctionReference.CleanFunctionName(string.Concat(argumentNames));
+
+            methodCandidates = methodCandidates.Concat(
+                allMethods
+                .Where(m => m.ParametersCount == argumentNames.Count)
+                .Where(m => m.AvailableFunctionNames.Any(fn => string.Equals(fn, joinedNames, StringComparison.OrdinalIgnoreCase))));
 
             var firstCandidate = methodCandidates.FirstOrDefault();
 
@@ -165,38 +170,6 @@ namespace NetRunner.Executable.Invokation
             return functions.FirstOrDefault(f =>
                 f.ArgumentTypes.Count == argumentCount &&
                 f.AvailableFunctionNames.Any(fn => string.Equals(fn, name, StringComparison.OrdinalIgnoreCase)));
-        }
-
-        private static List<string> LoadAssemblies(ReadOnlyList<string> pathes)
-        {
-            Validate.IsNotNull(currentTestDomain, "Test domain was not initialized");
-            Validate.IsNotNull(reflectionInvoker, "Test domain was not initialized");
-
-            var loadedAssemblies = new List<string>() { testContainerType.Assembly.Location };
-
-            foreach (string assemblyPath in pathes)
-            {
-                try
-                {
-                    if (!File.Exists(assemblyPath))
-                    {
-                        Trace.TraceError("Unable to load assembly because it does not exist: '{0}'", assemblyPath);
-
-                        continue;
-                    }
-
-                    reflectionInvoker.LoadTestAssembly(assemblyPath);
-
-                    Trace.TraceInformation("Assembly {0} was loaded", assemblyPath);
-
-                    loadedAssemblies.Add(assemblyPath);
-                }
-                catch (Exception ex)
-                {
-                    Trace.TraceError("Unable to load assembly {0} because of error: {1}", assemblyPath, ex);
-                }
-            }
-            return loadedAssemblies;
         }
 
         public static bool TryReadPropery(GeneralIsolatedReference targetObject, string propertyName, [CanBeNull]  out TypeReference propertyType, [CanBeNull] out GeneralIsolatedReference resultValue)
@@ -239,13 +212,36 @@ namespace NetRunner.Executable.Invokation
                 setupInformation.ConfigurationFile = configFileCandidate;
             }
 
+            setupInformation.ApplicationBase = GetFolderRoot();
+
             currentTestDomain = AppDomain.CreateDomain("Test execution domain", evidence, setupInformation);
 
-            InMemoryAssemblyLoader.SubscribeDomain(currentTestDomain);
+            var currentAssembly = Assembly.GetExecutingAssembly();
+
+            var loadingType = typeof(InMemoryAssemblyLoader);
+
+            Validate.Condition(loadingType.Assembly == currentAssembly, "Assembly of type '{0}' is '{1}' which is not equal with current '{2}'", loadingType, loadingType.Assembly, currentAssembly);
+
+            var createdInstance = (InMemoryAssemblyLoader)currentTestDomain.CreateInstanceFrom(currentAssembly.Location, loadingType.FullName).Unwrap();
+
+            Validate.IsNotNull(createdInstance, "Unable to create instance of type {0} in the test domain", loadingType);
+
+            createdInstance.SubscribeDomain(currentTestDomain);
 
             reflectionInvoker = (ReflectionInvoker)currentTestDomain.CreateInstanceAndUnwrap(reflectionInvokerType.Assembly.FullName, reflectionInvokerType.FullName);
 
             ReloadAssemblies();
+        }
+
+        private static string GetFolderRoot()
+        {
+            var existingAssembly = assemblyList.Where(File.Exists)
+                .Select(a => new FileInfo(a).Directory)
+                .SkipNulls()
+                .Select(d => d.FullName)
+                .FirstOrDefault();
+
+            return existingAssembly ?? Environment.CurrentDirectory;
         }
 
         public static IsolatedReference<bool> TrueResult
@@ -275,6 +271,14 @@ namespace NetRunner.Executable.Invokation
         public static IsolatedReference<TType> CreateOnTestDomain<TType>([CanBeNull] TType value)
         {
             return reflectionInvoker.CreateOnTestDomain(value);
+        }
+
+        public static void UpdateCounts(TestCounts counts)
+        {
+            Validate.ArgumentIsNotNull(counts, "counts");
+            Validate.IsNotNull(reflectionInvoker, "Test domain does not initialized");
+
+            reflectionInvoker.SendStatistic(counts);
         }
     }
 }

@@ -73,12 +73,12 @@ namespace NetRunner.Executable.Invokation.Keywords
 
             if (checkSucceded)
             {
-                return new InvokationResult(new IsolatedReference<object>(true));
+                return new InvokationResult(ReflectionLoader.TrueResult);
             }
 
             var showActualValueCellChange = new ShowActualValueCellChange(lastCell, resultObject);
 
-            return new InvokationResult(new IsolatedReference<object>(false), new TableChangeCollection(false, false, showActualValueCellChange));
+            return new InvokationResult(ReflectionLoader.TrueResult, new TableChangeCollection(false, false, showActualValueCellChange));
         }
 
         /// <summary>

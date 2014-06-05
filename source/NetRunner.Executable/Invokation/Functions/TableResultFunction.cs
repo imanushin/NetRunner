@@ -22,7 +22,7 @@ namespace NetRunner.Executable.Invokation.Functions
         {
         }
 
-        protected override FunctionExecutionResult ProcessResult(IsolatedReference<object> mainFunctionResult)
+        protected override FunctionExecutionResult ProcessResult(GeneralIsolatedReference mainFunctionResult)
         {
             var tableResult = mainFunctionResult.AsTableResultReference();
 
@@ -50,10 +50,13 @@ namespace NetRunner.Executable.Invokation.Functions
                 return FormatResult(false, false, changes);
             }
 
-            var notificationResult = tableResult.ExecuteBeforeFunctionCallMethod(functionToExecute.DisplayName);
+            var notificationResult = tableResult.ExecuteBeforeAllFunctionsCallMethod(functionToExecute.Method);
+
+            allIsOk &= !notificationResult.HasError;
+            exceptionsOccurred |= notificationResult.HasError;
 
             AddExceptionLineIfNeeded(notificationResult, changes);
-
+            
             foreach (var row in Rows)
             {
                 var rowResult = InvokeFunction(
@@ -82,7 +85,10 @@ namespace NetRunner.Executable.Invokation.Functions
                 }
             }
 
-            notificationResult = tableResult.ExecuteAfterFunctionCallMethod(functionToExecute.DisplayName);
+            notificationResult = tableResult.ExecuteAfterAllFunctionsCallMethod(functionToExecute.Method);
+
+            allIsOk &= !notificationResult.HasError;
+            exceptionsOccurred |= notificationResult.HasError;
 
             AddExceptionLineIfNeeded(notificationResult, changes);
 
@@ -98,11 +104,11 @@ namespace NetRunner.Executable.Invokation.Functions
 
             changes.Add(new ExecutionFailedMessage(
                 ColumnsRow.RowReference,
-                string.Format("Exception during handler invokation"),
+                string.Format("Exception during handler invokation: {0}", notificationException.ExceptionType),
                 "Argument handler executed with error: {0}",
-                notificationException));
+                notificationException.ExceptionToString));
 
-            changes.Add(new AddRowCssClass(ColumnsRow.RowReference, HtmlParser.FailCssClass));
+            changes.Add(new AddRowCssClass(ColumnsRow.RowReference, HtmlParser.ErrorCssClass));
         }
 
         [CanBeNull]

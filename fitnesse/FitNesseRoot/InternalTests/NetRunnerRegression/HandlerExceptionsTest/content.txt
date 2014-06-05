@@ -1,0 +1,57 @@
+!define testName {''.InternalTests.TestScenarios.HandlerExceptionsTests''}
+
+| '''execute page''' | ${testName} |
+
+| check | '''tests count''' | 1 |
+
+| '''Init Test''' | ${testName} |
+
+| '''Current Test Results''' |
+| '''Type''' | '''Count''' |
+| right | 0 |
+| wrong | 0 |
+| ignores | 0 |
+| exceptions | 4 |
+
+| check | '''Row Count Of Table''' | 1 | '''is''' | 1 | 
+
+| '''Analyse Table''' | 1 |
+| '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
+| 1 | 1 | Contains | fail before |
+| 1 | 1 | Contains | !-OnBeforeFunctionCallFail-! |
+| 1 | 1 | Contains | !-InvalidOperationException-! |
+| 1 | 1 | Contains | class="error" |
+| 1..100 | 1..100 | Count | 1 |
+
+| check | '''Row Count Of Table''' | 2 | '''is''' | 1 | 
+
+| '''Analyse Table''' | 2 |
+| '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
+| 1 | 1 | Contains | fail after |
+| 1 | 1 | Contains | !-OnAfterFunctionCallFail-! |
+| 1 | 1 | Contains | !-InvalidOperationException-! |
+| 1 | 1 | Contains | class="error" |
+| 1..100 | 1..100 | Count | 1 |
+
+
+| check | '''Row Count Of Table''' | 3 | '''is''' | 3 | 
+
+| '''Analyse Table''' | 3 |
+| '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
+| 1 | 1 | Contains | Create Problematic Argument |
+| 1 | 2 | Contains | Fail Before All |
+| 1 | 2 | Contains | !-BeforeAllFunctionsCallFail-! |
+| 1 | 2 | Contains | !-InvalidOperationException-! |
+| 1 | 1 | Contains | class="error" |
+| 1..100 | 1..100 | Count | 3 |
+
+| check | '''Row Count Of Table''' | 4 | '''is''' | 3 | 
+
+| '''Analyse Table''' | 4 |
+| '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
+| 1 | 1 | Contains | Create Problematic Argument |
+| 1 | 2 | Contains | Fail After All |
+| 1 | 2 | Contains | !-AfterAllFunctionsCallFail-! |
+| 1 | 2 | Contains | !-InvalidOperationException-! |
+| 1 | 1 | Contains | class="error" |
+| 1..100 | 1..100 | Count | 3 |

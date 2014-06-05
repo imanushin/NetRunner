@@ -2,3 +2,8 @@
 | '''Analyse All Tables In All Tests''' |
 | '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
 | 1..100 | 1..100 | Not Contain | !-NetRunner.Executable.-! |
+
+| check | ''' exception count is ''' | 0 |
+| check | ''' fail count is ''' | 0 |
+| check | ''' ignores count is ''' | 0 |
+| '''Success Greater Than Zero ''' |

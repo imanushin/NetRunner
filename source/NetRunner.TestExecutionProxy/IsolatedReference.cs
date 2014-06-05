@@ -11,7 +11,7 @@ namespace NetRunner.TestExecutionProxy
 {
     public class IsolatedReference<TType> : GeneralIsolatedReference
     {
-        public IsolatedReference([CanBeNull]TType value)
+        internal IsolatedReference([CanBeNull]TType value)
             :base(value)
         {
             Value = value;
@@ -42,13 +42,6 @@ namespace NetRunner.TestExecutionProxy
         }
 
 
-        [NotNull]
-        public IsolatedReference<T> As<T>()
-            where T : class
-        {
-            return new IsolatedReference<T>(Value as T);
-        }
-
         public ExecutionResult ExecuteMethod<TResult>(Func<TType, TResult> method)
         {
             try
@@ -77,24 +70,6 @@ namespace NetRunner.TestExecutionProxy
             {
                 return ExecutionResult.FromException(ex);
             }
-        }
-
-        public IsolatedReference<T> Cast<T>()
-            where T : class
-        {
-            if (ReferenceEquals(null, Value))
-            {
-                return new IsolatedReference<T>(null);
-            }
-
-            var result = As<T>();
-
-            if (result.IsNull)
-            {
-                throw new InvalidCastException(string.Format("Unable to convert type {0} to {1}", typeof(TType), typeof(T)));
-            }
-
-            return result;
         }
 
         private Type ValueType
