@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -31,6 +32,16 @@ namespace NetRunner.TestExecutionProxy
         public TableResultReference AsTableResultReference()
         {
             return new TableResultReference(Value as BaseTableArgument);
+        }
+
+        public IsolatedReference<IEnumerable> AsIEnumerable()
+        {
+            return new IsolatedReference<IEnumerable>(Value as IEnumerable);
+        }
+
+        public IsolatedReference<FunctionContainer> CastToFunctionContainer()
+        {
+            return new IsolatedReference<FunctionContainer>((FunctionContainer)Value);
         }
 
         public override int GetHashCode()

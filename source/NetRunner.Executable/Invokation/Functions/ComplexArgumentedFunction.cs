@@ -89,7 +89,7 @@ namespace NetRunner.Executable.Invokation.Functions
             return new FunctionExecutionResult(actualResult.ResultType, actualResult.TableChanges.Concat(result.Changes.Changes));
         }
 
-        protected abstract FunctionExecutionResult ProcessResult([NotNull] IsolatedReference<object> mainFunctionResult);
+        protected abstract FunctionExecutionResult ProcessResult([NotNull] GeneralIsolatedReference mainFunctionResult);
 
         [CanBeNull]
         private FunctionExecutionResult CheckInputData()

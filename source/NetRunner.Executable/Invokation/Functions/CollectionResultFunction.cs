@@ -23,7 +23,7 @@ namespace NetRunner.Executable.Invokation.Functions
         {
         }
 
-        private static TableChangeCollection CompareItems(IsolatedReference<object> resultObject, HtmlCell expectedResult, string propertyName)
+        private static TableChangeCollection CompareItems(GeneralIsolatedReference resultObject, HtmlCell expectedResult, string propertyName)
         {
             TypeReference propertyType;
 
@@ -61,9 +61,9 @@ namespace NetRunner.Executable.Invokation.Functions
         }
 
 
-        protected override FunctionExecutionResult ProcessResult(IsolatedReference<object> mainFunctionResult)
+        protected override FunctionExecutionResult ProcessResult(GeneralIsolatedReference mainFunctionResult)
         {
-            var collectionResult = mainFunctionResult.As<IEnumerable>();
+            var collectionResult = mainFunctionResult.AsIEnumerable();
 
             collectionResult = collectionResult.IsNull ?
                 ReflectionLoader.CreateOnTestDomain((IEnumerable)ReadOnlyList<object>.Empty) :

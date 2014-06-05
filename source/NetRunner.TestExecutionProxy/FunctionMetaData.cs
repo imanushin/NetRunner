@@ -93,7 +93,7 @@ namespace NetRunner.TestExecutionProxy
             return Method.GetParameters().Select(p => new ParameterInfoReference(p)).ToArray();
         }
 
-        public ExecutionResult Invoke(IsolatedReference<object>[] parameters)
+        public ExecutionResult Invoke(GeneralIsolatedReference[] parameters)
         {
             var executeBefore = ExecuteBeforeFunctionCallMethod();
 
@@ -106,7 +106,7 @@ namespace NetRunner.TestExecutionProxy
             {
                 var result = Method.Invoke(targetObject, parameters.Select(p => TrimStrings(p.Value)).ToArray());
 
-                var actualResult = new ExecutionResult(new IsolatedReference<object>(result));
+                var actualResult = new ExecutionResult(new GeneralIsolatedReference(result));
 
                 var afterExecutionResult = ExecuteAfterFunctionCallMethod();
 
@@ -143,7 +143,7 @@ namespace NetRunner.TestExecutionProxy
 
             if (ReferenceEquals(objectForExecute, null))
             {
-                return new ExecutionResult(new IsolatedReference<object>(null));
+                return new ExecutionResult(new GeneralIsolatedReference(null));
             }
 
             var result = function(objectForExecute, argument);
@@ -153,7 +153,7 @@ namespace NetRunner.TestExecutionProxy
                 return ExecutionResult.FromException(result);
             }
 
-            return new ExecutionResult(new IsolatedReference<object>(null));
+            return new ExecutionResult(new GeneralIsolatedReference(null));
         }
 
         private ExecutionResult Execute(Func<FunctionContainer, MethodInfo, Exception> function)

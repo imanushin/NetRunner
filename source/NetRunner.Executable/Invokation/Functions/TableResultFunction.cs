@@ -22,7 +22,7 @@ namespace NetRunner.Executable.Invokation.Functions
         {
         }
 
-        protected override FunctionExecutionResult ProcessResult(IsolatedReference<object> mainFunctionResult)
+        protected override FunctionExecutionResult ProcessResult(GeneralIsolatedReference mainFunctionResult)
         {
             var tableResult = mainFunctionResult.AsTableResultReference();
 

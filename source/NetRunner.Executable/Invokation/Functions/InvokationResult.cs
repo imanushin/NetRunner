@@ -11,7 +11,7 @@ namespace NetRunner.Executable.Invokation.Functions
 {
     internal sealed class InvokationResult
     {
-        public InvokationResult(IsolatedReference<object> result, [NotNull]TableChangeCollection changes)
+        public InvokationResult(GeneralIsolatedReference result, [NotNull]TableChangeCollection changes)
         {
             Validate.ArgumentIsNotNull(changes, "changes");
 
@@ -19,7 +19,7 @@ namespace NetRunner.Executable.Invokation.Functions
             Changes = changes;
         }
 
-        public InvokationResult(IsolatedReference<object> result)
+        public InvokationResult(GeneralIsolatedReference result)
             : this(result, TableChangeCollection.AllIsOkNoChanges)
         {
         }
@@ -30,7 +30,7 @@ namespace NetRunner.Executable.Invokation.Functions
             private set;
         }
 
-        public IsolatedReference<object> Result
+        public GeneralIsolatedReference Result
         {
             get;
             private set;

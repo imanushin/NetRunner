@@ -79,7 +79,7 @@ namespace NetRunner.Executable.Invokation
             return string.Format("Method: {0}; target object type: {1}; Parameters: {2}; Result type: {3}; AvailableFunctionNames: {4}", Method.SystemName, TargetObject.GetType().Name, ArgumentTypes, ResultType, AvailableFunctionNames);
         }
 
-        public ExecutionResult Invoke(IEnumerable<IsolatedReference<object>> parameters)
+        public ExecutionResult Invoke(IEnumerable<GeneralIsolatedReference> parameters)
         {
             return Method.Invoke(parameters.ToArray());
         }

@@ -73,7 +73,7 @@ namespace NetRunner.Executable.Invokation
             testContainers = reflectionInvoker.CreateTypeInstances<BaseTestContainer>(testTypes.ToArray()).ToReadOnlyList();
 
             functions = testContainers
-                .SelectMany(tc => reflectionInvoker.FindFunctionsAvailable(tc).Select(f => new TestFunctionReference(f, tc.Cast<FunctionContainer>())))
+                .SelectMany(tc => reflectionInvoker.FindFunctionsAvailable(tc).Select(f => new TestFunctionReference(f, tc.CastToFunctionContainer())))
                 .ToReadOnlyList();
 
             var parsersFound = reflectionInvoker.CreateParsers(parserTypes.ToArray()).ToList();
