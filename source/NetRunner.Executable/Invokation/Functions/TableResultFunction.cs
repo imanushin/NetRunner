@@ -50,7 +50,7 @@ namespace NetRunner.Executable.Invokation.Functions
                 return FormatResult(false, false, changes);
             }
 
-            var notificationResult = tableResult.ExecuteBeforeFunctionCallMethod(functionToExecute.DisplayName);
+            var notificationResult = tableResult.ExecuteBeforeFunctionCallMethod(functionToExecute.Method);
 
             AddExceptionLineIfNeeded(notificationResult, changes);
 
@@ -82,7 +82,7 @@ namespace NetRunner.Executable.Invokation.Functions
                 }
             }
 
-            notificationResult = tableResult.ExecuteAfterFunctionCallMethod(functionToExecute.DisplayName);
+            notificationResult = tableResult.ExecuteAfterFunctionCallMethod(functionToExecute.Method);
 
             AddExceptionLineIfNeeded(notificationResult, changes);
 

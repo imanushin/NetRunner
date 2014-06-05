@@ -10,22 +10,22 @@ namespace NetRunner.ExternalLibrary
     [UsedImplicitly(ImplicitUseTargetFlags.Members)]
     public abstract class BaseTableArgument : FunctionContainer
     {
-        public delegate void BeforeFunctionCallHandler(string expectedFunctionName);
-        public delegate void AfterFunctionCallHandler(string functionCalledName);
+        public delegate void BeforeFunctionCallHandler(MethodInfo targetFunction);
+        public delegate void AfterFunctionCallHandler(MethodInfo targetFunction);
 
         public event BeforeFunctionCallHandler BeforeFunctionCall;
         public event AfterFunctionCallHandler AfterFunctionCall;
 
         [CanBeNull]
         [UsedImplicitly]
-        internal Exception NotifyAfterFunctionCall(string functionCalledName)
+        internal Exception NotifyAfterFunctionCall(MethodInfo targetFunction)
         {
             if (AfterFunctionCall == null)
                 return null;
 
             try
             {
-                AfterFunctionCall(functionCalledName);
+                AfterFunctionCall(targetFunction);
 
                 return null;
             }
@@ -37,14 +37,14 @@ namespace NetRunner.ExternalLibrary
 
         [CanBeNull]
         [UsedImplicitly]
-        internal Exception NotifyBeforeFunctionCall(string expectedFunctionName)
+        internal Exception NotifyBeforeFunctionCall(MethodInfo targetFunction)
         {
             if (BeforeFunctionCall == null)
                 return null;
 
             try
             {
-                BeforeFunctionCall(expectedFunctionName);
+                BeforeFunctionCall(targetFunction);
 
                 return null;
             }

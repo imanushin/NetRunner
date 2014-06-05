@@ -14,20 +14,23 @@ namespace NetRunner.Executable.Invokation
 {
     internal sealed class TestFunctionReference : BaseReadOnlyObject
     {
-        private readonly FunctionMetaData method;
-
         public TestFunctionReference(FunctionMetaData method, GeneralIsolatedReference targetObject)
         {
             Validate.ArgumentIsNotNull(method, "method");
             Validate.ArgumentIsNotNull(targetObject, "targetObject");
 
-            this.method = method;
+            Method = method;
             TargetObject = targetObject;
 
-            Name = method.SystemName;
             ArgumentTypes = method.GetParameters().ToReadOnlyList();
             ResultType = method.ReturnType;
             AvailableFunctionNames = method.AvailableFunctionNames.Select(CleanFunctionName).ToReadOnlyList();
+        }
+
+        public FunctionMetaData Method
+        {
+            get;
+            private set;
         }
 
         public ReadOnlyList<string> AvailableFunctionNames
@@ -37,12 +40,6 @@ namespace NetRunner.Executable.Invokation
         }
 
         public GeneralIsolatedReference TargetObject
-        {
-            get;
-            private set;
-        }
-
-        public string Name
         {
             get;
             private set;
@@ -64,13 +61,13 @@ namespace NetRunner.Executable.Invokation
         {
             get
             {
-                return TargetObject.GetType().Name + '.' + Name;
+                return TargetObject.GetType().Name + '.' + Method.SystemName;
             }
         }
 
         protected override IEnumerable<object> GetInnerObjects()
         {
-            yield return Name;
+            yield return Method.SystemName;
             yield return ArgumentTypes;
             yield return TargetObject;
             yield return ResultType;
@@ -79,12 +76,12 @@ namespace NetRunner.Executable.Invokation
 
         protected override string GetString()
         {
-            return string.Format("Method: {0}; target object type: {1}; Parameters: {2}; Result type: {3}; AvailableFunctionNames: {4}", Name, TargetObject.GetType().Name, ArgumentTypes, ResultType, AvailableFunctionNames);
+            return string.Format("Method: {0}; target object type: {1}; Parameters: {2}; Result type: {3}; AvailableFunctionNames: {4}", Method.SystemName, TargetObject.GetType().Name, ArgumentTypes, ResultType, AvailableFunctionNames);
         }
 
         public ExecutionResult Invoke(IEnumerable<IsolatedReference<object>> parameters)
         {
-            return method.Invoke(parameters.ToArray());
+            return Method.Invoke(parameters.ToArray());
         }
 
         [NotNull, Pure]
