@@ -139,13 +139,18 @@ namespace NetRunner.Executable.Invokation
         [CanBeNull]
         public static TestFunctionReference FindFunction(ReadOnlyList<string> argumentNames, TableResultReference targetObject)
         {
-            var targetType = targetObject.GetType();
-
             var allMethods = targetObject.GetMethods();
 
             var methodCandidates =
                 allMethods.Where(m => m.GetParameters().Select(p => p.Name)
                     .SequenceEqual(argumentNames, StringComparer.OrdinalIgnoreCase));
+
+            string joinedNames = TestFunctionReference.CleanFunctionName(string.Concat(argumentNames));
+
+            methodCandidates = methodCandidates.Concat(
+                allMethods
+                .Where(m => m.ParametersCount == argumentNames.Count)
+                .Where(m => m.AvailableFunctionNames.Any(fn => string.Equals(fn, joinedNames, StringComparison.OrdinalIgnoreCase))));
 
             var firstCandidate = methodCandidates.FirstOrDefault();
 

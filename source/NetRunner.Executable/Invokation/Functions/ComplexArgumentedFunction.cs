@@ -27,7 +27,7 @@ namespace NetRunner.Executable.Invokation.Functions
             Rows = rows.ToReadOnlyList();
             functionReference = functionToExecute;
             ColumnsRow = columnsRow;
-            CleanedColumnNames = columnsRow.Cells.Select(c => c.CleanedContent.Replace(" ", string.Empty)).ToReadOnlyList();
+            CleanedColumnNames = columnsRow.Cells.Select(c => c.CleanedContent).Select(TestFunctionReference.CleanFunctionName).ToReadOnlyList();
         }
 
         protected HtmlRow ColumnsRow

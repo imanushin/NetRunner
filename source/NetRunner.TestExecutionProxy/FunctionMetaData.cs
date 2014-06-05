@@ -48,18 +48,21 @@ namespace NetRunner.TestExecutionProxy
 
         internal MethodInfo Method
         {
+            [Pure]
             get;
             private set;
         }
 
         public ReadOnlyCollection<string> AvailableFunctionNames
         {
+            [Pure]
             get;
             private set;
         }
 
         public string SystemName
         {
+            [Pure]
             get
             {
                 return Method.Name;
@@ -68,12 +71,23 @@ namespace NetRunner.TestExecutionProxy
 
         public TypeReference ReturnType
         {
+            [Pure]
             get
             {
                 return new TypeReference(Method.ReturnType);
             }
         }
 
+        public int ParametersCount
+        {
+            [Pure]
+            get
+            {
+                return Method.GetParameters().Length;
+            }
+        }
+
+        [Pure]
         public ParameterInfoReference[] GetParameters()
         {
             return Method.GetParameters().Select(p => new ParameterInfoReference(p)).ToArray();

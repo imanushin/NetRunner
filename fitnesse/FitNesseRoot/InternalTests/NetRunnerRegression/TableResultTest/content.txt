@@ -9,7 +9,7 @@
 
 | '''Current Test Results''' |
 | '''Type''' | '''Count''' |
-| right | 2 |
+| right | 3 |
 | wrong | 3 |
 | ignores | 0 |
 | exceptions | 3 |
@@ -36,9 +36,21 @@
 | 1..100 | 1..100 | Count | 5 |
 
 
-| check | '''Row Count Of Table''' | 3 | '''is''' | 3 | 
+| check | '''Row Count Of Table''' | 3 | '''is''' | 4 | 
 
 | '''Analyse Table''' | 3 |
+| '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
+| 1 | 1 | Contains | create subfolders in |
+| 2 | 1 | Contains | ./ |
+| 1 | 2 | Contains | Create Folder |
+| 1..100 | 1 | Contains | class="pass" |
+| 1..100 | 2..100 | Not Contain | class="pass" |
+| 1..100 | 1..100 | Not Contain | class="fail" |
+| 1..100 | 1..100 | Count | 5 |
+
+| check | '''Row Count Of Table''' | 4 | '''is''' | 3 | 
+
+| '''Analyse Table''' | 4 |
 | '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
 | 1 | 1 | Contains | create subfolders in |
 | 2 | 1 | Contains | :: |
@@ -47,20 +59,6 @@
 | 1..100 | 3 | Contains | class="error" |
 | 1..100 | 1..100 | Count | 4 |
 
-
-| check | '''Row Count Of Table''' | 4 | '''is''' | 3 | 
-
-| '''Analyse Table''' | 4 |
-| '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
-| 1 | 1 | Contains | create subfolders in |
-| 2 | 1 | Contains | ./ |
-| 1 | 1 | Contains | ${invokationWasSkippedText} |
-| 1..100 | 2 | Not Contain | class="pass" |
-| 1..100 | 2 | Not Contain | class="error" |
-| 1..100 | 2 | Not Contain | class="fail" |
-| 1 | 3 | Contains | class="fail" |
-| 1 | 3 | Contains | Wrong column count |
-| 1..100 | 1..100 | Count | 5 |
 
 | check | '''Row Count Of Table''' | 5 | '''is''' | 3 | 
 
@@ -73,13 +71,27 @@
 | 1..100 | 2 | Not Contain | class="error" |
 | 1..100 | 2 | Not Contain | class="fail" |
 | 1 | 3 | Contains | class="fail" |
+| 1 | 3 | Contains | Wrong column count |
+| 1..100 | 1..100 | Count | 5 |
+
+| check | '''Row Count Of Table''' | 6 | '''is''' | 3 | 
+
+| '''Analyse Table''' | 6 |
+| '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
+| 1 | 1 | Contains | create subfolders in |
+| 2 | 1 | Contains | ./ |
+| 1 | 1 | Contains | ${invokationWasSkippedText} |
+| 1..100 | 2 | Not Contain | class="pass" |
+| 1..100 | 2 | Not Contain | class="error" |
+| 1..100 | 2 | Not Contain | class="fail" |
+| 1 | 3 | Contains | class="fail" |
 | 1..100 | 3 | Contains | All cells should be non-bold |
 | 1..100 | 1..100 | Count | 4 |
 
 
-| check | '''Row Count Of Table''' | 6 | '''is''' | 5 | 
+| check | '''Row Count Of Table''' | 7 | '''is''' | 5 | 
 
-| '''Analyse Table''' | 6 |
+| '''Analyse Table''' | 7 |
 | '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
 | 1 | 1 | Contains | create subfolders in |
 | 2 | 1 | Contains | ./ |
@@ -91,9 +103,9 @@
 | 1..100 | 4 | Contains | execution was failed |
 | 1..100 | 1..100 | Count | 6 |
 
-| check | '''Row Count Of Table''' | 7 | '''is''' | 5 | 
+| check | '''Row Count Of Table''' | 8 | '''is''' | 5 | 
 
-| '''Analyse Table''' | 7 |
+| '''Analyse Table''' | 8 |
 | '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
 | 1 | 1 | Contains | remove subfolders from |
 | 2 | 1 | Contains | ./ |
@@ -102,9 +114,9 @@
 | 1..100 | 1..100 | Count | 6 |
 
 
-| check | '''Row Count Of Table''' | 8 | '''is''' | 3 | 
+| check | '''Row Count Of Table''' | 9 | '''is''' | 3 | 
 
-| '''Analyse Table''' | 8 |
+| '''Analyse Table''' | 9 |
 | '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
 | 1 | 1 | Contains | create subfolders in |
 | 1 | 1 | Contains | !-ArgumentException-! |
