@@ -18,26 +18,14 @@ namespace NetRunner.TestExecutionProxy
             this.baseTableArgument = baseTableArgument;
         }
 
-        public ExecutionResult ExecuteAfterFunctionCallMethod(FunctionMetaData function)
+        public ExecutionResult ExecuteBeforeAllFunctionsCallMethod(FunctionMetaData method)
         {
-            return Execute(function.Method, baseTableArgument.NotifyAfterFunctionCall);
+            return method.ExecuteHandler<MethodInfo, BaseTableArgument>((ta, m) => ta.NotifyBeforeAllFunctionsCall(method.Method), method.Method);
         }
 
-        public ExecutionResult ExecuteBeforeFunctionCallMethod(FunctionMetaData function)
+        public ExecutionResult ExecuteAfterAllFunctionsCallMethod(FunctionMetaData method)
         {
-            return Execute(function.Method, baseTableArgument.NotifyBeforeFunctionCall);
-        }
-
-        private ExecutionResult Execute(MethodInfo functionReference, Func<MethodInfo, Exception> function)
-        {
-            var result = function(functionReference);
-
-            if (result != null)
-            {
-                return ExecutionResult.FromException(result);
-            }
-
-            return new ExecutionResult(new IsolatedReference<object>(null));
+            return method.ExecuteHandler<MethodInfo, BaseTableArgument>((ta, m) => ta.NotifyAfterAllFunctionsCall(method.Method), method.Method);
         }
     }
 }

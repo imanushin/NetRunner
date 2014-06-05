@@ -95,16 +95,70 @@ namespace NetRunner.TestExecutionProxy
 
         public ExecutionResult Invoke(IsolatedReference<object>[] parameters)
         {
+            var executeBefore = ExecuteBeforeFunctionCallMethod();
+
+            if (executeBefore.HasError)
+            {
+                return executeBefore;
+            }
+
             try
             {
                 var result = Method.Invoke(targetObject, parameters.Select(p => TrimStrings(p.Value)).ToArray());
 
-                return new ExecutionResult(new IsolatedReference<object>(result));
+                var actualResult = new ExecutionResult(new IsolatedReference<object>(result));
+
+                var afterExecutionResult = ExecuteAfterFunctionCallMethod();
+
+                if (afterExecutionResult.HasError)
+                {
+                    return afterExecutionResult;
+                }
+
+                return actualResult;
             }
             catch (Exception ex)
             {
                 return ExecutionResult.FromException(ex);
             }
+        }
+
+        public ExecutionResult ExecuteAfterFunctionCallMethod()
+        {
+            return Execute((fc, m) => fc.NotifyAfterFunctionCall(m));
+        }
+
+        public ExecutionResult ExecuteBeforeFunctionCallMethod()
+        {
+            return Execute((fc, m) => fc.NotifyBeforeFunctionCall(m));
+        }
+
+        [NotNull]
+        internal ExecutionResult ExecuteHandler<TArg, TTargetType>(
+            Func<TTargetType, TArg, Exception> function, 
+            TArg argument)
+            where TTargetType : FunctionContainer
+        {
+            var objectForExecute = targetObject as TTargetType;
+
+            if (ReferenceEquals(objectForExecute, null))
+            {
+                return new ExecutionResult(new IsolatedReference<object>(null));
+            }
+
+            var result = function(objectForExecute, argument);
+
+            if (result != null)
+            {
+                return ExecutionResult.FromException(result);
+            }
+
+            return new ExecutionResult(new IsolatedReference<object>(null));
+        }
+
+        private ExecutionResult Execute(Func<FunctionContainer, MethodInfo, Exception> function)
+        {
+            return ExecuteHandler(function, Method);
         }
 
         private static object TrimStrings(object value)
