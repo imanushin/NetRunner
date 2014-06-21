@@ -1,6 +1,6 @@
 !define testName {''.InternalTests.TestScenarios.CollectionsTests''}
 
-| '''execute page''' | ${testName} |
+| '''execute page''' | ${testName} | '''on port''' | ${FITNESSE_PORT} |
 
 | check | '''tests count''' | 1 |
 
@@ -8,7 +8,7 @@
 
 | '''Current Test Results''' |
 | '''Type''' | '''Count''' |
-| right | 1 |
+| right | 2 |
 | wrong | 4 |
 | ignores | 0 |
 | exceptions | 0 |
@@ -72,3 +72,12 @@
 | 1..2 | 1, 3 | Contains | class="fail" |
 | 1..2 | 4 | Not Contain | class="fail" |
 | 2 | 3 | Contains | All cells should be non-bold |
+
+| check | '''Row Count Of Table''' | 6 | '''is''' | 8 | 
+
+| '''Analyse Table''' | 6 |
+| '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
+| 1 | 1 | Contains | list numbers from |
+| 1..100 | 1 | Contains | class="pass" |
+| 1..100 | 3..100 | Contains | class="pass" |
+

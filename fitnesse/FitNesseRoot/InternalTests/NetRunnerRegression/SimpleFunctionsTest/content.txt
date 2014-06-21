@@ -1,6 +1,6 @@
 !define testName {''.InternalTests.TestScenarios.SimpleFunctionsTests''}
 
-| '''execute page''' | ${testName} |
+| '''execute page''' | ${testName} | '''on port''' | ${FITNESSE_PORT} |
 
 | check | '''tests count''' | 1 |
 

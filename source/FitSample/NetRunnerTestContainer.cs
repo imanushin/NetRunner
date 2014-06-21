@@ -49,6 +49,17 @@ namespace FitSample
             }
         }
 
+        public IEnumerable ListNumbersFromTo(int start, int finish)
+        {
+            return Enumerable.Range(start, finish - start + 1).Select(i => new
+            {
+                String = i.ToString(),
+                Int = i,
+                Bool = i % 2 == 0,
+                Byte = (byte)i
+            });
+        }
+
         public bool PingSiteWithoutExceptions(string url)
         {
             try

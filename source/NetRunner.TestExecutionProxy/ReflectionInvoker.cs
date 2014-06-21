@@ -46,9 +46,11 @@ namespace NetRunner.TestExecutionProxy
 
                 var targetFileName = assemblyName + ".dll";
 
-                var filesCandidates = assemblyFolders.Select(f => Path.Combine(f, targetFileName)).Where(File.Exists);
+                var filesCandidates = assemblyFolders.Select(f => Path.Combine(f, targetFileName)).Where(File.Exists).ToArray();
 
-                loadLog.AppendFormat("Existing files with '{0}': {1}", assemblyName, filesCandidates);
+                var joinedCandidates = string.Join(", ", filesCandidates);
+
+                loadLog.AppendFormat("Existing files with '{0}': {1}", assemblyName, joinedCandidates);
                 loadLog.AppendLine();
 
                 foreach (var candidate in filesCandidates)
@@ -65,7 +67,8 @@ namespace NetRunner.TestExecutionProxy
 
                 Trace.TraceInformation(loadLog.ToString());
 
-                Trace.TraceError("Unable to load assembly {0}. Files candidates: {1}, ", args.Name, filesCandidates);
+                
+                Trace.TraceError("Unable to load assembly {0}. Files candidates: {1}, ", args.Name, joinedCandidates);
             }
             catch (Exception ex)
             {
@@ -89,14 +92,24 @@ namespace NetRunner.TestExecutionProxy
 
             if (!File.Exists(assemblyPath))
             {
+                var assemblyName = Path.GetFileName(assemblyPath);
+
+                var otherPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, assemblyName);
+
+                if (File.Exists(otherPath))
+                {
+                    assemblyPath = otherPath;
+                }
+            }
+
+            if (!File.Exists(assemblyPath))
+            {
                 Trace.TraceError("Unable to load assembly from the path '{0}'. Current domain directory: '{1}'", assemblyPath, AppDomain.CurrentDomain.BaseDirectory);
 
                 return;
             }
 
-            var assemblyContent = File.ReadAllBytes(assemblyPath);
-
-            testAssemblies.Add(Assembly.Load(assemblyContent));
+            testAssemblies.Add(Assembly.LoadFrom(assemblyPath));
         }
 
         private static Type BaseParserType
