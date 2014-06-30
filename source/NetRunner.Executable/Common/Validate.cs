@@ -99,7 +99,7 @@ namespace NetRunner.Executable.Common
         /// <param name="argument">Argument.</param>
         /// <param name="argumentName">Argument name.</param>
         public static void ArgumentEnumerationValueIsDefined<T>(T argument, [InvokerParameterName] string argumentName = null)
-            where T : struct, IComparable, IFormattable, IConvertible
+            where T : struct, IComparable, IFormattable
         {
             Type enumerationType = typeof(T);
 

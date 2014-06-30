@@ -45,7 +45,9 @@ namespace NetRunner.Executable.Invokation.Functions
 
             string errorHeader = string.Format("Unable to convert value to type '{0}'", propertyType.Name);
 
-            var expectedObject = ParametersConverter.ConvertParameter(expectedResult, propertyType, errorHeader);
+            var cellInfo = new CellParsingInfo(expectedResult, propertyType);
+
+            var expectedObject = ParametersConverter.ConvertParameter(cellInfo, errorHeader);
 
             if (!expectedObject.Changes.AllWasOk)
             {

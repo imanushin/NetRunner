@@ -59,7 +59,16 @@ namespace NetRunner.Executable.RawData
             [Pure]
             get
             {
-                return tableCell.InnerText;
+                return HtmlEntity.DeEntitize(tableCell.InnerText);
+            }
+        }
+
+        public string RawContent
+        {
+            [Pure]
+            get
+            {
+                return tableCell.InnerHtml;
             }
         }
 

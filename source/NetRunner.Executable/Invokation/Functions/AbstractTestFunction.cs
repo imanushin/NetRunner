@@ -48,8 +48,8 @@ namespace NetRunner.Executable.Invokation.Functions
                     functionReference.DisplayName,
                     inputArgument.CleanedContent);
 
-
-                var conversionResult = ParametersConverter.ConvertParameter(inputArgument, expectedTypes[i].ParameterType, conversionErrorHeader);
+                var cellInfo = new CellParsingInfo(expectedTypes[i], inputArgument);
+                var conversionResult = ParametersConverter.ConvertParameter(cellInfo, conversionErrorHeader);
                 actualTypes[i] = conversionResult.Result;
 
                 conversionErrors.AddRange(conversionResult.Changes.Changes);

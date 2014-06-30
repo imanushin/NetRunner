@@ -37,6 +37,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdditionalFunctionNameAttribute.cs" />
+    <Compile Include="ArgumentPrepareAttribute.cs" />
     <Compile Include="BaseDictionaryParser.cs" />
     <Compile Include="BaseOperationMarkerAttribute.cs" />
     <Compile Include="BaseParser.cs" />

@@ -10,3 +10,9 @@
 | '''is positive''' | aaa |
 | '''is positive''' | !-<a href="https://google.com">1</a>-! |
 | '''try parse string''' | ''aaa'' |
+
+!note check escaping symbols
+| check | '''string length of ''' | < | '''is''' | 1 |
+| check | '''string length of ''' | > | '''is''' | 1 |
+| check | '''string length of ''' | & | '''is''' | 1 |
+| check | '''string length of ''' | ''&'' | '''is''' | 1 |

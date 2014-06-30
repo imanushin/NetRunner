@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -47,6 +48,11 @@ namespace FitSample
                     }
                 }
             }
+        }
+
+        public int StringLengthOfIs(string inputLine)
+        {
+            return inputLine.Length;
         }
 
         public IEnumerable ListNumbersFromTo(int start, int finish)

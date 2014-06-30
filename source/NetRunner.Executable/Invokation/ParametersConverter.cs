@@ -21,10 +21,13 @@ namespace NetRunner.Executable.Invokation
         {
             parsers.Clear();
         }
-        
-        public static InvokationResult ConvertParameter(HtmlCell inputData, TypeReference expectedType, string conversionErrorHeader)
+
+        public static InvokationResult ConvertParameter(CellParsingInfo cellInfo, string conversionErrorHeader)
         {
             IsolatedParser parser;
+
+            var inputData = cellInfo.TargetCell;
+            var expectedType = cellInfo.ExpectedType;
 
             var errorCellMark = new CssClassCellChange(inputData, HtmlParser.ErrorCssClass);
 
@@ -32,7 +35,7 @@ namespace NetRunner.Executable.Invokation
             {
                 foreach (var baseParser in ReflectionLoader.Parsers)
                 {
-                    var parseResult = ParseData(inputData, expectedType, conversionErrorHeader, baseParser);
+                    var parseResult = ParseData(cellInfo, conversionErrorHeader, baseParser);
 
                     if (parseResult != null)
                         return parseResult;
@@ -43,7 +46,7 @@ namespace NetRunner.Executable.Invokation
                 return new InvokationResult(null, new TableChangeCollection(false, true, parserNotFound, errorCellMark));
             }
 
-            var foundParserResult = ParseData(inputData, expectedType, conversionErrorHeader, parser);
+            var foundParserResult = ParseData(cellInfo, conversionErrorHeader, parser);
 
             if (foundParserResult != null)
                 return foundParserResult;
@@ -54,13 +57,16 @@ namespace NetRunner.Executable.Invokation
         }
 
         [CanBeNull]
-        private static InvokationResult ParseData(HtmlCell inputData, TypeReference expectedType, string conversionErrorHeader, IsolatedParser baseParser)
+        private static InvokationResult ParseData(CellParsingInfo cellInfo, string conversionErrorHeader, IsolatedParser baseParser)
         {
+            var inputData = cellInfo.TargetCell;
+            var expectedType = cellInfo.ExpectedType;
+
             try
             {
                 ExecutionResult result;
 
-                var parseSucceeded = baseParser.TryParse(inputData.CleanedContent, expectedType, out result);
+                var parseSucceeded = baseParser.TryParse(cellInfo.PrepareString(), expectedType, out result);
 
                 if (result.HasError)
                 {

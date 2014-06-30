@@ -62,7 +62,9 @@ namespace NetRunner.Executable.Invokation.Keywords
 
             string errorHeader = string.Format("Unable to convert result to '{0}'", resultType.Name);
 
-            var expectedObject = ParametersConverter.ConvertParameter(lastCell, resultType, errorHeader);
+            var cellInfo = new CellParsingInfo(lastCell, resultType);
+
+            var expectedObject = ParametersConverter.ConvertParameter(cellInfo, errorHeader);
 
             if (expectedObject.Changes.WereExceptions)
             {

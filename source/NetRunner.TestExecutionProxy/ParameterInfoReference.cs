@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using NetRunner.ExternalLibrary;
 
 namespace NetRunner.TestExecutionProxy
 {
@@ -12,6 +13,7 @@ namespace NetRunner.TestExecutionProxy
         internal ParameterInfoReference(ParameterInfo parameter)
         {
             Parameter = parameter;
+            PrepareMode = ReflectionHelpers.FindAttribute(parameter, ArgumentPrepareAttribute.Default).Mode;
         }
 
         internal ParameterInfo Parameter
@@ -26,6 +28,12 @@ namespace NetRunner.TestExecutionProxy
             {
                 return Parameter.Name;
             }
+        }
+
+        public ArgumentPrepareAttribute.ArgumentPrepareMode PrepareMode
+        {
+            get;
+            private set;
         }
 
         public TypeReference ParameterType
