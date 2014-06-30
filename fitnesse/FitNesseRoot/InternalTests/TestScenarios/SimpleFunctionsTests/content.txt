@@ -16,3 +16,8 @@
 | check | '''string length of ''' | > | '''is''' | 1 |
 | check | '''string length of ''' | & | '''is''' | 1 |
 | check | '''string length of ''' | ''&'' | '''is''' | 1 |
+
+| check | '''raw string length of ''' | < | '''is''' | 4 |
+| check | '''raw string length of ''' | > | '''is''' | 4 |
+| check | '''raw string length of ''' | & | '''is''' | 5 |
+| check | '''raw string length of ''' | ''&'' | '''is''' | 12 |

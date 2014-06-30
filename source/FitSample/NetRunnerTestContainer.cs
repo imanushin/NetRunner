@@ -55,6 +55,11 @@ namespace FitSample
             return inputLine.Length;
         }
 
+        public int RawStringLengthOfIs([ArgumentPrepare(ArgumentPrepareAttribute.ArgumentPrepareMode.RawHtml)] string inputLine)
+        {
+            return inputLine.Length;
+        }
+
         public IEnumerable ListNumbersFromTo(int start, int finish)
         {
             return Enumerable.Range(start, finish - start + 1).Select(i => new

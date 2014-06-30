@@ -38,3 +38,4 @@ using NetRunner.ExternalLibrary;
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
 [assembly: ExcludeDefaultFunctionName(false)]
+[assembly: ArgumentPrepare(ArgumentPrepareAttribute.ArgumentPrepareMode.CleanupHtmlContent)]
