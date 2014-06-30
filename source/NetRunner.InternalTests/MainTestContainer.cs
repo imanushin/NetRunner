@@ -23,7 +23,6 @@ namespace NetRunner.InternalTests
 
         public MainTestContainer()
         {
-            GlobalSettings.TrimAllInputLines = true;
         }
 
         public bool SetFitnessePath(Uri pathToRoot)
@@ -174,5 +173,16 @@ namespace NetRunner.InternalTests
             return TestStatistic.GlobalStatistic.Right > 0;
         }
 
+        [StringTrim]
+        public int TrimmedStringLengthOfIs(string inputData)
+        {
+            return inputData.Length;
+        }
+
+        [StringTrim]
+        public int NonTrimmedStringLengthOfIs([StringTrim(false)] string inputData)
+        {
+            return inputData.Length;
+        }
     }
 }

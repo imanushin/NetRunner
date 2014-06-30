@@ -14,6 +14,13 @@ namespace NetRunner.TestExecutionProxy
         {
             Parameter = parameter;
             PrepareMode = ReflectionHelpers.FindAttribute(parameter, ArgumentPrepareAttribute.Default).Mode;
+            TrimInputCharacters = ReflectionHelpers.FindAttribute(parameter, StringTrimAttribute.Default).TrimInputString;
+        }
+
+        public bool TrimInputCharacters
+        {
+            get;
+            private set;
         }
 
         internal ParameterInfo Parameter

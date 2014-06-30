@@ -22,11 +22,6 @@ namespace NetRunner.TestExecutionProxy
         {
             try
             {
-                if (GlobalSettings.TrimAllInputLines)
-                {
-                    inputData = inputData.Trim();
-                }
-
                 MethodInfo generic = tryParseMethod.MakeGenericMethod(expectedType.TargetType);
 
                 var args = new object[]

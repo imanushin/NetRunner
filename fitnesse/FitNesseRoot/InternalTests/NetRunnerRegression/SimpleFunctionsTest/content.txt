@@ -87,3 +87,8 @@
 | 4 | 1..100 | Contains | is |
 | 1..100 | 1..100 | Contains | class="pass" |
 | 1..100 | 1..100 | Count | 20 |
+
+
+| check | '''Trimmed String Length Of''' | ''   1   '' | '''is''' | 1 |
+
+| check | '''Non Trimmed String Length Of''' | ''   1   '' | '''is''' | 7 |

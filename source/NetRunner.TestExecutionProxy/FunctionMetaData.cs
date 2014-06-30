@@ -104,7 +104,7 @@ namespace NetRunner.TestExecutionProxy
 
             try
             {
-                var result = Method.Invoke(targetObject, parameters.Select(p => TrimStrings(p.Value)).ToArray());
+                var result = Method.Invoke(targetObject, parameters.Select(p => p.Value).ToArray());
 
                 var actualResult = new ExecutionResult(new GeneralIsolatedReference(result));
 
@@ -159,18 +159,6 @@ namespace NetRunner.TestExecutionProxy
         private ExecutionResult Execute(Func<FunctionContainer, MethodInfo, Exception> function)
         {
             return ExecuteHandler(function, Method);
-        }
-
-        private static object TrimStrings(object value)
-        {
-            var strValue = value as string;
-
-            if (GlobalSettings.TrimAllInputLines && strValue != null)
-            {
-                return strValue.Trim();
-            }
-
-            return value;
         }
     }
 }

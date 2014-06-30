@@ -50,10 +50,10 @@
     <Compile Include="ExcludeDefaultFunctionNameAttribute.cs" />
     <Compile Include="FunctionContainer.cs" />
     <Compile Include="GenericParser.cs" />
-    <Compile Include="GlobalSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\ResharperAttributes.cs" />
     <Compile Include="StringParser.cs" />
+    <Compile Include="StringTrimAttribute.cs" />
     <Compile Include="TestStatistic.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
