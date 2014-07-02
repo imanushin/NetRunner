@@ -37,6 +37,14 @@ namespace NetRunner.TestExecutionProxy
             }
         }
 
+        public bool IsOut
+        {
+            get
+            {
+                return Parameter.IsOut;
+            }
+        }
+
         public ArgumentPrepareAttribute.ArgumentPrepareMode PrepareMode
         {
             get;

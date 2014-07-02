@@ -48,7 +48,7 @@ namespace NetRunner.Executable.Invokation.Keywords
         {
             if (parsingErrors.Any())
             {
-                return new InvokationResult(null, new TableChangeCollection(false, true, parsingErrors));
+                return InvokationResult.CreateErrorResult(new TableChangeCollection(false, true, parsingErrors));
             }
 
             var result = base.InvokeFunction(func, targetFunction);

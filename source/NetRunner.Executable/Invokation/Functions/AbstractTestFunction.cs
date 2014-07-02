@@ -57,7 +57,7 @@ namespace NetRunner.Executable.Invokation.Functions
 
             if (conversionErrors.Any())
             {
-                return new InvokationResult(null, new TableChangeCollection(false, true, conversionErrors));
+                return InvokationResult.CreateErrorResult(new TableChangeCollection(false, true, conversionErrors));
             }
 
             var result = functionReference.Invoke(actualTypes);
@@ -71,7 +71,7 @@ namespace NetRunner.Executable.Invokation.Functions
                     functionReference.DisplayName,
                     result.ExceptionType);
 
-                return new InvokationResult(null, new TableChangeCollection(false, true, errorData));
+                return InvokationResult.CreateErrorResult(new TableChangeCollection(false, true, errorData));
             }
 
             return new InvokationResult(result.Result);

@@ -43,7 +43,7 @@ namespace NetRunner.Executable.Invokation
 
                 var parserNotFound = new AddCellExpandableInfo(inputData, conversionErrorHeader, string.Format("Unable to find parser for type {0}. Parsers available: {1}", expectedType, ReflectionLoader.Parsers));
 
-                return new InvokationResult(null, new TableChangeCollection(false, true, parserNotFound, errorCellMark));
+                return InvokationResult.CreateErrorResult(new TableChangeCollection(false, true, parserNotFound, errorCellMark));
             }
 
             var foundParserResult = ParseData(cellInfo, conversionErrorHeader, parser);
@@ -53,7 +53,7 @@ namespace NetRunner.Executable.Invokation
 
             var noParserCellChange = new AddCellExpandableInfo(inputData, conversionErrorHeader, string.Format("Internal error: Object {0} parsed type {1} earlier however it could not do this now.", parser, expectedType));
 
-            return new InvokationResult(null, new TableChangeCollection(false, true, noParserCellChange, errorCellMark));
+            return InvokationResult.CreateErrorResult(new TableChangeCollection(false, true, noParserCellChange, errorCellMark));
         }
 
         [CanBeNull]
@@ -72,7 +72,7 @@ namespace NetRunner.Executable.Invokation
                 {
                     var cellChange = new AddCellExpandableException(inputData, result, conversionErrorHeader);
 
-                    return new InvokationResult(null, new TableChangeCollection(false, true, cellChange));
+                    return InvokationResult.CreateErrorResult(new TableChangeCollection(false, true, cellChange));
                 }
 
                 if (parseSucceeded)
@@ -86,7 +86,7 @@ namespace NetRunner.Executable.Invokation
             {
                 var cellChange = new AddCellExpandableException(inputData, ex.InnerException, conversionErrorHeader);
 
-                return new InvokationResult(null, new TableChangeCollection(false, true, cellChange));
+                return InvokationResult.CreateErrorResult(new TableChangeCollection(false, true, cellChange));
             }
             return null;
         }

@@ -50,3 +50,18 @@
 | '''folder name''' |
 | test 2 |
 
+!note save and load settings
+| '''Check Settings''' |
+| '''name''' | '''In Value''' |
+| ''test 1'' | 1 |
+| ''test 2'' | 2 |
+
+| '''Check Settings''' |
+| '''name''' | '''Out Value''' |
+| ''test 1'' | 1 |
+| ''test 2'' | 2 |
+
+| '''Check Settings''' |
+| '''name''' | '''Out Value''' |
+| ''test 1'' | 1 |
+| ''test 2'' | 3 |

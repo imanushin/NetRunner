@@ -88,6 +88,7 @@ namespace NetRunner.Executable.Invokation
             Trace.TraceInformation("All available functions: {0}", functions.JoinToStringLazy(Environment.NewLine));
 
             TrueResult = reflectionInvoker.CreateOnTestDomain(true);
+            NullResult = reflectionInvoker.CreateOnTestDomain<object>(null);
             FalseResult = reflectionInvoker.CreateOnTestDomain(false);
             EnumerableType = reflectionInvoker.CreateTypeOnTestDomain(typeof(IEnumerable));
             TableArgumentType = reflectionInvoker.CreateTypeOnTestDomain(typeof(BaseTableArgument));
@@ -267,6 +268,12 @@ namespace NetRunner.Executable.Invokation
         }
 
         public static TypeReference TableArgumentType
+        {
+            get;
+            private set;
+        }
+
+        public static GeneralIsolatedReference NullResult
         {
             get;
             private set;
