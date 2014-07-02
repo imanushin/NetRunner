@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using NetRunner.Executable.Properties;
+using NetRunner.ExternalLibrary.Properties;
 
 namespace NetRunner.Executable
 {
@@ -46,7 +47,7 @@ namespace NetRunner.Executable
 
             if (string.Equals(assemblyName, "NetRunner.TestExecutionProxy", StringComparison.OrdinalIgnoreCase))
             {
-                return Assembly.Load(Resources.NetRunner_TestExecutionProxy);
+                return Assembly.Load(Resources.NetRunner_TestExecutionProxy, Resources.NetRunner_TestExecutionProxyPdb);
             }
 
             return null;

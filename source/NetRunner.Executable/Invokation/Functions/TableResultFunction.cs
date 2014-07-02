@@ -26,16 +26,13 @@ namespace NetRunner.Executable.Invokation.Functions
         {
             var tableResult = mainFunctionResult.AsTableResultReference();
 
-            var changes = new List<AbstractTableChange>();
+            var changes = new SequenceExecutionStatus();
 
             var functionExecutionResult = CheckTableFunctionResult(mainFunctionResult, tableResult, changes);
 
             if (functionExecutionResult != null)
                 return functionExecutionResult;
-
-            bool allIsOk = true;
-            bool exceptionsOccurred = false;
-
+            
             var functionToExecute = ReflectionLoader.FindFunction(CleanedColumnNames, tableResult);
 
             if (functionToExecute == null)
@@ -45,9 +42,6 @@ namespace NetRunner.Executable.Invokation.Functions
 
             var notificationResult = tableResult.ExecuteBeforeAllFunctionsCallMethod(functionToExecute.Method);
 
-            allIsOk &= !notificationResult.HasError;
-            exceptionsOccurred |= notificationResult.HasError;
-
             AddExceptionLineIfNeeded(notificationResult, changes);
 
             foreach (var row in Rows)
@@ -56,44 +50,42 @@ namespace NetRunner.Executable.Invokation.Functions
                     functionToExecute,
                     row.Cells.First(),
                     row.Cells);
+                
+                CompareOutParameters(rowResult, row, functionToExecute, changes);
 
-                changes.AddRange(rowResult.Changes.Changes);
-
-                changes.AddRange(CompareOutParameters(rowResult, row, functionToExecute));
-
-                if (rowResult.Changes.WereExceptions)
-                {
-                    changes.Add(new AddRowCssClass(row.RowReference, HtmlParser.ErrorCssClass));
-
-                    exceptionsOccurred = true;
-                }
-
-                if (ReflectionLoader.FalseResult.Equals(rowResult.Result))
-                {
-                    changes.Add(new AddRowCssClass(row.RowReference, HtmlParser.FailCssClass));
-
-                    allIsOk = false;
-                }
-                else if (ReflectionLoader.TrueResult.Equals(rowResult.Result))
-                {
-                    changes.Add(new AddRowCssClass(row.RowReference, HtmlParser.PassCssClass));
-                }
+                AnalyseResult(rowResult, changes, row);
             }
 
             notificationResult = tableResult.ExecuteAfterAllFunctionsCallMethod(functionToExecute.Method);
-
-            allIsOk &= !notificationResult.HasError;
-            exceptionsOccurred |= notificationResult.HasError;
-
+            
             AddExceptionLineIfNeeded(notificationResult, changes);
 
-            return FormatResult(exceptionsOccurred, allIsOk, changes);
+            return FormatResult(changes);
         }
 
-        private IEnumerable<AbstractTableChange> CompareOutParameters(InvokationResult rowResult, HtmlRow row, TestFunctionReference functionToExecute)
+        private static void AnalyseResult(InvokationResult rowResult, SequenceExecutionStatus changes, HtmlRow row)
         {
-            var changes = new List<AbstractTableChange>();
+            changes.MergeWith(rowResult.Changes);
 
+            if (rowResult.Changes.WereExceptions)
+            {
+                changes.Changes.Add(new AddRowCssClass(row.RowReference, HtmlParser.ErrorCssClass));
+            }
+
+            if (ReflectionLoader.FalseResult.Equals(rowResult.Result))
+            {
+                changes.Changes.Add(new AddRowCssClass(row.RowReference, HtmlParser.FailCssClass));
+
+                changes.AllIsOk = false;
+            }
+            else if (ReflectionLoader.TrueResult.Equals(rowResult.Result))
+            {
+                changes.Changes.Add(new AddRowCssClass(row.RowReference, HtmlParser.PassCssClass));
+            }
+        }
+
+        private void CompareOutParameters(InvokationResult rowResult, HtmlRow row, TestFunctionReference functionToExecute, SequenceExecutionStatus changes)
+        {
             foreach (var outParameter in rowResult.OutParametersResult)
             {
                 var outParameterIndex = CleanedColumnNames.IndexOf(outParameter.Name, StringComparer.OrdinalIgnoreCase);
@@ -105,85 +97,63 @@ namespace NetRunner.Executable.Invokation.Functions
 
                 var targetCell = row.Cells[outParameterIndex.Value];
 
-                var targetParameter = functionToExecute.Method.GetParameter(outParameter.Name);
-
-                var cellInfo = new CellParsingInfo(targetParameter, targetCell);
-
-                const string conversionErrorHeader = "Unable to convert value";
-
-                var comparisonResult = ParametersConverter.ConvertParameter(cellInfo, conversionErrorHeader);
-
-                changes.AddRange(comparisonResult.Changes.Changes);
-
-                if (!comparisonResult.Changes.AllWasOk)
-                {
-                    continue;
-                }
-
-                if (comparisonResult.Result.Equals(outParameter.Value))
-                {
-                    changes.Add(new CssClassCellChange(targetCell, HtmlParser.PassCssClass));
-                }
-                else
-                {
-                    changes.Add(new ShowActualValueCellChange(targetCell, outParameter.Value.ToString()));
-                }
+                CheckOutParameter(functionToExecute, changes, outParameter, targetCell);
             }
-
-            return changes;
         }
 
-        private FunctionExecutionResult FormatFunctionNotFoundMesage(List<AbstractTableChange> changes)
+        private FunctionExecutionResult FormatFunctionNotFoundMesage(SequenceExecutionStatus changes)
         {
-            changes.Add(new ExecutionFailedMessage(
+            changes.Changes.Add(new ExecutionFailedMessage(
                 ColumnsRow.RowReference,
                 string.Format("Unable to find function with these parameters: {0}", CleanedColumnNames),
                 "Unable to find function"));
 
-            changes.Add(new AddRowCssClass(ColumnsRow.RowReference, HtmlParser.FailCssClass));
+            changes.Changes.Add(new AddRowCssClass(ColumnsRow.RowReference, HtmlParser.FailCssClass));
 
-            return FormatResult(false, false, changes);
+            return FormatResult(changes);
         }
 
-        private void AddExceptionLineIfNeeded(ExecutionResult notificationException, List<AbstractTableChange> changes)
+        private void AddExceptionLineIfNeeded(ExecutionResult notificationException, SequenceExecutionStatus changes)
         {
+            changes.MergeWith(notificationException);
+
             if (!notificationException.HasError)
             {
                 return;
             }
 
-            changes.Add(new ExecutionFailedMessage(
+            changes.Changes.Add(new ExecutionFailedMessage(
                 ColumnsRow.RowReference,
                 string.Format("Exception during handler invokation: {0}", notificationException.ExceptionType),
                 "Argument handler executed with error: {0}",
                 notificationException.ExceptionToString));
 
-            changes.Add(new AddRowCssClass(ColumnsRow.RowReference, HtmlParser.ErrorCssClass));
+            changes.Changes.Add(new AddRowCssClass(ColumnsRow.RowReference, HtmlParser.ErrorCssClass));
         }
 
         [CanBeNull]
-        private FunctionExecutionResult CheckTableFunctionResult(GeneralIsolatedReference mainFunctionResult, TableResultReference tableResult, List<AbstractTableChange> changes)
+        private FunctionExecutionResult CheckTableFunctionResult(GeneralIsolatedReference mainFunctionResult, TableResultReference tableResult, SequenceExecutionStatus changes)
         {
             if (tableResult.IsNull)
             {
                 if (mainFunctionResult.IsNull)
                 {
-                    changes.Add(new ExecutionFailedMessage(
+                    changes.Changes.Add(new ExecutionFailedMessage(
                         Function.RowReference,
                         string.Format("Unable to check table: function '{0}' return null", Function.FunctionName),
                         "Unable to build table"));
                 }
                 else
                 {
-                    changes.Add(new ExecutionFailedMessage(
+                    changes.Changes.Add(new ExecutionFailedMessage(
                         Function.RowReference,
                         string.Format("Unable to check table: function '{0}' return object '{1}' instead of '{2}'", Function.FunctionName, mainFunctionResult.GetType(), typeof(BaseTableArgument)),
                         "Unable to build table"));
                 }
 
-                changes.Add(new AddRowCssClass(Function.RowReference, HtmlParser.FailCssClass));
+                changes.Changes.Add(new AddRowCssClass(Function.RowReference, HtmlParser.FailCssClass));
 
-                return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Fail, changes);
+                return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Fail, changes.Changes);
             }
 
             return null;

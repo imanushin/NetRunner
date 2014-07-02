@@ -18,9 +18,14 @@ namespace NetRunner.Executable.Invokation
         private readonly bool trimInputCharacters;
 
         public CellParsingInfo(ParameterInfoReference parameter, HtmlCell targetCell)
-            : this(targetCell, parameter.ParameterType, parameter.PrepareMode, parameter.TrimInputCharacters)
+            : this(targetCell, ClearReferenceFlag(parameter), parameter.PrepareMode, parameter.TrimInputCharacters)
         {
 
+        }
+
+        private static TypeReference ClearReferenceFlag(ParameterInfoReference parameter)
+        {
+            return parameter.IsOut ? parameter.ParameterType.GetElementType() : parameter.ParameterType;
         }
 
         public CellParsingInfo(

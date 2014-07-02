@@ -73,10 +73,7 @@ namespace NetRunner.Executable.Invokation.Functions
 
             var orderedResult = collectionResult.ToArray();
 
-            var allRight = true;
-            var exceptionOccurred = false;
-
-            var tableChanges = new List<AbstractTableChange>();
+            var tableChanges = new SequenceExecutionStatus();
 
             for (int rowIndex = 0; rowIndex < orderedResult.Length && rowIndex < Rows.Count; rowIndex++)
             {
@@ -90,10 +87,7 @@ namespace NetRunner.Executable.Invokation.Functions
 
                     var changes = CompareItems(resultObject, expectedResult, CleanedColumnNames[columnIndex]);
 
-                    tableChanges.AddRange(changes.Changes);
-
-                    allRight &= changes.AllWasOk;
-                    exceptionOccurred |= changes.WereExceptions;
+                    tableChanges.MergeWith(changes);
                 }
             }
 
@@ -103,9 +97,9 @@ namespace NetRunner.Executable.Invokation.Functions
 
                 var cells = currentRow.Cells.Select(c => c.CleanedContent + "<br/> <i class=\"code\">missing</i>").ToReadOnlyList();
 
-                tableChanges.Add(new AppendRowWithCells(HtmlParser.FailCssClass, cells));
+                tableChanges.Changes.Add(new AppendRowWithCells(HtmlParser.FailCssClass, cells));
 
-                allRight = false;
+                tableChanges.AllIsOk = false;
             }
 
             for (int rowIndex = Rows.Count; rowIndex < orderedResult.Length; rowIndex++)
@@ -114,12 +108,12 @@ namespace NetRunner.Executable.Invokation.Functions
 
                 var cells = CleanedColumnNames.Select(name => ReadProperty(name, resultObject) + "<br/> <i class=\"code\">surplus</i>").ToReadOnlyList();
 
-                tableChanges.Add(new AppendRowWithCells(HtmlParser.FailCssClass, cells));
+                tableChanges.Changes.Add(new AppendRowWithCells(HtmlParser.FailCssClass, cells));
 
-                allRight = false;
+                tableChanges.AllIsOk = false;
             }
 
-            return FormatResult(exceptionOccurred, allRight, tableChanges);
+            return FormatResult(tableChanges);
         }
 
         private static string ReadProperty(string propertyName, IsolatedReference<object> resultObject)

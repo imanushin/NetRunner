@@ -51,7 +51,6 @@ namespace NetRunner.Executable.Invokation.Functions
             private set;
         }
 
-
         protected override IEnumerable<object> GetInnerObjects()
         {
             yield return AllWasOk;

@@ -161,21 +161,21 @@ namespace NetRunner.Executable.Invokation.Functions
             return null;
         }
 
-        protected FunctionExecutionResult FormatResult(bool exceptionsOccurred, bool allIsOk, IEnumerable<AbstractTableChange> changes)
+        protected FunctionExecutionResult FormatResult(SequenceExecutionStatus changes)
         {
-            var resultType = exceptionsOccurred
+            var resultType = changes.WereExceptions
                 ? FunctionExecutionResult.FunctionRunResult.Exception
-                : (allIsOk
+                : (changes.AllIsOk
                     ? FunctionExecutionResult.FunctionRunResult.Success
                     : FunctionExecutionResult.FunctionRunResult.Fail);
 
-            var innerChanges = changes.ToList();
+            var innerChanges = changes.Changes;
 
-            if (exceptionsOccurred)
+            if (changes.WereExceptions)
             {
                 innerChanges.Add(new AddRowCssClass(Function.RowReference, HtmlParser.ErrorCssClass));
             }
-            else if (allIsOk)
+            else if (changes.AllIsOk)
             {
                 innerChanges.Add(new AddRowCssClass(Function.RowReference, HtmlParser.PassCssClass));
             }

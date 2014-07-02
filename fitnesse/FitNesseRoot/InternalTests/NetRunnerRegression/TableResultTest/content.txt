@@ -9,8 +9,8 @@
 
 | '''Current Test Results''' |
 | '''Type''' | '''Count''' |
-| right | 3 |
-| wrong | 3 |
+| right | 5 |
+| wrong | 4 |
 | ignores | 0 |
 | exceptions | 3 |
 
@@ -126,3 +126,37 @@
 | 1..100 | 1..100 | Count | 4 |
 
 
+
+| check | '''Row Count Of Table''' | 10 | '''is''' | 4 | 
+
+| '''Analyse Table''' | 10 |
+| '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
+| 1 | 1 | Contains | Check Settings |
+| 1 | 1 | Contains | class="pass" |
+| 1..100 | 2..100 | Not Contain | class="pass" |
+| 1..100 | 1..100 | Count | 7 |
+
+
+| check | '''Row Count Of Table''' | 11 | '''is''' | 4 | 
+
+| '''Analyse Table''' | 11 |
+| '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
+| 1 | 1 | Contains | Check Settings |
+| 1 | 1 | Contains | class="pass" |
+| 1..100 | 2 | Not Contain | class="pass" |
+| 1 | 2..4 | Not Contain | class="pass" |
+| 2 | 3..4 | Contains | class="pass" |
+| 1..100 | 1..100 | Count | 7 |
+
+
+| check | '''Row Count Of Table''' | 11 | '''is''' | 4 | 
+
+| '''Analyse Table''' | 12 |
+| '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
+| 1 | 1 | Contains | Check Settings |
+| 1 | 1 | Contains | class="fail" |
+| 1..100 | 2 | Not Contain | class="pass" |
+| 1 | 2..4 | Not Contain | class="pass" |
+| 2 | 3 | Contains | class="pass" |
+| 2 | 4 | Contains | class="fail" |
+| 1..100 | 1..100 | Count | 7 |

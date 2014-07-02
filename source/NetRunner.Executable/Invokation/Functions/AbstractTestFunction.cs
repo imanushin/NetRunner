@@ -85,5 +85,33 @@ namespace NetRunner.Executable.Invokation.Functions
         }
 
         public abstract ReadOnlyList<TestFunctionReference> GetInnerFunctions();
+
+        protected static void CheckOutParameter(TestFunctionReference functionToExecute, SequenceExecutionStatus changes, ParameterData outParameter, HtmlCell targetCell)
+        {
+            var targetParameter = functionToExecute.Method.GetParameter(outParameter.Name);
+
+            var cellInfo = new CellParsingInfo(targetParameter, targetCell);
+
+            const string conversionErrorHeader = "Unable to convert value";
+
+            var parsedValue = ParametersConverter.ConvertParameter(cellInfo, conversionErrorHeader);
+
+            changes.MergeWith(parsedValue.Changes);
+
+            if (!parsedValue.Changes.AllWasOk)
+            {
+                return;
+            }
+
+            if (parsedValue.Result.Equals(outParameter.Value))
+            {
+                changes.Changes.Add(new CssClassCellChange(targetCell, HtmlParser.PassCssClass));
+            }
+            else
+            {
+                changes.Changes.Add(new ShowActualValueCellChange(targetCell, outParameter.Value.ToString()));
+                changes.AllIsOk = false;
+            }
+        }
     }
 }
