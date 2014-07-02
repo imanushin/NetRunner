@@ -79,7 +79,7 @@ namespace NetRunner.Executable.Invokation
                 {
                     parsers[expectedType] = baseParser;
 
-                    return new InvokationResult(result.Result);
+                    return InvokationResult.CreateSuccessResult(result);
                 }
             }
             catch (TargetInvocationException ex)

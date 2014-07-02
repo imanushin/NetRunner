@@ -14,7 +14,7 @@ namespace NetRunner.Executable.Invokation.Functions
         private InvokationResult(
             [NotNull]GeneralIsolatedReference result,
             [NotNull]TableChangeCollection changes,
-            [NotNull]IEnumerable<Tuple<string, GeneralIsolatedReference>> outParametersResult)
+            [NotNull]IEnumerable<ParameterData> outParametersResult)
         {
             Validate.ArgumentIsNotNull(result, "result");
             Validate.ArgumentIsNotNull(changes, "changes");
@@ -26,17 +26,12 @@ namespace NetRunner.Executable.Invokation.Functions
         }
 
         public InvokationResult(GeneralIsolatedReference result, [NotNull]TableChangeCollection changes)
-            : this(result, changes, ReadOnlyList<Tuple<string, GeneralIsolatedReference>>.Empty)
+            : this(result, changes, ReadOnlyList<ParameterData>.Empty)
         {
         }
 
         public InvokationResult(GeneralIsolatedReference result)
-            : this(result, TableChangeCollection.AllIsOkNoChanges, ReadOnlyList<Tuple<string, GeneralIsolatedReference>>.Empty)
-        {
-        }
-
-        public InvokationResult(GeneralIsolatedReference result, IEnumerable<Tuple<string, GeneralIsolatedReference>> outParametersResult)
-            : this(result, TableChangeCollection.AllIsOkNoChanges, outParametersResult)
+            : this(result, TableChangeCollection.AllIsOkNoChanges, ReadOnlyList<ParameterData>.Empty)
         {
         }
 
@@ -52,15 +47,20 @@ namespace NetRunner.Executable.Invokation.Functions
             private set;
         }
 
-        public ReadOnlyList<Tuple<string, GeneralIsolatedReference>> OutParametersResult
+        public ReadOnlyList<ParameterData> OutParametersResult
         {
             get;
             private set;
         }
 
+        public static InvokationResult CreateSuccessResult(ExecutionResult result)
+        {
+            return new InvokationResult(result.Result, TableChangeCollection.AllIsOkNoChanges, result.OutParameters);
+        }
+
         public static InvokationResult CreateErrorResult(TableChangeCollection changes)
         {
-            return new InvokationResult(ReflectionLoader.NullResult, changes, ReadOnlyList<Tuple<string, GeneralIsolatedReference>>.Empty);
+            return new InvokationResult(ReflectionLoader.NullResult, changes, ReadOnlyList<ParameterData>.Empty);
         }
     }
 }

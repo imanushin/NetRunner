@@ -40,14 +40,7 @@ namespace NetRunner.Executable.Invokation.Functions
 
             if (functionToExecute == null)
             {
-                changes.Add(new ExecutionFailedMessage(
-                    ColumnsRow.RowReference,
-                    string.Format("Unable to find function with these parameters: {0}", CleanedColumnNames),
-                    "Unable to find function"));
-
-                changes.Add(new AddRowCssClass(ColumnsRow.RowReference, HtmlParser.FailCssClass));
-
-                return FormatResult(false, false, changes);
+                return FormatFunctionNotFoundMesage(changes);
             }
 
             var notificationResult = tableResult.ExecuteBeforeAllFunctionsCallMethod(functionToExecute.Method);
@@ -56,7 +49,7 @@ namespace NetRunner.Executable.Invokation.Functions
             exceptionsOccurred |= notificationResult.HasError;
 
             AddExceptionLineIfNeeded(notificationResult, changes);
-            
+
             foreach (var row in Rows)
             {
                 var rowResult = InvokeFunction(
@@ -65,6 +58,8 @@ namespace NetRunner.Executable.Invokation.Functions
                     row.Cells);
 
                 changes.AddRange(rowResult.Changes.Changes);
+
+                changes.AddRange(CompareOutParameters(rowResult, row, functionToExecute));
 
                 if (rowResult.Changes.WereExceptions)
                 {
@@ -93,6 +88,61 @@ namespace NetRunner.Executable.Invokation.Functions
             AddExceptionLineIfNeeded(notificationResult, changes);
 
             return FormatResult(exceptionsOccurred, allIsOk, changes);
+        }
+
+        private IEnumerable<AbstractTableChange> CompareOutParameters(InvokationResult rowResult, HtmlRow row, TestFunctionReference functionToExecute)
+        {
+            var changes = new List<AbstractTableChange>();
+
+            foreach (var outParameter in rowResult.OutParametersResult)
+            {
+                var outParameterIndex = CleanedColumnNames.IndexOf(outParameter.Name, StringComparer.OrdinalIgnoreCase);
+
+                if (!outParameterIndex.HasValue)
+                {
+                    continue;
+                }
+
+                var targetCell = row.Cells[outParameterIndex.Value];
+
+                var targetParameter = functionToExecute.Method.GetParameter(outParameter.Name);
+
+                var cellInfo = new CellParsingInfo(targetParameter, targetCell);
+
+                const string conversionErrorHeader = "Unable to convert value";
+
+                var comparisonResult = ParametersConverter.ConvertParameter(cellInfo, conversionErrorHeader);
+
+                changes.AddRange(comparisonResult.Changes.Changes);
+
+                if (!comparisonResult.Changes.AllWasOk)
+                {
+                    continue;
+                }
+
+                if (comparisonResult.Result.Equals(outParameter.Value))
+                {
+                    changes.Add(new CssClassCellChange(targetCell, HtmlParser.PassCssClass));
+                }
+                else
+                {
+                    changes.Add(new ShowActualValueCellChange(targetCell, outParameter.Value.ToString()));
+                }
+            }
+
+            return changes;
+        }
+
+        private FunctionExecutionResult FormatFunctionNotFoundMesage(List<AbstractTableChange> changes)
+        {
+            changes.Add(new ExecutionFailedMessage(
+                ColumnsRow.RowReference,
+                string.Format("Unable to find function with these parameters: {0}", CleanedColumnNames),
+                "Unable to find function"));
+
+            changes.Add(new AddRowCssClass(ColumnsRow.RowReference, HtmlParser.FailCssClass));
+
+            return FormatResult(false, false, changes);
         }
 
         private void AddExceptionLineIfNeeded(ExecutionResult notificationException, List<AbstractTableChange> changes)

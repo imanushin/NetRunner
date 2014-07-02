@@ -12,7 +12,7 @@ namespace NetRunner.TestExecutionProxy
     {
         public static readonly ExecutionResult Empty = new ExecutionResult(GeneralIsolatedReference.Empty, new ParameterData[0]);
 
-        internal ExecutionResult([CanBeNull]GeneralIsolatedReference result, IEnumerable<ParameterData> outParameters)
+        internal ExecutionResult([NotNull]GeneralIsolatedReference result, IEnumerable<ParameterData> outParameters)
         {
             Result = result;
             OutParameters = outParameters.ToArray();
@@ -25,13 +25,14 @@ namespace NetRunner.TestExecutionProxy
             ExceptionToString = exceptionToString;
         }
 
-        [CanBeNull]
+        [NotNull]
         public GeneralIsolatedReference Result
         {
             get;
             private set;
         }
 
+        [NotNull]
         public ParameterData[] OutParameters
         {
             get;

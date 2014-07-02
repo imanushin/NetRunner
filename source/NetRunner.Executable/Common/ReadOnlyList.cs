@@ -2,17 +2,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics.Contracts;
 using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NetRunner.Executable.Invokation.Functions;
+using NetRunner.ExternalLibrary.Properties;
 
 namespace NetRunner.Executable.Common
 {
     [ImmutableObject(true)]
-    [Pure]
+    [System.Diagnostics.Contracts.Pure]
     internal sealed class ReadOnlyList<TValue> : BaseReadOnlyObject, IReadOnlyCollection<TValue>
     {
         private readonly TValue[] innerValues;
@@ -108,6 +108,21 @@ namespace NetRunner.Executable.Common
             {
                 action(innerValue);
             }
+        }
+
+        public int? IndexOf(TValue expectedValue, [NotNull] IEqualityComparer<TValue> comparer)
+        {
+            Validate.ArgumentIsNotNull(comparer, "comparer");
+
+            for (int i = 0; i < Count; i++)
+            {
+                if (comparer.Equals(expectedValue, this[i]))
+                {
+                    return i;
+                }
+            }
+
+            return null;
         }
     }
 }

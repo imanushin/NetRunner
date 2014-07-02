@@ -213,5 +213,18 @@ namespace NetRunner.TestExecutionProxy
         {
             return ExecuteHandler(function, Method);
         }
+
+        public ParameterInfoReference GetParameter(string name)
+        {
+            var result = Method.GetParameters()
+                .Where(p => string.Equals(name, p.Name, StringComparison.OrdinalIgnoreCase))
+                .Select(p => new ParameterInfoReference(p))
+                .FirstOrDefault();
+
+            if(result == null)
+                throw new InvalidOperationException(string.Format("Unable to find parameter {0} of method {1}", name, Method));
+
+            return result;
+        }
     }
 }

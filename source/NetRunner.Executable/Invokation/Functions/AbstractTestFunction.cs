@@ -81,7 +81,7 @@ namespace NetRunner.Executable.Invokation.Functions
                 return InvokationResult.CreateErrorResult(new TableChangeCollection(false, true, errorData));
             }
 
-            return new InvokationResult(result.Result);
+            return InvokationResult.CreateSuccessResult(result);
         }
 
         public abstract ReadOnlyList<TestFunctionReference> GetInnerFunctions();
