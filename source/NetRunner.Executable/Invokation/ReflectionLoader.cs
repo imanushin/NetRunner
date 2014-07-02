@@ -19,7 +19,6 @@ namespace NetRunner.Executable.Invokation
 {
     internal static class ReflectionLoader
     {
-        private static readonly Type testContainerType = typeof(BaseTestContainer);
         private static readonly Type reflectionInvokerType = typeof(ReflectionInvoker);
 
         private static AppDomain currentTestDomain;

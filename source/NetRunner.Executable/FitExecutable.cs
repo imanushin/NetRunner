@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using NetRunner.Executable.Common;
@@ -13,6 +15,8 @@ namespace NetRunner.Executable
 {
     internal static class FitExecutable
     {
+        private const string netRunnerExternallibrary = "NetRunner.ExternalLibrary";
+
         internal static void Execute(ApplicationSettings settings)
         {
             using (var communicator = new FitnesseCommunicator(settings.Host, settings.Port, settings.SocketToken))
@@ -23,10 +27,32 @@ namespace NetRunner.Executable
 
         private static void ProcessTestDocuments(FitnesseCommunicator communicator, string assemblylist)
         {
-            ReflectionLoader.AddAssemblies(assemblylist.Split(new[]
+            var assemblyPathes = assemblylist.Split(new[]
             {
                 ','
-            }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim()).ToReadOnlyList());
+            }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim()).ToReadOnlyList();
+
+            AppDomain.CurrentDomain.AssemblyResolve += (sender, args) =>
+            {
+                var assemblyName = new AssemblyName(args.Name).Name;
+
+                if (!string.Equals(assemblyName, netRunnerExternallibrary, StringComparison.Ordinal))
+                    return null;
+
+                var externalLibraryFile = assemblyPathes
+                    .Select(Path.GetDirectoryName)
+                    .Select(d => Path.Combine(d, netRunnerExternallibrary + ".dll"))
+                    .FirstOrDefault(File.Exists);
+
+                if (string.IsNullOrEmpty(externalLibraryFile))
+                {
+                    return null;
+                }
+
+                return Assembly.LoadFrom(externalLibraryFile);
+            };
+
+            ReflectionLoader.AddAssemblies(assemblyPathes);
 
             ReflectionLoader.CreateNewApplicationDomain();
 
