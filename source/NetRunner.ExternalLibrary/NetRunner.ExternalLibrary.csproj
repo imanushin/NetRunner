@@ -36,6 +36,9 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="AdditionalFunctionNameAttribute.cs" />
     <Compile Include="ArgumentPrepareAttribute.cs" />
     <Compile Include="BaseDictionaryParser.cs" />

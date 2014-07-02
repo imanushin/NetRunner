@@ -44,6 +44,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="DomainCheckContainer.cs" />
     <Compile Include="IndexRange.cs" />
     <Compile Include="MainTestContainer.cs" />
