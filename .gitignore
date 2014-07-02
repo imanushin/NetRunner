@@ -41,3 +41,4 @@ document/FitnesseRoot/files/testResults/
 /binary/testBuild
 /binary/tools/TestsGenerator/HtmlAgilityPack.xml
 /binary/tempBuild
+/NuGet/InstallTests/packages
