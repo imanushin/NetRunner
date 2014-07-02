@@ -50,10 +50,8 @@ namespace NetRunner.Executable.Invokation.Functions
                     functionToExecute,
                     row.Cells.First(),
                     row.Cells);
-                
-                CompareOutParameters(rowResult, row, functionToExecute, changes);
 
-                AnalyseResult(rowResult, changes, row);
+                AnalyseResult(rowResult, changes, row, functionToExecute);
             }
 
             notificationResult = tableResult.ExecuteAfterAllFunctionsCallMethod(functionToExecute.Method);
@@ -63,7 +61,7 @@ namespace NetRunner.Executable.Invokation.Functions
             return FormatResult(changes);
         }
 
-        private static void AnalyseResult(InvokationResult rowResult, SequenceExecutionStatus changes, HtmlRow row)
+        private void AnalyseResult(InvokationResult rowResult, SequenceExecutionStatus changes, HtmlRow row, TestFunctionReference functionToExecute)
         {
             changes.MergeWith(rowResult.Changes);
 
@@ -82,6 +80,8 @@ namespace NetRunner.Executable.Invokation.Functions
             {
                 changes.Changes.Add(new AddRowCssClass(row.RowReference, HtmlParser.PassCssClass));
             }
+
+            CompareOutParameters(rowResult, row, functionToExecute, changes);
         }
 
         private void CompareOutParameters(InvokationResult rowResult, HtmlRow row, TestFunctionReference functionToExecute, SequenceExecutionStatus changes)
