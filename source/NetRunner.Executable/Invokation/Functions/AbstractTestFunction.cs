@@ -34,23 +34,30 @@ namespace NetRunner.Executable.Invokation.Functions
             Validate.ArgumentIsNotNull(inputArguments, "inputArguments");
 
             var expectedTypes = functionReference.ArgumentTypes;
-            var actualTypes = new GeneralIsolatedReference[expectedTypes.Count];
+            var actualTypes = new List<ParameterData>();
 
             var conversionErrors = new List<AbstractTableChange>();
 
             for (int i = 0; i < expectedTypes.Count; i++)
             {
                 var inputArgument = inputArguments[i];
+                var parameterInfo = expectedTypes[i];
 
+                if (parameterInfo.IsOut)
+                {
+                    continue;
+                }
                 var conversionErrorHeader = string.Format(
                     "Unable to convert value '{2}' of parameter '{0}' of function '{1}'",
-                    functionReference.ArgumentTypes[i].Name,
+                    parameterInfo.Name,
                     functionReference.DisplayName,
                     inputArgument.CleanedContent);
 
-                var cellInfo = new CellParsingInfo(expectedTypes[i], inputArgument);
+                var cellInfo = new CellParsingInfo(parameterInfo, inputArgument);
                 var conversionResult = ParametersConverter.ConvertParameter(cellInfo, conversionErrorHeader);
-                actualTypes[i] = conversionResult.Result;
+                var parameterData = new ParameterData(parameterInfo.Name, conversionResult.Result);
+
+                actualTypes.Add(parameterData);
 
                 conversionErrors.AddRange(conversionResult.Changes.Changes);
             }

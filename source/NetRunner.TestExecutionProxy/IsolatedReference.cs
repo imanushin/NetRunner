@@ -40,38 +40,7 @@ namespace NetRunner.TestExecutionProxy
 
             return enumerable.Cast<object>().Select(o => new IsolatedReference<object>(o)).ToArray();
         }
-
-
-        public ExecutionResult ExecuteMethod<TResult>(Func<TType, TResult> method)
-        {
-            try
-            {
-                var result = method(Value);
-
-                return new ExecutionResult(new IsolatedReference<object>(result));
-            }
-            catch (Exception ex)
-            {
-                return ExecutionResult.FromException(ex);
-            }
-        }
-
-        public ExecutionResult ExecuteMethod(string methodName, string displayName)
-        {
-            try
-            {
-                var targetMethod = Value.GetType().GetMethod(methodName);
-
-                var result = targetMethod.Invoke(Value, new object[] { displayName });
-
-                return new ExecutionResult(new IsolatedReference<object>(result));
-            }
-            catch (Exception ex)
-            {
-                return ExecutionResult.FromException(ex);
-            }
-        }
-
+        
         private Type ValueType
         {
             get

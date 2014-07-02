@@ -94,7 +94,7 @@ namespace NetRunner.TestExecutionProxy
         }
 
         [NotNull]
-        public ExecutionResult Invoke(GeneralIsolatedReference[] parameters)
+        public ExecutionResult Invoke(ParameterData[] parameters)
         {
             var executeBefore = ExecuteBeforeFunctionCallMethod();
 
@@ -105,9 +105,15 @@ namespace NetRunner.TestExecutionProxy
 
             try
             {
-                var result = Method.Invoke(targetObject, parameters.Select(p => p.Value).ToArray());
+                var originalParameters = Method.GetParameters();
 
-                var actualResult = new ExecutionResult(new GeneralIsolatedReference(result));
+                var parametersArray = PrepareParameters(parameters, originalParameters);
+
+                var result = Method.Invoke(targetObject, parametersArray);
+
+                var outParameters = ExtractOutParameters(originalParameters, parametersArray);
+
+                var actualResult = new ExecutionResult(new GeneralIsolatedReference(result), outParameters);
 
                 var afterExecutionResult = ExecuteAfterFunctionCallMethod();
 
@@ -122,6 +128,52 @@ namespace NetRunner.TestExecutionProxy
             {
                 return ExecutionResult.FromException(ex);
             }
+        }
+
+        private static object[] PrepareParameters(ParameterData[] parameters, ParameterInfo[] originalParameters)
+        {
+            var parametersArray = new object[originalParameters.Length];
+
+            for (int i = 0; i < originalParameters.Length; i++)
+            {
+                var parameter = originalParameters[i];
+
+                if (parameter.IsOut)
+                {
+                    continue;
+                }
+
+                var parameterValue = parameters.FirstOrDefault(p => string.Equals(p.Name, parameter.Name, StringComparison.Ordinal));
+
+                if (parameterValue == null)
+                {
+                    throw new InvalidOperationException(string.Format(
+                        "Internal execution error: parameter {0} is required, however parameter value is undefined. Input values are available for parameters: {1}",
+                        parameter.Name,
+                        string.Join(", ", parameters.Select(p => p.Name))));
+                }
+
+                parametersArray[i] = parameterValue.Value.Value;
+            }
+            return parametersArray;
+        }
+
+        private static List<ParameterData> ExtractOutParameters(ParameterInfo[] originalParameters, object[] parametersArray)
+        {
+            var outParameters = new List<ParameterData>();
+
+            for (int i = 0; i < originalParameters.Length; i++)
+            {
+                var parameter = originalParameters[i];
+
+                if (!parameter.IsOut)
+                {
+                    continue;
+                }
+
+                outParameters.Add(new ParameterData(parameter.Name, new GeneralIsolatedReference(parametersArray[i])));
+            }
+            return outParameters;
         }
 
         public ExecutionResult ExecuteAfterFunctionCallMethod()

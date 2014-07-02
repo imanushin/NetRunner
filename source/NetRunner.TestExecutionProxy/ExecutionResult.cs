@@ -10,11 +10,12 @@ namespace NetRunner.TestExecutionProxy
 {
     public sealed class ExecutionResult : MarshalByRefObject
     {
-        public static readonly ExecutionResult Empty = new ExecutionResult(GeneralIsolatedReference.Empty);
+        public static readonly ExecutionResult Empty = new ExecutionResult(GeneralIsolatedReference.Empty, new ParameterData[0]);
 
-        internal ExecutionResult([CanBeNull]GeneralIsolatedReference result)
+        internal ExecutionResult([CanBeNull]GeneralIsolatedReference result, IEnumerable<ParameterData> outParameters)
         {
             Result = result;
+            OutParameters = outParameters.ToArray();
         }
 
         public ExecutionResult(string exceptionMessage, string exceptionType, string exceptionToString)
@@ -24,7 +25,14 @@ namespace NetRunner.TestExecutionProxy
             ExceptionToString = exceptionToString;
         }
 
+        [CanBeNull]
         public GeneralIsolatedReference Result
+        {
+            get;
+            private set;
+        }
+
+        public ParameterData[] OutParameters
         {
             get;
             private set;

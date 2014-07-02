@@ -88,7 +88,7 @@ namespace NetRunner.Executable.Invokation
         }
 
         [NotNull]
-        public ExecutionResult Invoke(IEnumerable<GeneralIsolatedReference> parameters)
+        public ExecutionResult Invoke(IEnumerable<ParameterData> parameters)
         {
             return Method.Invoke(parameters.ToArray());
         }
