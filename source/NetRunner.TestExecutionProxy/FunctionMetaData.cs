@@ -93,6 +93,7 @@ namespace NetRunner.TestExecutionProxy
             return Method.GetParameters().Select(p => new ParameterInfoReference(p)).ToArray();
         }
 
+        [NotNull]
         public ExecutionResult Invoke(GeneralIsolatedReference[] parameters)
         {
             var executeBefore = ExecuteBeforeFunctionCallMethod();
