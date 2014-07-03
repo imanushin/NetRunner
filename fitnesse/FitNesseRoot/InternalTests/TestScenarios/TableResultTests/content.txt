@@ -1,6 +1,6 @@
 !note proper execution
 | '''create subfolders in ''' | ''./'' |
-| '''folder name''' |
+| ''folder name'' |
 | test 1 |
 | test 2 |
 

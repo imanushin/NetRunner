@@ -32,6 +32,7 @@ namespace NetRunner.Executable
             }
             catch (Exception ex)
             {
+                Trace.Listeners.Add(new EventLogTraceListener());
                 Trace.TraceError("Unhandled exception: {0}", ex);
 
                 Trace.Flush();

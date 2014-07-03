@@ -66,6 +66,8 @@ namespace NetRunner.Executable.Invokation.Functions
         {
             var inputDataProblems = CheckInputData();
 
+            var setBoldColumns = SetColumnCellsAsBold();
+
             if (inputDataProblems != null)
             {
                 return inputDataProblems;
@@ -77,7 +79,7 @@ namespace NetRunner.Executable.Invokation.Functions
             {
                 var rowCss = new AddRowCssClass(Function.RowReference, HtmlParser.ErrorCssClass);
 
-                return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Exception, result.Changes.Changes.Concat(rowCss));
+                return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Exception, result.Changes.Changes.Concat(rowCss).Concat(setBoldColumns));
             }
 
             Validate.IsNotNull(result.Result, "Function result should not be null");
@@ -86,10 +88,24 @@ namespace NetRunner.Executable.Invokation.Functions
 
             var actualResult = ProcessResult(result.Result);
 
-            return new FunctionExecutionResult(actualResult.ResultType, actualResult.TableChanges.Concat(result.Changes.Changes));
+            return new FunctionExecutionResult(actualResult.ResultType, actualResult.TableChanges.Concat(result.Changes.Changes).Concat(setBoldColumns));
         }
 
         protected abstract FunctionExecutionResult ProcessResult([NotNull] GeneralIsolatedReference mainFunctionResult);
+
+        private ReadOnlyList<AbstractTableChange> SetColumnCellsAsBold()
+        {
+            var result = new List<AbstractTableChange>();
+
+            var nonBoldCells = ColumnsRow.Cells.Where(c => !c.IsBold).ToReadOnlyList();
+
+            foreach (var cell in nonBoldCells)
+            {
+                result.Add(new MarkAsBoldCellChange(cell));
+            }
+
+            return result.ToReadOnlyList();
+        }
 
         [CanBeNull]
         private FunctionExecutionResult CheckInputData()
@@ -102,17 +118,6 @@ namespace NetRunner.Executable.Invokation.Functions
                     ColumnsRow.RowReference,
                     string.Format("Wrong header: second row should have at least one column. They are used to retrieve result property names"),
                     "There are no any values in the second row in function {0}. Please add header row to match table values and function result/input",
-                    Function.FunctionName));
-
-                errors.Add(new AddRowCssClass(ColumnsRow.RowReference, HtmlParser.FailCssClass));
-            }
-
-            if (!ColumnsRow.Cells.All(c => c.IsBold))
-            {
-                errors.Add(new ExecutionFailedMessage(
-                    ColumnsRow.RowReference,
-                    string.Format("Wrong header: all elements should be bold"),
-                    "All elements on second row (named 'headers') should be bold. These values are used in the function {0} to match internal field name and table column name.",
                     Function.FunctionName));
 
                 errors.Add(new AddRowCssClass(ColumnsRow.RowReference, HtmlParser.FailCssClass));
