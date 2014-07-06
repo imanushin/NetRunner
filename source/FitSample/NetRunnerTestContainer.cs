@@ -101,5 +101,10 @@ namespace FitSample
         {
             return new RemoveFolderArgument(baseDirectoryPath);
         }
+
+        public IEnumerable<InOutObject> ListInOutObjects(int count)
+        {
+            return Enumerable.Range(0, count).Select(i => new InOutObject());
+        }
     }
 }

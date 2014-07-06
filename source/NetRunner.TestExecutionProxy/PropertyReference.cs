@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using NetRunner.ExternalLibrary.Properties;
 
 namespace NetRunner.TestExecutionProxy
 {
@@ -29,6 +30,7 @@ namespace NetRunner.TestExecutionProxy
             }
         }
 
+        [NotNull]
         public TypeReference PropertyType
         {
             get
@@ -37,9 +39,18 @@ namespace NetRunner.TestExecutionProxy
             }
         }
 
-        public GeneralIsolatedReference GetValue(GeneralIsolatedReference targetObject)
+        public ExecutionResult GetValue(GeneralIsolatedReference targetObject)
         {
-            return new GeneralIsolatedReference(property.GetValue(targetObject.Value));
+            try
+            {
+                var result =  new GeneralIsolatedReference(property.GetValue(targetObject.Value));
+
+                return new ExecutionResult(result, Enumerable.Empty<ParameterData>());
+            }
+            catch (Exception ex)
+            {
+                return ExecutionResult.FromException(ex);
+            }
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NetRunner.ExternalLibrary.Properties;
 
 namespace NetRunner.TestExecutionProxy
 {
@@ -105,6 +106,7 @@ namespace NetRunner.TestExecutionProxy
             return TargetType.GetHashCode();
         }
 
+        [CanBeNull]
         public PropertyReference GetProperty(string propertyName)
         {
             var result =

@@ -172,27 +172,6 @@ namespace NetRunner.Executable.Invokation
                 f.AvailableFunctionNames.Any(fn => string.Equals(fn, name, StringComparison.OrdinalIgnoreCase)));
         }
 
-        public static bool TryReadPropery(GeneralIsolatedReference targetObject, string propertyName, [CanBeNull]  out TypeReference propertyType, [CanBeNull] out GeneralIsolatedReference resultValue)
-        {
-#warning change to Table changes
-            var targetType = targetObject.GetType();
-
-            var property = targetType.GetProperty(propertyName);
-
-            if (property == null)
-            {
-                Trace.TraceError("Unable to find property with name {0} for type {1} ({2})", propertyName, targetType, targetObject);
-                resultValue = null;
-                propertyType = null;
-                return false;
-            }
-
-            resultValue = property.GetValue(targetObject);
-            propertyType = property.PropertyType;
-
-            return true;
-        }
-
         public static void CreateNewApplicationDomain()
         {
             if (currentTestDomain != null)

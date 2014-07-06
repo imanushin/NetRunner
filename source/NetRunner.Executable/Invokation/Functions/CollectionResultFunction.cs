@@ -25,23 +25,34 @@ namespace NetRunner.Executable.Invokation.Functions
 
         private static TableChangeCollection CompareItems(GeneralIsolatedReference resultObject, HtmlCell expectedResult, string propertyName)
         {
-            TypeReference propertyType;
-
-            GeneralIsolatedReference resultValue;
-
             var resultIsOkChange = new CssClassCellChange(expectedResult, HtmlParser.PassCssClass);
 
-            if (!ReflectionLoader.TryReadPropery(resultObject, propertyName, out propertyType, out resultValue))
+            var objectType = resultObject.GetType();
+
+            var property = objectType.GetProperty(propertyName);
+
+            if (property == null)
             {
-                return new TableChangeCollection(false, false, new ShowActualValueCellChange(expectedResult, resultObject));
+                const string propertyNotFoundFormat = "Type '{0}' does not contain property '{1}'. Available properties: {2}";
+                string header = string.Format("Property {0} was not found", propertyName);
+                string info = string.Format(propertyNotFoundFormat, objectType, propertyName, string.Join(", ", objectType.GetProperties.Select(p => p.Name)));
+
+                var propertyNotFoundChange = new AddCellExpandableInfo(expectedResult, header, info);
+                var exceptionClassChange  = new CssClassCellChange(expectedResult, HtmlParser.ErrorCssClass);
+
+                return new TableChangeCollection(false, true, propertyNotFoundChange, exceptionClassChange);
             }
 
-            if (ReferenceEquals(null, resultValue))
+            var propertyValue = property.GetValue(resultObject);
+
+            if (propertyValue.HasError)
             {
-                return new TableChangeCollection(true, false, resultIsOkChange);
+                var changes = new AddCellExpandableException(expectedResult, propertyValue, "Unable to read '{0}'", propertyName);
+
+                return new TableChangeCollection(false, true, changes);
             }
 
-            Validate.IsNotNull(propertyType, "Internal error: type of property '{0}' is undefined", propertyName);
+            var propertyType = property.PropertyType;
 
             string errorHeader = string.Format("Unable to convert value to type '{0}'", propertyType.Name);
 
@@ -54,7 +65,10 @@ namespace NetRunner.Executable.Invokation.Functions
                 return expectedObject.Changes;
             }
 
+            var resultValue = propertyValue.Result;
+
             var conversionSucceeded = resultValue.Equals(expectedObject.Result);
+
             var cellChange = conversionSucceeded
                  ? resultIsOkChange
                  : new ShowActualValueCellChange(expectedResult, resultValue);
@@ -116,13 +130,25 @@ namespace NetRunner.Executable.Invokation.Functions
             return FormatResult(tableChanges);
         }
 
-        private static string ReadProperty(string propertyName, IsolatedReference<object> resultObject)
+        private static string ReadProperty(string propertyName, GeneralIsolatedReference resultObject)
         {
-            GeneralIsolatedReference resultValue;
-            TypeReference propertyType;
+            var type = resultObject.GetType();
 
-            if (!ReflectionLoader.TryReadPropery(resultObject, propertyName, out propertyType, out resultValue))
-                return string.Format("Unable to read property '{0}'", propertyName);
+            var property = type.GetProperty(propertyName);
+
+            if (property == null)
+            {
+                return string.Format("Unable to find property '{0}'", propertyName);
+            }
+
+            var propertyReadValue = property.GetValue(resultObject);
+
+            if (propertyReadValue.HasError)
+            {
+                return string.Format("Unable to read property '{0}' because of: {1}", propertyName, propertyReadValue.ExceptionToString);
+            }
+
+            var resultValue = propertyReadValue.Result;
 
             return (resultValue.IsNull ? string.Empty : resultValue.ToString()).ToString();
         }
