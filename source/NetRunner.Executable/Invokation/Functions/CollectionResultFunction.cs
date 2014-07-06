@@ -23,60 +23,6 @@ namespace NetRunner.Executable.Invokation.Functions
         {
         }
 
-        private static TableChangeCollection CompareItems(GeneralIsolatedReference resultObject, HtmlCell expectedResult, string propertyName)
-        {
-            var resultIsOkChange = new CssClassCellChange(expectedResult, HtmlParser.PassCssClass);
-
-            var objectType = resultObject.GetType();
-
-            var property = objectType.GetProperty(propertyName);
-
-            if (property == null)
-            {
-                const string propertyNotFoundFormat = "Type '{0}' does not contain property '{1}'. Available properties: {2}";
-                string header = string.Format("Property {0} was not found", propertyName);
-                string info = string.Format(propertyNotFoundFormat, objectType, propertyName, string.Join(", ", objectType.GetProperties.Select(p => p.Name)));
-
-                var propertyNotFoundChange = new AddCellExpandableInfo(expectedResult, header, info);
-                var exceptionClassChange = new CssClassCellChange(expectedResult, HtmlParser.ErrorCssClass);
-
-                return new TableChangeCollection(false, true, propertyNotFoundChange, exceptionClassChange);
-            }
-
-            var propertyValue = property.GetValue(resultObject);
-
-            if (propertyValue.HasError)
-            {
-                var changes = new AddCellExpandableException(expectedResult, propertyValue, "Unable to read '{0}'", propertyName);
-
-                return new TableChangeCollection(false, true, changes);
-            }
-
-            var propertyType = property.PropertyType;
-
-            string errorHeader = string.Format("Unable to convert value to type '{0}'", propertyType.Name);
-
-            var cellInfo = new CellParsingInfo(expectedResult, propertyType);
-
-            var expectedObject = ParametersConverter.ConvertParameter(cellInfo, errorHeader);
-
-            if (!expectedObject.Changes.AllWasOk)
-            {
-                return expectedObject.Changes;
-            }
-
-            var resultValue = propertyValue.Result;
-
-            var conversionSucceeded = resultValue.Equals(expectedObject.Result);
-
-            var cellChange = conversionSucceeded
-                 ? new CssClassCellChange(expectedResult, HtmlParser.PassCssClass)
-                 : new ShowActualValueCellChange(expectedResult, resultValue);
-
-            return new TableChangeCollection(conversionSucceeded, false, expectedObject.Changes.Changes.Concat(cellChange));
-        }
-
-
         protected override FunctionExecutionResult ProcessResult(GeneralIsolatedReference mainFunctionResult)
         {
             var collectionResult = mainFunctionResult.AsIEnumerable();
