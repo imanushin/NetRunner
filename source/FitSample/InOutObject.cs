@@ -8,9 +8,9 @@ namespace FitSample
 {
     public sealed class InOutObject
     {
-        private string currentValue;
+        private int currentValue;
 
-        public string InValue
+        public int InValue
         {
             set
             {
@@ -18,7 +18,7 @@ namespace FitSample
             }
         }
 
-        public string OutValue
+        public int OutValue
         {
             get
             {

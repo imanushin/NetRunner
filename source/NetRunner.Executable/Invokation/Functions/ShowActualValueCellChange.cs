@@ -1,4 +1,5 @@
 ﻿using HtmlAgilityPack;
+using NetRunner.Executable.Common;
 using NetRunner.Executable.RawData;
 using NetRunner.ExternalLibrary.Properties;
 
@@ -9,9 +10,11 @@ namespace NetRunner.Executable.Invokation.Functions
         [CanBeNull]
         private readonly object actualValue;
 
-        public ShowActualValueCellChange(HtmlCell cell, [CanBeNull] object actualValue)
+        public ShowActualValueCellChange(HtmlCell cell, [NotNull] string actualValue)
             : base(cell, HtmlParser.FailCssClass)
         {
+            Validate.ArgumentIsNotNull(actualValue, "actualValue");
+
             this.actualValue = actualValue;
         }
 

@@ -126,7 +126,7 @@ namespace NetRunner.Executable.Invokation.Functions
             }
         }
 
-        private static void ProcessSetProperties(ReadOnlyList<PropertyReference> properties, HtmlRow currentRow, SequenceExecutionStatus tableChanges, IsolatedReference<object> resultObject)
+        private static void ProcessSetProperties(ReadOnlyList<PropertyReference> properties, HtmlRow currentRow, SequenceExecutionStatus tableChanges, GeneralIsolatedReference resultObject)
         {
             for (int i = 0; i < properties.Count; i++)
             {
@@ -137,8 +137,10 @@ namespace NetRunner.Executable.Invokation.Functions
                     continue;
                 }
 
+                var currentCell = currentRow.Cells[i];
+
                 var cellInfo = new CellParsingInfo(
-                    currentRow.Cells[i],
+                    currentCell,
                     property.PropertyType,
                     property.ArgumentPrepareMode,
                     property.TrimInputCharacters);
@@ -154,7 +156,7 @@ namespace NetRunner.Executable.Invokation.Functions
 
                 var setValueResult = property.SetValue(resultObject, value.Result);
 
-                tableChanges.MergeWith(setValueResult, currentRow.Cells[i], "Unable to set value");
+                tableChanges.MergeWith(setValueResult, currentCell, "Unable to set value");
             }
         }
 
@@ -191,6 +193,11 @@ namespace NetRunner.Executable.Invokation.Functions
             if (property == null)
             {
                 return string.Format("Unable to find property '{0}'", propertyName);
+            }
+
+            if (!property.HasGet)
+            {
+                return string.Empty;
             }
 
             var propertyReadValue = property.GetValue(resultObject);

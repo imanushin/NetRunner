@@ -70,9 +70,11 @@ namespace NetRunner.Executable.Invokation
 
                 if (result.HasError)
                 {
+                    var errorCellMark = new CssClassCellChange(inputData, HtmlParser.ErrorCssClass);
+
                     var cellChange = new AddCellExpandableException(inputData, result, conversionErrorHeader);
 
-                    return InvokationResult.CreateErrorResult(new TableChangeCollection(false, true, cellChange));
+                    return InvokationResult.CreateErrorResult(new TableChangeCollection(false, true, cellChange, errorCellMark));
                 }
 
                 if (parseSucceeded)

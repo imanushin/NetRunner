@@ -78,7 +78,7 @@ namespace NetRunner.Executable.Invokation.Keywords
                 return new InvokationResult(ReflectionLoader.TrueResult);
             }
 
-            var showActualValueCellChange = new ShowActualValueCellChange(lastCell, resultObject);
+            var showActualValueCellChange = new ShowActualValueCellChange(lastCell, resultObject.ToString());
 
             return new InvokationResult(ReflectionLoader.TrueResult, new TableChangeCollection(false, false, showActualValueCellChange));
         }
