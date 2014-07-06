@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NetRunner.Executable.RawData;
 using NetRunner.TestExecutionProxy;
 
 namespace NetRunner.Executable.Invokation.Functions
@@ -37,6 +38,18 @@ namespace NetRunner.Executable.Invokation.Functions
         {
             AllIsOk &= !other.HasError;
             WereExceptions |= other.HasError;
+        }
+
+        public void MergeWith(ExecutionResult other, HtmlCell problematicCell, string generalInfo)
+        {
+            AllIsOk &= !other.HasError;
+            WereExceptions |= other.HasError;
+
+            if (other.HasError)
+            {
+                Changes.Add(new CssClassCellChange(problematicCell, HtmlParser.ErrorCssClass));
+                Changes.Add(new AddCellExpandableInfo(problematicCell, generalInfo, other.ExceptionToString));
+            }
         }
 
         public void MergeWith(TableChangeCollection other)

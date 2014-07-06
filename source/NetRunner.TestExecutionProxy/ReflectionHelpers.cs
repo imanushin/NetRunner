@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using NetRunner.ExternalLibrary;
 
 namespace NetRunner.TestExecutionProxy
 {
@@ -30,7 +31,13 @@ namespace NetRunner.TestExecutionProxy
 
             var type = member.DeclaringType;
 
-            result = type.GetCustomAttribute<TAttribute>();
+            return FindAttribute(defaultValue, type);
+        }
+
+        private static TAttribute FindAttribute<TAttribute>(TAttribute defaultValue, Type type) 
+            where TAttribute : Attribute
+        {
+            var result = type.GetCustomAttribute<TAttribute>();
 
             if (result != null)
             {
@@ -47,6 +54,19 @@ namespace NetRunner.TestExecutionProxy
             }
 
             return defaultValue;
+        }
+
+        public static TAttribute FindAttribute<TAttribute>(PropertyInfo property, TAttribute defaultValue)
+            where TAttribute : Attribute
+        {
+            var result = property.GetCustomAttribute<TAttribute>();
+
+            if (result != null)
+            {
+                return result;
+            }
+
+            return FindAttribute(defaultValue, property.DeclaringType);
         }
     }
 }

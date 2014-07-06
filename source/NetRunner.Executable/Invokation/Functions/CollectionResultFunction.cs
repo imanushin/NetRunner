@@ -38,7 +38,7 @@ namespace NetRunner.Executable.Invokation.Functions
                 string info = string.Format(propertyNotFoundFormat, objectType, propertyName, string.Join(", ", objectType.GetProperties.Select(p => p.Name)));
 
                 var propertyNotFoundChange = new AddCellExpandableInfo(expectedResult, header, info);
-                var exceptionClassChange  = new CssClassCellChange(expectedResult, HtmlParser.ErrorCssClass);
+                var exceptionClassChange = new CssClassCellChange(expectedResult, HtmlParser.ErrorCssClass);
 
                 return new TableChangeCollection(false, true, propertyNotFoundChange, exceptionClassChange);
             }
@@ -70,7 +70,7 @@ namespace NetRunner.Executable.Invokation.Functions
             var conversionSucceeded = resultValue.Equals(expectedObject.Result);
 
             var cellChange = conversionSucceeded
-                 ? resultIsOkChange
+                 ? new CssClassCellChange(expectedResult, HtmlParser.PassCssClass)
                  : new ShowActualValueCellChange(expectedResult, resultValue);
 
             return new TableChangeCollection(conversionSucceeded, false, expectedObject.Changes.Changes.Concat(cellChange));
@@ -92,17 +92,21 @@ namespace NetRunner.Executable.Invokation.Functions
             for (int rowIndex = 0; rowIndex < orderedResult.Length && rowIndex < Rows.Count; rowIndex++)
             {
                 var resultObject = orderedResult[rowIndex];
+                var type = resultObject.GetType();
 
                 var currentRow = Rows[rowIndex];
 
-                for (int columnIndex = 0; columnIndex < CleanedColumnNames.Count; columnIndex++)
+                var properties = CleanedColumnNames.Select(type.GetProperty).ToReadOnlyList();
+
+                if (properties.Any(p => p == null))
                 {
-                    var expectedResult = currentRow.Cells[columnIndex];
+                    MarkMissingProperties(currentRow, properties, tableChanges, type);
 
-                    var changes = CompareItems(resultObject, expectedResult, CleanedColumnNames[columnIndex]);
-
-                    tableChanges.MergeWith(changes);
+                    continue;
                 }
+
+                ProcessSetProperties(properties, currentRow, tableChanges, resultObject);
+                ProcessGetProperties(properties, currentRow, tableChanges, resultObject);
             }
 
             for (int rowIndex = orderedResult.Length; rowIndex < Rows.Count; rowIndex++)
@@ -128,6 +132,108 @@ namespace NetRunner.Executable.Invokation.Functions
             }
 
             return FormatResult(tableChanges);
+        }
+
+        private static void ProcessGetProperties(ReadOnlyList<PropertyReference> properties, HtmlRow currentRow, SequenceExecutionStatus tableChanges, GeneralIsolatedReference resultObject)
+        {
+            for (int i = 0; i < properties.Count; i++)
+            {
+                var property = properties[i];
+
+                if (!property.HasGet)
+                {
+                    continue;
+                }
+
+                var cellInfo = new CellParsingInfo(
+                    currentRow.Cells[i],
+                    property.PropertyType,
+                    property.ArgumentPrepareMode,
+                    property.TrimInputCharacters);
+
+                var value = ParametersConverter.ConvertParameter(cellInfo, "Unable to parse value");
+
+                tableChanges.MergeWith(value.Changes);
+
+                if (!value.Changes.AllWasOk)
+                {
+                    continue;
+                }
+
+                var getValueResult = property.GetValue(resultObject);
+
+                tableChanges.MergeWith(getValueResult, currentRow.Cells[i], "Unable to get value");
+
+                if (getValueResult.HasError)
+                {
+                    continue;
+                }
+
+                var conversionSucceeded = value.Result.Equals(getValueResult.Result);
+
+                var cellChange = conversionSucceeded
+                     ? new CssClassCellChange(currentRow.Cells[i], HtmlParser.PassCssClass)
+                     : new ShowActualValueCellChange(currentRow.Cells[i], getValueResult.Result.ToString());
+
+                tableChanges.Changes.Add(cellChange);
+                tableChanges.AllIsOk &= conversionSucceeded;
+            }
+        }
+
+        private static void ProcessSetProperties(ReadOnlyList<PropertyReference> properties, HtmlRow currentRow, SequenceExecutionStatus tableChanges, IsolatedReference<object> resultObject)
+        {
+            for (int i = 0; i < properties.Count; i++)
+            {
+                var property = properties[i];
+
+                if (property.HasGet)
+                {
+                    continue;
+                }
+
+                var cellInfo = new CellParsingInfo(
+                    currentRow.Cells[i],
+                    property.PropertyType,
+                    property.ArgumentPrepareMode,
+                    property.TrimInputCharacters);
+
+                var value = ParametersConverter.ConvertParameter(cellInfo, "Unable to parse value");
+
+                tableChanges.MergeWith(value.Changes);
+
+                if (!value.Changes.AllWasOk)
+                {
+                    continue;
+                }
+
+                var setValueResult = property.SetValue(resultObject, value.Result);
+
+                tableChanges.MergeWith(setValueResult, currentRow.Cells[i], "Unable to set value");
+            }
+        }
+
+        private void MarkMissingProperties(HtmlRow currentRow, ReadOnlyList<PropertyReference> properties, SequenceExecutionStatus status, TypeReference returnType)
+        {
+            status.AllIsOk = false;
+            status.WereExceptions = true;
+
+            for (int i = 0; i < properties.Count; i++)
+            {
+                if (properties[i] != null)
+                {
+                    continue;
+                }
+
+                var targetCell = currentRow.Cells[i];
+                var propertyName = CleanedColumnNames[i];
+
+                const string propertyNotFoundFormat = "Type '{0}' does not contain property '{1}'. Available properties: {2}";
+                string header = string.Format("Property {0} was not found", propertyName);
+                string info = string.Format(propertyNotFoundFormat, returnType, propertyName, string.Join(", ", returnType.GetProperties.Select(p => p.Name)));
+
+                status.Changes.Add( new AddCellExpandableInfo(targetCell, header, info));
+                status.Changes.Add( new CssClassCellChange(targetCell, HtmlParser.ErrorCssClass));
+            }
         }
 
         private static string ReadProperty(string propertyName, GeneralIsolatedReference resultObject)

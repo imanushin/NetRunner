@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using NetRunner.ExternalLibrary;
 using NetRunner.ExternalLibrary.Properties;
 
 namespace NetRunner.TestExecutionProxy
@@ -20,6 +21,8 @@ namespace NetRunner.TestExecutionProxy
             }
 
             this.property = property;
+            ArgumentPrepareMode = ReflectionHelpers.FindAttribute(property, ArgumentPrepareAttribute.Default).Mode;
+            TrimInputCharacters = ReflectionHelpers.FindAttribute(property, StringTrimAttribute.Default).TrimInputString;
         }
 
         public string Name
@@ -27,6 +30,14 @@ namespace NetRunner.TestExecutionProxy
             get
             {
                 return property.Name;
+            }
+        }
+
+        public bool HasGet
+        {
+            get
+            {
+                return property.GetMethod != null;
             }
         }
 
@@ -39,11 +50,37 @@ namespace NetRunner.TestExecutionProxy
             }
         }
 
+        public ArgumentPrepareAttribute.ArgumentPrepareMode ArgumentPrepareMode
+        {
+            get;
+            private set;
+        }
+
+        public bool TrimInputCharacters
+        {
+            get;
+            private set;
+        }
+
+        public ExecutionResult SetValue(GeneralIsolatedReference targetObject, GeneralIsolatedReference value)
+        {
+            try
+            {
+                property.SetValue(targetObject.Value, value.Value);
+
+                return new ExecutionResult(GeneralIsolatedReference.Empty, Enumerable.Empty<ParameterData>());
+            }
+            catch (Exception ex)
+            {
+                return ExecutionResult.FromException(ex);
+            }
+        }
+
         public ExecutionResult GetValue(GeneralIsolatedReference targetObject)
         {
             try
             {
-                var result =  new GeneralIsolatedReference(property.GetValue(targetObject.Value));
+                var result = new GeneralIsolatedReference(property.GetValue(targetObject.Value));
 
                 return new ExecutionResult(result, Enumerable.Empty<ParameterData>());
             }
