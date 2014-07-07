@@ -58,7 +58,7 @@ namespace NetRunner.Executable.Invokation.Functions
             
             AddExceptionLineIfNeeded(notificationResult, changes);
 
-            return FormatResult(changes);
+            return FormatResult(changes, Function.RowReference);
         }
 
         private void AnalyseResult(InvokationResult rowResult, SequenceExecutionStatus changes, HtmlRow row, TestFunctionReference functionToExecute)
@@ -110,7 +110,7 @@ namespace NetRunner.Executable.Invokation.Functions
 
             changes.Changes.Add(new AddRowCssClass(ColumnsRow.RowReference, HtmlParser.FailCssClass));
 
-            return FormatResult(changes);
+            return FormatResult(changes, Function.RowReference);
         }
 
         private void AddExceptionLineIfNeeded(ExecutionResult notificationException, SequenceExecutionStatus changes)

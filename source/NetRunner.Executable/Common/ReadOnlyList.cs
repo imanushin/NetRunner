@@ -110,19 +110,26 @@ namespace NetRunner.Executable.Common
             }
         }
 
-        public int? IndexOf(TValue expectedValue, [NotNull] IEqualityComparer<TValue> comparer)
+        public int? IndexOf(Func<TValue, bool> predicate)
         {
-            Validate.ArgumentIsNotNull(comparer, "comparer");
+            Validate.ArgumentIsNotNull(predicate, "predicate");
 
             for (int i = 0; i < Count; i++)
             {
-                if (comparer.Equals(expectedValue, this[i]))
+                if (predicate(this[i]))
                 {
                     return i;
                 }
             }
 
             return null;
+        }
+
+        public int? IndexOf(TValue expectedValue, [NotNull] IEqualityComparer<TValue> comparer)
+        {
+            Validate.ArgumentIsNotNull(comparer, "comparer");
+
+            return IndexOf(v => comparer.Equals(v, expectedValue));
         }
     }
 }

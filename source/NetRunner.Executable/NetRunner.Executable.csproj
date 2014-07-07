@@ -54,6 +54,7 @@
     <Compile Include="ApplicationSettings.cs" />
     <Compile Include="Common\BaseReadOnlyObject.cs" />
     <Compile Include="Common\CollectionExtensions.cs" />
+    <Compile Include="Common\GlobalConstants.cs" />
     <Compile Include="Common\ReadOnlyList.cs" />
     <Compile Include="Common\Utils.cs" />
     <Compile Include="Common\Validate.cs" />

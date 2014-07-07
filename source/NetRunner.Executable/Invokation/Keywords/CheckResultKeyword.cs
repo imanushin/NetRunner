@@ -51,7 +51,11 @@ namespace NetRunner.Executable.Invokation.Keywords
                 return InvokationResult.CreateErrorResult(new TableChangeCollection(false, true, parsingErrors));
             }
 
+            var status = new SequenceExecutionStatus();
+
             var result = base.InvokeFunction(func, targetFunction);
+
+            status.MergeWith(result.Changes);
 
             if (result.Changes.WereExceptions)
                 return result;
@@ -66,21 +70,25 @@ namespace NetRunner.Executable.Invokation.Keywords
 
             var expectedObject = ParametersConverter.ConvertParameter(cellInfo, errorHeader);
 
+            status.MergeWith(expectedObject.Changes);
+
             if (expectedObject.Changes.WereExceptions)
             {
-                return expectedObject;
+                return new InvokationResult(expectedObject.Result, new TableChangeCollection(false, true, status.Changes), result.OutParametersResult);
             }
 
             bool checkSucceded = Equals(expectedObject.Result, resultObject);
 
             if (checkSucceded)
             {
-                return new InvokationResult(ReflectionLoader.TrueResult);
+                return new InvokationResult(ReflectionLoader.TrueResult, result.Changes, result.OutParametersResult);
             }
 
             var showActualValueCellChange = new ShowActualValueCellChange(lastCell, resultObject.ToString());
 
-            return new InvokationResult(ReflectionLoader.TrueResult, new TableChangeCollection(false, false, showActualValueCellChange));
+            status.Changes.Add(showActualValueCellChange);
+
+            return new InvokationResult(ReflectionLoader.TrueResult, new TableChangeCollection(false, false, status.Changes), result.OutParametersResult);
         }
 
         /// <summary>

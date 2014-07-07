@@ -166,32 +166,6 @@ namespace NetRunner.Executable.Invokation.Functions
             return null;
         }
 
-        protected FunctionExecutionResult FormatResult(SequenceExecutionStatus changes)
-        {
-            var resultType = changes.WereExceptions
-                ? FunctionExecutionResult.FunctionRunResult.Exception
-                : (changes.AllIsOk
-                    ? FunctionExecutionResult.FunctionRunResult.Success
-                    : FunctionExecutionResult.FunctionRunResult.Fail);
-
-            var innerChanges = changes.Changes;
-
-            if (changes.WereExceptions)
-            {
-                innerChanges.Add(new AddRowCssClass(Function.RowReference, HtmlParser.ErrorCssClass));
-            }
-            else if (changes.AllIsOk)
-            {
-                innerChanges.Add(new AddRowCssClass(Function.RowReference, HtmlParser.PassCssClass));
-            }
-            else
-            {
-                innerChanges.Add(new AddRowCssClass(Function.RowReference, HtmlParser.FailCssClass));
-            }
-
-            return new FunctionExecutionResult(resultType, innerChanges);
-        }
-
 
         protected sealed override string GetString()
         {

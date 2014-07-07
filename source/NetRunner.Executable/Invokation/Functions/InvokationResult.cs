@@ -11,7 +11,7 @@ namespace NetRunner.Executable.Invokation.Functions
 {
     internal sealed class InvokationResult
     {
-        private InvokationResult(
+        public InvokationResult(
             [NotNull]GeneralIsolatedReference result,
             [NotNull]TableChangeCollection changes,
             [NotNull]IEnumerable<ParameterData> outParametersResult)
@@ -23,16 +23,6 @@ namespace NetRunner.Executable.Invokation.Functions
             Result = result;
             Changes = changes;
             OutParametersResult = outParametersResult.ToReadOnlyList();
-        }
-
-        public InvokationResult(GeneralIsolatedReference result, [NotNull]TableChangeCollection changes)
-            : this(result, changes, ReadOnlyList<ParameterData>.Empty)
-        {
-        }
-
-        public InvokationResult(GeneralIsolatedReference result)
-            : this(result, TableChangeCollection.AllIsOkNoChanges, ReadOnlyList<ParameterData>.Empty)
-        {
         }
 
         public TableChangeCollection Changes

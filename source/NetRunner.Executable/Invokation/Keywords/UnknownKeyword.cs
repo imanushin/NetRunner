@@ -7,7 +7,7 @@ namespace NetRunner.Executable.Invokation.Keywords
 {
     internal sealed class UnknownKeyword : AbstractKeyword
     {
-        private ReadOnlyList<HtmlCell> cells;
+        private readonly ReadOnlyList<HtmlCell> cells;
 
         public UnknownKeyword(IReadOnlyCollection<HtmlCell> cells)
         {

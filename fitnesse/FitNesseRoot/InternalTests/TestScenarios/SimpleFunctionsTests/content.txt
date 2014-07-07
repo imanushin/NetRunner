@@ -21,3 +21,7 @@
 | check | '''raw string length of ''' | > | '''is''' | 4 |
 | check | '''raw string length of ''' | & | '''is''' | 5 |
 | check | '''raw string length of ''' | ''&'' | '''is''' | 12 |
+
+| ''2 '' | '''plus''' | ''3'' | '''is''' | ''5'' |
+| ''2 '' | '''plus''' | ''3'' | '''is''' | ''6'' |
+| check | ''2 '' | '''plus''' | ''3'' | '''is''' | ''6'' | 5 |

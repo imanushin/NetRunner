@@ -33,7 +33,7 @@ namespace NetRunner.Executable.Invokation.Keywords
                     return result;
             }
 
-            return new UnknownKeyword(cells);
+            return new EmptyKeyword(cells);
         }
     }
 }

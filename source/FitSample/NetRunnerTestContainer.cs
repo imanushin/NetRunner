@@ -66,8 +66,8 @@ namespace FitSample
             {
                 String = i.ToString(),
                 Int = i,
-                Bool = i % 2 == 0,
-                Byte = (byte)i
+                Bool = i%2 == 0,
+                Byte = (byte) i
             });
         }
 
@@ -105,6 +105,13 @@ namespace FitSample
         public IEnumerable<InOutObject> ListInOutObjects(int count)
         {
             return Enumerable.Range(0, count).Select(i => new InOutObject());
+        }
+
+        public int PlusIs(int a, int b, out int c)
+        {
+            c = a + b;
+
+            return c;
         }
     }
 }

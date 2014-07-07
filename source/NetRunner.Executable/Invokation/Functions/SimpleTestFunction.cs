@@ -5,6 +5,7 @@ using HtmlAgilityPack;
 using NetRunner.Executable.Common;
 using NetRunner.Executable.RawData;
 using NetRunner.ExternalLibrary.Properties;
+using NetRunner.TestExecutionProxy;
 
 namespace NetRunner.Executable.Invokation.Functions
 {
@@ -36,25 +37,40 @@ namespace NetRunner.Executable.Invokation.Functions
         {
             try
             {
+                var status = new SequenceExecutionStatus();
+
                 var result = InvokeFunction(functionReference, function);
+
+                status.MergeWith(result.Changes);
 
                 if (result.Changes.WereExceptions)
                 {
                     var rowCss = new AddRowCssClass(function.RowReference, HtmlParser.ErrorCssClass);
 
-                    return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Exception, result.Changes.Changes.Concat(rowCss));
+                    status.Changes.Add(rowCss);
                 }
 
                 if (ReflectionLoader.FalseResult.Equals(result.Result))
                 {
-                    var falseResultMark = new AddRowCssClass(function.RowReference, HtmlParser.FailCssClass);
-
-                    return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Fail, result.Changes.Changes.Concat(falseResultMark));
+                    status.AllIsOk = false;
+                    status.Changes.Add(new AddRowCssClass(function.RowReference, HtmlParser.FailCssClass));
                 }
 
-                var trueResultMark = new AddRowCssClass(function.RowReference, HtmlParser.PassCssClass);
+                foreach (var parameterData in result.OutParametersResult)
+                {
+                    var cell = GetParameterCell(parameterData);
 
-                return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Success, result.Changes.Changes.Concat(trueResultMark));
+                    CheckOutParameter(functionReference, status, parameterData, cell);
+                }
+
+                if (ReflectionLoader.TrueResult.Equals(result.Result) && status.AllIsOk)
+                {
+                    var trueResultMark = new AddRowCssClass(function.RowReference, HtmlParser.PassCssClass);
+
+                    status.Changes.Add(trueResultMark);
+                }
+
+                return FormatResult(status, function.RowReference);
             }
             catch (InternalException ex)
             {
@@ -71,6 +87,22 @@ namespace NetRunner.Executable.Invokation.Functions
                     errorChange
                 });
             }
+        }
+
+        private HtmlCell GetParameterCell(ParameterData parameterData)
+        {
+            var parameterIndex = functionReference.ArgumentTypes.IndexOf(p=>string.Equals(p.Name, parameterData.Name, StringComparison.Ordinal));
+
+            Validate.IsNotNull(
+                parameterIndex, 
+                "Internal error: unable to find parameter '{0}' of '{1}'. Parameters available: {2}. Please send this issue to {3}",
+                parameterData.Name,
+                function.FunctionName,
+                functionReference.ArgumentTypes.JoinToStringLazy(", "),
+                GlobalConstants.IssuesPath
+            );
+
+            return function.Arguments[parameterIndex.Value];
         }
 
         public override ReadOnlyList<TestFunctionReference> GetInnerFunctions()

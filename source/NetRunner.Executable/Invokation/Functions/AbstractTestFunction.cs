@@ -88,6 +88,11 @@ namespace NetRunner.Executable.Invokation.Functions
 
         protected static void CheckOutParameter(TestFunctionReference functionToExecute, SequenceExecutionStatus changes, ParameterData outParameter, HtmlCell targetCell)
         {
+            Validate.ArgumentIsNotNull(functionToExecute, "functionToExecute");
+            Validate.ArgumentIsNotNull(changes, "changes");
+            Validate.ArgumentIsNotNull(outParameter, "outParameter");
+            Validate.ArgumentIsNotNull(targetCell, "targetCell");
+
             var targetParameter = functionToExecute.Method.GetParameter(outParameter.Name);
 
             var cellInfo = new CellParsingInfo(targetParameter, targetCell);
@@ -112,6 +117,32 @@ namespace NetRunner.Executable.Invokation.Functions
                 changes.Changes.Add(new ShowActualValueCellChange(targetCell, outParameter.Value.ToString()));
                 changes.AllIsOk = false;
             }
+        }
+
+        protected FunctionExecutionResult FormatResult(SequenceExecutionStatus changes, HtmlRowReference rowReference)
+        {
+            var resultType = changes.WereExceptions
+                ? FunctionExecutionResult.FunctionRunResult.Exception
+                : (changes.AllIsOk
+                    ? FunctionExecutionResult.FunctionRunResult.Success
+                    : FunctionExecutionResult.FunctionRunResult.Fail);
+
+            var innerChanges = changes.Changes;
+
+            if (changes.WereExceptions)
+            {
+                innerChanges.Add(new AddRowCssClass(rowReference, HtmlParser.ErrorCssClass));
+            }
+            else if (changes.AllIsOk)
+            {
+                innerChanges.Add(new AddRowCssClass(rowReference, HtmlParser.PassCssClass));
+            }
+            else
+            {
+                innerChanges.Add(new AddRowCssClass(rowReference, HtmlParser.FailCssClass));
+            }
+
+            return new FunctionExecutionResult(resultType, innerChanges);
         }
     }
 }

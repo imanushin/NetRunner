@@ -77,7 +77,7 @@ namespace NetRunner.Executable.Invokation.Functions
                 tableChanges.AllIsOk = false;
             }
 
-            return FormatResult(tableChanges);
+            return FormatResult(tableChanges, Function.RowReference);
         }
 
         private static void ProcessGetProperties(ReadOnlyList<PropertyReference> properties, HtmlRow currentRow, SequenceExecutionStatus tableChanges, GeneralIsolatedReference resultObject)
