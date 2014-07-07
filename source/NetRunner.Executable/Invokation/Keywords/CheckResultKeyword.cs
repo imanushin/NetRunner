@@ -81,7 +81,9 @@ namespace NetRunner.Executable.Invokation.Keywords
 
             if (checkSucceded)
             {
-                return new InvokationResult(ReflectionLoader.TrueResult, result.Changes, result.OutParametersResult);
+                status.Changes.Add(new CssClassCellChange(lastCell, HtmlParser.PassCssClass));
+
+                return new InvokationResult(ReflectionLoader.TrueResult, new TableChangeCollection(true, false, status.Changes), result.OutParametersResult);
             }
 
             var showActualValueCellChange = new ShowActualValueCellChange(lastCell, resultObject.ToString());
