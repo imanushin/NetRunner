@@ -30,7 +30,6 @@
 | '''Analyse Table''' | 2 |
 | '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
 | 1 | 1 | Contains | !-Some Test Function 1-!  |
-| 1..100 | 1..100 | Contains | class="pass" |
 | 1..100 | 1..100 | Count | 1 |
 
 | check | '''Row Count Of Table''' | 3 | '''is''' | 1 | 
@@ -38,7 +37,6 @@
 | '''Analyse Table''' | 3 |
 | '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
 | 1 | 1 | Contains | !-Test Function 2-!  |
-| 1..100 | 1..100 | Contains | class="pass" |
 | 1..100 | 1..100 | Count | 1 |
 
 | check | '''Row Count Of Table''' | 4 | '''is''' | 1 | 
@@ -46,5 +44,4 @@
 | '''Analyse Table''' | 4 |
 | '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
 | 1 | 1 | Contains | !-Some Test Function 2-!  |
-| 1..100 | 1..100 | Contains | class="pass" |
 | 1..100 | 1..100 | Count | 1 |

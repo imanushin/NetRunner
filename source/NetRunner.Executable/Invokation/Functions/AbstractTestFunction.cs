@@ -119,7 +119,7 @@ namespace NetRunner.Executable.Invokation.Functions
             }
         }
 
-        protected FunctionExecutionResult FormatResult(SequenceExecutionStatus changes, HtmlRowReference rowReference)
+        protected FunctionExecutionResult FormatResult(SequenceExecutionStatus changes)
         {
             var resultType = changes.WereExceptions
                 ? FunctionExecutionResult.FunctionRunResult.Exception
@@ -128,7 +128,14 @@ namespace NetRunner.Executable.Invokation.Functions
                     : FunctionExecutionResult.FunctionRunResult.Fail);
 
             var innerChanges = changes.Changes;
-            /*
+
+            return new FunctionExecutionResult(resultType, innerChanges);
+        }
+
+        protected void MarkRootFunction(SequenceExecutionStatus changes, HtmlRowReference rowReference)
+        {
+            var innerChanges = changes.Changes;
+
             if (changes.WereExceptions)
             {
                 innerChanges.Add(new AddRowCssClass(rowReference, HtmlParser.ErrorCssClass));
@@ -140,9 +147,7 @@ namespace NetRunner.Executable.Invokation.Functions
             else
             {
                 innerChanges.Add(new AddRowCssClass(rowReference, HtmlParser.FailCssClass));
-            }*/
-
-            return new FunctionExecutionResult(resultType, innerChanges);
+            }
         }
     }
 }

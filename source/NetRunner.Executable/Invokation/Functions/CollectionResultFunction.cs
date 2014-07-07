@@ -77,7 +77,9 @@ namespace NetRunner.Executable.Invokation.Functions
                 tableChanges.AllIsOk = false;
             }
 
-            return FormatResult(tableChanges, Function.RowReference);
+            MarkRootFunction(tableChanges, Function.RowReference);
+
+            return FormatResult(tableChanges);
         }
 
         private static void ProcessGetProperties(ReadOnlyList<PropertyReference> properties, HtmlRow currentRow, SequenceExecutionStatus tableChanges, GeneralIsolatedReference resultObject)

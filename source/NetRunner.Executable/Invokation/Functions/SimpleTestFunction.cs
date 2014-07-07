@@ -68,7 +68,7 @@ namespace NetRunner.Executable.Invokation.Functions
                     status.Changes.Add(trueResultMark);
                 }
 
-                return FormatResult(status, function.RowReference);
+                return FormatResult(status);
             }
             catch (InternalException ex)
             {
