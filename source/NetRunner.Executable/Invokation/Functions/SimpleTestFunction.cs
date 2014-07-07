@@ -58,9 +58,7 @@ namespace NetRunner.Executable.Invokation.Functions
 
                 foreach (var parameterData in result.OutParametersResult)
                 {
-                    var cell = GetParameterCell(parameterData);
-
-                    CheckOutParameter(functionReference, status, parameterData, cell);
+                    CheckOutParameter(functionReference, status, parameterData, GetParameterCell(parameterData));
                 }
 
                 if (ReflectionLoader.TrueResult.Equals(result.Result) && status.AllIsOk)

@@ -128,7 +128,7 @@ namespace NetRunner.Executable.Invokation.Functions
                     : FunctionExecutionResult.FunctionRunResult.Fail);
 
             var innerChanges = changes.Changes;
-
+            /*
             if (changes.WereExceptions)
             {
                 innerChanges.Add(new AddRowCssClass(rowReference, HtmlParser.ErrorCssClass));
@@ -140,7 +140,7 @@ namespace NetRunner.Executable.Invokation.Functions
             else
             {
                 innerChanges.Add(new AddRowCssClass(rowReference, HtmlParser.FailCssClass));
-            }
+            }*/
 
             return new FunctionExecutionResult(resultType, innerChanges);
         }

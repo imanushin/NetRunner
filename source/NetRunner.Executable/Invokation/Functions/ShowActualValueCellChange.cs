@@ -7,8 +7,8 @@ namespace NetRunner.Executable.Invokation.Functions
 {
     internal sealed class ShowActualValueCellChange : CssClassCellChange
     {
-        [CanBeNull]
-        private readonly object actualValue;
+        [NotNull]
+        private readonly string actualValue;
 
         public ShowActualValueCellChange(HtmlCell cell, [NotNull] string actualValue)
             : base(cell, HtmlParser.FailCssClass)
@@ -36,7 +36,7 @@ namespace NetRunner.Executable.Invokation.Functions
             htmlCell.AppendChild(expectBlock);
             htmlCell.InnerHtml += expect + "</br>";
             htmlCell.AppendChild(actualBlock);
-            htmlCell.InnerHtml += actualValue ?? string.Empty;
+            htmlCell.InnerHtml += actualValue;
         }
     }
 }
