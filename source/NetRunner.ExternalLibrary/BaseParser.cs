@@ -6,6 +6,9 @@ using NetRunner.ExternalLibrary.Properties;
 
 namespace NetRunner.ExternalLibrary
 {
+    /// <summary>
+    /// Use the tutorial here: https://github.com/imanushin/NetRunner/wiki/Parsing
+    /// </summary>
     [UsedImplicitly]
     public abstract class BaseParser
     {

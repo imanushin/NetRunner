@@ -7,6 +7,9 @@ using NetRunner.ExternalLibrary.Properties;
 
 namespace NetRunner.ExternalLibrary
 {
+    /// <summary>
+    /// Complex input argument. See wiki page: https://github.com/imanushin/NetRunner/wiki/Input-table for help.
+    /// </summary>
     [UsedImplicitly(ImplicitUseTargetFlags.Members)]
     public abstract class BaseTableArgument : FunctionContainer
     {
