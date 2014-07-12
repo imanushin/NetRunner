@@ -79,10 +79,12 @@ namespace NetRunner.Executable.Invokation.Functions
             }
             catch (Exception ex)
             {
-                var errorChange = new AddCellExpandableException(targetRow.Cells.First(), ex, "Internal error function execution error");
-                return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Exception, new[]
+                var errorChange = new AddCellExpandableException(targetRow.Cells.First(), ex, "Internal function execution error");
+                var markCellAsError = new AddRowCssClass(targetRow.RowReference, HtmlParser.ErrorCssClass);
+                return new FunctionExecutionResult(FunctionExecutionResult.FunctionRunResult.Exception, new AbstractTableChange[]
                 {
-                    errorChange
+                    errorChange,
+                    markCellAsError
                 });
             }
         }
