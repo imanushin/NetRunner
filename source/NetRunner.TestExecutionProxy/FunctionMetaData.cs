@@ -12,15 +12,26 @@ namespace NetRunner.TestExecutionProxy
 {
     public sealed class FunctionMetaData : MarshalByRefObject
     {
-        private readonly GeneralIsolatedReference targetObject;
+        private readonly Lazy<GeneralIsolatedReference> targetObject;
+        private readonly TypeReference objectType;
 
-        internal FunctionMetaData([NotNull] MethodInfo method, [NotNull] GeneralIsolatedReference targetObject)
+        private FunctionMetaData([NotNull] MethodInfo method, [NotNull] Lazy<GeneralIsolatedReference> targetObject, TypeReference objectType)
         {
             Method = method;
-
+            this.objectType = objectType;
             this.targetObject = targetObject;
 
             AvailableFunctionNames = GetFunctionNamesAvailable(method);
+        }
+
+        internal FunctionMetaData([NotNull] MethodInfo method, [NotNull] GeneralLazyIsolatedReference targetObject)
+            : this(method, new Lazy<GeneralIsolatedReference>(() => targetObject.Instance), targetObject.Type)
+        {
+        }
+
+        internal FunctionMetaData([NotNull] MethodInfo method, [NotNull] GeneralIsolatedReference targetObject)
+            : this(method, new Lazy<GeneralIsolatedReference>(() => targetObject), targetObject.GetType())
+        {
         }
 
         private static ReadOnlyCollection<string> GetFunctionNamesAvailable(MethodInfo method)
@@ -92,7 +103,7 @@ namespace NetRunner.TestExecutionProxy
         {
             get
             {
-                return targetObject.GetType();
+                return objectType;
             }
         }
 
@@ -118,7 +129,7 @@ namespace NetRunner.TestExecutionProxy
 
                 var parametersArray = PrepareParameters(parameters, originalParameters);
 
-                var result = Method.Invoke(targetObject.Value, parametersArray);
+                var result = Method.Invoke(targetObject.Value.Value, parametersArray);
 
                 var outParameters = ExtractOutParameters(originalParameters, parametersArray);
 
@@ -201,7 +212,7 @@ namespace NetRunner.TestExecutionProxy
             TArg argument)
             where TTargetType : FunctionContainer
         {
-            var objectForExecute = targetObject.Value as TTargetType;
+            var objectForExecute = targetObject.Value.Value as TTargetType;
 
             if (ReferenceEquals(objectForExecute, null))
             {
@@ -230,7 +241,7 @@ namespace NetRunner.TestExecutionProxy
                 .Select(p => new ParameterInfoReference(p))
                 .FirstOrDefault();
 
-            if(result == null)
+            if (result == null)
                 throw new InvalidOperationException(string.Format("Unable to find parameter {0} of method {1}", name, Method));
 
             return result;
