@@ -16,13 +16,11 @@ namespace NetRunner.Executable.Invokation
     {
         private static readonly char[] incorrectFunctionCharacters = " \n\r\t!@#$%^&*()_+=-/*`~\\|/,.№:;\"'?<>[]{}".ToCharArray();
 
-        public TestFunctionReference(FunctionMetaData method, GeneralIsolatedReference targetObject)
+        internal TestFunctionReference(FunctionMetaData method)
         {
             Validate.ArgumentIsNotNull(method, "method");
-            Validate.ArgumentIsNotNull(targetObject, "targetObject");
 
             Method = method;
-            TargetObject = targetObject;
 
             ArgumentTypes = method.GetParameters().ToReadOnlyList();
             ResultType = method.ReturnType;
@@ -38,13 +36,6 @@ namespace NetRunner.Executable.Invokation
 
         [NotNull]
         public ReadOnlyList<string> AvailableFunctionNames
-        {
-            get;
-            private set;
-        }
-
-        [NotNull]
-        public GeneralIsolatedReference TargetObject
         {
             get;
             private set;
@@ -69,7 +60,7 @@ namespace NetRunner.Executable.Invokation
         {
             get
             {
-                return TargetObject.GetType().Name + '.' + Method.SystemName;
+                return Method.ObjectType.Name + '.' + Method.SystemName;
             }
         }
 
@@ -77,14 +68,13 @@ namespace NetRunner.Executable.Invokation
         {
             yield return Method.SystemName;
             yield return ArgumentTypes;
-            yield return TargetObject;
             yield return ResultType;
             yield return AvailableFunctionNames;
         }
 
         protected override string GetString()
         {
-            return string.Format("Method: {0}; target object type: {1}; Parameters: {2}; Result type: {3}; AvailableFunctionNames: {4}", Method.SystemName, TargetObject.GetType().Name, ArgumentTypes, ResultType, AvailableFunctionNames);
+            return string.Format("Method: {0};  Parameters: {1}; Result type: {2}; AvailableFunctionNames: {3}", Method.SystemName, ArgumentTypes, ResultType, AvailableFunctionNames);
         }
 
         [NotNull]
@@ -100,7 +90,8 @@ namespace NetRunner.Executable.Invokation
 
             var subNames = functionName.Split(incorrectFunctionCharacters, StringSplitOptions.RemoveEmptyEntries);
 
-            return string.Concat(subNames);;
+            return string.Concat(subNames);
+            ;
         }
     }
 }

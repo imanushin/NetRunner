@@ -33,7 +33,7 @@ namespace NetRunner.Executable.Invokation
         private static ReadOnlyList<TestFunctionReference> functions = ReadOnlyList<TestFunctionReference>.Empty;
 
         [NotNull]
-        private static ReadOnlyList<IsolatedReference<BaseTestContainer>> testContainers = ReadOnlyList<IsolatedReference<BaseTestContainer>>.Empty;
+        private static ReadOnlyList<LazyIsolatedReference<BaseTestContainer>> testContainers = ReadOnlyList<LazyIsolatedReference<BaseTestContainer>>.Empty;
 
         [CanBeNull]
         private static ReflectionInvoker reflectionInvoker;
@@ -75,7 +75,7 @@ namespace NetRunner.Executable.Invokation
             testContainers = reflectionInvoker.CreateTypeInstances<BaseTestContainer>(testTypes.ToArray()).ToReadOnlyList();
 
             functions = testContainers
-                .SelectMany(tc => reflectionInvoker.FindFunctionsAvailable(tc).Select(f => new TestFunctionReference(f, tc.CastToFunctionContainer())))
+                .SelectMany(tc => reflectionInvoker.FindFunctionsAvailable(tc).Select(f => new TestFunctionReference(f)))
                 .ToReadOnlyList();
 
             var parsersFound = reflectionInvoker.CreateParsers(parserTypes.ToArray()).ToList();
@@ -127,7 +127,7 @@ namespace NetRunner.Executable.Invokation
         {
             get
             {
-                return testContainers.Select(tc => tc.GetTypeFullName()).ToReadOnlyList();
+                return testContainers.Select(tc => tc.Type.FullName).ToReadOnlyList();
             }
         }
 
@@ -160,7 +160,7 @@ namespace NetRunner.Executable.Invokation
             if (firstCandidate == null)
                 return null;
 
-            return new TestFunctionReference(firstCandidate, targetObject);
+            return new TestFunctionReference(firstCandidate);
         }
 
         [CanBeNull]

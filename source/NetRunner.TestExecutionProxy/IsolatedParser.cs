@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using NetRunner.ExternalLibrary;
+using NetRunner.ExternalLibrary.Properties;
 
 namespace NetRunner.TestExecutionProxy
 {
@@ -43,6 +44,21 @@ namespace NetRunner.TestExecutionProxy
                 
                 return false;
             }
+        }
+
+        [CanBeNull]
+        internal static IsolatedParser CreateOrNull(TypeReference type)
+        {
+            try
+            {
+                return new IsolatedParser(new LazyIsolatedReference<BaseParser>(type).TypedInstance.Value);
+            }
+            catch (Exception ex)
+            {
+                Trace.TraceError("Unable to create parse {0}: {1}", type.Name, ex);
+            }
+
+            return null;
         }
     }
 }

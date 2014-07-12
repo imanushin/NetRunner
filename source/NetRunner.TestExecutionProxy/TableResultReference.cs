@@ -13,7 +13,7 @@ namespace NetRunner.TestExecutionProxy
         private readonly BaseTableArgument baseTableArgument;
 
         internal TableResultReference(BaseTableArgument baseTableArgument)
-            : base(baseTableArgument)
+            : base(baseTableArgument, typeof(BaseTableArgument))
         {
             this.baseTableArgument = baseTableArgument;
         }

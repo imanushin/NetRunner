@@ -30,6 +30,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Build.Tasks.v4.0" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -45,8 +46,10 @@
     <Compile Include="ExecutionResult.cs" />
     <Compile Include="FunctionMetaData.cs" />
     <Compile Include="GeneralIsolatedReference.cs" />
+    <Compile Include="GeneralLazyIsolatedReference.cs" />
     <Compile Include="IsolatedParser.cs" />
     <Compile Include="IsolatedReference.cs" />
+    <Compile Include="LazyIsolatedReference.cs" />
     <Compile Include="ParameterData.cs" />
     <Compile Include="ParameterInfoReference.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

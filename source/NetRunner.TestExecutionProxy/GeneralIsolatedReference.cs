@@ -5,18 +5,33 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NetRunner.ExternalLibrary;
+using NetRunner.ExternalLibrary.Properties;
 
 namespace NetRunner.TestExecutionProxy
 {
     public class GeneralIsolatedReference : MarshalByRefObject
     {
-        public static readonly GeneralIsolatedReference Empty = new GeneralIsolatedReference(null);
+        public static readonly GeneralIsolatedReference Empty = new GeneralIsolatedReference(null, typeof(object));
 
-        internal GeneralIsolatedReference(object value)
+        private readonly TypeReference objectType;
+
+        internal GeneralIsolatedReference(object value, Type objectType)
+            :this(value, TypeReference.GetType(objectType))
         {
-            this.Value = value;
         }
 
+        internal GeneralIsolatedReference(object value, TypeReference objectType)
+        {
+            Value = value;
+            this.objectType = objectType;
+
+            if (!ReferenceEquals(null, value))
+            {
+                this.objectType = TypeReference.GetType(value.GetType());
+            }
+        }
+
+        [CanBeNull]
         internal object Value
         {
             get;
@@ -53,12 +68,12 @@ namespace NetRunner.TestExecutionProxy
 
         public FunctionMetaData[] GetMethods()
         {
-            return Value.GetType().GetMethods().Select(m => new FunctionMetaData(m, Value)).ToArray();
+            return objectType.TargetType.GetMethods().Select(m => new FunctionMetaData(m, this)).ToArray();
         }
 
         public new TypeReference GetType()
         {
-            return TypeReference.GetType(Value.GetType());
+            return objectType;
         }
 
         public override bool Equals(object obj)
@@ -86,6 +101,11 @@ namespace NetRunner.TestExecutionProxy
         public override string ToString()
         {
             return ReferenceEquals(Value, null) ? string.Empty : Value.ToString();
+        }
+
+        internal IsolatedReference<T> Cast<T>()
+        {
+            return new IsolatedReference<T>((T)Value);
         }
     }
 }

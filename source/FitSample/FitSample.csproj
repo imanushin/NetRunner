@@ -52,6 +52,7 @@
     <Compile Include="SettingArgument.cs" />
     <Compile Include="InOutObject.cs" />
     <Compile Include="SettingsContainer.cs" />
+    <Compile Include="TestContainerWithException.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NetRunner.ExternalLibrary\NetRunner.ExternalLibrary.csproj">

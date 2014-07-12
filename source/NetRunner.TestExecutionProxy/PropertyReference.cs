@@ -80,7 +80,7 @@ namespace NetRunner.TestExecutionProxy
         {
             try
             {
-                var result = new GeneralIsolatedReference(property.GetValue(targetObject.Value));
+                var result = new GeneralIsolatedReference(property.GetValue(targetObject.Value), property.PropertyType);
 
                 return new ExecutionResult(result, Enumerable.Empty<ParameterData>());
             }

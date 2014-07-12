@@ -12,12 +12,13 @@ namespace NetRunner.TestExecutionProxy
 {
     public sealed class FunctionMetaData : MarshalByRefObject
     {
-        private readonly object targetObject;
+        private readonly GeneralIsolatedReference targetObject;
 
-        internal FunctionMetaData(MethodInfo method, object targetObject)
+        internal FunctionMetaData([NotNull] MethodInfo method, [NotNull] GeneralIsolatedReference targetObject)
         {
-            this.targetObject = targetObject;
             Method = method;
+
+            this.targetObject = targetObject;
 
             AvailableFunctionNames = GetFunctionNamesAvailable(method);
         }
@@ -87,6 +88,14 @@ namespace NetRunner.TestExecutionProxy
             }
         }
 
+        public TypeReference ObjectType
+        {
+            get
+            {
+                return targetObject.GetType();
+            }
+        }
+
         [Pure]
         public ParameterInfoReference[] GetParameters()
         {
@@ -109,11 +118,11 @@ namespace NetRunner.TestExecutionProxy
 
                 var parametersArray = PrepareParameters(parameters, originalParameters);
 
-                var result = Method.Invoke(targetObject, parametersArray);
+                var result = Method.Invoke(targetObject.Value, parametersArray);
 
                 var outParameters = ExtractOutParameters(originalParameters, parametersArray);
 
-                var actualResult = new ExecutionResult(new GeneralIsolatedReference(result), outParameters);
+                var actualResult = new ExecutionResult(new GeneralIsolatedReference(result, TypeReference.GetType(Method.ReturnType)), outParameters);
 
                 var afterExecutionResult = ExecuteAfterFunctionCallMethod();
 
@@ -171,7 +180,7 @@ namespace NetRunner.TestExecutionProxy
                     continue;
                 }
 
-                outParameters.Add(new ParameterData(parameter.Name, new GeneralIsolatedReference(parametersArray[i])));
+                outParameters.Add(new ParameterData(parameter.Name, new GeneralIsolatedReference(parametersArray[i], originalParameters[i].ParameterType)));
             }
             return outParameters;
         }
@@ -192,7 +201,7 @@ namespace NetRunner.TestExecutionProxy
             TArg argument)
             where TTargetType : FunctionContainer
         {
-            var objectForExecute = targetObject as TTargetType;
+            var objectForExecute = targetObject.Value as TTargetType;
 
             if (ReferenceEquals(objectForExecute, null))
             {

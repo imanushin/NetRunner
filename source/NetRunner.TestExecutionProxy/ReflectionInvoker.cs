@@ -177,64 +177,26 @@ namespace NetRunner.TestExecutionProxy
 
         public IsolatedParser[] CreateParsers(TypeReference[] types)
         {
-            return CreateTypeInstances<BaseParser>(types).Select(r => new IsolatedParser(r.Value)).ToArray();
+            return types.Select(IsolatedParser.CreateOrNull).Where(p=>p!=null).ToArray();
         }
-
-        public IsolatedReference<T>[] CreateTypeInstances<T>(TypeReference[] targetTypes)
+        
+        public LazyIsolatedReference<T>[] CreateTypeInstances<T>(TypeReference[] targetTypes)
         {
-            var result = new List<IsolatedReference<T>>();
-
-            foreach (var typeReference in targetTypes)
-            {
-                try
-                {
-                    var constructor = typeReference.TargetType.GetConstructor(new Type[0]);
-
-                    if (constructor == null)
-                    {
-                        Trace.TraceError("Unable to create type {0}: unable to find any constructor without parameters", typeReference.TargetType);
-
-                        continue;
-                    }
-
-                    var newObject = (T)constructor.Invoke(new object[0]);
-
-                    result.Add(new IsolatedReference<T>(newObject));
-                }
-                catch (TargetInvocationException ex)
-                {
-                    Trace.TraceError("Unable to create instance of type {0} because of error: {1}", typeReference.TargetType, ex.InnerException);
-                }
-                catch (Exception ex)
-                {
-                    Trace.TraceError("Unable to create instance of type {0} because of error: {1}", typeReference.TargetType, ex);
-                }
-            }
-
-            return result.ToArray();
+            return targetTypes.Select(t => new LazyIsolatedReference<T>(t)).ToArray();
         }
 
-        public FunctionMetaData[] FindFunctionsAvailable(IsolatedReference<BaseTestContainer> testContainer)
+        public FunctionMetaData[] FindFunctionsAvailable(LazyIsolatedReference<BaseTestContainer> testContainer)
         {
             var functions = new List<FunctionMetaData>();
-
-            if (testContainer.IsNull)
-            {
-                Trace.TraceError("Internal error: unable to get items from container, because it is null");
-
-                return functions.ToArray();
-            }
-
-            BaseTestContainer localContainer = testContainer.Value;
-
-            var targetType = localContainer.GetType();
+            
+            var targetType = testContainer.Type.TargetType;
 
             try
             {
                 var availableTests = targetType.GetMethods(BindingFlags.Public | BindingFlags.Instance)
                                                .Where(f => !ignoredFunctions.Contains(f.Name));
 
-                var availableFunctions = availableTests.Select(t => new FunctionMetaData(t, localContainer));
+                var availableFunctions = availableTests.Select(t => new FunctionMetaData(t, testContainer.Instance));
 
                 Trace.TraceInformation("Type {0} contains following public functions: {1}", targetType.Name, availableFunctions);
 
