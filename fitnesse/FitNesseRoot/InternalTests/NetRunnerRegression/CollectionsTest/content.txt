@@ -9,9 +9,9 @@
 | '''Current Test Results''' |
 | '''Type''' | '''Count''' |
 | right | 3 |
-| wrong | 6 |
+| wrong | 7 |
 | ignores | 0 |
-| exceptions | 2 |
+| exceptions | 3 |
 
 | check | '''Row Count Of Table''' | 1 | '''is''' | 4 | 
 
@@ -144,3 +144,17 @@
 | 3 | 1 | Contains | in out objects |
 | 1..100 | 1, 3 | Contains | class="error" |
 | 1, 2 | 4 | Contains | surplus |
+
+| check | '''Row Count Of Table''' | 12 | '''is''' | 3 | 
+
+| '''Analyse Table''' | 12 |
+| '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
+| 1 | 3 | Contains | Unable to compare |
+| 1..100 | 1..100 | Not Contain | class="pass" |
+
+| check | '''Row Count Of Table''' | 13 | '''is''' | 3 | 
+
+| '''Analyse Table''' | 13 |
+| '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
+| 1 | 3 | Contains | Unable to get string |
+| 1..100 | 1..100 | Not Contain | class="pass" |

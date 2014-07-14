@@ -114,7 +114,14 @@ namespace NetRunner.TestExecutionProxy
 
         public override string ToString()
         {
-            return ReferenceEquals(Value, null) ? string.Empty : Value.ToString();
+            try
+            {
+                return ReferenceEquals(Value, null) ? string.Empty : Value.ToString();
+            }
+            catch (Exception ex)
+            {
+                return string.Format("Unable to get string of {0}: {1}", GetType().Name, ex);
+            }
         }
 
         internal IsolatedReference<T> Cast<T>()

@@ -9,7 +9,7 @@
 | '''Current Test Results''' |
 | '''Type''' | '''Count''' |
 | right | 4 |
-| wrong | 2 |
+| wrong | 3 |
 | ignores | 0 |
 | exceptions | 3 |
 
@@ -112,6 +112,18 @@
 | 1..100 | 1..100 | Contains | class="error" |
 | 1..100 | 1..100 | Contains | Do Method From Problematic Container |
 | 1..100 | 1..100 | Contains | Surprise!!! |
+| 1..100 | 1..100 | Not Contain | TargetInvokation |
+
+| check | '''Row Count Of Table''' | 10 | '''is''' | 2 | 
+
+| '''Analyse Table''' | 10 |
+| '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
+| 3 | 1 | Contains | Unable to compare |
+| 3 | 1 | Contains | Surprise !!! |
+| 3 | 2 | Contains | Unable to get string |
+| 3 | 2 | Contains | Surprise !!! |
+| 1..100 | 1..100 | Not Contain | class="pass" |
+
 | 1..100 | 1..100 | Not Contain | TargetInvokation |
 
 | check | '''Trimmed String Length Of''' | ''   1   '' | '''is''' | 1 |
