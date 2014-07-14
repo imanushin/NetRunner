@@ -29,3 +29,6 @@
 | ''' Do Method From Problematic Container ''' |
 | ''' Do Method From Problematic Container ''' |
 
+| check | ''' Get Incorrect Equality Class ''' | 123 |
+| check | ''' Get Incorrect To String Class ''' | 123 |
+

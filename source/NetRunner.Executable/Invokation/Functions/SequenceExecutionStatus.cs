@@ -58,5 +58,14 @@ namespace NetRunner.Executable.Invokation.Functions
             WereExceptions |= other.WereExceptions;
             Changes.AddRange(other.Changes);
         }
+
+        public bool CompareAndMerge(GeneralIsolatedReference first, GeneralIsolatedReference second, HtmlCell targetCell)
+        {
+            var areEquals = first.EqualsSafe(second);
+
+            MergeWith(areEquals, targetCell, "Unable to compare");
+
+            return ReflectionLoader.TrueResult.Equals(areEquals.Result);
+        }
     }
 }

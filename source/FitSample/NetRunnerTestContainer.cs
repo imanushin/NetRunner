@@ -114,6 +114,16 @@ namespace FitSample
             return c;
         }
 
+        public IncorrectEqualityClass GetIncorrectEqualityClass()
+        {
+            return new IncorrectEqualityClass();
+        }
+
+        public IncorrectToStringClass GetIncorrectToStringClass()
+        {
+            return new IncorrectToStringClass();
+        }
+
         public IEnumerable ListWrongEquality()
         {
             return new[]

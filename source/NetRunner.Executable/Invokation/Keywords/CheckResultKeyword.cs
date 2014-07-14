@@ -77,7 +77,7 @@ namespace NetRunner.Executable.Invokation.Keywords
                 return new InvokationResult(expectedObject.Result, new TableChangeCollection(false, true, status.Changes), result.OutParametersResult);
             }
 
-            bool checkSucceded = Equals(expectedObject.Result, resultObject);
+            bool checkSucceded = status.CompareAndMerge(expectedObject.Result, resultObject, lastCell);
 
             if (checkSucceded)
             {

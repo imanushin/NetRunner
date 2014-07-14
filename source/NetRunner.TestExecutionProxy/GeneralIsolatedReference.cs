@@ -16,7 +16,7 @@ namespace NetRunner.TestExecutionProxy
         private readonly TypeReference objectType;
 
         internal GeneralIsolatedReference(object value, Type objectType)
-            :this(value, TypeReference.GetType(objectType))
+            : this(value, TypeReference.GetType(objectType))
         {
         }
 
@@ -74,6 +74,20 @@ namespace NetRunner.TestExecutionProxy
         public new TypeReference GetType()
         {
             return objectType;
+        }
+
+        public ExecutionResult EqualsSafe(GeneralIsolatedReference second)
+        {
+            try
+            {
+                var result = Equals(this, second);
+
+                return new ExecutionResult(new GeneralIsolatedReference(result, typeof(bool)), new ParameterData[0]);
+            }
+            catch (Exception ex)
+            {
+                return ExecutionResult.FromException(ex);
+            }
         }
 
         public override bool Equals(object obj)

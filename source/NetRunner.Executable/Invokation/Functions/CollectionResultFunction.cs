@@ -117,7 +117,7 @@ namespace NetRunner.Executable.Invokation.Functions
                     continue;
                 }
 
-                var conversionSucceeded = value.Result.Equals(getValueResult.Result);
+                var conversionSucceeded = tableChanges.CompareAndMerge(value.Result, getValueResult.Result, currentRow.Cells[i]);
 
                 var cellChange = conversionSucceeded
                      ? new CssClassCellChange(currentRow.Cells[i], HtmlParser.PassCssClass)
@@ -181,8 +181,8 @@ namespace NetRunner.Executable.Invokation.Functions
                 string header = string.Format("Property {0} was not found", propertyName);
                 string info = string.Format(propertyNotFoundFormat, returnType, propertyName, string.Join(", ", returnType.GetProperties.Select(p => p.Name)));
 
-                status.Changes.Add( new AddCellExpandableInfo(targetCell, header, info));
-                status.Changes.Add( new CssClassCellChange(targetCell, HtmlParser.ErrorCssClass));
+                status.Changes.Add(new AddCellExpandableInfo(targetCell, header, info));
+                status.Changes.Add(new CssClassCellChange(targetCell, HtmlParser.ErrorCssClass));
             }
         }
 

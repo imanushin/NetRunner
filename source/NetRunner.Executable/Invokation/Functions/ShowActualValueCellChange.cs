@@ -1,4 +1,5 @@
-﻿using HtmlAgilityPack;
+﻿using System.Linq;
+using HtmlAgilityPack;
 using NetRunner.Executable.Common;
 using NetRunner.Executable.RawData;
 using NetRunner.ExternalLibrary.Properties;
@@ -24,6 +25,10 @@ namespace NetRunner.Executable.Invokation.Functions
 
             var htmlCell = Cell.FindMyself(table);
 
+            var clonedNodes = htmlCell.ChildNodes.Select(n => n.Clone()).ToList();
+
+            htmlCell.ChildNodes.Clear();
+            
             var expect = htmlCell.InnerText;
             htmlCell.InnerHtml = string.Empty;
             var expectBlock = htmlCell.OwnerDocument.CreateElement("i");
@@ -34,6 +39,7 @@ namespace NetRunner.Executable.Invokation.Functions
             actualBlock.InnerHtml = "actual: ";
 
             htmlCell.AppendChild(expectBlock);
+            clonedNodes.ForEach(htmlCell.ChildNodes.Add);
             htmlCell.InnerHtml += expect + "</br>";
             htmlCell.AppendChild(actualBlock);
             htmlCell.InnerHtml += actualValue;

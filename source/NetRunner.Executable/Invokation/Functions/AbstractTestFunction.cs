@@ -107,8 +107,8 @@ namespace NetRunner.Executable.Invokation.Functions
             {
                 return;
             }
-
-            if (parsedValue.Result.Equals(outParameter.Value))
+            
+            if (changes.CompareAndMerge(parsedValue.Result, outParameter.Value, targetCell))
             {
                 changes.Changes.Add(new CssClassCellChange(targetCell, HtmlParser.PassCssClass));
             }
