@@ -64,3 +64,11 @@
 | '''list''' | 2 | '''in out objects''' |
 | '''In Value''' | '''Out Value''' |
 | abc | abc |
+
+| '''List Wrong Equality''' |
+| First |
+| 123 |
+
+| '''List Wrong To string''' |
+| First |
+| 123 |

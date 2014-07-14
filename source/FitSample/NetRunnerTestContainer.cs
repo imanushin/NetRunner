@@ -66,8 +66,8 @@ namespace FitSample
             {
                 String = i.ToString(),
                 Int = i,
-                Bool = i%2 == 0,
-                Byte = (byte) i
+                Bool = i % 2 == 0,
+                Byte = (byte)i
             });
         }
 
@@ -112,6 +112,28 @@ namespace FitSample
             c = a + b;
 
             return c;
+        }
+
+        public IEnumerable ListWrongEquality()
+        {
+            return new[]
+            {
+                new
+                {
+                    First=new IncorrectEqualityClass()
+                }
+            };
+        }
+
+        public IEnumerable ListWrongToString()
+        {
+            return new[]
+            {
+                new
+                {
+                    First=new IncorrectToStringClass()
+                }
+            };
         }
     }
 }

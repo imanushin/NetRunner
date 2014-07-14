@@ -45,6 +45,8 @@
     </Compile>
     <Compile Include="CreateFolderArgument.cs" />
     <Compile Include="FunctionNamesTestContainer.cs" />
+    <Compile Include="IncorrectEqualityClass.cs" />
+    <Compile Include="IncorrectToStringClass.cs" />
     <Compile Include="NetRunnerTestContainer.cs" />
     <Compile Include="ProblematicBeforeFunctionContainer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
