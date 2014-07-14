@@ -11,7 +11,7 @@
 | right | 4 |
 | wrong | 2 |
 | ignores | 0 |
-| exceptions | 2 |
+| exceptions | 3 |
 
 | check | '''Row Count Of Table''' | 1 | '''is''' | 1 | 
 
@@ -103,6 +103,16 @@
 | 6 | 3 | Contains | actual: |
 | 6 | 3 | Contains | expect: |
 | 1..5 | 3 | Not Contain | class= |
+
+
+| check | '''Row Count Of Table''' | 9 | '''is''' | 2 | 
+
+| '''Analyse Table''' | 9 |
+| '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
+| 1..100 | 1..100 | Contains | class="error" |
+| 1..100 | 1..100 | Contains | Do Method From Problematic Container |
+| 1..100 | 1..100 | Contains | Surprise!!! |
+| 1..100 | 1..100 | Not Contain | TargetInvokation |
 
 | check | '''Trimmed String Length Of''' | ''   1   '' | '''is''' | 1 |
 

@@ -212,21 +212,28 @@ namespace NetRunner.TestExecutionProxy
             TArg argument)
             where TTargetType : FunctionContainer
         {
-            var objectForExecute = targetObject.Value.Value as TTargetType;
-
-            if (ReferenceEquals(objectForExecute, null))
+            try
             {
+                var objectForExecute = targetObject.Value.Value as TTargetType;
+
+                if (ReferenceEquals(objectForExecute, null))
+                {
+                    return ExecutionResult.Empty;
+                }
+
+                var result = function(objectForExecute, argument);
+
+                if (result != null)
+                {
+                    return ExecutionResult.FromException(result);
+                }
+
                 return ExecutionResult.Empty;
             }
-
-            var result = function(objectForExecute, argument);
-
-            if (result != null)
+            catch (Exception ex)
             {
-                return ExecutionResult.FromException(result);
+                return ExecutionResult.FromException(ex);
             }
-
-            return ExecutionResult.Empty;
         }
 
         private ExecutionResult Execute(Func<FunctionContainer, MethodInfo, Exception> function)
