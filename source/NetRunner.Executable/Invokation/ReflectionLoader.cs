@@ -19,6 +19,11 @@ namespace NetRunner.Executable.Invokation
 {
     internal static class ReflectionLoader
     {
+        static ReflectionLoader()
+        {
+            LoadedAssemblies = ReadOnlyList<string>.Empty;
+        }
+
         private static readonly Type reflectionInvokerType = typeof(ReflectionInvoker);
 
         private static AppDomain currentTestDomain;
@@ -37,6 +42,13 @@ namespace NetRunner.Executable.Invokation
 
         [CanBeNull]
         private static ReflectionInvoker reflectionInvoker;
+
+        [NotNull]
+        public static ReadOnlyList<string> LoadedAssemblies
+        {
+            get;
+            private set;
+        }
 
         public static void AddAssemblies(IReadOnlyCollection<string> assemblyPathes)
         {
@@ -64,7 +76,7 @@ namespace NetRunner.Executable.Invokation
 
             reflectionInvoker.AddAssemblyLoadFolders(assemblyFolders.ToArray());
 
-            assemblyList.ForEach(reflectionInvoker.LoadTestAssembly);
+            LoadedAssemblies = assemblyList.Select(reflectionInvoker.LoadTestAssembly).ToReadOnlyList();
 
             var testTypes = reflectionInvoker.FindTestTypes().ToReadOnlyList();
             var parserTypes = reflectionInvoker.FindParsersAvailable().ToReadOnlyList();

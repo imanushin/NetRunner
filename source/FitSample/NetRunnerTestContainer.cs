@@ -12,6 +12,9 @@ using NetRunner.ExternalLibrary;
 
 namespace FitSample
 {
+    /// <summary>
+    /// NetRunnerTestContainer help
+    /// </summary>
     internal sealed class NetRunnerTestContainer : BaseTestContainer
     {
         public int SummAndWillBe(int first, int second)

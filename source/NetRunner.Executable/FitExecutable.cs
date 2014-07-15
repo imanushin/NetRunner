@@ -56,6 +56,8 @@ namespace NetRunner.Executable
 
             ReflectionLoader.CreateNewApplicationDomain();
 
+            DocumentationStore.LoadForAssemblies(ReflectionLoader.LoadedAssemblies);
+
             for (string document = communicator.ReceiveDocument(); document.Any(); document = communicator.ReceiveDocument())
             {
                 Trace.WriteLine("Processing document of size: " + document.Length);

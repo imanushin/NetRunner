@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using NetRunner.ExternalLibrary;
+using NetRunner.ExternalLibrary.Properties;
 
 namespace NetRunner.TestExecutionProxy
 {
@@ -83,7 +84,8 @@ namespace NetRunner.TestExecutionProxy
             assemblyFolders = assemblyFolders.Concat(newAssemblyFolders).Distinct(StringComparer.OrdinalIgnoreCase).ToArray();
         }
 
-        public void LoadTestAssembly(string assemblyPath)
+        [CanBeNull]
+        public string LoadTestAssembly(string assemblyPath)
         {
             if (!testAssemblies.Any())
             {
@@ -106,10 +108,14 @@ namespace NetRunner.TestExecutionProxy
             {
                 Trace.TraceError("Unable to load assembly from the path '{0}'. Current domain directory: '{1}'", assemblyPath, AppDomain.CurrentDomain.BaseDirectory);
 
-                return;
+                return null;
             }
 
-            testAssemblies.Add(Assembly.LoadFrom(assemblyPath));
+            var newAssembly = Assembly.LoadFrom(assemblyPath);
+
+            testAssemblies.Add(newAssembly);
+
+            return newAssembly.Location;
         }
 
         private static Type BaseParserType
