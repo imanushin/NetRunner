@@ -38,6 +38,8 @@ namespace NetRunner.Executable.Invokation
         {
             var document = new HtmlDocument();
 
+            AppendModalWindowTags(document);
+
             document.DocumentNode.AppendChild(document.CreateElement("br"));
 
             var expandableDiv = document.DocumentNode.AppendChild(document.CreateElement("div"));
@@ -86,6 +88,55 @@ namespace NetRunner.Executable.Invokation
             return document.DocumentNode.OuterHtml;
         }
 
+        private void AppendModalWindowTags(HtmlDocument document)
+        {
+            var modalDialog = document.DocumentNode.AppendChild(document.CreateElement("div"));
+
+            modalDialog.InnerHtml =
+@"    <div id=""overlay"">
+        <div>
+            <p>Content you want the user to see goes here.</p>
+            
+            <a href='#' onclick='overlay()'>close</a>
+        </div>
+    </div>";
+
+            var style = document.DocumentNode.AppendChild(document.CreateElement("style"));
+
+            style.InnerHtml =
+@"#overlay {
+    visibility: hidden;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    z-index: 1000;
+}
+
+#overlay div {
+    max-width: 90%;
+    max-height: 90%;
+    min-width: 10%;
+    min-height: 10%;
+    overflow: hidden;
+    margin: 100px auto;
+    background-color: #fff;
+    border: 1px solid #000;
+    padding: 15px;
+    text-align: center;
+}";
+
+            var openCloseFunction = document.DocumentNode.AppendChild(document.CreateElement("script"));
+
+            openCloseFunction.InnerHtml =
+@"function overlay() {
+            var el = document.getElementById(""overlay"");
+            el.style.visibility = (el.style.visibility == ""visible"") ? ""hidden"" : ""visible"";
+        }";
+        }
+
         private static void AddTextTag(HtmlNode textNode, string tagName, string titleText)
         {
             var title = textNode.AppendChild(textNode.OwnerDocument.CreateElement(tagName));
@@ -100,9 +151,15 @@ namespace NetRunner.Executable.Invokation
 
         private static void StringsToSequence(HtmlNode textNode, IEnumerable<string> inputStrings)
         {
+            var ownerDocument = textNode.OwnerDocument;
+
             foreach (string testContainerName in inputStrings)
             {
-                textNode.AppendChild(textNode.OwnerDocument.CreateElement("p")).InnerHtml = testContainerName;
+                var linkElement = textNode.AppendChild(ownerDocument.CreateElement("a"));
+                linkElement.SetAttributeValue("href", "#");
+                linkElement.SetAttributeValue("onclick", "overlay()");
+
+                linkElement.AppendChild(ownerDocument.CreateElement("p")).InnerHtml = testContainerName;
             }
         }
 
