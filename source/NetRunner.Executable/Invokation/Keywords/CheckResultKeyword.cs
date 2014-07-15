@@ -83,14 +83,14 @@ namespace NetRunner.Executable.Invokation.Keywords
             {
                 status.Changes.Add(new CssClassCellChange(lastCell, HtmlParser.PassCssClass));
 
-                return new InvokationResult(ReflectionLoader.TrueResult, new TableChangeCollection(true, false, status.Changes), result.OutParametersResult);
+                return new InvokationResult(ReflectionLoader.CreateBoolean(true), new TableChangeCollection(true, false, status.Changes), result.OutParametersResult);
             }
 
             var showActualValueCellChange = new ShowActualValueCellChange(lastCell, resultObject.ToString());
 
             status.Changes.Add(showActualValueCellChange);
 
-            return new InvokationResult(ReflectionLoader.TrueResult, new TableChangeCollection(false, false, status.Changes), result.OutParametersResult);
+            return new InvokationResult(ReflectionLoader.CreateBoolean(false), new TableChangeCollection(false, false, status.Changes), result.OutParametersResult);
         }
 
         /// <summary>

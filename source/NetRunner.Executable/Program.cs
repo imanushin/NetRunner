@@ -18,7 +18,7 @@ namespace NetRunner.Executable
                 Trace.Listeners.Add(new ConsoleTraceListener());
                 Trace.AutoFlush = true;
 
-                Debugger.Launch();
+                //Debugger.Launch();
 
                 InMemoryAssemblyLoader.Instance.SubscribeDomain(AppDomain.CurrentDomain);
 

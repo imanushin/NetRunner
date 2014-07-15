@@ -98,9 +98,7 @@ namespace NetRunner.Executable.Invokation
 
             Trace.TraceInformation("All available functions: {0}", functions.JoinToStringLazy(Environment.NewLine));
 
-            TrueResult = reflectionInvoker.CreateOnTestDomain(true);
             NullResult = reflectionInvoker.CreateOnTestDomain<object>(null);
-            FalseResult = reflectionInvoker.CreateOnTestDomain(false);
             EnumerableType = reflectionInvoker.CreateTypeOnTestDomain(typeof(IEnumerable));
             TableArgumentType = reflectionInvoker.CreateTypeOnTestDomain(typeof(BaseTableArgument));
         }
@@ -239,18 +237,6 @@ namespace NetRunner.Executable.Invokation
             return existingAssembly ?? Environment.CurrentDirectory;
         }
 
-        public static IsolatedReference<bool> TrueResult
-        {
-            get;
-            private set;
-        }
-
-        public static IsolatedReference<bool> FalseResult
-        {
-            get;
-            private set;
-        }
-
         public static TypeReference EnumerableType
         {
             get;
@@ -261,6 +247,13 @@ namespace NetRunner.Executable.Invokation
         {
             get;
             private set;
+        }
+
+        public static GeneralIsolatedReference CreateBoolean(bool value)
+        {
+            Validate.IsNotNull(reflectionInvoker, "Test domain had not been initialized yet");
+
+            return reflectionInvoker.CreateOnTestDomain(value);
         }
 
         public static GeneralIsolatedReference NullResult

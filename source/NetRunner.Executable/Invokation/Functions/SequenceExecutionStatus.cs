@@ -67,7 +67,7 @@ namespace NetRunner.Executable.Invokation.Functions
 
             MergeWith(areEquals, targetCell, "Unable to compare {0} and {1}", first.GetType().Name, second.GetType().Name);
 
-            return ReflectionLoader.TrueResult.Equals(areEquals.Result);
+            return !areEquals.HasError && areEquals.Result.IsTrue;
         }
     }
 }

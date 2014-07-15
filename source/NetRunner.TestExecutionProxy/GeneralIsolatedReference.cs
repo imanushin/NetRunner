@@ -46,6 +46,22 @@ namespace NetRunner.TestExecutionProxy
             }
         }
 
+        public bool IsTrue
+        {
+            get
+            {
+                return true.Equals(Value);
+            }
+        }
+
+        public bool IsFalse
+        {
+            get
+            {
+                return false.Equals(Value);
+            }
+        }
+
         public TableResultReference AsTableResultReference()
         {
             return new TableResultReference(Value as BaseTableArgument);

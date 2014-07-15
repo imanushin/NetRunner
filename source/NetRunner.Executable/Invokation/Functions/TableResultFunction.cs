@@ -72,13 +72,13 @@ namespace NetRunner.Executable.Invokation.Functions
                 changes.Changes.Add(new AddRowCssClass(row.RowReference, HtmlParser.ErrorCssClass));
             }
 
-            if (ReflectionLoader.FalseResult.Equals(rowResult.Result))
+            if (rowResult.Result.IsFalse)
             {
                 changes.Changes.Add(new AddRowCssClass(row.RowReference, HtmlParser.FailCssClass));
 
                 changes.AllIsOk = false;
             }
-            else if (ReflectionLoader.TrueResult.Equals(rowResult.Result))
+            else if (rowResult.Result.IsTrue)
             {
                 changes.Changes.Add(new AddRowCssClass(row.RowReference, HtmlParser.PassCssClass));
             }

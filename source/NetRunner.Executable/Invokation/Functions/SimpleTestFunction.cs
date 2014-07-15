@@ -50,7 +50,7 @@ namespace NetRunner.Executable.Invokation.Functions
                     status.Changes.Add(rowCss);
                 }
 
-                if (ReflectionLoader.FalseResult.Equals(result.Result))
+                if (result.Result.IsFalse)
                 {
                     status.AllIsOk = false;
                     status.Changes.Add(new AddRowCssClass(function.RowReference, HtmlParser.FailCssClass));
@@ -61,7 +61,7 @@ namespace NetRunner.Executable.Invokation.Functions
                     CheckOutParameter(functionReference, status, parameterData, GetParameterCell(parameterData));
                 }
 
-                if (ReflectionLoader.TrueResult.Equals(result.Result) && status.AllIsOk)
+                if (result.Result.IsTrue && status.AllIsOk)
                 {
                     var trueResultMark = new AddRowCssClass(function.RowReference, HtmlParser.PassCssClass);
 
