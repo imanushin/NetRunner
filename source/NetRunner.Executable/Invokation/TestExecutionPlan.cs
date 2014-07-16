@@ -59,7 +59,7 @@ namespace NetRunner.Executable.Invokation
                 {
                     var functionNode = textNode.AppendChild(document.CreateElement("p"));
 
-                    var argumentsString = string.Join(", ", function.ArgumentTypes.Select(t => t.ParameterType.Name + ' ' + t.Name).ToReadOnlyList());
+                    var argumentsString = string.Join(", ", function.Arguments.Select(t => t.ParameterType.Name + ' ' + t.Name).ToReadOnlyList());
 
                     functionNode.InnerHtml = string.Format("{0}({1})", function.DisplayName, argumentsString);
                 }

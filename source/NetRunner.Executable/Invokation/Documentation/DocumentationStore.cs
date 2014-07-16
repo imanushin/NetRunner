@@ -8,27 +8,43 @@ using NetRunner.Executable.Common;
 using NetRunner.ExternalLibrary.Properties;
 using NetRunner.TestExecutionProxy;
 
-namespace NetRunner.Executable.Invokation
+namespace NetRunner.Executable.Invokation.Documentation
 {
     internal static class DocumentationStore
     {
         private static readonly Dictionary<string, string> internalStore = new Dictionary<string, string>();
 
         private const string typeIdentityFormat = "T:{0}";
+        private const string methodIdentityFormat = "M:{0}.{1}({2})";
 
         [CanBeNull]
-        public static string GetForType(TypeReference type)
+        public static string GetRaw(TypeReference type)
         {
-            string result;
-
             var identity = string.Format(typeIdentityFormat, type.FullName);
 
+            return TryFindForKey(identity);
+        }
+
+        private static string TryFindForKey(string identity)
+        {
+            string result;
             if (internalStore.TryGetValue(identity, out result))
             {
                 return result;
             }
 
             return null;
+        }
+
+        public static string GetRaw(TestFunctionReference function)
+        {
+            var key = string.Format(
+                methodIdentityFormat,
+                function.Owner.FullName,
+                function.Method.SystemName,
+                string.Join(",", function.Arguments.Select(a => a.ParameterType.FullName)));
+
+            return TryFindForKey(key);
         }
 
         public static void LoadForAssemblies(ReadOnlyList<string> assemblyPathes)

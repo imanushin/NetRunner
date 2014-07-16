@@ -91,14 +91,14 @@ namespace NetRunner.Executable.Invokation.Functions
 
         private HtmlCell GetParameterCell(ParameterData parameterData)
         {
-            var parameterIndex = functionReference.ArgumentTypes.IndexOf(p=>string.Equals(p.Name, parameterData.Name, StringComparison.Ordinal));
+            var parameterIndex = functionReference.Arguments.IndexOf(p=>string.Equals(p.Name, parameterData.Name, StringComparison.Ordinal));
 
             Validate.IsNotNull(
                 parameterIndex, 
                 "Internal error: unable to find parameter '{0}' of '{1}'. Parameters available: {2}. Please send this issue to {3}",
                 parameterData.Name,
                 function.FunctionName,
-                functionReference.ArgumentTypes.JoinToStringLazy(", "),
+                functionReference.Arguments.JoinToStringLazy(", "),
                 GlobalConstants.IssuesPath
             );
 

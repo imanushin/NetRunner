@@ -16,19 +16,27 @@ namespace NetRunner.Executable.Invokation
     {
         private static readonly char[] incorrectFunctionCharacters = " \n\r\t!@#$%^&*()_+=-/*`~\\|/,.№:;\"'?<>[]{}".ToCharArray();
 
-        internal TestFunctionReference(FunctionMetaData method)
+        internal TestFunctionReference(FunctionMetaData method, TypeReference owner)
         {
             Validate.ArgumentIsNotNull(method, "method");
 
             Method = method;
+            Owner = owner;
 
-            ArgumentTypes = method.GetParameters().ToReadOnlyList();
+            Arguments = method.GetParameters().ToReadOnlyList();
             ResultType = method.ReturnType;
             AvailableFunctionNames = method.AvailableFunctionNames.Select(CleanFunctionName).ToReadOnlyList();
         }
 
         [NotNull]
         public FunctionMetaData Method
+        {
+            get;
+            private set;
+        }
+
+        [NotNull]
+        public TypeReference Owner
         {
             get;
             private set;
@@ -42,7 +50,7 @@ namespace NetRunner.Executable.Invokation
         }
 
         [NotNull]
-        public ReadOnlyList<ParameterInfoReference> ArgumentTypes
+        public ReadOnlyList<ParameterInfoReference> Arguments
         {
             get;
             private set;
@@ -67,14 +75,15 @@ namespace NetRunner.Executable.Invokation
         protected override IEnumerable<object> GetInnerObjects()
         {
             yield return Method.SystemName;
-            yield return ArgumentTypes;
+            yield return Arguments;
             yield return ResultType;
+            yield return Owner;
             yield return AvailableFunctionNames;
         }
 
         protected override string GetString()
         {
-            return string.Format("Method: {0};  Parameters: {1}; Result type: {2}; AvailableFunctionNames: {3}", Method.SystemName, ArgumentTypes, ResultType, AvailableFunctionNames);
+            return string.Format("Method: {0};  Parameters: {1}; Result type: {2}; AvailableFunctionNames: {3}", Method.SystemName, Arguments, ResultType, AvailableFunctionNames);
         }
 
         [NotNull]

@@ -33,7 +33,7 @@ namespace NetRunner.Executable.Invokation.Functions
             Validate.ArgumentIsNotNull(functionReference, "functionReference");
             Validate.ArgumentIsNotNull(inputArguments, "inputArguments");
 
-            var expectedTypes = functionReference.ArgumentTypes;
+            var expectedTypes = functionReference.Arguments;
             var actualTypes = new List<ParameterData>();
 
             var conversionErrors = new List<AbstractTableChange>();

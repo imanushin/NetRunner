@@ -50,6 +50,15 @@ namespace NetRunner.Executable.Invokation
             private set;
         }
 
+        public static ReadOnlyList<TestFunctionReference> GetMethodFor(LazyIsolatedReference<BaseTestContainer> testContainer)
+        {
+            Validate.ArgumentIsNotNull(testContainer, "testContainer");
+
+            var type = testContainer.Type;
+
+            return functions.Where(f => f.Owner.Equals(type)).ToReadOnlyList();
+        }
+
         public static void AddAssemblies(IReadOnlyCollection<string> assemblyPathes)
         {
             var allAssemblyFiles = assemblyList.Concat(assemblyPathes).Distinct(StringComparer.OrdinalIgnoreCase).Where(af => !String.IsNullOrWhiteSpace(af)).ToReadOnlyList();
@@ -87,7 +96,7 @@ namespace NetRunner.Executable.Invokation
             testContainers = reflectionInvoker.CreateTypeInstances<BaseTestContainer>(testTypes.ToArray()).ToReadOnlyList();
 
             functions = testContainers
-                .SelectMany(tc => reflectionInvoker.FindFunctionsAvailable(tc).Select(f => new TestFunctionReference(f)))
+                .SelectMany(tc => reflectionInvoker.FindFunctionsAvailable(tc).Select(f => new TestFunctionReference(f, tc.Type)))
                 .ToReadOnlyList();
 
             var parsersFound = reflectionInvoker.CreateParsers(parserTypes.ToArray()).ToList();
@@ -133,11 +142,11 @@ namespace NetRunner.Executable.Invokation
             private set;
         }
 
-        public static ReadOnlyList<TypeReference> TestContainerTypes
+        public static ReadOnlyList<LazyIsolatedReference<BaseTestContainer>> TestContainers
         {
             get
             {
-                return testContainers.Select(tc => tc.Type).ToReadOnlyList();
+                return testContainers;
             }
         }
 
@@ -170,7 +179,7 @@ namespace NetRunner.Executable.Invokation
             if (firstCandidate == null)
                 return null;
 
-            return new TestFunctionReference(firstCandidate);
+            return new TestFunctionReference(firstCandidate, targetObject.GetType());
         }
 
         [CanBeNull]
@@ -178,7 +187,7 @@ namespace NetRunner.Executable.Invokation
         {
             //ToDo: Change to dictionary to avoid multiple enumerations
             return functions.FirstOrDefault(f =>
-                f.ArgumentTypes.Count == argumentCount &&
+                f.Arguments.Count == argumentCount &&
                 f.AvailableFunctionNames.Any(fn => string.Equals(fn, name, StringComparison.OrdinalIgnoreCase)));
         }
 

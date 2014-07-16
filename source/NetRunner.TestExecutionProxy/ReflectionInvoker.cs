@@ -17,11 +17,6 @@ namespace NetRunner.TestExecutionProxy
         private string[] assemblyFolders = new string[0];
         private readonly List<Assembly> testAssemblies = new List<Assembly>();
 
-        private static readonly string[] ignoredFunctions =
-        {
-            "ToString", "GetHashCode", "Equals", "GetType"
-        };
-
         private static readonly ConsoleTraceListener consoleTraceListener = new ConsoleTraceListener();
 
         public ReflectionInvoker()
@@ -200,10 +195,7 @@ namespace NetRunner.TestExecutionProxy
 
             try
             {
-                var availableTests = targetType.GetMethods(BindingFlags.Public | BindingFlags.Instance)
-                                               .Where(f => !ignoredFunctions.Contains(f.Name));
-
-                var availableFunctions = availableTests.Select(t => new FunctionMetaData(t, testContainer));
+                var availableFunctions = testContainer.AvailableMethods;
 
                 Trace.TraceInformation("Type {0} contains following public functions: {1}", targetType.Name, availableFunctions);
 

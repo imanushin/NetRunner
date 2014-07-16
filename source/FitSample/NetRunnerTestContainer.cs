@@ -20,11 +20,19 @@ namespace FitSample
     /// </summary>
     internal sealed class NetRunnerTestContainer : BaseTestContainer
     {
+        /// <summary>
+        /// Summ function
+        /// </summary>
+        /// <param name="first">Param1 hint</param>
+        /// <returns></returns>
         public int SummAndWillBe(int first, int second)
         {
             return first + second;
         }
 
+        /// <summary>
+        /// Very positive help
+        /// </summary>
         public bool IsPositive(int value)
         {
             return value > 0;

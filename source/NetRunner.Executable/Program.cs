@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
+using System.Threading;
 using NetRunner.Executable.Properties;
 
 namespace NetRunner.Executable
@@ -34,6 +35,8 @@ namespace NetRunner.Executable
                 Trace.TraceError("Unhandled exception: {0}", ex);
 
                 Trace.Flush();
+
+                Thread.Sleep(1000); //wait for data transfer
 
                 return 1;
             }

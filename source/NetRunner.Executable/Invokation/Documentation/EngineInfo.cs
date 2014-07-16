@@ -5,7 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
+using NetRunner.Executable.Common;
 using NetRunner.Executable.RawData;
+using NetRunner.ExternalLibrary;
 using NetRunner.TestExecutionProxy;
 
 namespace NetRunner.Executable.Invokation.Documentation
@@ -21,10 +23,12 @@ namespace NetRunner.Executable.Invokation.Documentation
             modalDialog.SetAttributeValue("id", "helpDialog");
 
             modalDialog.InnerHtml =
-@"<div>
-    <p id=""helpDialogContent"">Content you want the user to see goes here.</p>
-    
-    <a href='#' onclick='closeHelpDialog()'>close</a>
+@"<div style=""max-width: 800px; max-height: 90%; position: relative; overflow: hidden; margin: 100px auto; background-color: #fff; border: 1px solid #000; padding: 15px;"">    
+	<div style=""max-height: calc(100% - 300px);position: relative; overflow: auto;padding: 5px;"">
+        <div id=""helpDialogContent"" style=""text-align: start;""  />
+    </div>   
+
+    <a href='#' onclick='closeHelpDialog()' style=""bottom: 0;position:relative"">close</a>
 </div>";
 
             var style = document.DocumentNode.AppendChild(document.CreateElement("style"));
@@ -40,19 +44,7 @@ namespace NetRunner.Executable.Invokation.Documentation
     text-align: center;
     z-index: 1000;
 }
-
-#helpDialog div {
-    max-width: 90%;
-    max-height: 90%;
-    min-width: 10%;
-    min-height: 10%;
-    overflow: hidden;
-    margin: 100px auto;
-    background-color: #fff;
-    border: 1px solid #000;
-    padding: 15px;
-    text-align: center;
-}";
+";
 
             document.DocumentNode.AppendChild(document.CreateElement("script")).InnerHtml =
 @"function openHelpDialog(helpKey) {
@@ -76,7 +68,7 @@ namespace NetRunner.Executable.Invokation.Documentation
         public static string PrintTestEngineInformation()
         {
             var document = new HtmlDocument();
-            
+
             AppendModalWindowTags(document);
 
             document.DocumentNode.AppendChild(document.CreateElement("br"));
@@ -92,11 +84,11 @@ namespace NetRunner.Executable.Invokation.Documentation
             expandableDiv.AppendChild(titleNode);
 
             var textNode = document.CreateElement("div");
-            
+
             var helpKeyValues = new Dictionary<string, string>();
 
             AddTitle(textNode, "Test containers:");
-            TestContainersToSequence(textNode, ReflectionLoader.TestContainerTypes, helpKeyValues);
+            TestContainersToSequence(textNode, ReflectionLoader.TestContainers, helpKeyValues);
 
             AddTitle(textNode, "Parsers:");
             StringsToSequence(textNode, ReflectionLoader.Parsers.Select(p => string.Format("{0}; priority: {1}", p.GetTypeName(), p.ExecuteProperty<int>("Priority"))));
@@ -128,25 +120,34 @@ namespace NetRunner.Executable.Invokation.Documentation
             AddTextTag(textNode, "h4", titleText);
         }
 
-        private static void TestContainersToSequence(HtmlNode textNode, IEnumerable<TypeReference> inputStrings, Dictionary<string, string> helpKeyValues)
+        private static void TestContainersToSequence(HtmlNode textNode, ReadOnlyList<LazyIsolatedReference<BaseTestContainer>> inputStrings, Dictionary<string, string> helpKeyValues)
         {
             var ownerDocument = textNode.OwnerDocument;
 
             foreach (var testContainer in inputStrings)
             {
-                var rawDocumentation = DocumentationStore.GetForType(testContainer);
+                var testContainerType = testContainer.Type;
 
-                var helpDivContent = string.IsNullOrWhiteSpace(rawDocumentation) ?
-                    string.Format(howToAddHelpLinkFormat, testContainer.Name) :
-                    ReplaceTags(rawDocumentation);
-
-                var key = string.Format("type_{0}", testContainer.FullName);
+                var rawDocumentation = DocumentationStore.GetRaw(testContainerType);
 
                 var helpElement = textNode.AppendChild(ownerDocument.CreateElement("div"));
 
-                helpElement.InnerHtml = helpDivContent;
+                var key = string.Format("type_{0}", testContainerType.FullName);
+
                 helpElement.SetAttributeValue("id", key);
                 helpElement.SetAttributeValue("style", "display: none;");
+
+                var helpDivContent = string.IsNullOrWhiteSpace(rawDocumentation) ?
+                    string.Format(howToAddHelpLinkFormat, testContainerType.Name) :
+                    ReplaceTags(rawDocumentation);
+
+                var containerParagraph = helpElement.AppendChild(ownerDocument.CreateElement("p"));
+
+                containerParagraph.AppendChild(ownerDocument.CreateElement("p")).InnerHtml = helpDivContent;
+
+                var methods = ReflectionLoader.GetMethodFor(testContainer);
+
+                methods.ForEach(m => AppendMethod(m, containerParagraph));
 
                 helpKeyValues[key] = helpDivContent;
 
@@ -154,8 +155,41 @@ namespace NetRunner.Executable.Invokation.Documentation
                 linkElement.SetAttributeValue("href", "#");
                 linkElement.SetAttributeValue("onclick", string.Format("openHelpDialog('{0}')", key));
 
-                linkElement.AppendChild(ownerDocument.CreateElement("p")).InnerHtml = testContainer.Name;
+                linkElement.AppendChild(ownerDocument.CreateElement("p")).InnerHtml = testContainerType.Name;
             }
+        }
+
+        private static void AppendMethod(TestFunctionReference function, HtmlNode container)
+        {
+            var document = container.OwnerDocument;
+
+            var functionNode = container.AppendChild(document.CreateElement("p"));
+
+            var innerHtml = new StringBuilder();
+
+           // innerHtml.Append("--------------");
+            innerHtml.Append("<br/>");
+
+            var rawHelp = DocumentationStore.GetRaw(function);
+
+            if (!string.IsNullOrWhiteSpace(rawHelp))
+            {
+                innerHtml.Append(ReplaceTags(rawHelp));
+            }
+
+            if (function.AvailableFunctionNames.Count > 1)
+            {
+                innerHtml.Append("Available names:<br/>");
+
+                function.AvailableFunctionNames.ForEach(name => innerHtml.AppendFormat("<i>{0}</i><br/>", ReplaceTags(name)));
+            }
+
+            innerHtml.Append(function.Method.SystemName);
+
+            innerHtml.AppendFormat("({0})", string.Join(", ", function.Arguments.Select(a => 
+                (a.IsOut ? "out " : string.Empty) + a.ParameterType.Name + " " + a.Name)));
+
+            functionNode.InnerHtml = innerHtml.ToString();
         }
 
         private static string ReplaceTags(string rawData)
