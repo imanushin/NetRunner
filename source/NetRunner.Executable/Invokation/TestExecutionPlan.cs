@@ -8,6 +8,7 @@ using HtmlAgilityPack;
 using NetRunner.Executable.Common;
 using NetRunner.Executable.Invokation.Functions;
 using NetRunner.Executable.RawData;
+using NetRunner.TestExecutionProxy;
 
 namespace NetRunner.Executable.Invokation
 {
@@ -68,8 +69,10 @@ namespace NetRunner.Executable.Invokation
                 }
             }
 
+            var helpKeyValues = new Dictionary<string, string>();
+
             AddTitle(textNode, "Test containers:");
-            StringsToSequence(textNode, ReflectionLoader.TestContainerNames);
+            TestContainersToSequence(textNode, ReflectionLoader.TestContainerTypes, helpKeyValues);
 
             AddTitle(textNode, "Parsers:");
             StringsToSequence(textNode, ReflectionLoader.Parsers.Select(p => string.Format("{0}; priority: {1}", p.GetTypeName(), p.ExecuteProperty<int>("Priority"))));
@@ -92,19 +95,19 @@ namespace NetRunner.Executable.Invokation
         {
             var modalDialog = document.DocumentNode.AppendChild(document.CreateElement("div"));
 
+            modalDialog.SetAttributeValue("id", "helpDialog");
+
             modalDialog.InnerHtml =
-@"    <div id=""overlay"">
-        <div>
-            <p>Content you want the user to see goes here.</p>
-            
-            <a href='#' onclick='overlay()'>close</a>
-        </div>
-    </div>";
+@"<div>
+    <p>Content you want the user to see goes here.</p>
+    
+    <a href='#' onclick='closeHelpDialog()'>close</a>
+</div>";
 
             var style = document.DocumentNode.AppendChild(document.CreateElement("style"));
 
             style.InnerHtml =
-@"#overlay {
+@"#helpDialog {
     visibility: hidden;
     position: absolute;
     left: 0px;
@@ -115,7 +118,7 @@ namespace NetRunner.Executable.Invokation
     z-index: 1000;
 }
 
-#overlay div {
+#helpDialog div {
     max-width: 90%;
     max-height: 90%;
     min-width: 10%;
@@ -128,12 +131,16 @@ namespace NetRunner.Executable.Invokation
     text-align: center;
 }";
 
-            var openCloseFunction = document.DocumentNode.AppendChild(document.CreateElement("script"));
+            document.DocumentNode.AppendChild(document.CreateElement("script")).InnerHtml =
+@"function openHelpDialog(helpKey) {
+            var el = document.getElementById(""helpDialog"");
+            el.style.visibility = ""visible"";
+        }";
 
-            openCloseFunction.InnerHtml =
-@"function overlay() {
-            var el = document.getElementById(""overlay"");
-            el.style.visibility = (el.style.visibility == ""visible"") ? ""hidden"" : ""visible"";
+            document.DocumentNode.AppendChild(document.CreateElement("script")).InnerHtml =
+@"function closeHelpDialog() {
+            var el = document.getElementById(""helpDialog"");
+            el.style.visibility = ""hidden"";
         }";
         }
 
@@ -149,17 +156,27 @@ namespace NetRunner.Executable.Invokation
             AddTextTag(textNode, "h4", titleText);
         }
 
+        private static void TestContainersToSequence(HtmlNode textNode, IEnumerable<TypeReference> inputStrings, Dictionary<string, string> helpKeyValues)
+        {
+            var ownerDocument = textNode.OwnerDocument;
+
+            foreach (var testContainer in inputStrings)
+            {
+                var linkElement = textNode.AppendChild(ownerDocument.CreateElement("a"));
+                linkElement.SetAttributeValue("href", "#");
+                linkElement.SetAttributeValue("onclick", string.Format("openHelpDialog('type:{0}')", testContainer.FullName));
+
+                linkElement.AppendChild(ownerDocument.CreateElement("p")).InnerHtml = testContainer.Name;
+            }
+        }
+
         private static void StringsToSequence(HtmlNode textNode, IEnumerable<string> inputStrings)
         {
             var ownerDocument = textNode.OwnerDocument;
 
             foreach (string testContainerName in inputStrings)
             {
-                var linkElement = textNode.AppendChild(ownerDocument.CreateElement("a"));
-                linkElement.SetAttributeValue("href", "#");
-                linkElement.SetAttributeValue("onclick", "overlay()");
-
-                linkElement.AppendChild(ownerDocument.CreateElement("p")).InnerHtml = testContainerName;
+                textNode.AppendChild(ownerDocument.CreateElement("p")).InnerHtml = testContainerName;
             }
         }
 

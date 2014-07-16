@@ -133,11 +133,11 @@ namespace NetRunner.Executable.Invokation
             private set;
         }
 
-        public static ReadOnlyList<string> TestContainerNames
+        public static ReadOnlyList<TypeReference> TestContainerTypes
         {
             get
             {
-                return testContainers.Select(tc => tc.Type.FullName).ToReadOnlyList();
+                return testContainers.Select(tc => tc.Type).ToReadOnlyList();
             }
         }
 
