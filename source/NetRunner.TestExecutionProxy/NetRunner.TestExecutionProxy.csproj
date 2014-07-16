@@ -47,6 +47,7 @@
     <Compile Include="FunctionMetaData.cs" />
     <Compile Include="GeneralIsolatedReference.cs" />
     <Compile Include="GeneralLazyIsolatedReference.cs" />
+    <Compile Include="GeneralReferenceObject.cs" />
     <Compile Include="IsolatedParser.cs" />
     <Compile Include="IsolatedReference.cs" />
     <Compile Include="LazyIsolatedReference.cs" />

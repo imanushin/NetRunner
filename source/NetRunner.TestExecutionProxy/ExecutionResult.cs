@@ -8,7 +8,7 @@ using NetRunner.ExternalLibrary.Properties;
 
 namespace NetRunner.TestExecutionProxy
 {
-    public sealed class ExecutionResult : MarshalByRefObject
+    public sealed class ExecutionResult : GeneralReferenceObject
     {
         public static readonly ExecutionResult Empty = new ExecutionResult(GeneralIsolatedReference.Empty, new ParameterData[0]);
 
@@ -16,8 +16,6 @@ namespace NetRunner.TestExecutionProxy
         {
             Result = result;
             OutParameters = outParameters.ToArray();
-
-            ReflectionInvoker.KeepObject(this);
         }
 
         private ExecutionResult(string exceptionMessage, string exceptionType, string exceptionToString)
@@ -25,8 +23,6 @@ namespace NetRunner.TestExecutionProxy
             ExceptionMessage = exceptionMessage;
             ExceptionType = exceptionType;
             ExceptionToString = exceptionToString;
-
-            ReflectionInvoker.KeepObject(this);
         }
 
         [NotNull]

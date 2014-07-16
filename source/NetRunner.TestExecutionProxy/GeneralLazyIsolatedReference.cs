@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NetRunner.TestExecutionProxy
 {
-    public class GeneralLazyIsolatedReference : MarshalByRefObject
+    public class GeneralLazyIsolatedReference : GeneralReferenceObject
     {
         private readonly TypeReference typeReference;
         private readonly Lazy<GeneralIsolatedReference> lazyInstance;
@@ -15,8 +15,6 @@ namespace NetRunner.TestExecutionProxy
         {
             this.typeReference = typeReference;
             lazyInstance = new Lazy<GeneralIsolatedReference>(CreateItem);
-
-            ReflectionInvoker.KeepObject(this);
         }
 
         private GeneralIsolatedReference CreateItem()

@@ -10,7 +10,7 @@ using NetRunner.ExternalLibrary.Properties;
 
 namespace NetRunner.TestExecutionProxy
 {
-    public sealed class FunctionMetaData : MarshalByRefObject
+    public sealed class FunctionMetaData : GeneralReferenceObject
     {
         private readonly Lazy<GeneralIsolatedReference> targetObject;
         private readonly TypeReference objectType;

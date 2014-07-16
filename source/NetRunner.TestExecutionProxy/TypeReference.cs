@@ -9,7 +9,7 @@ using NetRunner.ExternalLibrary.Properties;
 
 namespace NetRunner.TestExecutionProxy
 {
-    public sealed class TypeReference : MarshalByRefObject
+    public sealed class TypeReference : GeneralReferenceObject
     {
         private static readonly object syncRoot = new object();
 

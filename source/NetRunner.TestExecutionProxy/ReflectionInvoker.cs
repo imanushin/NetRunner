@@ -12,10 +12,8 @@ using NetRunner.ExternalLibrary.Properties;
 
 namespace NetRunner.TestExecutionProxy
 {
-    public sealed class ReflectionInvoker : MarshalByRefObject
+    public sealed class ReflectionInvoker : GeneralReferenceObject
     {
-        private static ConcurrentBag<object> keepedObjects = new ConcurrentBag<object>(); 
-
         private string[] assemblyFolders = new string[0];
         private readonly List<Assembly> testAssemblies = new List<Assembly>();
 
@@ -35,13 +33,6 @@ namespace NetRunner.TestExecutionProxy
             }
 
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomainOnAssemblyResolve;
-
-            KeepObject(this);
-        }
-
-        internal static void KeepObject(object obj)
-        {
-            keepedObjects.Add(obj);
         }
 
         private Assembly CurrentDomainOnAssemblyResolve(object sender, ResolveEventArgs args)

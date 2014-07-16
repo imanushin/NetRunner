@@ -9,7 +9,7 @@ using NetRunner.ExternalLibrary.Properties;
 
 namespace NetRunner.TestExecutionProxy
 {
-    public sealed class PropertyReference : MarshalByRefObject
+    public sealed class PropertyReference : GeneralReferenceObject
     {
         private readonly PropertyInfo property;
 

@@ -8,7 +8,7 @@ using NetRunner.ExternalLibrary;
 
 namespace NetRunner.TestExecutionProxy
 {
-    public sealed class ParameterInfoReference : MarshalByRefObject
+    public sealed class ParameterInfoReference : GeneralReferenceObject
     {
         internal ParameterInfoReference(ParameterInfo parameter)
         {

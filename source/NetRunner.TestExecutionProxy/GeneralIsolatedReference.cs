@@ -9,7 +9,7 @@ using NetRunner.ExternalLibrary.Properties;
 
 namespace NetRunner.TestExecutionProxy
 {
-    public class GeneralIsolatedReference : MarshalByRefObject
+    public class GeneralIsolatedReference : GeneralReferenceObject
     {
         public static readonly GeneralIsolatedReference Empty = new GeneralIsolatedReference(null, typeof(object));
 
@@ -29,8 +29,6 @@ namespace NetRunner.TestExecutionProxy
             {
                 this.objectType = TypeReference.GetType(value.GetType());
             }
-            
-            ReflectionInvoker.KeepObject(this);
         }
 
         [CanBeNull]
