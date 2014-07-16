@@ -14,7 +14,7 @@ namespace NetRunner.Executable.Invokation
 {
     internal sealed class TestExecutionPlan : BaseReadOnlyObject
     {
-        private const string howToAddHelpLink = "<a>https://github.com/imanushin/NetRunner/wiki/Help-and-hints</a>";
+        private const string howToAddHelpLinkFormat = "Help does not available for type <b>{0}</b>. See <a href=\"https://github.com/imanushin/NetRunner/wiki/Help-and-hints\">this tutorial</a> about the NetRunner help configuring.";
 
         public TestExecutionPlan([StringCanBeEmpty] string textBeforeFirstTable, IEnumerable<ParsedTable> functionsSequence)
         {
@@ -172,7 +172,10 @@ namespace NetRunner.Executable.Invokation
             {
                 var rawDocumentation = DocumentationStore.GetForType(testContainer);
 
-                var helpDivContent = string.IsNullOrWhiteSpace(rawDocumentation) ? howToAddHelpLink : HtmlEntity.DeEntitize(rawDocumentation);
+                var helpDivContent = string.IsNullOrWhiteSpace(rawDocumentation) ? 
+                    string.Format(howToAddHelpLinkFormat, testContainer.Name) : 
+                    HtmlEntity.DeEntitize(rawDocumentation);
+
                 var key = string.Format("type_{0}", testContainer.FullName);
 
                 var helpElement = textNode.AppendChild(ownerDocument.CreateElement("div"));
