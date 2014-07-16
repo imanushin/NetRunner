@@ -14,6 +14,9 @@ namespace FitSample
 {
     /// <summary>
     /// NetRunnerTestContainer help
+    /// <b>bold test</b>
+    /// <i>italic test</i>
+    /// <script>injection</script>
     /// </summary>
     internal sealed class NetRunnerTestContainer : BaseTestContainer
     {

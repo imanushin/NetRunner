@@ -14,6 +14,8 @@ namespace NetRunner.Executable.Invokation
 {
     internal sealed class TestExecutionPlan : BaseReadOnlyObject
     {
+        private const string howToAddHelpLink = "<a>https://github.com/imanushin/NetRunner/wiki/Help-and-hints</a>";
+
         public TestExecutionPlan([StringCanBeEmpty] string textBeforeFirstTable, IEnumerable<ParsedTable> functionsSequence)
         {
             Validate.ArgumentIsNotNull(textBeforeFirstTable, "textBeforeFirstTable");
@@ -99,7 +101,7 @@ namespace NetRunner.Executable.Invokation
 
             modalDialog.InnerHtml =
 @"<div>
-    <p>Content you want the user to see goes here.</p>
+    <p id=""helpDialogContent"">Content you want the user to see goes here.</p>
     
     <a href='#' onclick='closeHelpDialog()'>close</a>
 </div>";
@@ -133,9 +135,15 @@ namespace NetRunner.Executable.Invokation
 
             document.DocumentNode.AppendChild(document.CreateElement("script")).InnerHtml =
 @"function openHelpDialog(helpKey) {
-            var el = document.getElementById(""helpDialog"");
-            el.style.visibility = ""visible"";
-        }";
+    var el = document.getElementById(""helpDialog"");
+    el.style.visibility = ""visible"";
+
+    var contentPane = document.getElementById(""helpDialogContent"");
+    var helpContent = document.getElementById(helpKey);
+
+    var helpHtml = helpContent.innerHTML;
+    contentPane.innerHTML = helpHtml;
+}";
 
             document.DocumentNode.AppendChild(document.CreateElement("script")).InnerHtml =
 @"function closeHelpDialog() {
@@ -162,9 +170,22 @@ namespace NetRunner.Executable.Invokation
 
             foreach (var testContainer in inputStrings)
             {
+                var rawDocumentation = DocumentationStore.GetForType(testContainer);
+
+                var helpDivContent = string.IsNullOrWhiteSpace(rawDocumentation) ? howToAddHelpLink : HtmlEntity.DeEntitize(rawDocumentation);
+                var key = string.Format("type_{0}", testContainer.FullName);
+
+                var helpElement = textNode.AppendChild(ownerDocument.CreateElement("div"));
+
+                helpElement.InnerHtml = helpDivContent;
+                helpElement.SetAttributeValue("id", key);
+                helpElement.SetAttributeValue("style", "display: none;");
+
+                helpKeyValues[key] = helpDivContent;
+
                 var linkElement = textNode.AppendChild(ownerDocument.CreateElement("a"));
                 linkElement.SetAttributeValue("href", "#");
-                linkElement.SetAttributeValue("onclick", string.Format("openHelpDialog('type:{0}')", testContainer.FullName));
+                linkElement.SetAttributeValue("onclick", string.Format("openHelpDialog('{0}')", key));
 
                 linkElement.AppendChild(ownerDocument.CreateElement("p")).InnerHtml = testContainer.Name;
             }
