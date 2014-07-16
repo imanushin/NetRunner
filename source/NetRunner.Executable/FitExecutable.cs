@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NetRunner.Executable.Common;
 using NetRunner.Executable.Invokation;
+using NetRunner.Executable.Invokation.Documentation;
 using NetRunner.Executable.RawData;
 using NetRunner.TestExecutionProxy;
 
@@ -58,9 +59,18 @@ namespace NetRunner.Executable
 
             DocumentationStore.LoadForAssemblies(ReflectionLoader.LoadedAssemblies);
 
+            bool firstDocument = true;
+
             for (string document = communicator.ReceiveDocument(); document.Any(); document = communicator.ReceiveDocument())
             {
                 Trace.WriteLine("Processing document of size: " + document.Length);
+
+                if (firstDocument)
+                {
+                    communicator.SendDocument(EngineInfo.PrintTestEngineInformation());
+
+                    firstDocument = false;
+                }
 
                 var counts = new TestCounts();
 
