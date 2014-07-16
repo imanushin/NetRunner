@@ -174,7 +174,7 @@ namespace NetRunner.Executable.Invokation
 
                 var helpDivContent = string.IsNullOrWhiteSpace(rawDocumentation) ? 
                     string.Format(howToAddHelpLinkFormat, testContainer.Name) : 
-                    HtmlEntity.DeEntitize(rawDocumentation);
+                    ReplaceTags(rawDocumentation);
 
                 var key = string.Format("type_{0}", testContainer.FullName);
 
@@ -192,6 +192,26 @@ namespace NetRunner.Executable.Invokation
 
                 linkElement.AppendChild(ownerDocument.CreateElement("p")).InnerHtml = testContainer.Name;
             }
+        }
+
+        private static string ReplaceTags(string rawData)
+        {
+            return rawData
+                .Replace("&", "&amp;")
+                .Replace("<", "&lt;")
+                .Replace(">", "&gt;")
+                .Replace("\"", "&quot;")
+                .Replace("'", "&#39;")
+                .Replace("&lt;p&gt;", "<p>")
+                .Replace("&lt;/p&gt;", "</p>")
+                .Replace("&lt;b&gt;", "<b>")
+                .Replace("&lt;/b&gt;", "</b>")
+                .Replace("&lt;i&gt;", "<i>")
+                .Replace("&lt;/i&gt;", "</i>")
+                .Replace("&lt;u&gt;", "<u>")
+                .Replace("&lt;/u&gt;", "</u>")
+                .Replace("&lt;br /&gt;", "<br/>")
+                .Replace("&lt;br/&gt;", "<br/>");
         }
 
         private static void StringsToSequence(HtmlNode textNode, IEnumerable<string> inputStrings)
