@@ -15,6 +15,8 @@ namespace NetRunner.TestExecutionProxy
         {
             this.typeReference = typeReference;
             lazyInstance = new Lazy<GeneralIsolatedReference>(CreateItem);
+
+            ReflectionInvoker.KeepObject(this);
         }
 
         private GeneralIsolatedReference CreateItem()

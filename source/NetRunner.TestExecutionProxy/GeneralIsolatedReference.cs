@@ -29,6 +29,8 @@ namespace NetRunner.TestExecutionProxy
             {
                 this.objectType = TypeReference.GetType(value.GetType());
             }
+
+            ReflectionInvoker.KeepObject(this);
         }
 
         [CanBeNull]

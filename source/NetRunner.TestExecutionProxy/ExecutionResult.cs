@@ -16,13 +16,17 @@ namespace NetRunner.TestExecutionProxy
         {
             Result = result;
             OutParameters = outParameters.ToArray();
+
+            ReflectionInvoker.KeepObject(this);
         }
 
-        public ExecutionResult(string exceptionMessage, string exceptionType, string exceptionToString)
+        private ExecutionResult(string exceptionMessage, string exceptionType, string exceptionToString)
         {
             ExceptionMessage = exceptionMessage;
             ExceptionType = exceptionType;
             ExceptionToString = exceptionToString;
+
+            ReflectionInvoker.KeepObject(this);
         }
 
         [NotNull]
