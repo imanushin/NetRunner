@@ -15,26 +15,14 @@ namespace NetRunner.Executable.Invokation.Documentation
     internal static class EngineInfo
     {
         private const string howToAddHelpLinkFormat = "Help does not available for type <b>{0}</b>. See <a href=\"https://github.com/imanushin/NetRunner/wiki/Help-and-hints\">this tutorial</a> about the NetRunner help configuring.";
-
-        private static void AppendModalWindowTags(HtmlDocument document)
-        {
-            var modalDialog = document.DocumentNode.AppendChild(document.CreateElement("div"));
-
-            modalDialog.SetAttributeValue("id", "helpDialog");
-
-            modalDialog.InnerHtml =
-@"<div style=""max-width: 800px; max-height: 90%; position: relative; overflow: hidden; margin: 100px auto; background-color: #fff; border: 1px solid #000; padding: 15px;"">    
+        private const string dialogContent = @"<div style=""max-width: 800px; max-height: 90%; position: relative; overflow: hidden; margin: 100px auto; background-color: #fff; border: 1px solid #000; padding: 15px;"">    
 	<div style=""max-height: calc(100% - 300px);position: relative; overflow: auto;padding: 5px;"">
         <div id=""helpDialogContent"" style=""text-align: start;""  />
     </div>   
 
     <a href='#' onclick='closeHelpDialog()' style=""bottom: 0;position:relative"">close</a>
 </div>";
-
-            var style = document.DocumentNode.AppendChild(document.CreateElement("style"));
-
-            style.InnerHtml =
-@"#helpDialog {
+        private const string dialogStyle = @"#helpDialog {
     visibility: hidden;
     position: absolute;
     left: 0px;
@@ -45,9 +33,7 @@ namespace NetRunner.Executable.Invokation.Documentation
     z-index: 1000;
 }
 ";
-
-            document.DocumentNode.AppendChild(document.CreateElement("script")).InnerHtml =
-@"function openHelpDialog(helpKey) {
+        private const string dialogFunctions = @"function openHelpDialog(helpKey) {
     var el = document.getElementById(""helpDialog"");
     el.style.visibility = ""visible"";
 
@@ -56,13 +42,26 @@ namespace NetRunner.Executable.Invokation.Documentation
 
     var helpHtml = helpContent.innerHTML;
     contentPane.innerHTML = helpHtml;
-}";
+}
 
-            document.DocumentNode.AppendChild(document.CreateElement("script")).InnerHtml =
-@"function closeHelpDialog() {
+function closeHelpDialog() {
             var el = document.getElementById(""helpDialog"");
             el.style.visibility = ""hidden"";
         }";
+
+        private static void AppendModalWindowTags(HtmlDocument document)
+        {
+            var modalDialog = document.DocumentNode.AppendChild(document.CreateElement("div"));
+
+            modalDialog.SetAttributeValue("id", "helpDialog");
+
+            modalDialog.InnerHtml = dialogContent;
+
+            var style = document.DocumentNode.AppendChild(document.CreateElement("style"));
+
+            style.InnerHtml = dialogStyle;
+
+            document.DocumentNode.AppendChild(document.CreateElement("script")).InnerHtml = dialogFunctions;
         }
 
         public static string PrintTestEngineInformation()
@@ -167,7 +166,7 @@ namespace NetRunner.Executable.Invokation.Documentation
 
             var innerHtml = new StringBuilder();
 
-           // innerHtml.Append("--------------");
+            // innerHtml.Append("--------------");
             innerHtml.Append("<br/>");
 
             var rawHelp = DocumentationStore.GetRaw(function);
@@ -186,7 +185,7 @@ namespace NetRunner.Executable.Invokation.Documentation
 
             innerHtml.Append(function.Method.SystemName);
 
-            innerHtml.AppendFormat("({0})", string.Join(", ", function.Arguments.Select(a => 
+            innerHtml.AppendFormat("({0})", string.Join(", ", function.Arguments.Select(a =>
                 (a.IsOut ? "out " : string.Empty) + a.ParameterType.Name + " " + a.Name)));
 
             functionNode.InnerHtml = innerHtml.ToString();
