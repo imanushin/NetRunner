@@ -34,8 +34,8 @@ namespace NetRunner.Executable.Invokation.Documentation
 	<tbody>
 
 	<tr style=""overflow:hidden;max-height: calc(90% - 30px)"">
-		<td id=""helpDialogContent"" style=""max-height: calc(90% - 30px); text-align: start; border: 0px;vertical-align:top;white-space: normal"" colspan=""2"">
-			<div style=""overflow:auto;height:calc(90% - 100px)"">
+		<td style=""max-height: calc(90% - 30px); text-align: start; border: 0px;vertical-align:top;white-space: normal"" colspan=""2"">
+			<div id=""helpDialogContent"" style=""overflow:auto;height:calc(90% - 100px)"">
             NetRunnerTestContainer help
             <b>bold test</b><br><i>italic test</i><br>&lt;script&gt;injection&lt;/script&gt;</p><p>---<br></p><p>
             Summ function
