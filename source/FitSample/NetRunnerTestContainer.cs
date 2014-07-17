@@ -38,6 +38,11 @@ namespace FitSample
             return value > 0;
         }
 
+        /// <summary>
+        /// Usage: <br/>
+        /// Right: | '''try parse string ''' | 123 | <br/>
+        /// Wrong: | '''try parse string ''' | 123 |
+        /// </summary>
         public bool TryParseString(string value)
         {
             int result;
