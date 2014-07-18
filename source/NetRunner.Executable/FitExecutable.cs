@@ -68,6 +68,7 @@ namespace NetRunner.Executable
                 if (firstDocument)
                 {
                     communicator.SendDocument(DocumentationHtmlHelpers.HtmlHeader);
+                    communicator.SendDocument(DocumentationHtmlHelpers.GetAllTypesHintElements());
                     communicator.SendDocument(EngineInfo.PrintTestEngineInformation());
 
                     firstDocument = false;
@@ -96,6 +97,8 @@ namespace NetRunner.Executable
 
                     communicator.SendDocument(HtmlParser.LineBreak);
 
+                    communicator.SendDocument(DocumentationHtmlHelpers.HtmlFooter);
+
                     communicator.SendCounts(counts);
                 }
                 catch (Exception e)
@@ -114,8 +117,6 @@ namespace NetRunner.Executable
                     }
                 }
             }
-
-            communicator.SendDocument(DocumentationHtmlHelpers.HtmlFooter);
 
             Trace.WriteLine("Execution completed");
         }

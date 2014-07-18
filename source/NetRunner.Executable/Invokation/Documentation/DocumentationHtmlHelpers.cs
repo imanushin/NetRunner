@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NetRunner.TestExecutionProxy;
 
 namespace NetRunner.Executable.Invokation.Documentation
 {
@@ -30,6 +31,9 @@ $(document).ready(function()
      // MAKE SURE YOUR SELECTOR MATCHES SOMETHING IN YOUR HTML!!!
      $('[helpId]').each(function() {
         var el = document.getElementById( $( this ).attr('helpid') );
+
+        if( el === null )
+            return true;
         
          $(this).qtip({
              content: {
@@ -41,6 +45,31 @@ $(document).ready(function()
   </script>
 ";
 
+        public static string GetAllTypesHintElements()
+        {
+            var types = DocumentationStore.GetAllTypesRawHelp();
+
+            var result = new StringBuilder();
+
+            foreach (var nameToText in types)
+            {
+                var rawText = nameToText.Value;
+
+                result.AppendFormat("<div class='tooltiptext' id='{0}'>{1}</div>", GetTypeId(nameToText.Key), rawText);
+            }
+
+            return result.ToString();
+        }
+
+        public static string GetHintAttributeValue(TypeReference type)
+        {
+            return GetTypeId(type.FullName);
+        }
+
+        private static string GetTypeId(string typeFullName)
+        {
+            return string.Format("type_{0}", typeFullName.Replace('.', '_'));
+        }
 
         public static string HtmlHeader
         {

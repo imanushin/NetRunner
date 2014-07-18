@@ -96,5 +96,25 @@ namespace NetRunner.Executable.RawData
             return new HtmlRow(allCells.Select(cell => new HtmlCell(cell)).ToReadOnlyList(), HtmlRowReference.MarkRowAndGenerateReference(rowNode));
         }
 
+        public static string ReplaceUnknownTags(string rawData)
+        {
+            return rawData
+                .Replace("&", "&amp;")
+                .Replace("<", "&lt;")
+                .Replace(">", "&gt;")
+                .Replace("\"", "&quot;")
+                .Replace("'", "&#39;")
+                .Replace("&lt;p&gt;", "<p>")
+                .Replace("&lt;/p&gt;", "</p>")
+                .Replace("&lt;b&gt;", "<b>")
+                .Replace("&lt;/b&gt;", "</b>")
+                .Replace("&lt;i&gt;", "<i>")
+                .Replace("&lt;/i&gt;", "</i>")
+                .Replace("&lt;u&gt;", "<u>")
+                .Replace("&lt;/u&gt;", "</u>")
+                .Replace("&lt;br /&gt;", "<br/>")
+                .Replace("&lt;br/&gt;", "<br/>");
+        }
+
     }
 }

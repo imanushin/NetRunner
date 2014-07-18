@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Xml;
 using NetRunner.Executable.Common;
+using NetRunner.Executable.RawData;
 using NetRunner.ExternalLibrary.Properties;
 using NetRunner.TestExecutionProxy;
 
@@ -18,7 +19,7 @@ namespace NetRunner.Executable.Invokation.Documentation
         private const string methodIdentityFormat = "M:{0}.{1}({2})";
 
         [CanBeNull]
-        public static string GetRaw(TypeReference type)
+        public static string GetFor(TypeReference type)
         {
             var identity = string.Format(typeIdentityFormat, type.FullName);
 
@@ -36,7 +37,7 @@ namespace NetRunner.Executable.Invokation.Documentation
             return null;
         }
 
-        public static string GetRaw(TestFunctionReference function)
+        public static string GetFor(TestFunctionReference function)
         {
             var key = string.Format(
                 methodIdentityFormat,
@@ -45,6 +46,13 @@ namespace NetRunner.Executable.Invokation.Documentation
                 string.Join(",", function.Arguments.Select(a => a.ParameterType.FullName)));
 
             return TryFindForKey(key);
+        }
+
+        public static Dictionary<string, string> GetAllTypesRawHelp()
+        {
+            return internalStore
+                .Where(kv => kv.Key.StartsWith("T:", StringComparison.Ordinal))
+                .ToDictionary(kv => kv.Key.Substring(2), kv => kv.Value);
         }
 
         public static void LoadForAssemblies(ReadOnlyList<string> assemblyPathes)
@@ -100,7 +108,7 @@ namespace NetRunner.Executable.Invokation.Documentation
                             continue;
                         }
 
-                        internalStore[memberName] = summaryNode.InnerXml;
+                        internalStore[memberName] = HtmlParser.ReplaceUnknownTags(summaryNode.InnerXml);
                     }
                 }
                 catch (Exception ex)

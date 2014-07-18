@@ -156,7 +156,7 @@ function closeHelpDialog() {
             {
                 var testContainerType = testContainer.Type;
 
-                var rawDocumentation = DocumentationStore.GetRaw(testContainerType);
+                var rawDocumentation = DocumentationStore.GetFor(testContainerType);
 
                 var helpElement = textNode.AppendChild(ownerDocument.CreateElement("div"));
 
@@ -167,7 +167,7 @@ function closeHelpDialog() {
 
                 var helpDivContent = string.IsNullOrWhiteSpace(rawDocumentation) ?
                     string.Format(howToAddHelpLinkFormat, testContainerType.Name) :
-                    ReplaceTags(rawDocumentation);
+                    rawDocumentation;
 
                 var containerParagraph = helpElement.AppendChild(ownerDocument.CreateElement("p"));
 
@@ -181,6 +181,7 @@ function closeHelpDialog() {
 
                 var linkElement = textNode.AppendChild(ownerDocument.CreateElement("a"));
                 linkElement.SetAttributeValue("href", "#");
+                linkElement.SetAttributeValue(DocumentationHtmlHelpers.AttributeName, DocumentationHtmlHelpers.GetHintAttributeValue(testContainerType));
                 linkElement.SetAttributeValue("onclick", string.Format("openHelpDialog('{0}')", key));
 
                 linkElement.AppendChild(ownerDocument.CreateElement("p")).InnerHtml = testContainerType.Name;
@@ -198,11 +199,11 @@ function closeHelpDialog() {
             innerHtml.Append("---");
             innerHtml.Append("<br/>");
 
-            var rawHelp = DocumentationStore.GetRaw(function);
+            var rawHelp = DocumentationStore.GetFor(function);
 
             if (!string.IsNullOrWhiteSpace(rawHelp))
             {
-                innerHtml.AppendFormat("<p><i>{0}</i>  </p>", ReplaceTags(rawHelp));
+                innerHtml.AppendFormat("<p><i>{0}</i>  </p>", rawHelp);
             }
 
             string systemName = function.Method.SystemName;
@@ -211,7 +212,8 @@ function closeHelpDialog() {
                 (function.AvailableFunctionNames.Count > 1 ||
                 !string.Equals(function.AvailableFunctionNames.First(), systemName, StringComparison.OrdinalIgnoreCase)))
             {
-                var names = string.Join(", ", function.AvailableFunctionNames.Select(name => string.Format("<i>{0}</i>", ReplaceTags(name))));
+                var names = string.Join(", ", function.AvailableFunctionNames
+                    .Select(name => string.Format("<i>{0}</i>", HtmlParser.ReplaceUnknownTags(name))));
 
                 innerHtml.AppendFormat("<p>Available names: {0}</p>", names);
             }
@@ -235,26 +237,6 @@ function closeHelpDialog() {
             }
 
             return name;
-        }
-
-        private static string ReplaceTags(string rawData)
-        {
-            return rawData
-                .Replace("&", "&amp;")
-                .Replace("<", "&lt;")
-                .Replace(">", "&gt;")
-                .Replace("\"", "&quot;")
-                .Replace("'", "&#39;")
-                .Replace("&lt;p&gt;", "<p>")
-                .Replace("&lt;/p&gt;", "</p>")
-                .Replace("&lt;b&gt;", "<b>")
-                .Replace("&lt;/b&gt;", "</b>")
-                .Replace("&lt;i&gt;", "<i>")
-                .Replace("&lt;/i&gt;", "</i>")
-                .Replace("&lt;u&gt;", "<u>")
-                .Replace("&lt;/u&gt;", "</u>")
-                .Replace("&lt;br /&gt;", "<br/>")
-                .Replace("&lt;br/&gt;", "<br/>");
         }
 
         private static void StringsToSequence(HtmlNode textNode, IEnumerable<string> inputStrings)
