@@ -22,7 +22,7 @@ namespace NetRunner.Executable.Invokation.Functions
 
             var keyword = originalFunction.Keyword;
 
-            return keyword.InvokeFunction(() => InvokeFunction(functionReference, originalFunction.FirstFunctionCell, originalFunction.Arguments), functionReference);
+            return keyword.InvokeFunction(() => InvokeFunction(functionReference, originalFunction.FunctionCells.First(), originalFunction.Arguments), functionReference);
         }
 
         protected InvokationResult InvokeFunction(

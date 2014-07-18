@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using HtmlAgilityPack;
 using NetRunner.Executable.Common;
+using NetRunner.Executable.Invokation.Documentation;
 using NetRunner.Executable.RawData;
 using NetRunner.ExternalLibrary.Properties;
 using NetRunner.TestExecutionProxy;
@@ -40,6 +41,8 @@ namespace NetRunner.Executable.Invokation.Functions
                 var status = new SequenceExecutionStatus();
 
                 var result = InvokeFunction(functionReference, function);
+
+                status.Changes.Add(new AddFunctionHelp(function.FunctionCells, functionReference));
 
                 status.MergeWith(result.Changes);
 

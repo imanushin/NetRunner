@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using NetRunner.TestExecutionProxy;
 
@@ -10,6 +11,15 @@ namespace NetRunner.Executable.Invokation.Documentation
     internal static class DocumentationHtmlHelpers
     {
         public const string AttributeName = "helpid";
+
+        private static readonly Dictionary<string, string> functionKeyMap = new Dictionary<string, string>();
+
+        private static readonly StringBuilder resultHtmls = new StringBuilder();
+
+        private static int indexer = 1;
+
+        private static readonly object syncRoot = new object();
+        private const string tooltipFormat = "<div class='tooltiptext' id='{0}'>{1}</div>";
 
         private const string header =
             @"<script src=""http://cdn.jsdelivr.net/qtip2/2.2.0/jquery.qtip.min.js"" type=""text/javascript""></script>
@@ -27,8 +37,6 @@ namespace NetRunner.Executable.Invokation.Documentation
 // Create the tooltips only when document ready
 $(document).ready(function()
 {
-
-     // MAKE SURE YOUR SELECTOR MATCHES SOMETHING IN YOUR HTML!!!
      $('[helpId]').each(function() {
         var el = document.getElementById( $( this ).attr('helpid') );
 
@@ -47,7 +55,7 @@ $(document).ready(function()
 
         public static string GetAllTypesHintElements()
         {
-            var types = DocumentationStore.GetAllTypesRawHelp();
+            var types = DocumentationStore.GetAllTypesHelp();
 
             var result = new StringBuilder();
 
@@ -55,10 +63,34 @@ $(document).ready(function()
             {
                 var rawText = nameToText.Value;
 
-                result.AppendFormat("<div class='tooltiptext' id='{0}'>{1}</div>", GetTypeId(nameToText.Key), rawText);
+                result.AppendFormat(tooltipFormat, GetTypeId(nameToText.Key), rawText);
             }
 
             return result.ToString();
+        }
+
+        public static string GetHintAttributeValue(TestFunctionReference function)
+        {
+            var identity = function.Identity;
+
+            lock (syncRoot)
+            {
+                string internalId;
+
+                if (!functionKeyMap.TryGetValue(identity, out internalId))
+                {
+                    internalId = string.Format("function_{0}", Interlocked.Increment(ref indexer));
+
+                    string documentation = DocumentationStore.GetFor(function);
+
+                    if (!string.IsNullOrWhiteSpace(documentation))
+                    {
+                        resultHtmls.AppendFormat(tooltipFormat, internalId, documentation);
+                    }
+                }
+
+                return internalId;
+            }
         }
 
         public static string GetHintAttributeValue(TypeReference type)
@@ -78,11 +110,21 @@ $(document).ready(function()
                 return header;
             }
         }
+
         public static string HtmlFooter
         {
             get
             {
-                return footer;
+                lock (syncRoot)
+                {
+                    resultHtmls.Append(footer);
+
+                    var result = resultHtmls.ToString();
+
+                    resultHtmls.Clear();
+
+                    return result;
+                }
             }
         }
     }

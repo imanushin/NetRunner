@@ -16,9 +16,10 @@ namespace NetRunner.Executable.Invokation
     {
         private static readonly char[] incorrectFunctionCharacters = " \n\r\t!@#$%^&*()_+=-/*`~\\|/,.№:;\"'?<>[]{}".ToCharArray();
 
-        internal TestFunctionReference(FunctionMetaData method, TypeReference owner)
+        internal TestFunctionReference(FunctionMetaData method, [NotNull]TypeReference owner)
         {
             Validate.ArgumentIsNotNull(method, "method");
+            Validate.ArgumentIsNotNull(owner, "owner");
 
             Method = method;
             Owner = owner;
@@ -26,6 +27,18 @@ namespace NetRunner.Executable.Invokation
             Arguments = method.GetParameters().ToReadOnlyList();
             ResultType = method.ReturnType;
             AvailableFunctionNames = method.AvailableFunctionNames.Select(CleanFunctionName).ToReadOnlyList();
+
+            Identity = string.Format("{0}_{1}.{2}({3})",
+                Method.ReturnType.FullName,
+                Owner.FullName,
+                Method.SystemName,
+                string.Join(",", Arguments.Select(a => a.ParameterType.FullName)));
+        }
+
+        public string Identity
+        {
+            get;
+            private set;
         }
 
         [NotNull]

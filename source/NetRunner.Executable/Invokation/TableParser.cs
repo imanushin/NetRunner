@@ -124,7 +124,7 @@ namespace NetRunner.Executable.Invokation
             if (string.IsNullOrWhiteSpace(functionName))
                 return null;
 
-            return new FunctionHeader(functionName, arguments, row.RowReference, functionCells.First(), keyword);
+            return new FunctionHeader(functionName, arguments, row.RowReference, functionCells, keyword);
         }
 
     }

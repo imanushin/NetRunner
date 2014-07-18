@@ -13,22 +13,22 @@ namespace NetRunner.Executable.Invokation
 {
     internal sealed class FunctionHeader : BaseReadOnlyObject
     {
-        public FunctionHeader(string functionName, IReadOnlyCollection<HtmlCell> arguments, HtmlRowReference rowReference, HtmlCell firstFunctionCell, AbstractKeyword keyword)
+        public FunctionHeader(string functionName, IEnumerable<HtmlCell> arguments, HtmlRowReference rowReference, ReadOnlyList<HtmlCell> functionCells, AbstractKeyword keyword)
         {
             Validate.ArgumentStringIsMeanful(functionName, "functionName");
             Validate.ArgumentIsNotNull(arguments, "arguments");
             Validate.ArgumentIsNotNull(keyword, "keyword");
             Validate.ArgumentIsNotNull(rowReference, "rowReference");
-            Validate.ArgumentIsNotNull(firstFunctionCell, "firstFunctionCell");
+            Validate.CollectionArgumentHasElements(functionCells, "functionCells");
 
             FunctionName = TestFunctionReference.CleanFunctionName(functionName);
             Arguments = arguments.ToReadOnlyList();
             RowReference = rowReference;
             Keyword = keyword;
-            FirstFunctionCell = firstFunctionCell;
+            FunctionCells = functionCells;
         }
 
-        public HtmlCell FirstFunctionCell
+        public ReadOnlyList<HtmlCell> FunctionCells
         {
             get;
             private set;
@@ -64,6 +64,7 @@ namespace NetRunner.Executable.Invokation
             yield return FunctionName;
             yield return Arguments;
             yield return Keyword;
+            yield return FunctionCells;
         }
 
         protected override string GetString()
