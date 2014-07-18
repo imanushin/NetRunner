@@ -71,7 +71,22 @@ $(document).ready(function()
 
         public static string GetHintAttributeValue(TestFunctionReference function)
         {
-            var identity = function.Identity;
+            return GetOrCreateHintValue(function, f => f.Identity, DocumentationStore.GetFor);
+        }
+
+        public static string GetHintAttributeValue(TypeReference function)
+        {
+            return GetOrCreateHintValue(function, f => f.Identity, DocumentationStore.GetFor);
+        }
+
+        public static string GetHintAttributeValue(PropertyReference property)
+        {
+            return GetOrCreateHintValue(property, f => f.Identity, DocumentationStore.GetFor);
+        }
+
+        private static string GetOrCreateHintValue<TItem>(TItem item, Func<TItem, string> identityGet, Func<TItem, string> documentationGet)
+        {
+            var identity = identityGet(item);
 
             lock (syncRoot)
             {
@@ -79,9 +94,9 @@ $(document).ready(function()
 
                 if (!functionKeyMap.TryGetValue(identity, out internalId))
                 {
-                    internalId = string.Format("function_{0}", Interlocked.Increment(ref indexer));
+                    internalId = string.Format("helpitem_{0}", Interlocked.Increment(ref indexer));
 
-                    string documentation = DocumentationStore.GetFor(function);
+                    string documentation = documentationGet(item);
 
                     if (!string.IsNullOrWhiteSpace(documentation))
                     {
@@ -91,11 +106,6 @@ $(document).ready(function()
 
                 return internalId;
             }
-        }
-
-        public static string GetHintAttributeValue(TypeReference type)
-        {
-            return GetTypeId(type.FullName);
         }
 
         private static string GetTypeId(string typeFullName)

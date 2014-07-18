@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Xml;
 using NetRunner.Executable.Common;
 using NetRunner.Executable.RawData;
@@ -17,6 +18,7 @@ namespace NetRunner.Executable.Invokation.Documentation
 
         private const string typeIdentityFormat = "T:{0}";
         private const string methodIdentityFormat = "M:{0}.{1}({2})";
+        private const string propertyFormat = "P:{0}.{1}({2})";
 
         [CanBeNull]
         public static string GetFor(TypeReference type)
@@ -53,6 +55,15 @@ namespace NetRunner.Executable.Invokation.Documentation
             return internalStore
                 .Where(kv => kv.Key.StartsWith("T:", StringComparison.Ordinal))
                 .ToDictionary(kv => kv.Key.Substring(2), kv => kv.Value);
+        }
+
+        public static string GetFor(PropertyReference property)
+        {
+            return GetFor(property.Owner);
+            //return string.Empty;
+            /*return internalStore
+                .Where(kv => kv.Key.StartsWith("P:", StringComparison.Ordinal))
+                .ToDictionary(kv => kv.Key.Substring(2), kv => kv.Value);*/
         }
 
         public static void LoadForAssemblies(ReadOnlyList<string> assemblyPathes)

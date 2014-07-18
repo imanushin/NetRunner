@@ -13,16 +13,24 @@ namespace NetRunner.TestExecutionProxy
     {
         private readonly PropertyInfo property;
 
-        internal PropertyReference(PropertyInfo property)
+        internal PropertyReference(PropertyInfo property, TypeReference typeReference)
         {
             if (property == null)
             {
                 throw new ArgumentNullException("property");
             }
 
+            Owner = typeReference;
             this.property = property;
             ArgumentPrepareMode = ReflectionHelpers.FindAttribute(property, ArgumentPrepareAttribute.Default).Mode;
             TrimInputCharacters = ReflectionHelpers.FindAttribute(property, StringTrimAttribute.Default).TrimInputString;
+            Identity = typeReference.Identity + ":" + property.Name;
+        }
+
+        public TypeReference Owner
+        {
+            get;
+            private set;
         }
 
         public string Name
@@ -57,6 +65,12 @@ namespace NetRunner.TestExecutionProxy
         }
 
         public bool TrimInputCharacters
+        {
+            get;
+            private set;
+        }
+
+        public string Identity
         {
             get;
             private set;

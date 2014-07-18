@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
 using NetRunner.Executable.Common;
+using NetRunner.Executable.Invokation.Documentation;
 using NetRunner.Executable.RawData;
 using NetRunner.ExternalLibrary.Properties;
 using NetRunner.TestExecutionProxy;
@@ -25,6 +26,8 @@ namespace NetRunner.Executable.Invokation.Functions
 
         protected override FunctionExecutionResult ProcessResult(GeneralIsolatedReference mainFunctionResult)
         {
+            var status = new SequenceExecutionStatus();
+
             var collectionResult = mainFunctionResult.AsIEnumerable();
 
             collectionResult = collectionResult.IsNull ?
@@ -33,7 +36,7 @@ namespace NetRunner.Executable.Invokation.Functions
 
             var orderedResult = collectionResult.ToArray();
 
-            var tableChanges = new SequenceExecutionStatus();
+            AddPropertiesHelp(orderedResult[0], status);
 
             for (int rowIndex = 0; rowIndex < orderedResult.Length && rowIndex < Rows.Count; rowIndex++)
             {
@@ -46,13 +49,13 @@ namespace NetRunner.Executable.Invokation.Functions
 
                 if (properties.Any(p => p == null))
                 {
-                    MarkMissingProperties(currentRow, properties, tableChanges, type);
+                    MarkMissingProperties(currentRow, properties, status, type);
 
                     continue;
                 }
 
-                ProcessSetProperties(properties, currentRow, tableChanges, resultObject);
-                ProcessGetProperties(properties, currentRow, tableChanges, resultObject);
+                ProcessSetProperties(properties, currentRow, status, resultObject);
+                ProcessGetProperties(properties, currentRow, status, resultObject);
             }
 
             for (int rowIndex = orderedResult.Length; rowIndex < Rows.Count; rowIndex++)
@@ -61,9 +64,9 @@ namespace NetRunner.Executable.Invokation.Functions
 
                 var cells = currentRow.Cells.Select(c => c.CleanedContent + "<br/> <i class=\"code\">missing</i>").ToReadOnlyList();
 
-                tableChanges.Changes.Add(new AppendRowWithCells(HtmlParser.FailCssClass, cells));
+                status.Changes.Add(new AppendRowWithCells(HtmlParser.FailCssClass, cells));
 
-                tableChanges.AllIsOk = false;
+                status.AllIsOk = false;
             }
 
             for (int rowIndex = Rows.Count; rowIndex < orderedResult.Length; rowIndex++)
@@ -72,14 +75,28 @@ namespace NetRunner.Executable.Invokation.Functions
 
                 var cells = CleanedColumnNames.Select(name => ReadProperty(name, resultObject) + "<br/> <i class=\"code\">surplus</i>").ToReadOnlyList();
 
-                tableChanges.Changes.Add(new AppendRowWithCells(HtmlParser.FailCssClass, cells));
+                status.Changes.Add(new AppendRowWithCells(HtmlParser.FailCssClass, cells));
 
-                tableChanges.AllIsOk = false;
+                status.AllIsOk = false;
             }
 
-            MarkRootFunction(tableChanges, Function.RowReference);
+            MarkRootFunction(status, Function.RowReference);
 
-            return FormatResult(tableChanges);
+            return FormatResult(status);
+        }
+
+        private void AddPropertiesHelp(GeneralIsolatedReference firstRow, SequenceExecutionStatus status)
+        {
+            var type = firstRow.GetType();
+
+            var newChanges = CleanedColumnNames.Select((cn, i) => new
+            {
+                Property = type.GetProperty(cn),
+                Index = i
+            }).Where(e => e.Property != null)
+            .Select(e => new AddCellPropertyHelp(ColumnsRow.Cells[e.Index], e.Property)).ToReadOnlyList();
+
+            status.Changes.AddRange(newChanges);
         }
 
         private static void ProcessGetProperties(ReadOnlyList<PropertyReference> properties, HtmlRow currentRow, SequenceExecutionStatus tableChanges, GeneralIsolatedReference resultObject)

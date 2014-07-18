@@ -37,6 +37,8 @@ namespace NetRunner.TestExecutionProxy
         private TypeReference(Type targetType)
         {
             TargetType = targetType;
+
+            Identity = targetType.FullName;
         }
 
         internal Type TargetType
@@ -76,8 +78,14 @@ namespace NetRunner.TestExecutionProxy
         {
             get
             {
-                return TargetType.GetProperties().Select(p => new PropertyReference(p)).ToArray();
+                return TargetType.GetProperties().Select(p => new PropertyReference(p, this)).ToArray();
             }
+        }
+
+        public string Identity
+        {
+            get;
+            private set;
         }
 
         public override string ToString()
@@ -117,7 +125,7 @@ namespace NetRunner.TestExecutionProxy
 
             if (result != null)
             {
-                return new PropertyReference(result);
+                return new PropertyReference(result, this);
             }
 
             return null;

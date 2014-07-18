@@ -62,6 +62,7 @@
     <Compile Include="FitnesseCommunicator.cs" />
     <Compile Include="InMemoryAssemblyLoader.cs" />
     <Compile Include="Invokation\CellParsingInfo.cs" />
+    <Compile Include="Invokation\Documentation\AddCellPropertyHelp.cs" />
     <Compile Include="Invokation\Documentation\AddCellTypeHelp.cs" />
     <Compile Include="Invokation\Documentation\AddFunctionHelp.cs" />
     <Compile Include="Invokation\Documentation\BaseCellsHelp.cs" />
