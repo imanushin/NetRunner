@@ -67,6 +67,7 @@ namespace NetRunner.Executable
 
                 if (firstDocument)
                 {
+                    communicator.SendDocument(DocumentationHtmlHelpers.HtmlHeader);
                     communicator.SendDocument(EngineInfo.PrintTestEngineInformation());
 
                     firstDocument = false;
@@ -114,7 +115,9 @@ namespace NetRunner.Executable
                 }
             }
 
-            Trace.WriteLine("Completion signal received");
+            communicator.SendDocument(DocumentationHtmlHelpers.HtmlFooter);
+
+            Trace.WriteLine("Execution completed");
         }
     }
 }

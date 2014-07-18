@@ -35,18 +35,7 @@ namespace NetRunner.Executable.Invokation.Documentation
 
 	<tr style=""overflow:hidden;max-height: calc(90% - 30px)"">
 		<td style=""max-height: calc(90% - 30px); text-align: start; border: 0px;vertical-align:top;white-space: normal"" colspan=""2"">
-			<div id=""helpDialogContent"" style=""overflow:auto;height:calc(90% - 100px)"">
-            NetRunnerTestContainer help
-            <b>bold test</b><br><i>italic test</i><br>&lt;script&gt;injection&lt;/script&gt;</p><p>---<br></p><p>
-            Summ function
-            </p><b>int SummAndWillBe(int first, int second)</b><p></p><p>---<br></p><p>
-            Very positive help
-            </p><b>bool IsPositive(int value)</b><p></p><p>---<br></p><p>
-            Usage: <br>
-            Right: | '''try parse string ''' | 123 | <br>
-            Wrong: | '''try parse string ''' | 123 |
-            </p><b>bool TryParseString(string value)</b><p></p><p>---<br><b>bool PingSite(string url)</b></p><p>---<br><b>int StringLengthOfIs(string inputLine)</b></p><p>---<br><b>int RawStringLengthOfIs(string inputLine)</b></p><p>---<br><b>IEnumerable ListNumbersFromTo(int start, int finish)</b></p><p>---<br><b>bool PingSiteWithoutExceptions(string url)</b></p><p>---<br><b>IEnumerable ListFilesIn(string path)</b></p><p>---<br><b>CreateFolderArgument CreateSubfoldersIn(string baseDirectoryPath)</b></p><p>---<br><b>RemoveFolderArgument RemoveSubfoldersFrom(string baseDirectoryPath)</b></p><p>---<br><b>IEnumerable`1 ListInOutObjects(int count)</b></p><p>---<br><b>int PlusIs(int a, int b, out Int32&amp; c)</b></p><p>---<br><b>IncorrectEqualityClass GetIncorrectEqualityClass()</b></p><p>---<br><b>IncorrectToStringClass GetIncorrectToStringClass()</b></p><p>---<br><b>IEnumerable ListWrongEquality()</b></p><p>---<br><b>IEnumerable ListWrongToString()</b></p><p></p>
-			</div>
+			<div id=""helpDialogContent"" style=""overflow:auto;height:calc(90% - 100px)""/>
 	</td>
 	</tr>
 	</tbody>
@@ -213,7 +202,7 @@ function closeHelpDialog() {
 
             if (!string.IsNullOrWhiteSpace(rawHelp))
             {
-                innerHtml.AppendFormat("<p>{0}</p>", ReplaceTags(rawHelp));
+                innerHtml.AppendFormat("<p><i>{0}</i>  </p>", ReplaceTags(rawHelp));
             }
 
             string systemName = function.Method.SystemName;
