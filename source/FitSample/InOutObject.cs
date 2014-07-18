@@ -10,6 +10,9 @@ namespace FitSample
     {
         private int currentValue;
 
+        /// <summary>
+        /// Value for items inserting
+        /// </summary>
         public int InValue
         {
             set
@@ -18,6 +21,9 @@ namespace FitSample
             }
         }
 
+        /// <summary>
+        /// Return value from InValue property
+        /// </summary>
         public int OutValue
         {
             get

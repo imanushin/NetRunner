@@ -18,7 +18,7 @@ namespace NetRunner.Executable.Invokation.Documentation
 
         private const string typeIdentityFormat = "T:{0}";
         private const string methodIdentityFormat = "M:{0}.{1}({2})";
-        private const string propertyFormat = "P:{0}.{1}({2})";
+        private const string propertyFormat = "P:{0}.{1}";
 
         [CanBeNull]
         public static string GetFor(TypeReference type)
@@ -59,11 +59,14 @@ namespace NetRunner.Executable.Invokation.Documentation
 
         public static string GetFor(PropertyReference property)
         {
-            return GetFor(property.Owner);
-            //return string.Empty;
-            /*return internalStore
-                .Where(kv => kv.Key.StartsWith("P:", StringComparison.Ordinal))
-                .ToDictionary(kv => kv.Key.Substring(2), kv => kv.Value);*/
+            var key = string.Format(
+                propertyFormat,
+                property.Owner.FullName,
+                property.Name);
+
+            var result = TryFindForKey(key);
+
+            return result ?? GetFor(property.Owner);
         }
 
         public static void LoadForAssemblies(ReadOnlyList<string> assemblyPathes)
