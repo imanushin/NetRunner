@@ -51,13 +51,6 @@ namespace NetRunner.Executable.Invokation.Documentation
             return TryFindForKey(key);
         }
 
-        public static Dictionary<string, string> GetAllTypesHelp()
-        {
-            return internalStore
-                .Where(kv => kv.Key.StartsWith("T:", StringComparison.Ordinal))
-                .ToDictionary(kv => kv.Key.Substring(2), kv => kv.Value);
-        }
-
         public static string GetFor(PropertyReference property)
         {
             var key = string.Format(

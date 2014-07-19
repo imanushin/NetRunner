@@ -33,9 +33,9 @@ namespace NetRunner.Executable.Invokation.Documentation
 	</thead>
 	<tbody>
 
-	<tr style=""overflow:hidden;max-height: calc(90% - 30px)"">
-		<td style=""max-height: calc(90% - 30px); text-align: start; border: 0px;vertical-align:top;white-space: normal"" colspan=""2"">
-			<div id=""helpDialogContent"" style=""overflow:auto;height:calc(90% - 100px)""/>
+	<tr>
+		<td style=""text-align: start; border: 0px;vertical-align:top;white-space: normal"" colspan=""2"">
+			<div id=""helpDialogContent""/>
 	</td>
 	</tr>
 	</tbody>
@@ -47,7 +47,6 @@ namespace NetRunner.Executable.Invokation.Documentation
     left: 0px;
     top: 0px;
     width: 100%;
-    height: 100%;
     text-align: center;
     z-index: 1000;
 }
@@ -67,6 +66,8 @@ function closeHelpDialog() {
             var el = document.getElementById(""helpDialog"");
             el.style.visibility = ""hidden"";
         }";
+
+        
 
         private static readonly Dictionary<string, string> typesToCut = new Dictionary<string, string>
         {
@@ -148,6 +149,11 @@ function closeHelpDialog() {
             AddTextTag(textNode, "h4", titleText);
         }
 
+        private static string GetHtmlIdentity(this TypeReference type)
+        {
+            return type.Identity.Replace('.', '_');
+        }
+
         private static void TestContainersToSequence(HtmlNode textNode, ReadOnlyList<LazyIsolatedReference<BaseTestContainer>> inputStrings, Dictionary<string, string> helpKeyValues)
         {
             var ownerDocument = textNode.OwnerDocument;
@@ -160,7 +166,7 @@ function closeHelpDialog() {
 
                 var helpElement = textNode.AppendChild(ownerDocument.CreateElement("div"));
 
-                var key = string.Format("type_{0}", testContainerType.FullName);
+                var key = string.Format("type_{0}", testContainerType.GetHtmlIdentity());
 
                 helpElement.SetAttributeValue("id", key);
                 helpElement.SetAttributeValue("style", "display: none;");
