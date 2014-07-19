@@ -39,9 +39,11 @@ namespace FitSample
         }
 
         /// <summary>
+        /// Function tries to parse input string to the int value
         /// Usage: <br/>
         /// Right: | '''try parse string ''' | 123 | <br/>
         /// Wrong: | '''try parse string ''' | 123 |
+        /// <param name="value">String value for parsing</param>
         /// </summary>
         public bool TryParseString(string value)
         {

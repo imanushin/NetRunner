@@ -26,6 +26,7 @@ namespace NetRunner.Executable
 
         public void SendDocument(string document)
         {
+            Validate.ArgumentStringIsMeanful(document, "document");
             Write(FormatDocument(document));
         }
 
@@ -128,7 +129,7 @@ namespace NetRunner.Executable
 
                 isDisposed = true;
             }
-                
+
         }
     }
 }

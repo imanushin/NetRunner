@@ -53,22 +53,6 @@ $(document).ready(function()
   </script>
 ";
 
-        public static string GetAllTypesHintElements()
-        {
-            var types = DocumentationStore.GetAllTypesHelp();
-
-            var result = new StringBuilder();
-
-            foreach (var nameToText in types)
-            {
-                var rawText = nameToText.Value;
-
-                result.AppendFormat(tooltipFormat, GetTypeId(nameToText.Key), rawText);
-            }
-
-            return result.ToString();
-        }
-
         public static string GetHintAttributeValue(TestFunctionReference function)
         {
             return GetOrCreateHintValue(function, f => f.Identity, DocumentationStore.GetFor);

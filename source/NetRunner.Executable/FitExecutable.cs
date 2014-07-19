@@ -59,20 +59,12 @@ namespace NetRunner.Executable
 
             DocumentationStore.LoadForAssemblies(ReflectionLoader.LoadedAssemblies);
 
-            bool firstDocument = true;
+            communicator.SendDocument(DocumentationHtmlHelpers.HtmlHeader);
+            communicator.SendDocument(EngineInfo.PrintTestEngineInformation());
 
             for (string document = communicator.ReceiveDocument(); document.Any(); document = communicator.ReceiveDocument())
             {
                 Trace.WriteLine("Processing document of size: " + document.Length);
-
-                if (firstDocument)
-                {
-                    communicator.SendDocument(DocumentationHtmlHelpers.HtmlHeader);
-                    communicator.SendDocument(DocumentationHtmlHelpers.GetAllTypesHintElements());
-                    communicator.SendDocument(EngineInfo.PrintTestEngineInformation());
-
-                    firstDocument = false;
-                }
 
                 var counts = new TestCounts();
 
