@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Xml;
 using NetRunner.Executable.Common;
+using NetRunner.Executable.Properties;
 using NetRunner.Executable.RawData;
 using NetRunner.ExternalLibrary.Properties;
 using NetRunner.TestExecutionProxy;
@@ -73,6 +74,8 @@ namespace NetRunner.Executable.Invokation.Documentation
         {
             Validate.ArgumentIsNotNull(assemblyPathes, "assemblyPathes");
 
+            ProcessInternalHelp();
+
             foreach (var assemblyPath in assemblyPathes)
             {
                 try
@@ -91,44 +94,58 @@ namespace NetRunner.Executable.Invokation.Documentation
 
                     xmlDocument.Load(xmlFile);
 
-                    var nodes = xmlDocument.SelectNodes("//doc//members//member[contains(@prop, name) and descendant::summary]");
-
-                    if (ReferenceEquals(null, nodes))
-                    {
-                        continue;
-                    }
-
-                    foreach (XmlNode member in nodes)
-                    {
-                        var attributes = member.Attributes;
-
-                        Validate.IsNotNull(attributes, "Node {0} does not have attributes", member.Name);
-
-                        var memberNameAttribute = attributes.GetNamedItem("name");
-
-                        var memberName = memberNameAttribute.Value;
-
-                        var divider = memberName.IndexOf(':');
-
-                        if (divider < 0)
-                        {
-                            continue;
-                        }
-
-                        var summaryNode = member.ChildNodes.Cast<XmlNode>().FirstOrDefault(n => string.Equals(n.Name, "summary"));
-
-                        if (ReferenceEquals(summaryNode, null))
-                        {
-                            continue;
-                        }
-
-                        internalStore[memberName] = HtmlParser.ReplaceUnknownTags(summaryNode.InnerXml);
-                    }
+                    ProcessXmlDocument(xmlDocument);
                 }
                 catch (Exception ex)
                 {
                     Trace.TraceWarning("Assembly '{0}' has incorrect xml help: {1}", assemblyPath, ex);
                 }
+            }
+        }
+
+        private static void ProcessInternalHelp()
+        {
+            var document = new XmlDocument();
+
+            document.LoadXml(Resources.NetRunner_ExternalLibrary_xmlhelp);
+
+            ProcessXmlDocument(document);
+        }
+
+        private static void ProcessXmlDocument(XmlDocument xmlDocument)
+        {
+            var nodes = xmlDocument.SelectNodes("//doc//members//member[contains(@prop, name) and descendant::summary]");
+
+            if (ReferenceEquals(null, nodes))
+            {
+                return;
+            }
+
+            foreach (XmlNode member in nodes)
+            {
+                var attributes = member.Attributes;
+
+                Validate.IsNotNull(attributes, "Node {0} does not have attributes", member.Name);
+
+                var memberNameAttribute = attributes.GetNamedItem("name");
+
+                var memberName = memberNameAttribute.Value;
+
+                var divider = memberName.IndexOf(':');
+
+                if (divider < 0)
+                {
+                    continue;
+                }
+
+                var summaryNode = member.ChildNodes.Cast<XmlNode>().FirstOrDefault(n => string.Equals(n.Name, "summary"));
+
+                if (ReferenceEquals(summaryNode, null))
+                {
+                    continue;
+                }
+
+                internalStore[memberName] = HtmlParser.ReplaceUnknownTags(summaryNode.InnerXml);
             }
         }
     }

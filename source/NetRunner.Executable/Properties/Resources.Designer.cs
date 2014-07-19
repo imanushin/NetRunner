@@ -71,6 +71,28 @@ namespace NetRunner.Executable.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot;?&gt;
+        ///&lt;doc&gt;
+        ///    &lt;assembly&gt;
+        ///        &lt;name&gt;NetRunner.ExternalLibrary&lt;/name&gt;
+        ///    &lt;/assembly&gt;
+        ///    &lt;members&gt;
+        ///        &lt;member name=&quot;T:NetRunner.ExternalLibrary.AdditionalFunctionNameAttribute&quot;&gt;
+        ///            &lt;summary&gt;
+        ///            Add function synonym for function to have different name in the fintesse test execution.
+        ///            &lt;/summary&gt;
+        ///        &lt;/member&gt;
+        ///        &lt;member name=&quot;T:NetRunner.ExternalLibrary.ArgumentPrepareAttribute&quot;&gt;
+        ///            &lt;summary&gt;
+        ///            Allow to modify inpu [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string NetRunner_ExternalLibrary_xmlhelp {
+            get {
+                return ResourceManager.GetString("NetRunner_ExternalLibrary_xmlhelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
         internal static byte[] NetRunner_TestExecutionProxy {

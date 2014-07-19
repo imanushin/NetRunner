@@ -92,11 +92,6 @@ $(document).ready(function()
             }
         }
 
-        private static string GetTypeId(string typeFullName)
-        {
-            return string.Format("type_{0}", typeFullName.Replace('.', '_'));
-        }
-
         public static string HtmlHeader
         {
             get
