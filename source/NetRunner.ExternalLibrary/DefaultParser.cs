@@ -7,6 +7,11 @@ using System.Text;
 
 namespace NetRunner.ExternalLibrary
 {
+    /// <summary>
+    /// The default parser. For the input type it tries to find public static T Parse(string). Type is not supported by this parser if the method is abcent. 
+    /// Otherwise parser will be this method to parse any input line.<br/>
+    /// Therefore many of the default types are supported, such as <see cref="int"/>, <see cref="double"/>, <see cref="System.DateTime"/>, etc.
+    /// </summary>
     internal sealed class DefaultParser : BaseParser
     {
         private readonly object syncRoot = new object();

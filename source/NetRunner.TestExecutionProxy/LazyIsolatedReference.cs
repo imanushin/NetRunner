@@ -16,15 +16,13 @@ namespace NetRunner.TestExecutionProxy
             "ToString", "GetHashCode", "Equals", "GetType"
         };
 
-        private readonly TypeReference typeReference;
         private readonly Lazy<IsolatedReference<TType>> lazyInstance;
 
-        private Lazy<FunctionMetaData[]> availableMethods;
+        private readonly Lazy<FunctionMetaData[]> availableMethods;
 
         internal LazyIsolatedReference(TypeReference typeReference)
             :base(typeReference)
         {
-            this.typeReference = typeReference;
             lazyInstance = new Lazy<IsolatedReference<TType>>(CreateItem);
             availableMethods = new Lazy<FunctionMetaData[]>(GetAvailableMethods);
         }

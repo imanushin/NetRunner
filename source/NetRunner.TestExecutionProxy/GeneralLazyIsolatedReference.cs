@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,7 +20,11 @@ namespace NetRunner.TestExecutionProxy
 
         private GeneralIsolatedReference CreateItem()
         {
-            var constructor = typeReference.TargetType.GetConstructor(new Type[0]);
+            var constructor = 
+                typeReference
+                    .TargetType
+                    .GetConstructors(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+                    .FirstOrDefault(c => !c.GetParameters().Any());
 
             if (constructor == null)
             {

@@ -6,6 +6,10 @@ using NetRunner.ExternalLibrary.Properties;
 
 namespace NetRunner.ExternalLibrary
 {
+    /// <summary>
+    /// Key-value parser. To use it override <see cref="GetValues{TResult}"/> method by the all available keys and values. <br/>
+    /// All spaces will be ignored. e.g. the lines "1_2" is equal with "1 2" and with "12". Override method <see cref="ReplaceWhiteSpace"/> to change this behaviour.
+    /// </summary>
     public abstract class BaseDictionaryParser : BaseParser
     {
         private readonly object syncRoot = new object();

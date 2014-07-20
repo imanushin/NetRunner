@@ -7,12 +7,17 @@ using NetRunner.ExternalLibrary.Properties;
 namespace NetRunner.ExternalLibrary
 {
     /// <summary>
-    /// Use the tutorial here: https://github.com/imanushin/NetRunner/wiki/Parsing
+    /// Use the tutorial here: https://github.com/imanushin/NetRunner/wiki/Parsing .
+    /// The base type for the any parser. To add the custom parser implementation, simple inherit your parser type from this.
+    /// See also overrides of this type in the same namespace. 
     /// </summary>
-    [UsedImplicitly]
+    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public abstract class BaseParser
     {
         // ReSharper disable ConvertToConstant.Global
+        /// <summary>
+        /// Priorities which are used by this library. All parser with the bigger priority will be used before all others.
+        /// </summary>
         public static class Priorities
         {
             public static readonly int EmbeddedParsersPriority = -10;
@@ -23,6 +28,9 @@ namespace NetRunner.ExternalLibrary
         }
         // ReSharper restore ConvertToConstant.Global
 
+        /// <summary>
+        /// Create parser with the zero priorite (e.g. this parser will be used <b>before</b> any embedded parser)
+        /// </summary>
         protected BaseParser()
             : this(Priorities.DefaultPriority)
         {
@@ -44,6 +52,9 @@ namespace NetRunner.ExternalLibrary
         /// <returns>false is type is not supported. Exception is type is supported, however value could not be parsed. Otherwise true.</returns>
         public abstract bool TryParse<TResult>(string value, [CanBeNull] out TResult parsedResult);
         
+        /// <summary>
+        /// Parser priority. Can be set once during the parser construction
+        /// </summary>
         public int Priority
         {
             get;

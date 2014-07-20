@@ -14,7 +14,7 @@ namespace NetRunner.TestExecutionProxy
     {
         private static readonly MethodInfo tryParseMethod = typeof(BaseParser).GetMethod("TryParse");
 
-        internal IsolatedParser(BaseParser value)
+        private IsolatedParser(BaseParser value)
             : base(value)
         {
         }

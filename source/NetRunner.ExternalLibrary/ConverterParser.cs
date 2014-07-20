@@ -11,6 +11,11 @@ namespace NetRunner.ExternalLibrary
     /// </summary>
     public sealed class ConverterParser : BaseParser
     {
+        internal ConverterParser()
+            :base(Priorities.ConverterParserPrioriry)
+        {
+        }
+
         public override bool TryParse<TResult>(string value, out TResult parsedResult)
         {
             if (IsDisabled)
