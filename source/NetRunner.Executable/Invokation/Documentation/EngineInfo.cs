@@ -120,7 +120,7 @@ function closeHelpDialog() {
             TestContainersToSequence(textNode, ReflectionLoader.TestContainers, helpKeyValues);
 
             AddTitle(textNode, "Parsers:");
-            StringsToSequence(textNode, ReflectionLoader.Parsers.Select(p => string.Format("{0}; priority: {1}", p.GetTypeName(), p.ExecuteProperty<int>("Priority"))));
+            ParsersToSequence(textNode);
 
             AddTitle(textNode, "Test assemblies:");
             StringsToSequence(textNode, ReflectionLoader.AssemblyPathes);
@@ -134,6 +134,38 @@ function closeHelpDialog() {
             document.DocumentNode.AppendChild(document.CreateElement("br"));
 
             return document.DocumentNode.OuterHtml;
+        }
+
+        private static void ParsersToSequence(HtmlNode textNode)
+        {
+            var ownerDocument = textNode.OwnerDocument;
+
+            var rootTable = textNode.AppendChild(ownerDocument.CreateElement("table"));
+
+            rootTable.SetAttributeValue("style", "border:0px; padding:0px;  border-spacing: 0px;");
+
+            foreach (var parser in ReflectionLoader.Parsers)
+            {
+                var tableRow = rootTable.AppendChild(ownerDocument.CreateElement("tr"));
+                var tableCell = tableRow.AppendChild(ownerDocument.CreateElement("td"));
+                var parserElement = tableCell.AppendChild(ownerDocument.CreateElement("p"));
+
+                tableRow.SetAttributeValue("style", "border:0px; padding:0px;border-spacing: 0px;");
+                tableCell.SetAttributeValue("style", "border:0px; padding:0px;border-spacing: 0px;");
+                parserElement.SetAttributeValue("style", "display: inline-block; border:0px; padding:0px;border-spacing: 0px;margin: 3px");
+
+                var parserType = parser.GetType();
+                var text = string.Format("{0}; priority: {1}", parserType.Name, parser.ExecuteProperty<int>("Priority"));
+                
+                parserElement.InnerHtml = text;
+
+                var parserHint = DocumentationHtmlHelpers.GetHintAttributeValue(parserType);
+
+                if (!string.IsNullOrWhiteSpace(parserHint))
+                {
+                    parserElement.SetAttributeValue(DocumentationHtmlHelpers.AttributeName, parserHint);
+                }
+            }
         }
 
 

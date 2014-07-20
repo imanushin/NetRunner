@@ -40,23 +40,5 @@ namespace NetRunner.TestExecutionProxy
 
             return enumerable.Cast<object>().Select(o => new IsolatedReference<object>(o)).ToArray();
         }
-        
-        private Type ValueType
-        {
-            get
-            {
-                return ReferenceEquals(null, Value) ? typeof(TType) : Value.GetType();
-            }
-        }
-
-        public string GetTypeName()
-        {
-            return ValueType.Name;
-        }
-
-        public string GetTypeFullName()
-        {
-            return ValueType.FullName;
-        }
     }
 }

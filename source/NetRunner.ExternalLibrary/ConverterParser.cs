@@ -5,6 +5,10 @@ using System.Text;
 
 namespace NetRunner.ExternalLibrary
 {
+    /// <summary>
+    /// Parser for the standard <see cref="System.Convert"/> class implementation.
+    /// Register conversion from string to the target type to parse them automatically by using this parser.
+    /// </summary>
     public sealed class ConverterParser : BaseParser
     {
         public override bool TryParse<TResult>(string value, out TResult parsedResult)
