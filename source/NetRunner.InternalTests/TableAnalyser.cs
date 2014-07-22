@@ -15,6 +15,7 @@ namespace NetRunner.InternalTests
         {
             Contains,
             NotContain,
+            AtLeastOneContains,
             Count
         }
 
@@ -43,6 +44,8 @@ namespace NetRunner.InternalTests
             {
                 case Operation.Contains:
                     return actualCells.All(n => n.OuterHtml.Contains(parameter)) && actualCells.Any();
+                case Operation.AtLeastOneContains:
+                    return actualCells.Any(n => n.OuterHtml.Contains(parameter)) && actualCells.Any();
                 case Operation.NotContain:
                     return !actualCells.Any(n => n.OuterHtml.Contains(parameter)) && actualCells.Any();
                 case Operation.Count:

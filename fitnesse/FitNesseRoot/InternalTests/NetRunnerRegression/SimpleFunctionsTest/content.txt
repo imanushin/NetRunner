@@ -112,7 +112,7 @@
 | 1..100 | 1..100 | Contains | class="error" |
 | 1..100 | 1..100 | Contains | Do Method From Problematic Container |
 | 1..100 | 1..100 | Contains | Surprise!!! |
-| 1..100 | 1..100 | Not Contain | TargetInvokation |
+| 1..100 | 1..100 | Not Contain | !-TargetInvokation-! |
 
 | check | '''Row Count Of Table''' | 10 | '''is''' | 2 | 
 
@@ -123,8 +123,7 @@
 | 3 | 2 | Contains | Unable to get string |
 | 3 | 2 | Contains | Surprise !!! |
 | 1..100 | 1..100 | Not Contain | class="pass" |
-
-| 1..100 | 1..100 | Not Contain | TargetInvokation |
+| 1..100 | 1..100 | Not Contain | !-TargetInvokation-! |
 
 | check | '''Trimmed String Length Of''' | ''   1   '' | '''is''' | 1 |
 
