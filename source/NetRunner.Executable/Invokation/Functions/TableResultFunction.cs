@@ -31,8 +31,10 @@ namespace NetRunner.Executable.Invokation.Functions
             var functionExecutionResult = CheckTableFunctionResult(mainFunctionResult, tableResult, changes);
 
             if (functionExecutionResult != null)
+            {
                 return functionExecutionResult;
-            
+            }
+
             var functionToExecute = ReflectionLoader.FindFunction(CleanedColumnNames, tableResult);
 
             if (functionToExecute == null)
@@ -55,7 +57,7 @@ namespace NetRunner.Executable.Invokation.Functions
             }
 
             notificationResult = tableResult.ExecuteAfterAllFunctionsCallMethod(functionToExecute.Method);
-            
+
             AddExceptionLineIfNeeded(notificationResult, changes);
 
             MarkRootFunction(changes, Function.RowReference);

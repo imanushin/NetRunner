@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using HtmlAgilityPack;
 using NetRunner.Executable.Common;
+using NetRunner.Executable.Invokation.Documentation;
 using NetRunner.Executable.RawData;
 using NetRunner.TestExecutionProxy;
 
@@ -37,16 +38,20 @@ namespace NetRunner.Executable.Invokation.Functions
             var actualTypes = new List<ParameterData>();
 
             var conversionErrors = new List<AbstractTableChange>();
+            var helpChanges = new List<AbstractTableChange>();
 
             for (int i = 0; i < expectedTypes.Count; i++)
             {
                 var inputArgument = inputArguments[i];
                 var parameterInfo = expectedTypes[i];
 
+                helpChanges.Add(new AddCellParameterHelp(inputArgument, parameterInfo));
+
                 if (parameterInfo.IsOut)
                 {
                     continue;
                 }
+
                 var conversionErrorHeader = string.Format(
                     "Unable to convert value '{2}' of parameter '{0}' of function '{1}'",
                     parameterInfo.Name,
@@ -78,10 +83,12 @@ namespace NetRunner.Executable.Invokation.Functions
                     functionReference.DisplayName,
                     result.ExceptionType);
 
-                return InvokationResult.CreateErrorResult(new TableChangeCollection(false, true, errorData));
+                helpChanges.Add(errorData);
+
+                return InvokationResult.CreateErrorResult(new TableChangeCollection(false, true, helpChanges));
             }
 
-            return InvokationResult.CreateSuccessResult(result);
+            return InvokationResult.CreateSuccessResult(result, helpChanges);
         }
 
         public abstract ReadOnlyList<TestFunctionReference> GetInnerFunctions();

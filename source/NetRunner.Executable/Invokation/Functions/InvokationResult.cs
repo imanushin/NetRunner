@@ -43,9 +43,16 @@ namespace NetRunner.Executable.Invokation.Functions
             private set;
         }
 
+        public static InvokationResult CreateSuccessResult(ExecutionResult result, IEnumerable<AbstractTableChange> additionalChanges)
+        {
+            var changes = new TableChangeCollection(true,false,additionalChanges.ToReadOnlyList());
+
+            return new InvokationResult(result.Result, changes, result.OutParameters);
+        }
+
         public static InvokationResult CreateSuccessResult(ExecutionResult result)
         {
-            return new InvokationResult(result.Result, TableChangeCollection.AllIsOkNoChanges, result.OutParameters);
+            return CreateSuccessResult(result, ReadOnlyList<AbstractTableChange>.Empty);
         }
 
         public static InvokationResult CreateErrorResult(TableChangeCollection changes)

@@ -193,12 +193,6 @@ namespace NetRunner.Executable.Invokation.Functions
             }
 
             return null;
-            /*
-            throw new InvalidOperationException(string.Format(
-                "Result type {0} does not supported. Table function should inherit one of the following types: {1}, {2}",
-                resultType, 
-                CollectionResultFunction.BaseType, 
-                TableResultFunction.BaseType));*/
         }
 
         public override ReadOnlyList<TestFunctionReference> GetInnerFunctions()
