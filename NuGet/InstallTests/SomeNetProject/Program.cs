@@ -10,6 +10,7 @@ namespace SomeNetProject
     {
         static void Main(string[] args)
         {
+            //NetRunner.ExternalLibrary.AdditionalFunctionNameAttribute
         }
     }
 }
