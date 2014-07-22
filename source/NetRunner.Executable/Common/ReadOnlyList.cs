@@ -18,6 +18,11 @@ namespace NetRunner.Executable.Common
         private readonly TValue[] innerValues;
         public static readonly ReadOnlyList<TValue> Empty = new ReadOnlyList<TValue>(new TValue[0]);
 
+        public ReadOnlyList(params TValue[] values)
+        {
+            innerValues = (TValue[]) values.Clone();
+        }
+
         public ReadOnlyList(IEnumerable<TValue> values)
         {
             innerValues = values.ToArray();

@@ -52,12 +52,6 @@ namespace NetRunner.TestExecutionProxy
             return new TypeReference(TargetType.GetElementType());
         }
 
-        public string TypeName
-        {
-            get;
-            private set;
-        }
-
         public string Name
         {
             get

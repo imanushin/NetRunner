@@ -10,11 +10,13 @@ namespace NetRunner.TestExecutionProxy
 {
     public sealed class ParameterInfoReference : GeneralReferenceObject
     {
-        internal ParameterInfoReference(ParameterInfo parameter)
+        internal ParameterInfoReference(ParameterInfo parameter, FunctionMetaData method)
         {
             Parameter = parameter;
             PrepareMode = ReflectionHelpers.FindAttribute(parameter, ArgumentPrepareAttribute.Default).Mode;
             TrimInputCharacters = ReflectionHelpers.FindAttribute(parameter, StringTrimAttribute.Default).TrimInputString;
+            Owner = method;
+            Identity = method.Identity + ":" + parameter.Name;
         }
 
         public bool TrimInputCharacters
@@ -57,6 +59,18 @@ namespace NetRunner.TestExecutionProxy
             {
                 return TypeReference.GetType(Parameter.ParameterType);
             }
+        }
+
+        public FunctionMetaData Owner
+        {
+            get;
+            private set;
+        }
+
+        public string Identity
+        {
+            get;
+            private set;
         }
     }
 }

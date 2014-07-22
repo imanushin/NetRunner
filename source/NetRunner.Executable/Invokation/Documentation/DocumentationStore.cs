@@ -19,6 +19,7 @@ namespace NetRunner.Executable.Invokation.Documentation
 
         private const string typeIdentityFormat = "T:{0}";
         private const string methodIdentityFormat = "M:{0}.{1}({2})";
+        private const string parameterFormat = "Par:{0}.{1}";
         private const string propertyFormat = "P:{0}.{1}";
 
         [CanBeNull]
@@ -42,13 +43,23 @@ namespace NetRunner.Executable.Invokation.Documentation
 
         public static string GetFor(TestFunctionReference function)
         {
-            var key = string.Format(
-                methodIdentityFormat,
-                function.Owner.FullName,
-                function.Method.SystemName,
-                string.Join(",", function.Arguments.Select(a => a.ParameterType.FullName)));
+            return GetFor(function.Method);
+        }
+
+        private static string GetFor(FunctionMetaData function)
+        {
+            var key = GetKey(function);
 
             return TryFindForKey(key);
+        }
+
+        private static string GetKey(FunctionMetaData function)
+        {
+            return string.Format(
+                methodIdentityFormat,
+                function.Owner.FullName,
+                function.SystemName,
+                string.Join(",", function.GetParameters().Select(a => a.ParameterType.FullName)));
         }
 
         public static string GetFor(PropertyReference property)
@@ -61,6 +72,15 @@ namespace NetRunner.Executable.Invokation.Documentation
             var result = TryFindForKey(key);
 
             return result ?? GetFor(property.Owner);
+        }
+
+        public static string GetFor(ParameterInfoReference parameter)
+        {
+            var functionKey = GetKey(parameter.Owner);
+
+            var key = string.Format(parameterFormat, functionKey, parameter.Name);
+
+            return TryFindForKey(key);
         }
 
         public static void LoadForAssemblies(ReadOnlyList<string> assemblyPathes)
@@ -107,38 +127,78 @@ namespace NetRunner.Executable.Invokation.Documentation
 
         private static void ProcessXmlDocument(XmlDocument xmlDocument)
         {
-            var nodes = xmlDocument.SelectNodes("//doc//members//member[contains(@prop, name) and descendant::summary]");
-
-            if (ReferenceEquals(null, nodes))
+            try
             {
-                return;
+
+                var nodes = xmlDocument.SelectNodes("//doc//members//member[contains(@prop, name) and descendant::summary]");
+
+                if (ReferenceEquals(null, nodes))
+                {
+                    return;
+                }
+
+                foreach (XmlNode member in nodes)
+                {
+                    var attributes = member.Attributes;
+
+                    Validate.IsNotNull(attributes, "Node {0} does not have attributes", member.Name);
+
+                    var memberNameAttribute = attributes.GetNamedItem("name");
+
+                    var memberName = memberNameAttribute.Value;
+
+                    var divider = memberName.IndexOf(':');
+
+                    if (divider < 0)
+                    {
+                        continue;
+                    }
+
+                    var summaryNode = member.ChildNodes.Cast<XmlNode>().FirstOrDefault(n => string.Equals(n.Name, "summary"));
+
+                    if (ReferenceEquals(summaryNode, null))
+                    {
+                        continue;
+                    }
+
+                    ProcessParams(summaryNode, memberName);
+
+                    AddNewMember(memberName, summaryNode);
+                }
             }
-
-            foreach (XmlNode member in nodes)
+            catch (Exception ex)
             {
-                var attributes = member.Attributes;
+                Trace.TraceError("Unable to get help information: {0}", ex);
+            }
+        }
 
-                Validate.IsNotNull(attributes, "Node {0} does not have attributes", member.Name);
+        private static void AddNewMember(string memberName, XmlNode summaryNode)
+        {
+            internalStore[memberName] = HtmlParser.ReplaceUnknownTags(summaryNode.InnerXml);
+        }
 
-                var memberNameAttribute = attributes.GetNamedItem("name");
+        private static void ProcessParams(XmlNode summaryNode, string memberName)
+        {
+            var parameterNodes = summaryNode.ChildNodes.Cast<XmlNode>().Where(n => string.Equals(n.Name, "param")).ToReadOnlyList();
 
-                var memberName = memberNameAttribute.Value;
+            foreach (XmlNode parameterNode in parameterNodes)
+            {
+                Validate.IsNotNull(parameterNode, "Node with the 'param' name is null for the help member '{0}'", memberName);
 
-                var divider = memberName.IndexOf(':');
+                summaryNode.RemoveChild(parameterNode);
 
-                if (divider < 0)
+                var attributes = parameterNode.Attributes;
+
+                Validate.IsNotNull(attributes, "Attributes array of node 'param' for the help member '{0}' is null", memberName);
+
+                var newMemberName = attributes["name"];
+
+                if (ReferenceEquals(null, newMemberName))
                 {
                     continue;
                 }
 
-                var summaryNode = member.ChildNodes.Cast<XmlNode>().FirstOrDefault(n => string.Equals(n.Name, "summary"));
-
-                if (ReferenceEquals(summaryNode, null))
-                {
-                    continue;
-                }
-
-                internalStore[memberName] = HtmlParser.ReplaceUnknownTags(summaryNode.InnerXml);
+                AddNewMember(string.Format(parameterFormat, memberName, newMemberName.InnerText), parameterNode);
             }
         }
     }

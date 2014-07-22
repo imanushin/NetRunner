@@ -27,18 +27,14 @@ namespace NetRunner.Executable.Invokation
             Arguments = method.GetParameters().ToReadOnlyList();
             ResultType = method.ReturnType;
             AvailableFunctionNames = method.AvailableFunctionNames.Select(CleanFunctionName).ToReadOnlyList();
-
-            Identity = string.Format("{0}_{1}.{2}({3})",
-                Method.ReturnType.FullName,
-                Owner.FullName,
-                Method.SystemName,
-                string.Join(",", Arguments.Select(a => a.ParameterType.FullName)));
         }
 
         public string Identity
         {
-            get;
-            private set;
+            get
+            {
+                return Method.Identity;
+            }
         }
 
         [NotNull]
@@ -81,7 +77,7 @@ namespace NetRunner.Executable.Invokation
         {
             get
             {
-                return Method.ObjectType.Name + '.' + Method.SystemName;
+                return Method.Owner.Name + '.' + Method.SystemName;
             }
         }
 

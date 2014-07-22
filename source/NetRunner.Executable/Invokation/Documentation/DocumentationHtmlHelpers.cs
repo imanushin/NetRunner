@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using NetRunner.Executable.Common;
 using NetRunner.TestExecutionProxy;
 
 namespace NetRunner.Executable.Invokation.Documentation
@@ -68,9 +69,16 @@ $(document).ready(function()
             return GetOrCreateHintValue(property, f => f.Identity, DocumentationStore.GetFor);
         }
 
+        public static string GetHintAttributeValue(ParameterInfoReference argument)
+        {
+            return GetOrCreateHintValue(argument, f => f.Identity, DocumentationStore.GetFor);
+        }
+
         private static string GetOrCreateHintValue<TItem>(TItem item, Func<TItem, string> identityGet, Func<TItem, string> documentationGet)
         {
             var identity = identityGet(item);
+
+            Validate.IsNotNull(identity, "Identity should not be null");
 
             lock (syncRoot)
             {

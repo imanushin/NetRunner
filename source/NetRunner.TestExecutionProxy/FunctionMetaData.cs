@@ -13,15 +13,21 @@ namespace NetRunner.TestExecutionProxy
     public sealed class FunctionMetaData : GeneralReferenceObject
     {
         private readonly Lazy<GeneralIsolatedReference> targetObject;
-        private readonly TypeReference objectType;
 
         private FunctionMetaData([NotNull] MethodInfo method, [NotNull] Lazy<GeneralIsolatedReference> targetObject, TypeReference objectType)
         {
             Method = method;
-            this.objectType = objectType;
+            Owner = objectType;
             this.targetObject = targetObject;
 
             AvailableFunctionNames = GetFunctionNamesAvailable(method);
+
+            Identity = string.Format("{0}_{1}.{2}({3})",
+                Method.ReturnType.FullName,
+                Owner.FullName,
+                Method.Name,
+                string.Join(",", method.GetParameters().Select(a => a.ParameterType.FullName)));
+
         }
 
         internal FunctionMetaData([NotNull] MethodInfo method, [NotNull] GeneralLazyIsolatedReference targetObject)
@@ -99,18 +105,22 @@ namespace NetRunner.TestExecutionProxy
             }
         }
 
-        public TypeReference ObjectType
+        public TypeReference Owner
         {
-            get
-            {
-                return objectType;
-            }
+            get;
+            private set;
+        }
+
+        public string Identity
+        {
+            get;
+            private set;
         }
 
         [Pure]
         public ParameterInfoReference[] GetParameters()
         {
-            return Method.GetParameters().Select(p => new ParameterInfoReference(p)).ToArray();
+            return Method.GetParameters().Select(p => new ParameterInfoReference(p, this)).ToArray();
         }
 
         [NotNull]
@@ -245,7 +255,7 @@ namespace NetRunner.TestExecutionProxy
         {
             var result = Method.GetParameters()
                 .Where(p => string.Equals(name, p.Name, StringComparison.OrdinalIgnoreCase))
-                .Select(p => new ParameterInfoReference(p))
+                .Select(p => new ParameterInfoReference(p, this))
                 .FirstOrDefault();
 
             if (result == null)

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using NetRunner.Executable.Common;
@@ -10,10 +9,10 @@ using NetRunner.TestExecutionProxy;
 
 namespace NetRunner.Executable.Invokation.Documentation
 {
-    internal sealed class AddCellPropertyHelp : BaseCellsHelp
+    internal sealed class AddCellParameterHelp : BaseCellsHelp
     {
-        public AddCellPropertyHelp(HtmlCell cell, PropertyReference property)
-            : base(new ReadOnlyList<HtmlCell>(cell), DocumentationHtmlHelpers.GetHintAttributeValue(property))
+        public AddCellParameterHelp(HtmlCell parameterCell, ParameterInfoReference argument)
+            : base(new ReadOnlyList<HtmlCell>(parameterCell), DocumentationHtmlHelpers.GetHintAttributeValue(argument))
         {
         }
     }

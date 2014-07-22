@@ -42,7 +42,7 @@ namespace NetRunner.Executable.Invokation.Functions
 
                 var result = InvokeFunction(functionReference, function);
 
-                status.Changes.Add(new AddFunctionHelp(function.FunctionCells, functionReference));
+                AddFunctionHelp(status);
 
                 status.MergeWith(result.Changes);
 
@@ -92,12 +92,28 @@ namespace NetRunner.Executable.Invokation.Functions
             }
         }
 
+        private void AddFunctionHelp(SequenceExecutionStatus status)
+        {
+            var argumentsHelp = function.Arguments
+                .Select((arg, index) => new
+                {
+                    Argument = arg,
+                    Index = index
+                })
+                .Where(item => item.Index < functionReference.Arguments.Count)
+                .Select(item => new AddCellParameterHelp(item.Argument, functionReference.Arguments[item.Index]));
+
+            status.Changes.AddRange(argumentsHelp);
+
+            status.Changes.Add(new AddFunctionHelp(function.FunctionCells, functionReference));
+        }
+
         private HtmlCell GetParameterCell(ParameterData parameterData)
         {
-            var parameterIndex = functionReference.Arguments.IndexOf(p=>string.Equals(p.Name, parameterData.Name, StringComparison.Ordinal));
+            var parameterIndex = functionReference.Arguments.IndexOf(p => string.Equals(p.Name, parameterData.Name, StringComparison.Ordinal));
 
             Validate.IsNotNull(
-                parameterIndex, 
+                parameterIndex,
                 "Internal error: unable to find parameter '{0}' of '{1}'. Parameters available: {2}. Please send this issue to {3}",
                 parameterData.Name,
                 function.FunctionName,
