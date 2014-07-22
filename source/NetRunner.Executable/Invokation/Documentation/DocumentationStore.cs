@@ -59,7 +59,17 @@ namespace NetRunner.Executable.Invokation.Documentation
                 methodIdentityFormat,
                 function.Owner.FullName,
                 function.SystemName,
-                string.Join(",", function.GetParameters().Select(a => a.ParameterType.FullName)));
+                string.Join(",", function.GetParameters().Select(a => ReplaseRefSymbol(a.ParameterType.FullName))));
+        }
+
+        private static string ReplaseRefSymbol(string typeName)
+        {
+            if (typeName.EndsWith("&"))
+            {
+                return typeName.Substring(0, typeName.Length - 1) + "@";
+            }
+
+            return typeName;
         }
 
         public static string GetFor(PropertyReference property)
@@ -154,14 +164,14 @@ namespace NetRunner.Executable.Invokation.Documentation
                         continue;
                     }
 
-                    var summaryNode = member.ChildNodes.Cast<XmlNode>().FirstOrDefault(n => string.Equals(n.Name, "summary"));
+                    var summaryNode = member.ChildNodes.Cast<XmlNode>().FirstOrDefault(n => string.Equals(n.Name, "summary", StringComparison.OrdinalIgnoreCase));
 
                     if (ReferenceEquals(summaryNode, null))
                     {
                         continue;
                     }
 
-                    ProcessParams(summaryNode, memberName);
+                    ProcessParams(member, memberName);
 
                     AddNewMember(memberName, summaryNode);
                 }
@@ -177,15 +187,15 @@ namespace NetRunner.Executable.Invokation.Documentation
             internalStore[memberName] = HtmlParser.ReplaceUnknownTags(summaryNode.InnerXml);
         }
 
-        private static void ProcessParams(XmlNode summaryNode, string memberName)
+        private static void ProcessParams(XmlNode helpNode, string memberName)
         {
-            var parameterNodes = summaryNode.ChildNodes.Cast<XmlNode>().Where(n => string.Equals(n.Name, "param")).ToReadOnlyList();
+            var parameterNodes = helpNode.ChildNodes.Cast<XmlNode>().Where(n => string.Equals(n.Name, "param")).ToReadOnlyList();
 
             foreach (XmlNode parameterNode in parameterNodes)
             {
                 Validate.IsNotNull(parameterNode, "Node with the 'param' name is null for the help member '{0}'", memberName);
 
-                summaryNode.RemoveChild(parameterNode);
+                helpNode.RemoveChild(parameterNode);
 
                 var attributes = parameterNode.Attributes;
 

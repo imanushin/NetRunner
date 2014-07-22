@@ -128,6 +128,13 @@ namespace FitSample
             return Enumerable.Range(0, count).Select(i => new InOutObject());
         }
 
+        /// <summary>
+        /// Checks that a+b=c
+        /// </summary>
+        /// <param name="a">left argument - a</param>
+        /// <param name="b">right argument - b</param>
+        /// <param name="c">expected result</param>
+        /// <returns></returns>
         public int PlusIs(int a, int b, out int c)
         {
             c = a + b;
