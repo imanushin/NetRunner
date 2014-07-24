@@ -16,58 +16,7 @@ namespace NetRunner.Executable.Invokation.Documentation
     internal static class EngineInfo
     {
         private const string howToAddHelpLinkFormat = "Help does not available for type <b>{0}</b>. See <a href=\"https://github.com/imanushin/NetRunner/wiki/Help-and-hints\">this tutorial</a> about the NetRunner help configuring.";
-        private const string dialogContent = @"	<table style=""display: inline-block; max-width: 800px; max-height: 90%; position: relative; overflow: hidden; margin: 50px; background-color: #fff; border: 1px solid #000; padding: 1px"">
-	<thead style=""border-bottom: 1px;margin:0px;padding: 1px;"">
-	
-	<tr style=""padding: 1px; margin:0px;white-space: normal"">
-		<th style=""border: 0px;padding: 1px; margin:0px;"">
-			<h3 style=""border: 0px;padding: 1px; margin:0px; text-align: center;"">Functions help</h3>
-		</th>
-		
-		<td style=""border: 0px;margin:0px;padding: 1px;white-space: normal"">
-			<a href=""#"" onclick=""closeHelpDialog()"" style=""padding: 1px; margin:0px"">
-				<h3 style=""border: 0px;padding: 1px; margin:0px"">Close</h3>
-			</a>
-		</td>		
-	</tr>
-	</thead>
-	<tbody>
-
-	<tr>
-		<td style=""text-align: start; border: 0px;vertical-align:top;white-space: normal"" colspan=""2"">
-			<div id=""helpDialogContent""/>
-	</td>
-	</tr>
-	</tbody>
-	</table>
-";
-        private const string dialogStyle = @"#helpDialog {
-    visibility: hidden;
-    position: absolute;
-    left: 0px;
-    top: 0px;
-    width: 100%;
-    text-align: center;
-    z-index: 1000;
-}
-";
-        private const string dialogFunctions = @"function openHelpDialog(helpKey) {
-    var el = document.getElementById(""helpDialog"");
-    el.style.visibility = ""visible"";
-
-    var contentPane = document.getElementById(""helpDialogContent"");
-    var helpContent = document.getElementById(helpKey);
-
-    var helpHtml = helpContent.innerHTML;
-    contentPane.innerHTML = helpHtml;
-}
-
-function closeHelpDialog() {
-            var el = document.getElementById(""helpDialog"");
-            el.style.visibility = ""hidden"";
-        }";
-
-        
+       
 
         private static readonly Dictionary<string, string> typesToCut = new Dictionary<string, string>
         {
@@ -79,27 +28,10 @@ function closeHelpDialog() {
             {"Void", "void" },
         };
 
-        private static void AppendModalWindowTags(HtmlDocument document)
-        {
-            var modalDialog = document.DocumentNode.AppendChild(document.CreateElement("div"));
-
-            modalDialog.SetAttributeValue("id", "helpDialog");
-
-            modalDialog.InnerHtml = dialogContent;
-
-            var style = document.DocumentNode.AppendChild(document.CreateElement("style"));
-
-            style.InnerHtml = dialogStyle;
-
-            document.DocumentNode.AppendChild(document.CreateElement("script")).InnerHtml = dialogFunctions;
-        }
-
         public static string PrintTestEngineInformation()
         {
             var document = new HtmlDocument();
-
-            AppendModalWindowTags(document);
-
+            
             document.DocumentNode.AppendChild(document.CreateElement("br"));
 
             var expandableDiv = document.DocumentNode.AppendChild(document.CreateElement("div"));
@@ -127,6 +59,9 @@ function closeHelpDialog() {
 
             AddTextTag(textNode, "h5", "Working folder: " + Environment.CurrentDirectory);
 
+            textNode.AppendChild(document.CreateElement("br"));
+            textNode.AppendChild(document.CreateElement("br"));
+            textNode.AppendChild(document.CreateElement("br"));
             textNode.AppendChild(document.CreateElement("br"));
             AddTextTag(textNode, "h3", "Available functions:");
             AllFunctionsToSequence(textNode, ReflectionLoader.TestContainers);
@@ -183,11 +118,6 @@ function closeHelpDialog() {
             AddTextTag(textNode, "h4", titleText);
         }
 
-        private static string GetHtmlIdentity(this TypeReference type)
-        {
-            return type.Identity.Replace('.', '_');
-        }
-
         private static void TestContainersToSequence(HtmlNode textNode, ReadOnlyList<LazyIsolatedReference<BaseTestContainer>> inputContainers)
         {
             var ownerDocument = textNode.OwnerDocument;
@@ -195,23 +125,6 @@ function closeHelpDialog() {
             foreach (var testContainer in inputContainers)
             {
                 var testContainerType = testContainer.Type;
-
-                var helpDivContent = GetTypeDocumentation(testContainerType);
-
-                var helpElement = textNode.AppendChild(ownerDocument.CreateElement("div"));
-
-                var key = string.Format("type_{0}", testContainerType.GetHtmlIdentity());
-
-                helpElement.SetAttributeValue("id", key);
-                helpElement.SetAttributeValue("style", "display: none;");
-
-                var containerParagraph = helpElement.AppendChild(ownerDocument.CreateElement("p"));
-
-                containerParagraph.AppendChild(ownerDocument.CreateElement("p")).InnerHtml = helpDivContent;
-
-                var methods = ReflectionLoader.GetMethodFor(testContainer);
-
-                methods.ForEach(m => AppendMethod(m, containerParagraph));
                 
                 textNode.AppendChild(ownerDocument.CreateElement("p")).InnerHtml = testContainerType.Name;
             }
@@ -234,7 +147,7 @@ function closeHelpDialog() {
             {
                 var testContainerType = testContainer.Type;
 
-                textNode.AppendChild(ownerDocument.CreateElement("h5")).InnerHtml = string.Format("Container {0}:", testContainerType.Name);
+                textNode.AppendChild(ownerDocument.CreateElement("h4")).InnerHtml = string.Format("Container {0}:", testContainerType.Name);
                 textNode.AppendChild(ownerDocument.CreateElement("p")).InnerHtml = GetTypeDocumentation(testContainerType);
 
                 var containerParagraph = textNode.AppendChild(ownerDocument.CreateElement("p"));
