@@ -72,7 +72,7 @@
     <Compile Include="Invokation\Functions\MarkAsBoldCellChange.cs" />
     <Compile Include="Invokation\Functions\SequenceExecutionStatus.cs" />
     <Compile Include="Invokation\ParsedTable.cs" />
-    <Compile Include="Invokation\TestExecutionPlan.cs" />
+    <Compile Include="Invokation\Documentation\TestExecutionPlan.cs" />
     <Compile Include="Invokation\Functions\AddCellExpandableException.cs" />
     <Compile Include="Invokation\Functions\CollectionResultFunction.cs" />
     <Compile Include="Invokation\Functions\ComplexArgumentedFunction.cs" />

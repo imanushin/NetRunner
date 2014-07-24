@@ -1,32 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using HtmlAgilityPack;
 using NetRunner.Executable.Common;
-using NetRunner.Executable.Invokation.Functions;
 using NetRunner.Executable.RawData;
-using NetRunner.TestExecutionProxy;
 
-namespace NetRunner.Executable.Invokation
+namespace NetRunner.Executable.Invokation.Documentation
 {
     internal sealed class TestExecutionPlan : BaseReadOnlyObject
     {
-        public TestExecutionPlan([StringCanBeEmpty] string textBeforeFirstTable, IEnumerable<ParsedTable> functionsSequence)
+        public TestExecutionPlan(IEnumerable<ParsedTable> functionsSequence)
         {
-            Validate.ArgumentIsNotNull(textBeforeFirstTable, "textBeforeFirstTable");
             Validate.ArgumentIsNotNull(functionsSequence, "functionsSequence");
 
-            TextBeforeFirstTable = textBeforeFirstTable;
             FunctionsSequence = functionsSequence.ToReadOnlyList();
-        }
-
-        public string TextBeforeFirstTable
-        {
-            get;
-            private set;
         }
 
         public ReadOnlyList<ParsedTable> FunctionsSequence
@@ -59,6 +45,8 @@ namespace NetRunner.Executable.Invokation
                 {
                     var functionNode = textNode.AppendChild(document.CreateElement("p"));
 
+                    functionNode.SetAttributeValue(HtmlHintManager.AttributeName, HtmlHintManager.GetHintAttributeValue(function));
+
                     var argumentsString = string.Join(", ", function.Arguments.Select(t => t.ParameterType.Name + ' ' + t.Name).ToReadOnlyList());
 
                     functionNode.InnerHtml = string.Format("{0}({1})", function.DisplayName, argumentsString);
@@ -87,7 +75,6 @@ namespace NetRunner.Executable.Invokation
         protected override IEnumerable<object> GetInnerObjects()
         {
             yield return FunctionsSequence;
-            yield return TextBeforeFirstTable;
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NetRunner.Executable.Common;
+using NetRunner.Executable.Invokation.Documentation;
 using NetRunner.Executable.Invokation.Functions;
 using NetRunner.Executable.Invokation.Keywords;
 using NetRunner.Executable.RawData;
@@ -17,9 +18,7 @@ namespace NetRunner.Executable.Invokation
         {
             var parsedTables = document.Tables.Select(ParseTable).ToReadOnlyList();
 
-            var textBeforeFirstTable = document.TextBeforeFirstTable;
-
-            return new TestExecutionPlan(textBeforeFirstTable, parsedTables);
+            return new TestExecutionPlan(parsedTables);
         }
 
         private static ParsedTable ParseTable(HtmlTable table)
