@@ -75,8 +75,6 @@ namespace NetRunner.InternalTests
                     {
                         var result = reader.ReadToEnd();
 
-                        Trace.TraceInformation("Test execution result: {1}{0}{1}-------------------------", result, Environment.NewLine);
-
                         testResult = new TestResults(result);
 
                         InitTest("1");

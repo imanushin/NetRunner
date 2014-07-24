@@ -26,7 +26,11 @@ namespace NetRunner.Executable
 
         public void SendDocument(string document)
         {
-            Validate.ArgumentStringIsMeanful(document, "document");
+            if (string.IsNullOrEmpty(document))
+            {
+                return;
+            }
+
             Write(FormatDocument(document));
         }
 
