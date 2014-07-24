@@ -20,6 +20,7 @@ namespace NetRunner.InternalTests
 
         private TestResults testResult;
         private SingleTest currentTest;
+        private string rawResult = string.Empty;
 
         public MainTestContainer()
         {
@@ -73,9 +74,9 @@ namespace NetRunner.InternalTests
                 {
                     using (var reader = new StreamReader(stream))
                     {
-                        var result = reader.ReadToEnd();
+                        rawResult = reader.ReadToEnd();
 
-                        testResult = new TestResults(result);
+                        testResult = new TestResults(rawResult);
 
                         InitTest("1");
                     }
@@ -181,6 +182,20 @@ namespace NetRunner.InternalTests
         public int NonTrimmedStringLengthOfIs([StringTrim(false)] string inputData)
         {
             return inputData.Length;
+        }
+
+        /// <summary>
+        /// Analyse raw result of the text executed <br/>
+        /// Usage:<br/>
+        /// | '''Raw Result Contains''' | 123 |
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        [StringTrim]
+        public bool RawResultContains(string data)
+        {
+            Debugger.Launch();
+            return rawResult.Contains(data);
         }
     }
 }

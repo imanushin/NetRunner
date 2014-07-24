@@ -1,0 +1,16 @@
+!define testName {''.InternalTests.TestScenarios.OnlyText''}
+
+| '''execute page''' | ${testName} | '''on port''' | ${FITNESSE_PORT} |
+
+| check | '''tests count''' | 1 |
+
+| '''Init Test''' | ${testName} |
+
+| '''Current Test Results''' |
+| '''Type''' | '''Count''' |
+| right | 0 |
+| wrong | 0 |
+| ignores | 0 |
+| exceptions | 0 |
+
+
