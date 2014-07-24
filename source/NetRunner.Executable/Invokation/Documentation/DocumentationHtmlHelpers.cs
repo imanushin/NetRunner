@@ -30,10 +30,7 @@ namespace NetRunner.Executable.Invokation.Documentation
 .tooltiptext{
     display: none;
 }
-</style>";
-
-        private const string footer =
-            @"
+</style>
   <script>
 // Create the tooltips only when document ready
 $(document).ready(function()
@@ -53,7 +50,7 @@ $(document).ready(function()
 });
   </script>
 ";
-
+        
         public static string GetHintAttributeValue(TestFunctionReference function)
         {
             return GetOrCreateHintValue(function, f => f.Identity, DocumentationStore.GetFor);
@@ -114,8 +111,6 @@ $(document).ready(function()
             {
                 lock (syncRoot)
                 {
-                    resultHtmls.Append(footer);
-
                     var result = resultHtmls.ToString();
 
                     resultHtmls.Clear();
