@@ -23,6 +23,8 @@ namespace NetRunner.Executable.RawData
         internal const string TableRowNodeName = "tr";
         internal const string TableNodeName = "table";
 
+        internal const string ItemSequenceStyle = "display: inline-block;margin:0.3em";
+
         private static readonly Dictionary<string, string> replaceDictionary = CreateReplaceDictionary();
 
         public static FitnesseHtmlDocument Parse(string htmlDocument)

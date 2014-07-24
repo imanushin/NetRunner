@@ -124,7 +124,7 @@ namespace NetRunner.Executable.Invokation.Documentation
             textNode.AppendChild(ownerDocument.CreateElement("br"));
 
             testContainerNode.SetAttributeValue(HtmlHintManager.AttributeName, HtmlHintManager.GetHintAttributeValue(type));
-            testContainerNode.SetAttributeValue("style", "display: inline-block;margin:0.3em");
+            testContainerNode.SetAttributeValue("style", HtmlParser.ItemSequenceStyle);
             return testContainerNode;
         }
 

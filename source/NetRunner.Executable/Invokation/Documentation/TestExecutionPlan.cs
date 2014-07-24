@@ -43,9 +43,11 @@ namespace NetRunner.Executable.Invokation.Documentation
             {
                 foreach (var function in table.TestFunction.GetInnerFunctions())
                 {
-                    var functionNode = textNode.AppendChild(document.CreateElement("p"));
+                    var functionNode = textNode.AppendChild(document.CreateElement("div"));
+                    textNode.AppendChild(document.CreateElement("br"));
 
                     functionNode.SetAttributeValue(HtmlHintManager.AttributeName, HtmlHintManager.GetHintAttributeValue(function));
+                    functionNode.SetAttributeValue("style", HtmlParser.ItemSequenceStyle);
 
                     var argumentsString = string.Join(", ", function.Arguments.Select(t => t.ParameterType.Name + ' ' + t.Name).ToReadOnlyList());
 
