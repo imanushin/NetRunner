@@ -127,6 +127,10 @@ function closeHelpDialog() {
 
             AddTextTag(textNode, "h5", "Working folder: " + Environment.CurrentDirectory);
 
+            textNode.AppendChild(document.CreateElement("br"));
+            AddTextTag(textNode, "h3", "Available functions:");
+            AllFunctionsToSequence(textNode, ReflectionLoader.TestContainers);
+
             expandableDiv.AppendChild(textNode);
 
             document.DocumentNode.AppendChild(document.CreateElement("br"));
@@ -184,15 +188,15 @@ function closeHelpDialog() {
             return type.Identity.Replace('.', '_');
         }
 
-        private static void TestContainersToSequence(HtmlNode textNode, ReadOnlyList<LazyIsolatedReference<BaseTestContainer>> inputStrings)
+        private static void TestContainersToSequence(HtmlNode textNode, ReadOnlyList<LazyIsolatedReference<BaseTestContainer>> inputContainers)
         {
             var ownerDocument = textNode.OwnerDocument;
 
-            foreach (var testContainer in inputStrings)
+            foreach (var testContainer in inputContainers)
             {
                 var testContainerType = testContainer.Type;
 
-                var rawDocumentation = DocumentationStore.GetFor(testContainerType);
+                var helpDivContent = GetTypeDocumentation(testContainerType);
 
                 var helpElement = textNode.AppendChild(ownerDocument.CreateElement("div"));
 
@@ -201,10 +205,6 @@ function closeHelpDialog() {
                 helpElement.SetAttributeValue("id", key);
                 helpElement.SetAttributeValue("style", "display: none;");
 
-                var helpDivContent = string.IsNullOrWhiteSpace(rawDocumentation) ?
-                    string.Format(howToAddHelpLinkFormat, testContainerType.Name) :
-                    rawDocumentation;
-
                 var containerParagraph = helpElement.AppendChild(ownerDocument.CreateElement("p"));
 
                 containerParagraph.AppendChild(ownerDocument.CreateElement("p")).InnerHtml = helpDivContent;
@@ -212,13 +212,38 @@ function closeHelpDialog() {
                 var methods = ReflectionLoader.GetMethodFor(testContainer);
 
                 methods.ForEach(m => AppendMethod(m, containerParagraph));
+                
+                textNode.AppendChild(ownerDocument.CreateElement("p")).InnerHtml = testContainerType.Name;
+            }
+        }
 
-                var linkElement = textNode.AppendChild(ownerDocument.CreateElement("a"));
-                linkElement.SetAttributeValue("href", "#");
-                linkElement.SetAttributeValue(DocumentationHtmlHelpers.AttributeName, DocumentationHtmlHelpers.GetHintAttributeValue(testContainerType));
-                linkElement.SetAttributeValue("onclick", string.Format("openHelpDialog('{0}')", key));
+        private static string GetTypeDocumentation(TypeReference testContainerType)
+        {
+            var rawDocumentation = DocumentationStore.GetFor(testContainerType);
 
-                linkElement.AppendChild(ownerDocument.CreateElement("p")).InnerHtml = testContainerType.Name;
+            return string.IsNullOrWhiteSpace(rawDocumentation)
+                ? string.Format(howToAddHelpLinkFormat, testContainerType.Name)
+                : rawDocumentation;
+        }
+
+        private static void AllFunctionsToSequence(HtmlNode textNode, ReadOnlyList<LazyIsolatedReference<BaseTestContainer>> inputContainers)
+        {
+            var ownerDocument = textNode.OwnerDocument;
+
+            foreach (var testContainer in inputContainers)
+            {
+                var testContainerType = testContainer.Type;
+
+                textNode.AppendChild(ownerDocument.CreateElement("h5")).InnerHtml = string.Format("Container {0}:", testContainerType.Name);
+                textNode.AppendChild(ownerDocument.CreateElement("p")).InnerHtml = GetTypeDocumentation(testContainerType);
+
+                var containerParagraph = textNode.AppendChild(ownerDocument.CreateElement("p"));
+                
+                var methods = ReflectionLoader.GetMethodFor(testContainer);
+
+                methods.ForEach(m => AppendMethod(m, containerParagraph));
+
+                textNode.AppendChild(ownerDocument.CreateElement("p")).InnerHtml = testContainerType.Name;
             }
         }
 
