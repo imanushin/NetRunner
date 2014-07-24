@@ -9,7 +9,7 @@ using NetRunner.TestExecutionProxy;
 
 namespace NetRunner.Executable.Invokation.Documentation
 {
-    internal static class DocumentationHtmlHelpers
+    internal static class HtmlHintManager
     {
         public const string AttributeName = "helpid";
 

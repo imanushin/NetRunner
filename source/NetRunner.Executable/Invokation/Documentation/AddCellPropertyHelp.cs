@@ -13,7 +13,7 @@ namespace NetRunner.Executable.Invokation.Documentation
     internal sealed class AddCellPropertyHelp : BaseCellsHelp
     {
         public AddCellPropertyHelp(HtmlCell cell, PropertyReference property)
-            : base(new ReadOnlyList<HtmlCell>(cell), DocumentationHtmlHelpers.GetHintAttributeValue(property))
+            : base(new ReadOnlyList<HtmlCell>(cell), HtmlHintManager.GetHintAttributeValue(property))
         {
         }
     }

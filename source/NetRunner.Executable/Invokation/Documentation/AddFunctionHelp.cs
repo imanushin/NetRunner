@@ -11,7 +11,7 @@ namespace NetRunner.Executable.Invokation.Documentation
     internal sealed class AddFunctionHelp : BaseCellsHelp
     {
         public AddFunctionHelp(ReadOnlyList<HtmlCell> functionCells, TestFunctionReference function)
-            : base(functionCells, DocumentationHtmlHelpers.GetHintAttributeValue(function))
+            : base(functionCells, HtmlHintManager.GetHintAttributeValue(function))
         {
         }
     }

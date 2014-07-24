@@ -30,7 +30,7 @@ namespace NetRunner.Executable.Invokation.Documentation
             {
                 var targetCell = htmlCell.FindMyself(table);
 
-                targetCell.SetAttributeValue(DocumentationHtmlHelpers.AttributeName, helpIdentity);
+                targetCell.SetAttributeValue(HtmlHintManager.AttributeName, helpIdentity);
             }
         }
 

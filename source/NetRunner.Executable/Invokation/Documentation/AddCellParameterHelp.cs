@@ -12,7 +12,7 @@ namespace NetRunner.Executable.Invokation.Documentation
     internal sealed class AddCellParameterHelp : BaseCellsHelp
     {
         public AddCellParameterHelp(HtmlCell parameterCell, ParameterInfoReference argument)
-            : base(new ReadOnlyList<HtmlCell>(parameterCell), DocumentationHtmlHelpers.GetHintAttributeValue(argument))
+            : base(new ReadOnlyList<HtmlCell>(parameterCell), HtmlHintManager.GetHintAttributeValue(argument))
         {
         }
     }

@@ -66,7 +66,7 @@
     <Compile Include="Invokation\Documentation\AddCellPropertyHelp.cs" />
     <Compile Include="Invokation\Documentation\AddFunctionHelp.cs" />
     <Compile Include="Invokation\Documentation\BaseCellsHelp.cs" />
-    <Compile Include="Invokation\Documentation\DocumentationHtmlHelpers.cs" />
+    <Compile Include="Invokation\Documentation\HtmlHintManager.cs" />
     <Compile Include="Invokation\Documentation\DocumentationStore.cs" />
     <Compile Include="Invokation\Documentation\EngineInfo.cs" />
     <Compile Include="Invokation\Functions\MarkAsBoldCellChange.cs" />

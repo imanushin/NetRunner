@@ -47,7 +47,7 @@ namespace NetRunner.Executable.Invokation.Documentation
             var textNode = document.CreateElement("div");
             
             AddTitle(textNode, "Test containers:");
-            TestContainersToSequence(textNode, ReflectionLoader.TestContainers);
+            TestContainersToSequence(textNode, ReflectionLoader.TestContainers.Select(t=>t.Type));
 
             AddTitle(textNode, "Parsers:");
             ParsersToSequence(textNode);
@@ -83,25 +83,13 @@ namespace NetRunner.Executable.Invokation.Documentation
 
             foreach (var parser in ReflectionLoader.Parsers)
             {
-                var tableRow = rootTable.AppendChild(ownerDocument.CreateElement("tr"));
-                var tableCell = tableRow.AppendChild(ownerDocument.CreateElement("td"));
-                var parserElement = tableCell.AppendChild(ownerDocument.CreateElement("p"));
-
-                tableRow.SetAttributeValue("style", "border:0px; padding:0px;border-spacing: 0px;");
-                tableCell.SetAttributeValue("style", "border:0px; padding:0px;border-spacing: 0px;");
-                parserElement.SetAttributeValue("style", "display: inline-block; border:0px; padding:0px;border-spacing: 0px;margin: 3px");
-
                 var parserType = parser.GetType();
+
+                var itemNode = CreateAndAddNodeForType(textNode, parserType);
+
                 var text = string.Format("{0}; priority: {1}", parserType.Name, parser.ExecuteProperty<int>("Priority"));
-                
-                parserElement.InnerHtml = text;
 
-                var parserHint = DocumentationHtmlHelpers.GetHintAttributeValue(parserType);
-
-                if (!string.IsNullOrWhiteSpace(parserHint))
-                {
-                    parserElement.SetAttributeValue(DocumentationHtmlHelpers.AttributeName, parserHint);
-                }
+                itemNode.InnerHtml = text;
             }
         }
 
@@ -117,17 +105,27 @@ namespace NetRunner.Executable.Invokation.Documentation
         {
             AddTextTag(textNode, "h4", titleText);
         }
+        
+        private static void TestContainersToSequence(HtmlNode textNode, IEnumerable<TypeReference> inputTypes)
+        {
+            foreach (var type in inputTypes)
+            {
+                var testContainerNode = CreateAndAddNodeForType(textNode, type);
 
-        private static void TestContainersToSequence(HtmlNode textNode, ReadOnlyList<LazyIsolatedReference<BaseTestContainer>> inputContainers)
+                testContainerNode.InnerHtml = type.Name;
+            }
+        }
+
+        private static HtmlNode CreateAndAddNodeForType(HtmlNode textNode, TypeReference type)
         {
             var ownerDocument = textNode.OwnerDocument;
 
-            foreach (var testContainer in inputContainers)
-            {
-                var testContainerType = testContainer.Type;
-                
-                textNode.AppendChild(ownerDocument.CreateElement("p")).InnerHtml = testContainerType.Name;
-            }
+            var testContainerNode = textNode.AppendChild(ownerDocument.CreateElement("div"));
+            textNode.AppendChild(ownerDocument.CreateElement("br"));
+
+            testContainerNode.SetAttributeValue(HtmlHintManager.AttributeName, HtmlHintManager.GetHintAttributeValue(type));
+            testContainerNode.SetAttributeValue("style", "display: inline-block;margin:0.3em");
+            return testContainerNode;
         }
 
         private static string GetTypeDocumentation(TypeReference testContainerType)
@@ -201,11 +199,11 @@ namespace NetRunner.Executable.Invokation.Documentation
 
         private static string GetFormatterParameter(ParameterInfoReference parameter)
         {
-            var hint = DocumentationHtmlHelpers.GetHintAttributeValue(parameter);
+            var hint = HtmlHintManager.GetHintAttributeValue(parameter);
 
             return string.Format(
                 "<b {0}=\"{1}\">{2}{3} {4}</b>",
-                DocumentationHtmlHelpers.AttributeName,
+                HtmlHintManager.AttributeName,
                 hint,
                 parameter.IsOut ? "out " : string.Empty,
                 CutType(parameter.ParameterType),

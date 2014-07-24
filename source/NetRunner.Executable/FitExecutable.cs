@@ -59,7 +59,7 @@ namespace NetRunner.Executable
 
             DocumentationStore.LoadForAssemblies(ReflectionLoader.LoadedAssemblies);
 
-            communicator.SendDocument(DocumentationHtmlHelpers.HtmlHeader);
+            communicator.SendDocument(HtmlHintManager.HtmlHeader);
             communicator.SendDocument(EngineInfo.PrintTestEngineInformation());
 
             for (string document = communicator.ReceiveDocument(); document.Any(); document = communicator.ReceiveDocument())
@@ -89,7 +89,7 @@ namespace NetRunner.Executable
 
                     communicator.SendDocument(HtmlParser.LineBreak);
 
-                    communicator.SendDocument(DocumentationHtmlHelpers.HtmlFooter);
+                    communicator.SendDocument(HtmlHintManager.HtmlFooter);
 
                     communicator.SendCounts(counts);
                 }
