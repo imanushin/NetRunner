@@ -39,7 +39,7 @@ namespace FitSample
         }
 
         /// <summary>
-        /// Function tries to parse input string to the int value
+        /// Function tries to parse input <see cref="string"/> to the int value
         /// Usage: <br/>
         /// Right: | '''try parse string ''' | 123 | <br/>
         /// Wrong: | '''try parse string ''' | 123 |

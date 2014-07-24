@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 using HtmlAgilityPack;
 using NetRunner.Executable.RawData;
 using NetRunner.ExternalLibrary.Properties;
@@ -52,5 +53,16 @@ namespace NetRunner.Executable.Common
                 .Where(item => item.HasChildNodes)
                 .FirstOrDefault(item => string.Equals(item.ChildNodes.First().Name, HtmlParser.BoldNodeName, StringComparison.OrdinalIgnoreCase));
         }
+
+        internal static ReadOnlyList<XmlElement> SelectNodesWithName(this XmlNode node, string name)
+        {
+            return node
+                .ChildNodes
+                .OfType<XmlElement>()
+                .Where(cn => !ReferenceEquals(null, cn))
+                .Where(cn => string.Equals(cn.Name, name, StringComparison.OrdinalIgnoreCase))
+                .ToReadOnlyList();
+        }
+
     }
 }

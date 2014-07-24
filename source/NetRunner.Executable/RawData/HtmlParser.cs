@@ -23,6 +23,8 @@ namespace NetRunner.Executable.RawData
         internal const string TableRowNodeName = "tr";
         internal const string TableNodeName = "table";
 
+        private static readonly Dictionary<string, string> replaceDictionary = CreateReplaceDictionary();
+
         public static FitnesseHtmlDocument Parse(string htmlDocument)
         {
             var document = new HtmlDocument();
@@ -96,24 +98,34 @@ namespace NetRunner.Executable.RawData
             return new HtmlRow(allCells.Select(cell => new HtmlCell(cell)).ToReadOnlyList(), HtmlRowReference.MarkRowAndGenerateReference(rowNode));
         }
 
+        private static Dictionary<string, string> CreateReplaceDictionary()
+        {
+            var result = new Dictionary<string, string>();
+
+          //  result.Add("\"", "&quot;");
+          //  result.Add("'", "&#39;");
+
+            foreach (var tag in new[] { "applet", "script", "style", "link", "iframe", })
+            {
+                result.Add( "<" + tag + ">", "&lt;" + tag + "&gt;");
+                result.Add( "</" + tag + ">", "&lt;/" + tag + "&gt;");
+                result.Add( "<" + tag + "/>", "&lt;" + tag + "/&gt;");
+                result.Add( "<" + tag + " >", "&lt;" + tag + " &gt;");
+                result.Add( "</" + tag + " >", "&lt;" + tag + " &gt;");
+                result.Add( "<" + tag + " />", "&lt;" + tag + " /&gt;");
+            }
+
+            return result;
+        }
+
         public static string ReplaceUnknownTags(string rawData)
         {
-            return rawData
-                .Replace("&", "&amp;")
-                .Replace("<", "&lt;")
-                .Replace(">", "&gt;")
-                .Replace("\"", "&quot;")
-                .Replace("'", "&#39;")
-                .Replace("&lt;p&gt;", "<p>")
-                .Replace("&lt;/p&gt;", "</p>")
-                .Replace("&lt;b&gt;", "<b>")
-                .Replace("&lt;/b&gt;", "</b>")
-                .Replace("&lt;i&gt;", "<i>")
-                .Replace("&lt;/i&gt;", "</i>")
-                .Replace("&lt;u&gt;", "<u>")
-                .Replace("&lt;/u&gt;", "</u>")
-                .Replace("&lt;br /&gt;", "<br/>")
-                .Replace("&lt;br/&gt;", "<br/>");
+            foreach (var replacement in replaceDictionary)
+            {
+                rawData = rawData.Replace(replacement.Key, replacement.Value);
+            }
+
+            return rawData;
         }
 
     }

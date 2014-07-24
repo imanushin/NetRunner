@@ -16,6 +16,7 @@ namespace NetRunner.Executable.Invokation.Documentation
     internal static class DocumentationStore
     {
         private static readonly Dictionary<string, string> internalStore = new Dictionary<string, string>();
+        private static readonly ReadOnlyList<string> microsoftNamespaces = new ReadOnlyList<string>(new[] { "System.", "Microsoft." });
 
         private const string typeIdentityFormat = "T:{0}";
         private const string methodIdentityFormat = "M:{0}.{1}({2})";
@@ -139,7 +140,6 @@ namespace NetRunner.Executable.Invokation.Documentation
         {
             try
             {
-
                 var nodes = xmlDocument.SelectNodes("//doc//members//member[contains(@prop, name) and descendant::summary]");
 
                 if (ReferenceEquals(null, nodes))
@@ -164,12 +164,14 @@ namespace NetRunner.Executable.Invokation.Documentation
                         continue;
                     }
 
-                    var summaryNode = member.ChildNodes.Cast<XmlNode>().FirstOrDefault(n => string.Equals(n.Name, "summary", StringComparison.OrdinalIgnoreCase));
+                    var summaryNode = member.SelectNodesWithName("summary").FirstOrDefault();
 
                     if (ReferenceEquals(summaryNode, null))
                     {
                         continue;
                     }
+
+                    ReplaceWellKnownNodes(summaryNode);
 
                     ProcessParams(member, memberName);
 
@@ -187,13 +189,49 @@ namespace NetRunner.Executable.Invokation.Documentation
             internalStore[memberName] = HtmlParser.ReplaceUnknownTags(summaryNode.InnerXml);
         }
 
+        private static void ReplaceWellKnownNodes(XmlNode helpNode)
+        {
+            XmlDocument ownerDocument = helpNode.OwnerDocument;
+            Validate.IsNotNull(ownerDocument, "Owner document is null");
+
+            foreach (var seeNode in helpNode.SelectNodesWithName("see"))
+            {
+                var refAttribute = seeNode.Attributes["cref"];
+
+                if (ReferenceEquals(null, refAttribute))
+                {
+                    continue;
+                }
+
+                var targetType = refAttribute.Value.Replace("T:", string.Empty);
+
+                XmlElement newNode;
+
+                if (microsoftNamespaces.Any(targetType.StartsWith))
+                {
+                    newNode = ownerDocument.CreateElement("a");
+
+                    newNode.SetAttribute("href", string.Format("http://msdn.microsoft.com/en-us/library/{0}.aspx", targetType));
+                }
+                else
+                {
+                    newNode = ownerDocument.CreateElement("b");
+
+                }
+
+                newNode.InnerText = targetType;
+
+                helpNode.ReplaceChild(newNode, seeNode);
+            }
+        }
+
         private static void ProcessParams(XmlNode helpNode, string memberName)
         {
-            var parameterNodes = helpNode.ChildNodes.Cast<XmlNode>().Where(n => string.Equals(n.Name, "param")).ToReadOnlyList();
+            var parameterNodes = helpNode.SelectNodesWithName("param");
 
-            foreach (XmlNode parameterNode in parameterNodes)
+            foreach (var parameterNode in parameterNodes)
             {
-                Validate.IsNotNull(parameterNode, "Node with the 'param' name is null for the help member '{0}'", memberName);
+                ReplaceWellKnownNodes(parameterNode);
 
                 helpNode.RemoveChild(parameterNode);
 
