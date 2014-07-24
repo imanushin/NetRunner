@@ -113,11 +113,9 @@ function closeHelpDialog() {
             expandableDiv.AppendChild(titleNode);
 
             var textNode = document.CreateElement("div");
-
-            var helpKeyValues = new Dictionary<string, string>();
-
+            
             AddTitle(textNode, "Test containers:");
-            TestContainersToSequence(textNode, ReflectionLoader.TestContainers, helpKeyValues);
+            TestContainersToSequence(textNode, ReflectionLoader.TestContainers);
 
             AddTitle(textNode, "Parsers:");
             ParsersToSequence(textNode);
@@ -186,7 +184,7 @@ function closeHelpDialog() {
             return type.Identity.Replace('.', '_');
         }
 
-        private static void TestContainersToSequence(HtmlNode textNode, ReadOnlyList<LazyIsolatedReference<BaseTestContainer>> inputStrings, Dictionary<string, string> helpKeyValues)
+        private static void TestContainersToSequence(HtmlNode textNode, ReadOnlyList<LazyIsolatedReference<BaseTestContainer>> inputStrings)
         {
             var ownerDocument = textNode.OwnerDocument;
 
@@ -214,8 +212,6 @@ function closeHelpDialog() {
                 var methods = ReflectionLoader.GetMethodFor(testContainer);
 
                 methods.ForEach(m => AppendMethod(m, containerParagraph));
-
-                helpKeyValues[key] = helpDivContent;
 
                 var linkElement = textNode.AppendChild(ownerDocument.CreateElement("a"));
                 linkElement.SetAttributeValue("href", "#");
@@ -255,11 +251,28 @@ function closeHelpDialog() {
 
                 innerHtml.AppendFormat("<p>Available names: {0}</p>", names);
             }
-
-            innerHtml.AppendFormat("<b>{0} {1}({2})</b>", CutType(function.ResultType), systemName, string.Join(", ", function.Arguments.Select(a =>
-                (a.IsOut ? "out " : string.Empty) + CutType(a.ParameterType) + " " + a.Name)));
+            
+            innerHtml.AppendFormat(
+                "<b>{0} {1}({2})</b>", 
+                CutType(function.ResultType),
+                systemName, 
+                string.Join(", ", function.Arguments.Select(GetFormatterParameter)));
 
             functionNode.InnerHtml = innerHtml.ToString();
+        }
+
+        private static string GetFormatterParameter(ParameterInfoReference parameter)
+        {
+            var hint = DocumentationHtmlHelpers.GetHintAttributeValue(parameter);
+
+            return string.Format(
+                "<b {0}=\"{1}\">{2}{3} {4}</b>",
+                DocumentationHtmlHelpers.AttributeName,
+                hint,
+                parameter.IsOut ? "out " : string.Empty,
+                CutType(parameter.ParameterType),
+                parameter.Name
+                );
         }
 
         [NotNull]
