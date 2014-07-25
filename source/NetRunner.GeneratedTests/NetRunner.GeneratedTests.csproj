@@ -5,63 +5,54 @@
     <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{19D01E12-2663-4BD7-8D71-425BD4F1643C}</ProjectGuid>
+    <ProjectGuid>{347EE748-E2E2-4B31-8E75-96AAED63028C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NetRunner.ExternalLibrary</RootNamespace>
-    <AssemblyName>NetRunner.ExternalLibrary</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Profile92</TargetFrameworkProfile>
+    <RootNamespace>NetRunner.GeneratedTests</RootNamespace>
+    <AssemblyName>NetRunner.GeneratedTests</AssemblyName>
+    <DefaultLanguage>en-US</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <TargetFrameworkProfile>Profile92</TargetFrameworkProfile>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\binary\tempBuild\</OutputPath>
+    <OutputPath>..\..\binary\testBuild\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\..\binary\tempBuild\NetRunner.ExternalLibrary.XML</DocumentationFile>
+    <DocumentationFile>..\..\binary\testBuild\NetRunner.GeneratedTests.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\binary\tempBuild\</OutputPath>
+    <OutputPath>..\..\binary\testBuild\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\..\binary\tempBuild\NetRunner.ExternalLibrary.XML</DocumentationFile>
+    <DocumentationFile>..\..\binary\testBuild\NetRunner.GeneratedTests.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
+    <ProjectReference Include="..\NetRunner.ExternalLibrary\NetRunner.ExternalLibrary.csproj">
+      <Project>{19d01e12-2663-4bd7-8d71-425bd4f1643c}</Project>
+      <Name>NetRunner.ExternalLibrary</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="AdditionalFunctionNameAttribute.cs" />
-    <Compile Include="ArgumentPrepareAttribute.cs" />
-    <Compile Include="BaseDictionaryParser.cs" />
-    <Compile Include="BaseOperationMarkerAttribute.cs" />
-    <Compile Include="BaseParser.cs" />
-    <Compile Include="BaseTableArgument.cs" />
-    <Compile Include="BaseTestContainer.cs" />
-    <Compile Include="ConverterParser.cs" />
-    <Compile Include="DefaultParser.cs" />
-    <Compile Include="EmbeddedTestContainer.cs" />
-    <Compile Include="EnumParser.cs" />
-    <Compile Include="ExcludeDefaultFunctionNameAttribute.cs" />
-    <Compile Include="FunctionContainer.cs" />
-    <Compile Include="GenericParser.cs" />
+    <Compile Include="GeneratedTestContainers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\ResharperAttributes.cs" />
-    <Compile Include="StringParser.cs" />
-    <Compile Include="StringTrimAttribute.cs" />
-    <Compile Include="TestStatistic.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>..\..\binary\tools\BigTestsGenerator\BigTestsGenerator.exe "$(ProjectDir)GeneratedTestContainers.cs" "..\..\fitnesse\FitNesseRoot\InternalTests\TestScenarios\PerformanceTests\content.txt"</PreBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

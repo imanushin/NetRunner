@@ -30,14 +30,12 @@ namespace BigTestsGenerator
             var result = new StringBuilder();
 
             result.AppendLine("using System;");
-            result.AppendLine("using System.Collections.Generic;");
-            result.AppendLine("using System.Linq;");
-            result.AppendLine("using System.Text;");
-            result.AppendLine("using System.Threading.Tasks;");
-            result.AppendLine("// ReSharper disable once InconsistentNaming");
+            result.AppendLine("using NetRunner.ExternalLibrary;");
+            result.AppendLine("// ReSharper disable UnusedMember.Global");
+            result.AppendLine("// ReSharper disable InconsistentNaming");
 
             result.AppendLine();
-            result.AppendLine("namespace FitSample");
+            result.AppendLine("namespace NetRunner.GeneratedTests");
             result.AppendLine("{");
 
             var functions = new List<string>();
@@ -50,7 +48,7 @@ namespace BigTestsGenerator
                 result.AppendFormat("    /// {0}", RandomSentence(5, 20));
                 result.AppendLine();
                 result.AppendLine("    /// </summary>");
-                result.AppendFormat("    internal sealed class {0}", className);
+                result.AppendFormat("    internal sealed class {0} : BaseTestContainer", className);
                 result.AppendLine();
                 result.AppendLine("    {");
 
@@ -104,6 +102,8 @@ namespace BigTestsGenerator
             }
 
             result.AppendLine("}");
+            result.AppendLine("// ReSharper restore InconsistentNaming");
+            result.AppendLine("// ReSharper restore UnusedMember.Global");
 
             return new CSharpTestFileContent
             {
@@ -127,9 +127,9 @@ namespace BigTestsGenerator
                 case 3:
                     return typeof(Uri);
                 case 4:
-                    return typeof(UriPartial);
+                    return typeof(GCCollectionMode);
                 case 5:
-                    return typeof(TypeCode);
+                    return typeof(MidpointRounding);
                 default:
                     throw new ArgumentOutOfRangeException(string.Format("Type id {0} is not supported", typeId));
             }
