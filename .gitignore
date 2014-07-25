@@ -43,3 +43,6 @@ document/FitnesseRoot/files/testResults/
 /binary/tempBuild
 /NuGet/InstallTests/packages
 /fitnesse/FitNesseRoot/FitNesse
+/binary/tools/BigTestsGenerator/BigTestsGenerator.vshost.exe
+/binary/tools/BigTestsGenerator/BigTestsGenerator.vshost.exe.config
+/binary/tools/BigTestsGenerator/BigTestsGenerator.vshost.exe.manifest
