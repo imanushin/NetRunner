@@ -34,8 +34,10 @@ namespace BigTestsGenerator
             result.AppendLine("using System.Linq;");
             result.AppendLine("using System.Text;");
             result.AppendLine("using System.Threading.Tasks;");
+            result.AppendLine("// ReSharper disable once InconsistentNaming");
 
-            result.AppendLine("namespace GeneratedLib");
+            result.AppendLine();
+            result.AppendLine("namespace FitSample");
             result.AppendLine("{");
 
             var functions = new List<string>();
@@ -44,7 +46,11 @@ namespace BigTestsGenerator
             {
                 var className = RandomString(random.Next(10, 20));
 
-                result.AppendFormat("    public class {0}", className);
+                result.AppendLine("    /// <summary>");
+                result.AppendFormat("    /// {0}", RandomSentence(5, 20));
+                result.AppendLine();
+                result.AppendLine("    /// </summary>");
+                result.AppendFormat("    internal sealed class {0}", className);
                 result.AppendLine();
                 result.AppendLine("    {");
 
@@ -56,20 +62,37 @@ namespace BigTestsGenerator
 
                     functions.Add(functionName);
 
-                    result.AppendFormat("        public bool Generated{0}(", functionName);
+                    var resultType = GetRandomType();
 
                     var argumentsCount = random.Next(0, 10);
 
-                    var arguments = Enumerable
+                    var argumentNames = Enumerable
                         .Range(0, argumentsCount)
-                        .Select(a => string.Format("{0} {1}", GetRandomType().Name, RandomString(random.Next(4, 10))))
+                        .Select(a => RandomString(random.Next(4, 10)))
                         .ToArray();
+
+                    var arguments = argumentNames
+                        .Select(n => string.Format("{0} {1}", GetRandomType().Name, n))
+                        .ToArray();
+
+                    result.AppendLine("        /// <summary>");
+                    result.AppendFormat("        /// {0}", RandomSentence(3, 10));
+                    result.AppendLine();
+                    result.AppendLine("        /// </summary>");
+
+                    foreach (var argumentName in argumentNames)
+                    {
+                        result.AppendFormat("        /// <param name=\"{0}\">{1}</param>", argumentName, RandomSentence(1, 3));
+                        result.AppendLine();
+                    }
+
+                    result.AppendFormat("        internal {0} Generated{1}(", resultType.Name, functionName);
 
                     result.AppendFormat("{0})", string.Join(", ", arguments));
 
                     result.AppendLine();
                     result.AppendLine("        {");
-                    result.AppendFormat("            return {0};", (random.Next() % 2 == 0).ToString().ToLowerInvariant());
+                    result.AppendFormat("            return ({0})Convert.ChangeType(123, typeof ({0}));", resultType.Name);
                     result.AppendLine();
                     result.AppendLine("        }");
                     result.AppendLine();
@@ -123,6 +146,15 @@ namespace BigTestsGenerator
             }
 
             return builder.ToString();
+        }
+
+        private static string RandomSentence(int minWords, int maxWords)
+        {
+            var wordsCount = random.Next(minWords, maxWords);
+
+            var words = Enumerable.Range(0, wordsCount).Select(i => RandomString(random.Next(3, 8))).ToArray();
+
+            return string.Join(" ", words);
         }
 
     }
