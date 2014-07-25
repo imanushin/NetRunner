@@ -1,5 +1,5 @@
 !1 Tests which will be executed from other other 
 
-!path ..\binary\testBuild\FitSample.dll
+!path ..\binary\testBuild\FitSample.dll,..\binary\testBuild\NetRunner.GeneratedTests.dll
 
 !contents -R2 -g -p -f -h

@@ -26,15 +26,25 @@ namespace BigTestsGenerator
 
                 var charpFile = CSharpTestFileContent.Generate();
 
-                if (!File.Exists(resultCsharpFile) || !string.Equals(File.ReadAllText(resultCsharpFile), charpFile.FileContent, StringComparison.OrdinalIgnoreCase))
-                {
-                    File.WriteAllText(resultCsharpFile, charpFile.FileContent);
-                }
+                WriteIfNeeded(resultCsharpFile, charpFile.FileContent);
+
+                var fitNesseData = FitNesseFileGenerator.Generate(charpFile.AvailableFunctions);
+
+                WriteIfNeeded(resultFitNesseFile, fitNesseData);
             }
             catch (Exception ex)
             {
                 Trace.TraceError(ex.ToString());
             }
+        }
+
+        private static void WriteIfNeeded(string filePath, string fileContent)
+        {
+            if (!File.Exists(filePath) || !string.Equals(File.ReadAllText(filePath), fileContent, StringComparison.OrdinalIgnoreCase))
+            {
+                File.WriteAllText(filePath, fileContent);
+            }
+
         }
     }
 }

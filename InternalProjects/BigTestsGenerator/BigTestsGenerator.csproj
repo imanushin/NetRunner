@@ -41,9 +41,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FitNesseFileGenerator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CSharpTestFileContent.cs" />
+    <Compile Include="RandomUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
