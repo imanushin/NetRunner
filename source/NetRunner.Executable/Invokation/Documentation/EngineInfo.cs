@@ -201,6 +201,15 @@ namespace NetRunner.Executable.Invokation.Documentation
         {
             var hint = HtmlHintManager.GetHintAttributeValue(parameter);
 
+            if (string.IsNullOrEmpty(hint))
+            {
+                return string.Format(
+                    "<b>{0}{1} {2}</b>", 
+                    parameter.IsOut ? "out " : string.Empty,
+                    CutType(parameter.ParameterType),
+                    parameter.Name);
+            }
+
             return string.Format(
                 "<b {0}=\"{1}\">{2}{3} {4}</b>",
                 HtmlHintManager.AttributeName,
