@@ -58,12 +58,12 @@ $(document).ready(function()
 
         public static string GetHintAttributeValue(TypeReference function)
         {
-            return GetOrCreateHintValue(function, f => f.Identity, DocumentationStore.GetFor);
+            return GetOrCreateHintValue(function, f => f.HelpIdentity, DocumentationStore.GetFor);
         }
 
         public static string GetHintAttributeValue(PropertyReference property)
         {
-            return GetOrCreateHintValue(property, f => f.Identity, DocumentationStore.GetFor);
+            return GetOrCreateHintValue(property, f => f.HelpIdentity, DocumentationStore.GetFor);
         }
 
         public static string GetHintAttributeValue(ParameterInfoReference argument)

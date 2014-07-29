@@ -9,11 +9,13 @@ using NetRunner.ExternalLibrary.Properties;
 
 namespace NetRunner.TestExecutionProxy
 {
-    public sealed class TypeReference : GeneralReferenceObject
+    public sealed class TypeReference : GeneralReferenceObject, IHelpIdentity
     {
         private static readonly object syncRoot = new object();
 
         private static readonly Dictionary<Type, TypeReference> references = new Dictionary<Type, TypeReference>();
+
+        private const string typeIdentityFormat = "T:{0}";
 
         public static TypeReference GetType(Type type)
         {
@@ -38,7 +40,7 @@ namespace NetRunner.TestExecutionProxy
         {
             TargetType = targetType;
 
-            Identity = targetType.FullName;
+            HelpIdentity = string.Format(typeIdentityFormat, targetType.FullName);
         }
 
         internal Type TargetType
@@ -76,7 +78,7 @@ namespace NetRunner.TestExecutionProxy
             }
         }
 
-        public string Identity
+        public string HelpIdentity
         {
             get;
             private set;

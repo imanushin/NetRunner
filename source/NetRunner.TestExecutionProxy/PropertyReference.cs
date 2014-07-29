@@ -9,8 +9,10 @@ using NetRunner.ExternalLibrary.Properties;
 
 namespace NetRunner.TestExecutionProxy
 {
-    public sealed class PropertyReference : GeneralReferenceObject
+    public sealed class PropertyReference : GeneralReferenceObject, IHelpIdentity
     {
+        private const string propertyFormat = "P:{0}.{1}";
+
         private readonly PropertyInfo property;
 
         internal PropertyReference(PropertyInfo property, TypeReference typeReference)
@@ -24,7 +26,8 @@ namespace NetRunner.TestExecutionProxy
             this.property = property;
             ArgumentPrepareMode = ReflectionHelpers.FindAttribute(property, ArgumentPrepareAttribute.Default).Mode;
             TrimInputCharacters = ReflectionHelpers.FindAttribute(property, StringTrimAttribute.Default).TrimInputString;
-            Identity = typeReference.Identity + ":" + property.Name;
+            HelpIdentity = string.Format(propertyFormat, Owner.FullName, property.Name);
+
         }
 
         public TypeReference Owner
@@ -70,7 +73,7 @@ namespace NetRunner.TestExecutionProxy
             private set;
         }
 
-        public string Identity
+        public string HelpIdentity
         {
             get;
             private set;

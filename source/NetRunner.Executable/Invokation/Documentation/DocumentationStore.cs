@@ -18,17 +18,7 @@ namespace NetRunner.Executable.Invokation.Documentation
         private static readonly Dictionary<string, string> internalStore = new Dictionary<string, string>();
         private static readonly ReadOnlyList<string> microsoftNamespaces = new ReadOnlyList<string>(new[] { "System.", "Microsoft." });
 
-        private const string typeIdentityFormat = "T:{0}";
-        private const string propertyFormat = "P:{0}.{1}";
-
-        [CanBeNull]
-        public static string GetFor(TypeReference type)
-        {
-            var identity = string.Format(typeIdentityFormat, type.FullName);
-
-            return TryFindForKey(identity);
-        }
-
+        
         private static string TryFindForKey(string identity)
         {
             string result;
@@ -40,19 +30,16 @@ namespace NetRunner.Executable.Invokation.Documentation
             return null;
         }
 
+        [CanBeNull]
         public static string GetFor(IHelpIdentity function)
         {
             return TryFindForKey(function.HelpIdentity);
         }
 
+        [CanBeNull]
         public static string GetFor(PropertyReference property)
         {
-            var key = string.Format(
-                propertyFormat,
-                property.Owner.FullName,
-                property.Name);
-
-            var result = TryFindForKey(key);
+            var result = TryFindForKey(property.HelpIdentity);
 
             return result ?? GetFor(property.Owner);
         }
