@@ -110,6 +110,7 @@ namespace NetRunner.Executable.Invokation
             NullResult = reflectionInvoker.CreateOnTestDomain<object>(null);
             EnumerableType = reflectionInvoker.CreateTypeOnTestDomain(typeof(IEnumerable));
             TableArgumentType = reflectionInvoker.CreateTypeOnTestDomain(typeof(BaseTableArgument));
+            StringType = reflectionInvoker.CreateTypeOnTestDomain(typeof(string));
         }
 
         private static string LoadConfigurationIfNeeded()
@@ -253,6 +254,12 @@ namespace NetRunner.Executable.Invokation
         }
 
         public static TypeReference TableArgumentType
+        {
+            get;
+            private set;
+        }
+
+        public static TypeReference StringType
         {
             get;
             private set;

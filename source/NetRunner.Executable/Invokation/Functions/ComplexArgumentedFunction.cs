@@ -182,6 +182,11 @@ namespace NetRunner.Executable.Invokation.Functions
         {
             var resultType = functionToExecute.ResultType;
 
+            if (ReflectionLoader.StringType.Equals(resultType))
+            {
+                return null;
+            }
+
             if (ReflectionLoader.EnumerableType.IsAssignableFrom(resultType))
             {
                 return new CollectionResultFunction(columnNames, cells, header, functionToExecute);

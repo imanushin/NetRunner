@@ -20,6 +20,11 @@ namespace FitSample
     /// </summary>
     internal sealed class NetRunnerTestContainer : BaseTestContainer
     {
+        public string ConcatAnd(string left, string right)
+        {
+            return string.Concat(left, right);
+        }
+
         /// <summary>
         /// Summ function
         /// </summary>

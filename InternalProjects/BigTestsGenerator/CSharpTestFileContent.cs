@@ -54,7 +54,7 @@ namespace BigTestsGenerator
 
                 for (int f = 0; f < functionCount; f++)
                 {
-                    var functionName = RandomUtils.RandomString(RandomUtils.random.Next(10, 20));
+                    var functionName = "Generated" + RandomUtils.RandomString(RandomUtils.random.Next(10, 20));
 
                     var resultType = RandomUtils.GetRandomType();
 
@@ -82,7 +82,7 @@ namespace BigTestsGenerator
                         result.AppendLine();
                     }
 
-                    result.AppendFormat("        internal {0} Generated{1}(", resultType.Name, functionName);
+                    result.AppendFormat("        public {0} {1}(", resultType.Name, functionName);
 
                     result.AppendFormat("{0})", string.Join(", ", arguments));
 
