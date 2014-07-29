@@ -38,6 +38,9 @@ namespace NetRunner.Executable.Invokation
         private static ReadOnlyList<TestFunctionReference> functions = ReadOnlyList<TestFunctionReference>.Empty;
 
         [NotNull]
+        private static Dictionary<TypeReference, ReadOnlyList<TestFunctionReference>> testContainersFunctions = new Dictionary<TypeReference, ReadOnlyList<TestFunctionReference>>();
+            
+        [NotNull]
         private static ReadOnlyList<LazyIsolatedReference<BaseTestContainer>> testContainers = ReadOnlyList<LazyIsolatedReference<BaseTestContainer>>.Empty;
 
         [CanBeNull]
@@ -56,7 +59,7 @@ namespace NetRunner.Executable.Invokation
 
             var type = testContainer.Type;
 
-            return functions.Where(f => f.Owner.Equals(type)).ToReadOnlyList();
+            return testContainersFunctions.GetOrThrow(type);
         }
 
         public static void AddAssemblies(IReadOnlyCollection<string> assemblyPathes)
@@ -98,6 +101,8 @@ namespace NetRunner.Executable.Invokation
             functions = testContainers
                 .SelectMany(tc => reflectionInvoker.FindFunctionsAvailable(tc).Select(f => new TestFunctionReference(f, tc.Type)))
                 .ToReadOnlyList();
+
+            testContainersFunctions = functions.ToLookup(f => f.Owner).ToDictionary(i => i.Key, i => i.ToReadOnlyList());
 
             var parsersFound = reflectionInvoker.CreateParsers(parserTypes.ToArray()).ToList();
 

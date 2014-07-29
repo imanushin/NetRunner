@@ -64,5 +64,19 @@ namespace NetRunner.Executable.Common
                 .ToReadOnlyList();
         }
 
+        internal static TValue GetOrThrow<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey value)
+        {
+            Validate.ArgumentIsNotNull(dictionary, "dictionary");
+            Validate.ArgumentIsNotNull(value, "value");
+
+            TValue result;
+            if (!dictionary.TryGetValue(value, out result))
+            {
+                throw new InvalidOperationException(string.Format("Unable to find key '{0}' in the dictionary", value));
+            }
+
+            return result;
+        }
+
     }
 }
