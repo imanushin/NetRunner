@@ -8,7 +8,7 @@
 
 | '''Current Test Results''' |
 | '''Type''' | '''Count''' |
-| right | 4 |
+| right | 6 |
 | wrong | 3 |
 | ignores | 0 |
 | exceptions | 3 |
@@ -124,6 +124,21 @@
 | 3 | 2 | Contains | Surprise !!! |
 | 1..100 | 1..100 | Not Contain | class="pass" |
 | 1..100 | 1..100 | Not Contain | !-TargetInvokation-! |
+
+
+| check | '''Row Count Of Table''' | 11 | '''is''' | 1 | 
+
+| '''Analyse Table''' | 11 |
+| '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
+| 1..100 | 1..100 | Not Contain | class="pass" |
+| 1..100 | 1..100 | Not Contain | class="fail" |
+| 1..100 | 1..100 | Not Contain | class="error" |
+
+| check | '''Row Count Of Table''' | 12 | '''is''' | 1 | 
+
+| '''Analyse Table''' | 12 |
+| '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
+| 1..100 | 1..100 | Contains | class="pass" |
 
 | check | '''Trimmed String Length Of''' | ''   1   '' | '''is''' | 1 |
 
