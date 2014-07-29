@@ -2,21 +2,25 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using NetRunner.ExternalLibrary;
 
 namespace NetRunner.TestExecutionProxy
 {
-    public sealed class ParameterInfoReference : GeneralReferenceObject
+    public sealed class ParameterInfoReference : GeneralReferenceObject, IHelpIdentity
     {
+        public const string ParameterFormat = "Par:{0}.{1}";
+
         internal ParameterInfoReference(ParameterInfo parameter, FunctionMetaData method)
         {
             Parameter = parameter;
             PrepareMode = ReflectionHelpers.FindAttribute(parameter, ArgumentPrepareAttribute.Default).Mode;
             TrimInputCharacters = ReflectionHelpers.FindAttribute(parameter, StringTrimAttribute.Default).TrimInputString;
             Owner = method;
-            Identity = method.Identity + ":" + parameter.Name;
+
+            HelpIdentity = string.Format(ParameterFormat, method.HelpIdentity, parameter.Name);
         }
 
         public bool TrimInputCharacters
@@ -67,7 +71,7 @@ namespace NetRunner.TestExecutionProxy
             private set;
         }
 
-        public string Identity
+        public string HelpIdentity
         {
             get;
             private set;

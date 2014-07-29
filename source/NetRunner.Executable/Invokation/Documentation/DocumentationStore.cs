@@ -19,8 +19,6 @@ namespace NetRunner.Executable.Invokation.Documentation
         private static readonly ReadOnlyList<string> microsoftNamespaces = new ReadOnlyList<string>(new[] { "System.", "Microsoft." });
 
         private const string typeIdentityFormat = "T:{0}";
-        private const string methodIdentityFormat = "M:{0}.{1}({2})";
-        private const string parameterFormat = "Par:{0}.{1}";
         private const string propertyFormat = "P:{0}.{1}";
 
         [CanBeNull]
@@ -42,35 +40,9 @@ namespace NetRunner.Executable.Invokation.Documentation
             return null;
         }
 
-        public static string GetFor(TestFunctionReference function)
+        public static string GetFor(IHelpIdentity function)
         {
-            return GetFor(function.Method);
-        }
-
-        private static string GetFor(FunctionMetaData function)
-        {
-            var key = GetKey(function);
-
-            return TryFindForKey(key);
-        }
-
-        private static string GetKey(FunctionMetaData function)
-        {
-            return string.Format(
-                methodIdentityFormat,
-                function.Owner.FullName,
-                function.SystemName,
-                string.Join(",", function.GetParameters().Select(a => ReplaseRefSymbol(a.ParameterType.FullName))));
-        }
-
-        private static string ReplaseRefSymbol(string typeName)
-        {
-            if (typeName.EndsWith("&"))
-            {
-                return typeName.Substring(0, typeName.Length - 1) + "@";
-            }
-
-            return typeName;
+            return TryFindForKey(function.HelpIdentity);
         }
 
         public static string GetFor(PropertyReference property)
@@ -83,15 +55,6 @@ namespace NetRunner.Executable.Invokation.Documentation
             var result = TryFindForKey(key);
 
             return result ?? GetFor(property.Owner);
-        }
-
-        public static string GetFor(ParameterInfoReference parameter)
-        {
-            var functionKey = GetKey(parameter.Owner);
-
-            var key = string.Format(parameterFormat, functionKey, parameter.Name);
-
-            return TryFindForKey(key);
         }
 
         public static void LoadForAssemblies(ReadOnlyList<string> assemblyPathes)
@@ -246,7 +209,7 @@ namespace NetRunner.Executable.Invokation.Documentation
                     continue;
                 }
 
-                AddNewMember(string.Format(parameterFormat, memberName, newMemberName.InnerText), parameterNode);
+                AddNewMember(string.Format(ParameterInfoReference.ParameterFormat, memberName, newMemberName.InnerText), parameterNode);
             }
         }
     }

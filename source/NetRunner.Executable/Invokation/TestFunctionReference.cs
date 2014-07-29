@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using NetRunner.Executable.Common;
@@ -12,7 +13,7 @@ using NetRunner.TestExecutionProxy;
 
 namespace NetRunner.Executable.Invokation
 {
-    internal sealed class TestFunctionReference : BaseReadOnlyObject
+    internal sealed class TestFunctionReference : BaseReadOnlyObject, IHelpIdentity
     {
         private static readonly char[] incorrectFunctionCharacters = " \n\r\t!@#$%^&*()_+=-/*`~\\|/,.№:;\"'?<>[]{}".ToCharArray();
 
@@ -27,13 +28,14 @@ namespace NetRunner.Executable.Invokation
             Arguments = method.GetParameters().ToReadOnlyList();
             ResultType = method.ReturnType;
             AvailableFunctionNames = method.AvailableFunctionNames.Select(CleanFunctionName).ToReadOnlyList();
+            HelpIdentity = method.HelpIdentity;
         }
 
         public string Identity
         {
             get
             {
-                return Method.Identity;
+                return Method.HelpIdentity;
             }
         }
 
@@ -110,6 +112,12 @@ namespace NetRunner.Executable.Invokation
 
             return string.Concat(subNames);
             ;
+        }
+
+        public string HelpIdentity
+        {
+            get;
+            private set;
         }
     }
 }

@@ -48,6 +48,7 @@
     <Compile Include="GeneralIsolatedReference.cs" />
     <Compile Include="GeneralLazyIsolatedReference.cs" />
     <Compile Include="GeneralReferenceObject.cs" />
+    <Compile Include="IHelpIdentity.cs" />
     <Compile Include="IsolatedParser.cs" />
     <Compile Include="IsolatedReference.cs" />
     <Compile Include="LazyIsolatedReference.cs" />

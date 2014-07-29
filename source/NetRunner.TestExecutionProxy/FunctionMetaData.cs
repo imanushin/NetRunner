@@ -10,8 +10,10 @@ using NetRunner.ExternalLibrary.Properties;
 
 namespace NetRunner.TestExecutionProxy
 {
-    public sealed class FunctionMetaData : GeneralReferenceObject
+    public sealed class FunctionMetaData : GeneralReferenceObject, IHelpIdentity
     {
+        private const string methodIdentityFormat = "M:{0}.{1}({2})";
+
         private readonly Lazy<GeneralIsolatedReference> targetObject;
 
         private FunctionMetaData([NotNull] MethodInfo method, [NotNull] Lazy<GeneralIsolatedReference> targetObject, TypeReference objectType)
@@ -22,12 +24,11 @@ namespace NetRunner.TestExecutionProxy
 
             AvailableFunctionNames = GetFunctionNamesAvailable(method);
 
-            Identity = string.Format("{0}_{1}.{2}({3})",
-                Method.ReturnType.FullName,
+            HelpIdentity = string.Format(
+                methodIdentityFormat,
                 Owner.FullName,
-                Method.Name,
-                string.Join(",", method.GetParameters().Select(a => a.ParameterType.FullName)));
-
+                SystemName,
+                string.Join(",", method.GetParameters().Select(a => ReplaseRefSymbol(a.ParameterType.FullName))));
         }
 
         internal FunctionMetaData([NotNull] MethodInfo method, [NotNull] GeneralLazyIsolatedReference targetObject)
@@ -111,7 +112,7 @@ namespace NetRunner.TestExecutionProxy
             private set;
         }
 
-        public string Identity
+        public string HelpIdentity
         {
             get;
             private set;
@@ -263,5 +264,16 @@ namespace NetRunner.TestExecutionProxy
 
             return result;
         }
+
+        private static string ReplaseRefSymbol(string typeName)
+        {
+            if (typeName.EndsWith("&"))
+            {
+                return typeName.Substring(0, typeName.Length - 1) + "@";
+            }
+
+            return typeName;
+        }
+
     }
 }
