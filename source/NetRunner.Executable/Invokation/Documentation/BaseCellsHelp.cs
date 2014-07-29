@@ -18,7 +18,7 @@ namespace NetRunner.Executable.Invokation.Documentation
         protected BaseCellsHelp(ReadOnlyList<HtmlCell> functionCells, string helpIdentity)
         {
             Validate.CollectionArgumentHasElements(functionCells, "functionCells");
-            Validate.ArgumentStringIsMeanful(helpIdentity, "helpIdentity");
+            Validate.ArgumentIsNotNull(helpIdentity, "helpIdentity");
 
             this.cells = functionCells.ToReadOnlyList();
             this.helpIdentity = helpIdentity;
@@ -26,6 +26,11 @@ namespace NetRunner.Executable.Invokation.Documentation
 
         public sealed override void PatchHtmlTable(HtmlNode table)
         {
+            if (string.IsNullOrEmpty(helpIdentity))
+            {
+                return;
+            }
+
             foreach (HtmlCell htmlCell in cells)
             {
                 var targetCell = htmlCell.FindMyself(table);

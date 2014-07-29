@@ -36,7 +36,12 @@ namespace NetRunner.Executable.Invokation.Documentation
 $(document).ready(function()
 {
      $('[helpId]').each(function() {
-        var el = document.getElementById( $( this ).attr('helpid') );
+        var helpIdValue = $( this ).attr('helpid');
+
+        if(!helpIdValue)
+            return true;
+         
+        var el = document.getElementById(helpIdValue);
 
         if( el === null )
             return true;
@@ -83,9 +88,13 @@ $(document).ready(function()
 
                 if (!functionKeyMap.TryGetValue(identity, out internalId))
                 {
-                    internalId = string.Format("helpitem_{0}", Interlocked.Increment(ref indexer));
-
                     string documentation = documentationGet(item);
+
+                    internalId = string.IsNullOrEmpty(documentation) ? 
+                        string.Empty : 
+                        string.Format("helpitem_{0}", Interlocked.Increment(ref indexer));
+
+                    functionKeyMap[identity] = internalId;
 
                     if (!string.IsNullOrWhiteSpace(documentation))
                     {
