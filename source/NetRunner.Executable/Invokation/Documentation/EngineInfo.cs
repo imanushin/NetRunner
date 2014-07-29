@@ -187,37 +187,36 @@ namespace NetRunner.Executable.Invokation.Documentation
 
                 innerHtml.AppendFormat("<p>Available names: {0}</p>", names);
             }
-            
-            innerHtml.AppendFormat(
-                "<b>{0} {1}({2})</b>", 
-                CutType(function.ResultType),
-                systemName, 
-                string.Join(", ", function.Arguments.Select(GetFormatterParameter)));
+
+            innerHtml.AppendFormat("<b>{0} {1}(", CutType(function.ResultType), systemName);
+
+            innerHtml.AppendJoin(", ", AppendParameter, function.Arguments);
+
+            innerHtml.AppendFormat(")</b>");
 
             functionNode.InnerHtml = innerHtml.ToString();
         }
 
-        private static string GetFormatterParameter(ParameterInfoReference parameter)
+        private static void AppendParameter(StringBuilder builder, ParameterInfoReference parameter)
         {
             var hint = HtmlHintManager.GetHintAttributeValue(parameter);
 
             if (string.IsNullOrEmpty(hint))
             {
-                return string.Format(
+                builder.AppendFormat(
                     "<b>{0}{1} {2}</b>", 
                     parameter.IsOut ? "out " : string.Empty,
                     CutType(parameter.ParameterType),
                     parameter.Name);
             }
 
-            return string.Format(
+            builder.AppendFormat(
                 "<b {0}=\"{1}\">{2}{3} {4}</b>",
                 HtmlHintManager.AttributeName,
                 hint,
                 parameter.IsOut ? "out " : string.Empty,
                 CutType(parameter.ParameterType),
-                parameter.Name
-                );
+                parameter.Name);
         }
 
         [NotNull]
