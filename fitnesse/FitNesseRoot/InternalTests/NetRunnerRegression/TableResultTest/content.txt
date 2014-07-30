@@ -9,7 +9,7 @@
 
 | '''Current Test Results''' |
 | '''Type''' | '''Count''' |
-| right | 5 |
+| right | 6 |
 | wrong | 4 |
 | ignores | 0 |
 | exceptions | 3 |
@@ -151,7 +151,7 @@
 | 1..100 | 1..100 | Count | 7 |
 
 
-| check | '''Row Count Of Table''' | 11 | '''is''' | 4 | 
+| check | '''Row Count Of Table''' | 12 | '''is''' | 4 | 
 
 | '''Analyse Table''' | 12 |
 | '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
@@ -162,3 +162,12 @@
 | 2 | 3 | Contains | class="pass" |
 | 2 | 4 | Contains | class="fail" |
 | 1..100 | 1..100 | Count | 7 |
+
+
+| check | '''Row Count Of Table''' | 13 | '''is''' | 2 | 
+
+| '''Analyse Table''' | 13 |
+| '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
+| 1 | 1 | Contains | Check Settings |
+| 1..100 | 1 | Contains | class="pass" |
+| 1..100 | 1..100 | Not Contain | class="error" |

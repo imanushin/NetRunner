@@ -8,7 +8,7 @@
 
 | '''Current Test Results''' |
 | '''Type''' | '''Count''' |
-| right | 3 |
+| right | 4 |
 | wrong | 7 |
 | ignores | 0 |
 | exceptions | 3 |
@@ -145,16 +145,26 @@
 | 1..100 | 1, 3 | Contains | class="error" |
 | 1, 2 | 4 | Contains | surplus |
 
-| check | '''Row Count Of Table''' | 12 | '''is''' | 3 | 
+
+| check | '''Row Count Of Table''' | 12 | '''is''' | 2 | 
 
 | '''Analyse Table''' | 12 |
 | '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
-| 1 | 3 | Contains | Unable to compare |
-| 1..100 | 1..100 | Not Contain | class="pass" |
+| 1 | 1 | Contains | list |
+| 3 | 1 | Contains | in out objects |
+| 1..100 | 1 | Contains | class="pass" |
+| 1..100 | 1..100 | Not Contain | class="error" |
 
 | check | '''Row Count Of Table''' | 13 | '''is''' | 3 | 
 
 | '''Analyse Table''' | 13 |
+| '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
+| 1 | 3 | Contains | Unable to compare |
+| 1..100 | 1..100 | Not Contain | class="pass" |
+
+| check | '''Row Count Of Table''' | 14 | '''is''' | 3 | 
+
+| '''Analyse Table''' | 14 |
 | '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
 | 1 | 3 | Contains | Unable to get string |
 | 1..100 | 1..100 | Not Contain | class="pass" |

@@ -65,6 +65,9 @@
 | '''In Value''' | '''Out Value''' |
 | abc | abc |
 
+| '''list''' | 0 | '''in out objects''' |
+| '''In Value''' | '''Out Value''' |
+
 | '''List Wrong Equality''' |
 | First |
 | 123 |

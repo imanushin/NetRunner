@@ -37,7 +37,10 @@ namespace NetRunner.Executable.Invokation.Functions
 
             var orderedResult = collectionResult.ToArray();
 
-            AddPropertiesHelp(orderedResult[0], status);
+            if (orderedResult.Any())
+            {
+                AddPropertiesHelp(orderedResult[0], status);
+            }
 
             for (int rowIndex = 0; rowIndex < orderedResult.Length && rowIndex < Rows.Count; rowIndex++)
             {
