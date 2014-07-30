@@ -32,14 +32,12 @@ namespace NetRunner.Executable.Invokation.Documentation
             expandableDiv.Attributes.Add(HtmlParser.ClassAttributeName, "collapsible closed");
 
             var titleNode = document.CreateElement("p");
-            titleNode.InnerHtml = "Execution information";
+            titleNode.InnerHtml = "Execution plan";
             titleNode.Attributes.Add(HtmlParser.ClassAttributeName, "title");
 
             expandableDiv.AppendChild(titleNode);
 
             var textNode = document.CreateElement("div");
-
-            AddTitle(textNode, "Execution plan:");
 
             foreach (var table in FunctionsSequence)
             {
@@ -62,18 +60,6 @@ namespace NetRunner.Executable.Invokation.Documentation
             document.DocumentNode.AppendChild(document.CreateElement("br"));
 
             return document.DocumentNode.OuterHtml;
-        }
-
-        private static void AddTextTag(HtmlNode textNode, string tagName, string titleText)
-        {
-            var title = textNode.AppendChild(textNode.OwnerDocument.CreateElement(tagName));
-
-            title.InnerHtml = titleText;
-        }
-
-        private static void AddTitle(HtmlNode textNode, string titleText)
-        {
-            AddTextTag(textNode, "h4", titleText);
         }
 
         protected override IEnumerable<object> GetInnerObjects()
