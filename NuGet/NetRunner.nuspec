@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+    <metadata>
+        <id>NetRunner</id>
+        <version>1.0.9</version>
+        <authors>Igor Manushin,Sergey Dramarecky</authors>
+        <licenseUrl>https://github.com/imanushin/NetRunner/blob/master/license.txt</licenseUrl>
+        <projectUrl>https://github.com/imanushin/NetRunner/wiki</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>This tool is the bridge from FitNesse host and you test code. Use it to write tests on FitNesse and execute them in .Net</description>
+        <summary>Fast runner for FitNesse. Because of many improvements it could execute code faster and allow to simplify C# and fitnesse code to get the better execution instead of fitSharp runner.</summary>
+        <releaseNotes>Last version contains these improvements:
+1. Fix for empty collection result (NetRunner tries to generate help for the first row)
+2. Fix for NetRunner work without NetRunner.ExternalLibrary.dll placed near</releaseNotes>
+        <language>en-US</language>
+        <tags>FitNesse, NetRunner, Tests, Testing, FitSharp</tags>
+        <frameworkAssemblies>
+            <frameworkAssembly assemblyName="System" targetFramework="" />
+        </frameworkAssemblies>
+    </metadata>
+    <files>
+        <file src="..\binary\tempBuild\NetRunner.ExternalLibrary.dll" target="lib\portable-net4+sl4+wp7+win8\NetRunner.ExternalLibrary.dll" />
+        <file src="..\binary\tempBuild\NetRunner.ExternalLibrary.XML" target="lib\portable-net4+sl4+wp7+win8\NetRunner.ExternalLibrary.XML" />
+        <file src="..\binary\currentBuild\NetRunner.Executable.exe" target="tools\net45\NetRunner.Executable.exe" />
+    </files>
+</package>
