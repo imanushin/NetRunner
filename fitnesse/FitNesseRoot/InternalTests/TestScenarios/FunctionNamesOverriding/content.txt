@@ -1,3 +1,5 @@
+!include CommonPath
+
 | '''Test Function 1''' |
 
 | '''Some Test Function 1 %^%$^$%&''' |

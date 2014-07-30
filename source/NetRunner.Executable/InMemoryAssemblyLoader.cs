@@ -19,10 +19,27 @@ namespace NetRunner.Executable
         {
         }
 
-        public void SubscribeDomain(AppDomain domain)
+        public void SubscribeDomain(AppDomain domain, bool subscribeToExternalLibrary)
         {
             domain.AssemblyResolve += CurrentDomain_AssemblyResolve;
             domain.UnhandledException += domain_UnhandledException;
+
+            if (subscribeToExternalLibrary)
+            {
+                domain.AssemblyResolve += CurrentDomain_ExternalLibraryResolve;
+            }
+        }
+
+        private Assembly CurrentDomain_ExternalLibraryResolve(object sender, ResolveEventArgs args)
+        {
+            var assemblyName = new AssemblyName(args.Name).Name;
+
+            if (string.Equals(assemblyName, "NetRunner.ExternalLibrary", StringComparison.OrdinalIgnoreCase))
+            {
+                return Assembly.Load(Resources.NetRunner_ExternalLibrary);
+            }
+
+            return null;
         }
 
         private static void domain_UnhandledException(object sender, UnhandledExceptionEventArgs e)

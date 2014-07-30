@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using NetRunner.Executable.Common;
 using NetRunner.Executable.Invokation;
 using NetRunner.Executable.Invokation.Documentation;
+using NetRunner.Executable.Properties;
 using NetRunner.Executable.RawData;
 using NetRunner.TestExecutionProxy;
 
@@ -54,7 +55,7 @@ namespace NetRunner.Executable
 
                 if (string.IsNullOrEmpty(externalLibraryFile))
                 {
-                    return null;
+                    return Assembly.Load(Resources.NetRunner_ExternalLibrary);
                 }
 
                 return Assembly.LoadFrom(externalLibraryFile);

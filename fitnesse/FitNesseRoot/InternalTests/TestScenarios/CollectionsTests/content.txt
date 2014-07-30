@@ -1,3 +1,5 @@
+!include CommonPath
+
 !note One surplus
 | '''List Files In''' | ''../../fitnesse'' |
 | '''!!!Name''' | '''Extension???''' |

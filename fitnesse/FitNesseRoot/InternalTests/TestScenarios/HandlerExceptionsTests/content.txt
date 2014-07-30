@@ -1,3 +1,5 @@
+!include CommonPath
+
 | '''fail before''' |
 
 | '''fail after''' |

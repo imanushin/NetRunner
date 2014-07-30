@@ -1,3 +1,5 @@
+!include CommonPath
+
 | '''is positive''' | 1 |
 
 | '''is positive''' | aaa |

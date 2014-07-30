@@ -1,0 +1,3 @@
+
+!path ..\binary\testBuild\FitSample.dll,..\binary\testBuild\NetRunner.GeneratedTests.dll
+#!path ..\binary\testBuild\FitSample.dll

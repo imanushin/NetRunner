@@ -1,3 +1,5 @@
+!include CommonPath
+
 | '''missing method call''' |
 
 | check | '''Summ''' | non-integer | '''And ''' | 2 | ''' Will Be''' | 3 |

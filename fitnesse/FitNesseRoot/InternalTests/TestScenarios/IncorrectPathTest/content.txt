@@ -1,0 +1,4 @@
+
+!path ..\binary\WRONG_DIRECTORY\NetRunner.InternalTests.dll
+
+| '''missing method''' |

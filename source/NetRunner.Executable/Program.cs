@@ -21,7 +21,7 @@ namespace NetRunner.Executable
 
                 //Debugger.Launch();
 
-                InMemoryAssemblyLoader.Instance.SubscribeDomain(AppDomain.CurrentDomain);
+                InMemoryAssemblyLoader.Instance.SubscribeDomain(AppDomain.CurrentDomain, false);
 
                 var settings = ParseArguments(args);
 

@@ -1,1 +1,3 @@
+!include CommonPath
+
 Some text

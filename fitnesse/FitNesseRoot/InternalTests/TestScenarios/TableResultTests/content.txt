@@ -1,3 +1,5 @@
+!include CommonPath
+
 !note proper execution
 | '''create subfolders in ''' | ''./'' |
 | ''folder name'' |

@@ -71,6 +71,16 @@ namespace NetRunner.Executable.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] NetRunner_ExternalLibrary {
+            get {
+                object obj = ResourceManager.GetObject("NetRunner_ExternalLibrary", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot;?&gt;
         ///&lt;doc&gt;
         ///    &lt;assembly&gt;

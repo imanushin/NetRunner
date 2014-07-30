@@ -235,7 +235,7 @@ namespace NetRunner.Executable.Invokation
 
             Validate.IsNotNull(createdInstance, "Unable to create instance of type {0} in the test domain", loadingType);
 
-            createdInstance.SubscribeDomain(currentTestDomain);
+            createdInstance.SubscribeDomain(currentTestDomain, true);
 
             reflectionInvoker = (ReflectionInvoker)currentTestDomain.CreateInstanceAndUnwrap(reflectionInvokerType.Assembly.FullName, reflectionInvokerType.FullName);
 
