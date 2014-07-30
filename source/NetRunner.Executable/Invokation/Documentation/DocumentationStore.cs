@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Xml;
 using NetRunner.Executable.Common;
+using NetRunner.Executable.Invokation.Remoting;
 using NetRunner.Executable.Properties;
 using NetRunner.Executable.RawData;
 using NetRunner.ExternalLibrary.Properties;
@@ -39,9 +40,9 @@ namespace NetRunner.Executable.Invokation.Documentation
         [CanBeNull]
         public static string GetFor(PropertyReference property)
         {
-            var result = TryFindForKey(property.HelpIdentity);
+            var result = TryFindForKey(property.GetData().HelpIdentity);
 
-            return result ?? GetFor(property.Owner);
+            return result ?? GetFor(property.GetData().Owner);
         }
 
         public static void LoadForAssemblies(ReadOnlyList<string> assemblyPathes)

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using HtmlAgilityPack;
 using NetRunner.Executable.Common;
 using NetRunner.Executable.Invokation.Documentation;
+using NetRunner.Executable.Invokation.Remoting;
 using NetRunner.Executable.RawData;
 using NetRunner.ExternalLibrary.Properties;
 using NetRunner.TestExecutionProxy;
@@ -94,7 +95,7 @@ namespace NetRunner.Executable.Invokation.Functions
                 Property = type.GetProperty(cn),
                 Index = i
             }).Where(e => e.Property != null)
-            .Select(e => new AddCellPropertyHelp(ColumnsRow.Cells[e.Index], e.Property)).ToReadOnlyList();
+            .Select(e => new AddCellPropertyHelp(ColumnsRow.Cells[e.Index], e.Property.GetData())).ToReadOnlyList();
 
             status.Changes.AddRange(newChanges);
         }
@@ -105,16 +106,16 @@ namespace NetRunner.Executable.Invokation.Functions
             {
                 var property = properties[i];
 
-                if (!property.HasGet)
+                if (!property.GetData().HasGet)
                 {
                     continue;
                 }
 
                 var cellInfo = new CellParsingInfo(
                     currentRow.Cells[i],
-                    property.PropertyType,
-                    property.ArgumentPrepareMode,
-                    property.TrimInputCharacters);
+                    property.GetData().PropertyType,
+                    property.GetData().ArgumentPrepareMode,
+                    property.GetData().TrimInputCharacters);
 
                 var value = ParametersConverter.ConvertParameter(cellInfo, "Unable to parse value");
 
@@ -151,7 +152,7 @@ namespace NetRunner.Executable.Invokation.Functions
             {
                 var property = properties[i];
 
-                if (property.HasGet)
+                if (property.GetData().HasGet)
                 {
                     continue;
                 }
@@ -160,9 +161,9 @@ namespace NetRunner.Executable.Invokation.Functions
 
                 var cellInfo = new CellParsingInfo(
                     currentCell,
-                    property.PropertyType,
-                    property.ArgumentPrepareMode,
-                    property.TrimInputCharacters);
+                    property.GetData().PropertyType,
+                    property.GetData().ArgumentPrepareMode,
+                    property.GetData().TrimInputCharacters);
 
                 var value = ParametersConverter.ConvertParameter(cellInfo, "Unable to parse value");
 
@@ -196,7 +197,7 @@ namespace NetRunner.Executable.Invokation.Functions
 
                 const string propertyNotFoundFormat = "Type '{0}' does not contain property '{1}'. Available properties: {2}";
                 string header = string.Format("Property {0} was not found", propertyName);
-                string info = string.Format(propertyNotFoundFormat, returnType, propertyName, string.Join(", ", returnType.GetProperties.Select(p => p.Name)));
+                string info = string.Format(propertyNotFoundFormat, returnType, propertyName, string.Join(", ", returnType.GetProperties.Select(p => p.GetData().Name)));
 
                 status.Changes.Add(new AddCellExpandableInfo(targetCell, header, info));
                 status.Changes.Add(new CssClassCellChange(targetCell, HtmlParser.ErrorCssClass));
@@ -214,7 +215,7 @@ namespace NetRunner.Executable.Invokation.Functions
                 return string.Format("Unable to find property '{0}'", propertyName);
             }
 
-            if (!property.HasGet)
+            if (!property.GetData().HasGet)
             {
                 return string.Empty;
             }

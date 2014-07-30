@@ -9,70 +9,23 @@ using NetRunner.ExternalLibrary.Properties;
 
 namespace NetRunner.TestExecutionProxy
 {
-    public sealed class PropertyReference : GeneralReferenceObject, IHelpIdentity
+    public sealed class PropertyReference : GeneralReferenceObject, IReference<PropertyData>
     {
-        private const string propertyFormat = "P:{0}.{1}";
-
         private readonly PropertyInfo property;
 
         internal PropertyReference(PropertyInfo property, TypeReference typeReference)
         {
+            this.property = property;
+
             if (property == null)
             {
                 throw new ArgumentNullException("property");
             }
 
-            Owner = typeReference;
-            this.property = property;
-            ArgumentPrepareMode = ReflectionHelpers.FindAttribute(property, ArgumentPrepareAttribute.Default).Mode;
-            TrimInputCharacters = ReflectionHelpers.FindAttribute(property, StringTrimAttribute.Default).TrimInputString;
-            HelpIdentity = string.Format(propertyFormat, Owner.TargetType.FullName, property.Name);
+            StrongIdentity = typeReference.StrongIdentity + "." + property.Name;
         }
 
-        public TypeReference Owner
-        {
-            get;
-            private set;
-        }
-
-        public string Name
-        {
-            get
-            {
-                return property.Name;
-            }
-        }
-
-        public bool HasGet
-        {
-            get
-            {
-                return property.GetMethod != null;
-            }
-        }
-
-        [NotNull]
-        public TypeReference PropertyType
-        {
-            get
-            {
-                return TypeReference.GetType(property.PropertyType);
-            }
-        }
-
-        public ArgumentPrepareAttribute.ArgumentPrepareMode ArgumentPrepareMode
-        {
-            get;
-            private set;
-        }
-
-        public bool TrimInputCharacters
-        {
-            get;
-            private set;
-        }
-
-        public string HelpIdentity
+        public string StrongIdentity
         {
             get;
             private set;
