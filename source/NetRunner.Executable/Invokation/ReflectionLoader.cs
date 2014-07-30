@@ -295,5 +295,13 @@ namespace NetRunner.Executable.Invokation
 
             reflectionInvoker.SendStatistic(counts);
         }
+
+        public static TypeData LoadData(TypeReference reference)
+        {
+            Validate.ArgumentIsNotNull(reference, "reference");
+            Validate.IsNotNull(reflectionInvoker, "Test domain does not initialized");
+
+            return reflectionInvoker.LoadData(reference);
+        }
     }
 }

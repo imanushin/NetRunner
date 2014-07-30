@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
 using NetRunner.Executable.Common;
+using NetRunner.Executable.Invokation.Remoting;
 using NetRunner.Executable.RawData;
 using NetRunner.ExternalLibrary;
 using NetRunner.ExternalLibrary.Properties;
@@ -87,7 +88,7 @@ namespace NetRunner.Executable.Invokation.Documentation
 
                 var itemNode = CreateAndAddNodeForType(textNode, parserType);
 
-                var text = string.Format("{0}; priority: {1}", parserType.Name, parser.ExecuteProperty<int>("Priority"));
+                var text = string.Format("{0}; priority: {1}", parserType.GetData().Name, parser.ExecuteProperty<int>("Priority"));
 
                 itemNode.InnerHtml = text;
             }
@@ -112,7 +113,7 @@ namespace NetRunner.Executable.Invokation.Documentation
             {
                 var testContainerNode = CreateAndAddNodeForType(textNode, type);
 
-                testContainerNode.InnerHtml = type.Name;
+                testContainerNode.InnerHtml = type.GetData().Name;
             }
         }
 
@@ -133,7 +134,7 @@ namespace NetRunner.Executable.Invokation.Documentation
             var rawDocumentation = DocumentationStore.GetFor(testContainerType);
 
             return string.IsNullOrWhiteSpace(rawDocumentation)
-                ? string.Format(howToAddHelpLinkFormat, testContainerType.Name)
+                ? string.Format(howToAddHelpLinkFormat, testContainerType.GetData().Name)
                 : rawDocumentation;
         }
 
@@ -145,7 +146,7 @@ namespace NetRunner.Executable.Invokation.Documentation
             {
                 var testContainerType = testContainer.Type;
 
-                textNode.AppendChild(ownerDocument.CreateElement("h4")).InnerHtml = string.Format("Container {0}:", testContainerType.Name);
+                textNode.AppendChild(ownerDocument.CreateElement("h4")).InnerHtml = string.Format("Container {0}:", testContainerType.GetData().Name);
                 textNode.AppendChild(ownerDocument.CreateElement("p")).InnerHtml = GetTypeDocumentation(testContainerType);
 
                 var containerParagraph = textNode.AppendChild(ownerDocument.CreateElement("p"));
@@ -154,7 +155,7 @@ namespace NetRunner.Executable.Invokation.Documentation
 
                 methods.ForEach(m => AppendMethod(m, containerParagraph));
 
-                textNode.AppendChild(ownerDocument.CreateElement("p")).InnerHtml = testContainerType.Name;
+                textNode.AppendChild(ownerDocument.CreateElement("p")).InnerHtml = testContainerType.GetData().Name;
             }
         }
 
@@ -222,7 +223,7 @@ namespace NetRunner.Executable.Invokation.Documentation
         [NotNull]
         private static string CutType(TypeReference type)
         {
-            var name = type.Name;
+            var name = type.GetData().Name;
 
             string result;
 

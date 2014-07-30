@@ -14,6 +14,7 @@ namespace NetRunner.TestExecutionProxy
         private static readonly object syncRoot = new object();
 
         private static readonly Dictionary<Type, TypeReference> references = new Dictionary<Type, TypeReference>();
+        private static readonly Dictionary<string, TypeData> datas = new Dictionary<string, TypeData>();
 
         private const string typeIdentityFormat = "T:{0}";
 
@@ -30,6 +31,7 @@ namespace NetRunner.TestExecutionProxy
                 {
                     result = new TypeReference(type);
                     references[type] = result;
+                    datas[result.StrongIdentity]=new TypeData(type);
                 }
             }
 
@@ -41,6 +43,13 @@ namespace NetRunner.TestExecutionProxy
             TargetType = targetType;
 
             HelpIdentity = string.Format(typeIdentityFormat, targetType.FullName);
+            StrongIdentity = targetType.FullName;
+        }
+
+        public string StrongIdentity
+        {
+            get;
+            private set;
         }
 
         internal Type TargetType
@@ -52,22 +61,6 @@ namespace NetRunner.TestExecutionProxy
         public TypeReference GetElementType()
         {
             return new TypeReference(TargetType.GetElementType());
-        }
-
-        public string Name
-        {
-            get
-            {
-                return TargetType.Name;
-            }
-        }
-
-        public string FullName
-        {
-            get
-            {
-                return TargetType.FullName;
-            }
         }
 
         public PropertyReference[] GetProperties
@@ -125,6 +118,14 @@ namespace NetRunner.TestExecutionProxy
             }
 
             return null;
+        }
+
+        public static TypeData GetTypeData(TypeReference reference)
+        {
+            lock (syncRoot)
+            {
+                return datas[reference.StrongIdentity];
+            }
         }
     }
 }

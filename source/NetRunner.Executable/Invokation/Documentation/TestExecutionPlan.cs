@@ -2,7 +2,9 @@
 using System.Linq;
 using HtmlAgilityPack;
 using NetRunner.Executable.Common;
+using NetRunner.Executable.Invokation.Remoting;
 using NetRunner.Executable.RawData;
+using NetRunner.TestExecutionProxy;
 
 namespace NetRunner.Executable.Invokation.Documentation
 {
@@ -49,7 +51,7 @@ namespace NetRunner.Executable.Invokation.Documentation
                     functionNode.SetAttributeValue(HtmlHintManager.AttributeName, HtmlHintManager.GetHintAttributeValue(function));
                     functionNode.SetAttributeValue("style", HtmlParser.ItemSequenceStyle);
 
-                    var argumentsString = string.Join(", ", function.Arguments.Select(t => t.ParameterType.Name + ' ' + t.Name).ToReadOnlyList());
+                    var argumentsString = string.Join(", ", function.Arguments.Select(t => t.ParameterType.GetData().Name + ' ' + t.Name).ToReadOnlyList());
 
                     functionNode.InnerHtml = string.Format("{0}({1})", function.DisplayName, argumentsString);
                 }

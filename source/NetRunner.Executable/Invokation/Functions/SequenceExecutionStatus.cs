@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NetRunner.Executable.Invokation.Remoting;
 using NetRunner.Executable.RawData;
 using NetRunner.ExternalLibrary.Properties;
 using NetRunner.TestExecutionProxy;
@@ -65,7 +66,7 @@ namespace NetRunner.Executable.Invokation.Functions
         {
             var areEquals = first.EqualsSafe(second);
 
-            MergeWith(areEquals, targetCell, "Unable to compare {0} and {1}", first.GetType().Name, second.GetType().Name);
+            MergeWith(areEquals, targetCell, "Unable to compare {0} and {1}", first.GetType().GetData().Name, second.GetType().GetData().Name);
 
             return !areEquals.HasError && areEquals.Result.IsTrue;
         }

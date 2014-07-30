@@ -102,6 +102,7 @@
     <Compile Include="Invokation\Keywords\KeywordManager.cs" />
     <Compile Include="Invokation\ParametersConverter.cs" />
     <Compile Include="Invokation\ReflectionLoader.cs" />
+    <Compile Include="Invokation\Remoting\RemoteExtensions.cs" />
     <Compile Include="Invokation\RootInvoker.cs" />
     <Compile Include="Invokation\Functions\TestFunctionsSequence.cs" />
     <Compile Include="Invokation\Functions\SimpleTestFunction.cs" />

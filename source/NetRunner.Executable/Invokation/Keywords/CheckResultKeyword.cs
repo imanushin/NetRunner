@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NetRunner.Executable.Common;
 using NetRunner.Executable.Invokation.Functions;
+using NetRunner.Executable.Invokation.Remoting;
 using NetRunner.Executable.RawData;
 using NetRunner.ExternalLibrary.Properties;
 using NetRunner.TestExecutionProxy;
@@ -64,7 +65,7 @@ namespace NetRunner.Executable.Invokation.Keywords
 
             var resultType = targetFunction.ResultType;
 
-            string errorHeader = string.Format("Unable to convert result to '{0}'", resultType.Name);
+            string errorHeader = string.Format("Unable to convert result to '{0}'", resultType.GetData().Name);
 
             var cellInfo = new CellParsingInfo(lastCell, resultType);
 

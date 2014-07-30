@@ -28,7 +28,7 @@ namespace NetRunner.TestExecutionProxy
 
             if (constructor == null)
             {
-                throw new InvalidOperationException(string.Format("Unable to create type {0}: unable to find any constructor without parameters", typeReference.Name));
+                throw new InvalidOperationException(string.Format("Unable to create type {0}: unable to find any constructor without parameters", typeReference.TargetType.Name));
             }
 
             return new GeneralIsolatedReference(constructor.Invoke(new object[0]), typeReference);

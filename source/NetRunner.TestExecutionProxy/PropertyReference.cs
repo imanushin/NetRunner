@@ -26,8 +26,7 @@ namespace NetRunner.TestExecutionProxy
             this.property = property;
             ArgumentPrepareMode = ReflectionHelpers.FindAttribute(property, ArgumentPrepareAttribute.Default).Mode;
             TrimInputCharacters = ReflectionHelpers.FindAttribute(property, StringTrimAttribute.Default).TrimInputString;
-            HelpIdentity = string.Format(propertyFormat, Owner.FullName, property.Name);
-
+            HelpIdentity = string.Format(propertyFormat, Owner.TargetType.FullName, property.Name);
         }
 
         public TypeReference Owner

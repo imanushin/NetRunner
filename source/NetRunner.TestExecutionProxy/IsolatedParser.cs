@@ -40,7 +40,7 @@ namespace NetRunner.TestExecutionProxy
             {
                 result = ExecutionResult.FromException(ex);
 
-                Trace.TraceError("Unable to parse value '{0}' to type {1} using parser {2}: {3}", inputData, expectedType.FullName, Value.GetType().Name, result.ExceptionToString);
+                Trace.TraceError("Unable to parse value '{0}' to type {1} using parser {2}: {3}", inputData, expectedType.TargetType.FullName, Value.GetType().Name, result.ExceptionToString);
                 
                 return false;
             }
@@ -55,7 +55,7 @@ namespace NetRunner.TestExecutionProxy
             }
             catch (Exception ex)
             {
-                Trace.TraceError("Unable to create parse {0}: {1}", type.Name, ex);
+                Trace.TraceError("Unable to create parse {0}: {1}", type.TargetType.Name, ex);
             }
 
             return null;

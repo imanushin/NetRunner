@@ -26,7 +26,7 @@ namespace NetRunner.TestExecutionProxy
 
             HelpIdentity = string.Format(
                 methodIdentityFormat,
-                Owner.FullName,
+                Owner.TargetType.FullName,
                 SystemName,
                 string.Join(",", method.GetParameters().Select(a => ReplaseRefSymbol(a.ParameterType.FullName))));
         }

@@ -7,6 +7,7 @@ using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using NetRunner.Executable.Common;
+using NetRunner.Executable.Invokation.Remoting;
 using NetRunner.ExternalLibrary;
 using NetRunner.ExternalLibrary.Properties;
 using NetRunner.TestExecutionProxy;
@@ -79,7 +80,7 @@ namespace NetRunner.Executable.Invokation
         {
             get
             {
-                return Method.Owner.Name + '.' + Method.SystemName;
+                return Method.Owner.GetData().Name + '.' + Method.SystemName;
             }
         }
 
