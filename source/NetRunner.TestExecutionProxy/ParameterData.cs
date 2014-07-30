@@ -7,7 +7,7 @@ using NetRunner.ExternalLibrary.Properties;
 
 namespace NetRunner.TestExecutionProxy
 {
-    public sealed class ParameterData : MarshalByRefObject
+    public sealed class ParameterData : GeneralReferenceObject
     {
         public ParameterData(string name, GeneralIsolatedReference value)
         {
