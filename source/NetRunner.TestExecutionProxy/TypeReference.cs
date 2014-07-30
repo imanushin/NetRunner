@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using NetRunner.ExternalLibrary;
 using NetRunner.ExternalLibrary.Properties;
 
 namespace NetRunner.TestExecutionProxy
@@ -16,26 +17,20 @@ namespace NetRunner.TestExecutionProxy
 
         private static readonly Dictionary<Type, TypeReference> references = new Dictionary<Type, TypeReference>();
 
-        private const string typeIdentityFormat = "T:{0}";
-
         public static TypeReference GetType(Type type)
         {
             if (type == null)
                 throw new ArgumentNullException("type");
 
-            TypeReference result;
-
             lock (syncRoot)
             {
-                if (!references.TryGetValue(type, out result))
+                return references.GetOrCreate(type, t =>
                 {
-                    result = new TypeReference(type);
-                    references[type] = result;
-                    ReferenceCache.Save(result, type);
-                }
+                    var r = new TypeReference(t);
+                    ReferenceCache.Save(r, type);
+                    return r;
+                });
             }
-
-            return result;
         }
 
         private TypeReference(Type targetType)
