@@ -49,7 +49,7 @@ namespace NetRunner.TestExecutionProxy
             {
                 property.SetValue(targetObject.Value, value.Value);
 
-                return new ExecutionResult(GeneralIsolatedReference.Empty, Enumerable.Empty<ParameterData>());
+                return new ExecutionResult(GeneralIsolatedReference.Empty, Enumerable.Empty<ParameterValue>());
             }
             catch (Exception ex)
             {
@@ -63,7 +63,7 @@ namespace NetRunner.TestExecutionProxy
             {
                 var result = new GeneralIsolatedReference(property.GetValue(targetObject.Value), property.PropertyType);
 
-                return new ExecutionResult(result, Enumerable.Empty<ParameterData>());
+                return new ExecutionResult(result, Enumerable.Empty<ParameterValue>());
             }
             catch (Exception ex)
             {

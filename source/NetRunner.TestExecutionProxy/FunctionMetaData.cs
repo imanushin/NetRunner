@@ -125,7 +125,7 @@ namespace NetRunner.TestExecutionProxy
         }
 
         [NotNull]
-        public ExecutionResult Invoke(ParameterData[] parameters)
+        public ExecutionResult Invoke(ParameterValue[] parameters)
         {
             var executeBefore = ExecuteBeforeFunctionCallMethod();
 
@@ -161,7 +161,7 @@ namespace NetRunner.TestExecutionProxy
             }
         }
 
-        private static object[] PrepareParameters(ParameterData[] parameters, ParameterInfo[] originalParameters)
+        private static object[] PrepareParameters(ParameterValue[] parameters, ParameterInfo[] originalParameters)
         {
             var parametersArray = new object[originalParameters.Length];
 
@@ -189,9 +189,9 @@ namespace NetRunner.TestExecutionProxy
             return parametersArray;
         }
 
-        private static List<ParameterData> ExtractOutParameters(ParameterInfo[] originalParameters, object[] parametersArray)
+        private static List<ParameterValue> ExtractOutParameters(ParameterInfo[] originalParameters, object[] parametersArray)
         {
-            var outParameters = new List<ParameterData>();
+            var outParameters = new List<ParameterValue>();
 
             for (int i = 0; i < originalParameters.Length; i++)
             {
@@ -202,7 +202,7 @@ namespace NetRunner.TestExecutionProxy
                     continue;
                 }
 
-                outParameters.Add(new ParameterData(parameter.Name, new GeneralIsolatedReference(parametersArray[i], originalParameters[i].ParameterType)));
+                outParameters.Add(new ParameterValue(parameter.Name, new GeneralIsolatedReference(parametersArray[i], originalParameters[i].ParameterType)));
             }
             return outParameters;
         }

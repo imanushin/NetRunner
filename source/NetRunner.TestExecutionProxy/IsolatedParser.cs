@@ -32,7 +32,7 @@ namespace NetRunner.TestExecutionProxy
 
                 var parsed = (bool)generic.Invoke(Value, args);
 
-                result = new ExecutionResult(new IsolatedReference<object>(args[1]), Enumerable.Empty<ParameterData>());
+                result = new ExecutionResult(new IsolatedReference<object>(args[1]), Enumerable.Empty<ParameterValue>());
 
                 return parsed;
             }

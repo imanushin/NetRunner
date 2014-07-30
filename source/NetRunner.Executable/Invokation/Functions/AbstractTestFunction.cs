@@ -35,7 +35,7 @@ namespace NetRunner.Executable.Invokation.Functions
             Validate.ArgumentIsNotNull(inputArguments, "inputArguments");
 
             var expectedTypes = functionReference.Arguments;
-            var actualTypes = new List<ParameterData>();
+            var actualTypes = new List<ParameterValue>();
 
             var conversionErrors = new List<AbstractTableChange>();
             var helpChanges = new List<AbstractTableChange>();
@@ -60,7 +60,7 @@ namespace NetRunner.Executable.Invokation.Functions
 
                 var cellInfo = new CellParsingInfo(parameterInfo, inputArgument);
                 var conversionResult = ParametersConverter.ConvertParameter(cellInfo, conversionErrorHeader);
-                var parameterData = new ParameterData(parameterInfo.Name, conversionResult.Result);
+                var parameterData = new ParameterValue(parameterInfo.Name, conversionResult.Result);
 
                 actualTypes.Add(parameterData);
 
@@ -93,7 +93,7 @@ namespace NetRunner.Executable.Invokation.Functions
 
         public abstract ReadOnlyList<TestFunctionReference> GetInnerFunctions();
 
-        protected static void CheckOutParameter(TestFunctionReference functionToExecute, SequenceExecutionStatus changes, ParameterData outParameter, HtmlCell targetCell)
+        protected static void CheckOutParameter(TestFunctionReference functionToExecute, SequenceExecutionStatus changes, ParameterValue outParameter, HtmlCell targetCell)
         {
             Validate.ArgumentIsNotNull(functionToExecute, "functionToExecute");
             Validate.ArgumentIsNotNull(changes, "changes");

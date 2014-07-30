@@ -14,7 +14,7 @@ namespace NetRunner.Executable.Invokation.Functions
         public InvokationResult(
             [NotNull]GeneralIsolatedReference result,
             [NotNull]TableChangeCollection changes,
-            [NotNull]IEnumerable<ParameterData> outParametersResult)
+            [NotNull]IEnumerable<ParameterValue> outParametersResult)
         {
             Validate.ArgumentIsNotNull(result, "result");
             Validate.ArgumentIsNotNull(changes, "changes");
@@ -37,7 +37,7 @@ namespace NetRunner.Executable.Invokation.Functions
             private set;
         }
 
-        public ReadOnlyList<ParameterData> OutParametersResult
+        public ReadOnlyList<ParameterValue> OutParametersResult
         {
             get;
             private set;
@@ -57,7 +57,7 @@ namespace NetRunner.Executable.Invokation.Functions
 
         public static InvokationResult CreateErrorResult(TableChangeCollection changes)
         {
-            return new InvokationResult(ReflectionLoader.NullResult, changes, ReadOnlyList<ParameterData>.Empty);
+            return new InvokationResult(ReflectionLoader.NullResult, changes, ReadOnlyList<ParameterValue>.Empty);
         }
     }
 }

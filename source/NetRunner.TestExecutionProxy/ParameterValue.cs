@@ -7,9 +7,9 @@ using NetRunner.ExternalLibrary.Properties;
 
 namespace NetRunner.TestExecutionProxy
 {
-    public sealed class ParameterData : GeneralReferenceObject
+    public sealed class ParameterValue : GeneralReferenceObject
     {
-        public ParameterData(string name, GeneralIsolatedReference value)
+        public ParameterValue(string name, GeneralIsolatedReference value)
         {
             Name = name;
             Value = value;

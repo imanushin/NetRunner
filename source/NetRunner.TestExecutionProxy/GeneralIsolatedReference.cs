@@ -98,7 +98,7 @@ namespace NetRunner.TestExecutionProxy
             {
                 var result = Equals(this, second);
 
-                return new ExecutionResult(new GeneralIsolatedReference(result, typeof(bool)), new ParameterData[0]);
+                return new ExecutionResult(new GeneralIsolatedReference(result, typeof(bool)), new ParameterValue[0]);
             }
             catch (Exception ex)
             {

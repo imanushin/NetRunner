@@ -108,14 +108,14 @@ namespace NetRunner.Executable.Invokation.Functions
             status.Changes.Add(new AddFunctionHelp(function.FunctionCells, functionReference));
         }
 
-        private HtmlCell GetParameterCell(ParameterData parameterData)
+        private HtmlCell GetParameterCell(ParameterValue parameterValue)
         {
-            var parameterIndex = functionReference.Arguments.IndexOf(p => string.Equals(p.Name, parameterData.Name, StringComparison.Ordinal));
+            var parameterIndex = functionReference.Arguments.IndexOf(p => string.Equals(p.Name, parameterValue.Name, StringComparison.Ordinal));
 
             Validate.IsNotNull(
                 parameterIndex,
                 "Internal error: unable to find parameter '{0}' of '{1}'. Parameters available: {2}. Please send this issue to {3}",
-                parameterData.Name,
+                parameterValue.Name,
                 function.FunctionName,
                 functionReference.Arguments.JoinToStringLazy(", "),
                 GlobalConstants.IssuesPath

@@ -10,9 +10,9 @@ namespace NetRunner.TestExecutionProxy
 {
     public sealed class ExecutionResult : GeneralReferenceObject
     {
-        public static readonly ExecutionResult Empty = new ExecutionResult(GeneralIsolatedReference.Empty, new ParameterData[0]);
+        public static readonly ExecutionResult Empty = new ExecutionResult(GeneralIsolatedReference.Empty, new ParameterValue[0]);
 
-        internal ExecutionResult([NotNull]GeneralIsolatedReference result, IEnumerable<ParameterData> outParameters)
+        internal ExecutionResult([NotNull]GeneralIsolatedReference result, IEnumerable<ParameterValue> outParameters)
         {
             Result = result;
             OutParameters = outParameters.ToArray();
@@ -33,7 +33,7 @@ namespace NetRunner.TestExecutionProxy
         }
 
         [NotNull]
-        public ParameterData[] OutParameters
+        public ParameterValue[] OutParameters
         {
             get;
             private set;

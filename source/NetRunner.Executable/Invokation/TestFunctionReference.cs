@@ -99,7 +99,7 @@ namespace NetRunner.Executable.Invokation
         }
 
         [NotNull]
-        public ExecutionResult Invoke(IEnumerable<ParameterData> parameters)
+        public ExecutionResult Invoke(IEnumerable<ParameterValue> parameters)
         {
             return Method.Invoke(parameters.ToArray());
         }
