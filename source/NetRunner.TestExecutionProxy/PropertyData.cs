@@ -1,9 +1,11 @@
+using System;
 using System.Reflection;
 using NetRunner.ExternalLibrary;
 using NetRunner.ExternalLibrary.Properties;
 
 namespace NetRunner.TestExecutionProxy
 {
+    [Serializable]
     public sealed class PropertyData : IHelpIdentity
     {
         private const string propertyFormat = "P:{0}.{1}";
@@ -25,7 +27,6 @@ namespace NetRunner.TestExecutionProxy
             get;
             private set;
         }
-
 
         public TypeReference Owner
         {

@@ -9,6 +9,7 @@ using NetRunner.ExternalLibrary.Properties;
 
 namespace NetRunner.TestExecutionProxy
 {
+    [Serializable]
     public sealed class TypeReference : GeneralReferenceObject, IHelpIdentity, IReference<TypeData>
     {
         private static readonly object syncRoot = new object();
@@ -66,7 +67,7 @@ namespace NetRunner.TestExecutionProxy
         {
             get
             {
-                return TargetType.GetProperties().Select(p => new PropertyReference(p, this)).ToArray();
+                return TargetType.GetProperties().Select(PropertyReference.GetPropertyReference).ToArray();
             }
         }
 
@@ -113,7 +114,7 @@ namespace NetRunner.TestExecutionProxy
 
             if (result != null)
             {
-                return new PropertyReference(result, this);
+                return PropertyReference.GetPropertyReference(result);
             }
 
             return null;

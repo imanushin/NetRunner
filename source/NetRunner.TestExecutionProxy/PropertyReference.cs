@@ -13,7 +13,17 @@ namespace NetRunner.TestExecutionProxy
     {
         private readonly PropertyInfo property;
 
-        internal PropertyReference(PropertyInfo property, TypeReference typeReference)
+        private static readonly Dictionary<PropertyInfo, PropertyReference> properties = new Dictionary<PropertyInfo, PropertyReference>(); 
+
+        internal static PropertyReference GetPropertyReference(PropertyInfo property)
+        {
+            lock (properties)
+            {
+                return properties.GetOrCreate(property, p => new PropertyReference(p));
+            }
+        }
+
+        private PropertyReference(PropertyInfo property)
         {
             this.property = property;
 
@@ -22,7 +32,9 @@ namespace NetRunner.TestExecutionProxy
                 throw new ArgumentNullException("property");
             }
 
-            StrongIdentity = typeReference.StrongIdentity + "." + property.Name;
+            StrongIdentity = TypeReference.GetType(property.DeclaringType) + "." + property.Name;
+
+            ReferenceCache.Save(this, new PropertyData(property));
         }
 
         public string StrongIdentity

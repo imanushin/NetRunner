@@ -11,7 +11,7 @@ namespace NetRunner.ExternalLibrary
     public static class CollectionExtensions
     {
         /// <summary>
-        /// Gets key from dictionary if it exists.
+        /// Gets value from dictionary if it exists.
         /// Adds new key to the dictionary otherwise
         /// </summary>
         /// <returns>Exiting value or created new value</returns>
@@ -26,6 +26,27 @@ namespace NetRunner.ExternalLibrary
             }
 
             value = new TValue();
+
+            dictionary[key] = value;
+
+            return value;
+        }
+
+        /// <summary>
+        /// Gets value from dictionary if it exists.
+        /// Create new value and put into dictionary otherwise
+        /// </summary>
+        /// <returns>Exiting value or created new value</returns>
+        public static TValue GetOrCreate<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key, Func<TKey, TValue> ctor)
+        {
+            TValue value;
+
+            if (dictionary.TryGetValue(key, out value))
+            {
+                return value;
+            }
+
+            value = ctor(key);
 
             dictionary[key] = value;
 
