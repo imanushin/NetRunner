@@ -61,7 +61,7 @@ $(document).ready(function()
             return GetOrCreateHintValue(function, f => f.Identity, DocumentationStore.GetFor);
         }
 
-        public static string GetHintAttributeValue(TypeReference function)
+        public static string GetHintAttributeValue(TypeData function)
         {
             return GetOrCreateHintValue(function, f => f.HelpIdentity, DocumentationStore.GetFor);
         }

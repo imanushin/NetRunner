@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NetRunner.ExternalLibrary;
+using NetRunner.ExternalLibrary.Properties;
 using NetRunner.TestExecutionProxy;
 
 namespace NetRunner.Executable.Invokation.Remoting
@@ -40,6 +41,16 @@ namespace NetRunner.Executable.Invokation.Remoting
             where TData : class
         {
             return GenericHelper<TData, TValueData>.GetData(reference);
+        }
+
+
+        [CanBeNull]
+        public static PropertyReference GetProperty(this TypeData type, string propertyName)
+        {
+            return type
+                    .Properties
+                    .FirstOrDefault(p => String.Equals(p.GetData().Name, propertyName, StringComparison.OrdinalIgnoreCase));
+
         }
     }
 }

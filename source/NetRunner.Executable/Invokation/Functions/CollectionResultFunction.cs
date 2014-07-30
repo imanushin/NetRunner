@@ -43,10 +43,11 @@ namespace NetRunner.Executable.Invokation.Functions
             {
                 var resultObject = orderedResult[rowIndex];
                 var type = resultObject.GetType();
+                var typeData = type.GetData();
 
                 var currentRow = Rows[rowIndex];
 
-                var properties = CleanedColumnNames.Select(type.GetProperty).ToReadOnlyList();
+                var properties = ColumnProperties(typeData);
 
                 if (properties.Any(p => p == null))
                 {
@@ -86,13 +87,20 @@ namespace NetRunner.Executable.Invokation.Functions
             return FormatResult(status);
         }
 
+        private ReadOnlyList<PropertyReference> ColumnProperties(TypeData typeData)
+        {
+            return CleanedColumnNames.Select(typeData.GetProperty).ToReadOnlyList();
+        }
+
         private void AddPropertiesHelp(GeneralIsolatedReference firstRow, SequenceExecutionStatus status)
         {
             var type = firstRow.GetType();
 
-            var newChanges = CleanedColumnNames.Select((cn, i) => new
+            var newChanges =
+                ColumnProperties(type.GetData())
+                .Select((p, i) => new
             {
-                Property = type.GetProperty(cn),
+                Property = p,
                 Index = i
             }).Where(e => e.Property != null)
             .Select(e => new AddCellPropertyHelp(ColumnsRow.Cells[e.Index], e.Property.GetData())).ToReadOnlyList();
@@ -197,7 +205,7 @@ namespace NetRunner.Executable.Invokation.Functions
 
                 const string propertyNotFoundFormat = "Type '{0}' does not contain property '{1}'. Available properties: {2}";
                 string header = string.Format("Property {0} was not found", propertyName);
-                string info = string.Format(propertyNotFoundFormat, returnType, propertyName, string.Join(", ", returnType.GetProperties.Select(p => p.GetData().Name)));
+                string info = string.Format(propertyNotFoundFormat, returnType, propertyName, string.Join(", ", returnType.GetData().Properties.Select(p => p.GetData().Name)));
 
                 status.Changes.Add(new AddCellExpandableInfo(targetCell, header, info));
                 status.Changes.Add(new CssClassCellChange(targetCell, HtmlParser.ErrorCssClass));
@@ -207,8 +215,9 @@ namespace NetRunner.Executable.Invokation.Functions
         private static string ReadProperty(string propertyName, GeneralIsolatedReference resultObject)
         {
             var type = resultObject.GetType();
+            var typeData = type.GetData();
 
-            var property = type.GetProperty(propertyName);
+            var property = typeData.GetProperty(propertyName);
 
             if (property == null)
             {

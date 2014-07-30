@@ -42,7 +42,7 @@ namespace NetRunner.Executable.Invokation.Documentation
         {
             var result = TryFindForKey(property.GetData().HelpIdentity);
 
-            return result ?? GetFor(property.GetData().Owner);
+            return result ?? GetFor(property.GetData().Owner.GetData());
         }
 
         public static void LoadForAssemblies(ReadOnlyList<string> assemblyPathes)

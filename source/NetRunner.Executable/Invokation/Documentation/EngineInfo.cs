@@ -124,14 +124,14 @@ namespace NetRunner.Executable.Invokation.Documentation
             var testContainerNode = textNode.AppendChild(ownerDocument.CreateElement("div"));
             textNode.AppendChild(ownerDocument.CreateElement("br"));
 
-            testContainerNode.SetAttributeValue(HtmlHintManager.AttributeName, HtmlHintManager.GetHintAttributeValue(type));
+            testContainerNode.SetAttributeValue(HtmlHintManager.AttributeName, HtmlHintManager.GetHintAttributeValue(type.GetData()));
             testContainerNode.SetAttributeValue("style", HtmlParser.ItemSequenceStyle);
             return testContainerNode;
         }
 
         private static string GetTypeDocumentation(TypeReference testContainerType)
         {
-            var rawDocumentation = DocumentationStore.GetFor(testContainerType);
+            var rawDocumentation = DocumentationStore.GetFor(testContainerType.GetData());
 
             return string.IsNullOrWhiteSpace(rawDocumentation)
                 ? string.Format(howToAddHelpLinkFormat, testContainerType.GetData().Name)

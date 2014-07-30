@@ -10,7 +10,7 @@ using NetRunner.ExternalLibrary.Properties;
 namespace NetRunner.TestExecutionProxy
 {
     [Serializable]
-    public sealed class TypeReference : GeneralReferenceObject, IHelpIdentity, IDataCreation<TypeData, Type>
+    public sealed class TypeReference : GeneralReferenceObject, IDataCreation<TypeData, Type>
     {
         private static readonly object syncRoot = new object();
 
@@ -42,7 +42,6 @@ namespace NetRunner.TestExecutionProxy
         {
             TargetType = targetType;
 
-            HelpIdentity = string.Format(typeIdentityFormat, targetType.FullName);
             StrongIdentity = targetType.FullName;
         }
 
@@ -62,21 +61,7 @@ namespace NetRunner.TestExecutionProxy
         {
             return new TypeReference(TargetType.GetElementType());
         }
-
-        public PropertyReference[] GetProperties
-        {
-            get
-            {
-                return TargetType.GetProperties().Select(PropertyReference.GetPropertyReference).ToArray();
-            }
-        }
-
-        public string HelpIdentity
-        {
-            get;
-            private set;
-        }
-
+        
         public TypeData Create(Type targetItem)
         {
             return new TypeData(targetItem);
@@ -107,22 +92,6 @@ namespace NetRunner.TestExecutionProxy
         public override int GetHashCode()
         {
             return TargetType.GetHashCode();
-        }
-
-        [CanBeNull]
-        public PropertyReference GetProperty(string propertyName)
-        {
-            var result =
-                TargetType
-                    .GetProperties()
-                    .FirstOrDefault(p => String.Equals(p.Name, propertyName, StringComparison.OrdinalIgnoreCase));
-
-            if (result != null)
-            {
-                return PropertyReference.GetPropertyReference(result);
-            }
-
-            return null;
         }
     }
 }
