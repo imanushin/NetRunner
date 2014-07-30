@@ -10,12 +10,12 @@ namespace NetRunner.Executable.Invokation.Remoting
 {
     internal static class RemoteExtensions
     {
-        private static class GenericHelper<TData>
+        private static class GenericHelper<TData, TValueData>
             where TData : class
         {
             private static readonly Dictionary<string, TData> cache = new Dictionary<string, TData>();
 
-            public static TData GetData(IReference<TData> reference)
+            public static TData GetData(IDataCreation<TData, TValueData> reference)
             {
                 lock (cache)
                 {
@@ -36,10 +36,10 @@ namespace NetRunner.Executable.Invokation.Remoting
 
         }
 
-        public static TData GetData<TData>(this IReference<TData> reference)
+        public static TData GetData<TData, TValueData>(this IDataCreation<TData, TValueData> reference)
             where TData : class
         {
-            return GenericHelper<TData>.GetData(reference);
+            return GenericHelper<TData, TValueData>.GetData(reference);
         }
     }
 }

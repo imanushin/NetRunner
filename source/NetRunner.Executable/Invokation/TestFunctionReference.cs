@@ -18,26 +18,36 @@ namespace NetRunner.Executable.Invokation
     {
         private static readonly char[] incorrectFunctionCharacters = " \n\r\t!@#$%^&*()_+=-/*`~\\|/,.№:;\"'?<>[]{}".ToCharArray();
 
-        internal TestFunctionReference(FunctionMetaData method, [NotNull]TypeReference owner)
+        internal TestFunctionReference(FunctionMetaData method, [NotNull]TypeReference owner, MethodReference methodReference)
         {
             Validate.ArgumentIsNotNull(method, "method");
+            Validate.ArgumentIsNotNull(methodReference, "methodReference");
             Validate.ArgumentIsNotNull(owner, "owner");
 
+            var methodData = methodReference.GetData();
+
+            MethodData = methodData;
             Method = method;
             Owner = owner;
+            ResultType = methodData.ReturnType;
 
-            Arguments = method.GetParameters().ToReadOnlyList();
-            ResultType = method.ReturnType;
-            AvailableFunctionNames = method.AvailableFunctionNames.Select(CleanFunctionName).ToReadOnlyList();
-            HelpIdentity = method.HelpIdentity;
+            Arguments = methodData.Parameters.ToReadOnlyList();
+            AvailableFunctionNames = methodData.AvailableFunctionNames.Select(CleanFunctionName).ToReadOnlyList();
+            HelpIdentity = methodData.HelpIdentity;
         }
 
         public string Identity
         {
             get
             {
-                return Method.HelpIdentity;
+                return MethodData.HelpIdentity;
             }
+        }
+
+        public MethodData MethodData
+        {
+            get;
+            private set;
         }
 
         [NotNull]
@@ -80,13 +90,13 @@ namespace NetRunner.Executable.Invokation
         {
             get
             {
-                return Method.Owner.GetData().Name + '.' + Method.SystemName;
+                return MethodData.Owner.GetData().Name + '.' + MethodData.SystemName;
             }
         }
 
         protected override IEnumerable<object> GetInnerObjects()
         {
-            yield return Method.SystemName;
+            yield return MethodData.SystemName;
             yield return Arguments;
             yield return ResultType;
             yield return Owner;
@@ -95,7 +105,7 @@ namespace NetRunner.Executable.Invokation
 
         protected override string GetString()
         {
-            return string.Format("Method: {0};  Parameters: {1}; Result type: {2}; AvailableFunctionNames: {3}", Method.SystemName, Arguments, ResultType, AvailableFunctionNames);
+            return string.Format("Method: {0};  Parameters: {1}; Result type: {2}; AvailableFunctionNames: {3}", MethodData.SystemName, Arguments, ResultType, AvailableFunctionNames);
         }
 
         [NotNull]

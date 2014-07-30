@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NetRunner.Executable.Common;
+using NetRunner.Executable.Invokation.Remoting;
 using NetRunner.Executable.RawData;
 using NetRunner.ExternalLibrary;
 using NetRunner.ExternalLibrary.Properties;
@@ -18,14 +19,16 @@ namespace NetRunner.Executable.Invokation
         private readonly bool trimInputCharacters;
 
         public CellParsingInfo(ParameterInfoReference parameter, HtmlCell targetCell)
-            : this(targetCell, ClearReferenceFlag(parameter), parameter.PrepareMode, parameter.TrimInputCharacters)
+            : this(targetCell, ClearReferenceFlag(parameter), parameter.GetData().PrepareMode, parameter.GetData().TrimInputCharacters)
         {
 
         }
 
         private static TypeReference ClearReferenceFlag(ParameterInfoReference parameter)
         {
-            return parameter.IsOut ? parameter.ParameterType.GetElementType() : parameter.ParameterType;
+            ParameterInfoData data = parameter.GetData();
+
+            return data.IsOut ? data.ParameterType.GetElementType() : data.ParameterType;
         }
 
         public CellParsingInfo(

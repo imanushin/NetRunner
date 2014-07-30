@@ -51,7 +51,7 @@ namespace NetRunner.Executable.Invokation.Documentation
                     functionNode.SetAttributeValue(HtmlHintManager.AttributeName, HtmlHintManager.GetHintAttributeValue(function));
                     functionNode.SetAttributeValue("style", HtmlParser.ItemSequenceStyle);
 
-                    var argumentsString = string.Join(", ", function.Arguments.Select(t => t.ParameterType.GetData().Name + ' ' + t.Name).ToReadOnlyList());
+                    var argumentsString = string.Join(", ", function.Arguments.Select(t => t.GetData().ParameterType.GetData().Name + ' ' + t.GetData().Name).ToReadOnlyList());
 
                     functionNode.InnerHtml = string.Format("{0}({1})", function.DisplayName, argumentsString);
                 }

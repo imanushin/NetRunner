@@ -64,7 +64,7 @@ namespace NetRunner.TestExecutionProxy
 
                 Trace.TraceInformation(loadLog.ToString());
 
-                
+
                 Trace.TraceError("Unable to load assembly {0}. Files candidates: {1}, ", args.Name, joinedCandidates);
             }
             catch (Exception ex)
@@ -179,9 +179,9 @@ namespace NetRunner.TestExecutionProxy
 
         public IsolatedParser[] CreateParsers(TypeReference[] types)
         {
-            return types.Select(IsolatedParser.CreateOrNull).Where(p=>p!=null).ToArray();
+            return types.Select(IsolatedParser.CreateOrNull).Where(p => p != null).ToArray();
         }
-        
+
         public LazyIsolatedReference<T>[] CreateTypeInstances<T>(TypeReference[] targetTypes)
         {
             return targetTypes.Select(t => new LazyIsolatedReference<T>(t)).ToArray();
@@ -190,7 +190,7 @@ namespace NetRunner.TestExecutionProxy
         public FunctionMetaData[] FindFunctionsAvailable(LazyIsolatedReference<BaseTestContainer> testContainer)
         {
             var functions = new List<FunctionMetaData>();
-            
+
             var targetType = testContainer.Type.TargetType;
 
             try
@@ -225,7 +225,7 @@ namespace NetRunner.TestExecutionProxy
             TestStatistic.GlobalStatisticInternal = counts.ToTestStatistic();
         }
 
-        public TData LoadData<TData>(IReference<TData> reference)
+        public TData LoadData<TData, TValueData>(IDataCreation<TData, TValueData> reference)
             where TData : class
         {
             return ReferenceCache.Get(reference);

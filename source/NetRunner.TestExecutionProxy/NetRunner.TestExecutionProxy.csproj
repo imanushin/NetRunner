@@ -48,11 +48,15 @@
     <Compile Include="GeneralIsolatedReference.cs" />
     <Compile Include="GeneralLazyIsolatedReference.cs" />
     <Compile Include="GeneralReferenceObject.cs" />
+    <Compile Include="IDataCreation.cs" />
     <Compile Include="IHelpIdentity.cs" />
     <Compile Include="IReference.cs" />
     <Compile Include="IsolatedParser.cs" />
     <Compile Include="IsolatedReference.cs" />
     <Compile Include="LazyIsolatedReference.cs" />
+    <Compile Include="MethodData.cs" />
+    <Compile Include="MethodReference.cs" />
+    <Compile Include="ParameterInfoData.cs" />
     <Compile Include="ParameterValue.cs" />
     <Compile Include="ParameterInfoReference.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

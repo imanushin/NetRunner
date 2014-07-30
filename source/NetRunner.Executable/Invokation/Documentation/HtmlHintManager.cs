@@ -71,7 +71,7 @@ $(document).ready(function()
             return GetOrCreateHintValue(property, f => f.HelpIdentity, DocumentationStore.GetFor);
         }
 
-        public static string GetHintAttributeValue(ParameterInfoReference argument)
+        public static string GetHintAttributeValue(ParameterInfoData argument)
         {
             return GetOrCreateHintValue(argument, f => f.HelpIdentity, DocumentationStore.GetFor);
         }

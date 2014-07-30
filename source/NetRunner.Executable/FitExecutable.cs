@@ -22,7 +22,14 @@ namespace NetRunner.Executable
         {
             using (var communicator = new FitnesseCommunicator(settings.Host, settings.Port, settings.SocketToken))
             {
-                ProcessTestDocuments(communicator, settings.Assemblylist);
+                try
+                {
+                    ProcessTestDocuments(communicator, settings.Assemblylist);
+                }
+                catch (Exception ex)
+                {
+                    Trace.TraceError("Unhandled exception: " + ex);
+                }
             }
         }
 

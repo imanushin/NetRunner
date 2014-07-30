@@ -9,72 +9,43 @@ using NetRunner.ExternalLibrary;
 
 namespace NetRunner.TestExecutionProxy
 {
-    public sealed class ParameterInfoReference : GeneralReferenceObject, IHelpIdentity
+    [Serializable]
+    public sealed class ParameterInfoReference : IDataCreation<ParameterInfoData, ParameterInfo>
     {
-        public const string ParameterFormat = "Par:{0}.{1}";
-
-        internal ParameterInfoReference(ParameterInfo parameter, FunctionMetaData method)
+        private static readonly Dictionary<ParameterInfo, ParameterInfoReference> parameters = new Dictionary<ParameterInfo, ParameterInfoReference>();
+        
+        private ParameterInfoReference(ParameterInfo parameter, MethodReference method)
         {
-            Parameter = parameter;
-            PrepareMode = ReflectionHelpers.FindAttribute(parameter, ArgumentPrepareAttribute.Default).Mode;
-            TrimInputCharacters = ReflectionHelpers.FindAttribute(parameter, StringTrimAttribute.Default).TrimInputString;
-            Owner = method;
-
-            HelpIdentity = string.Format(ParameterFormat, method.HelpIdentity, parameter.Name);
+            var methodIdentity = method.StrongIdentity;
+            StrongIdentity = methodIdentity + ":" + parameter.Name;
         }
 
-        public bool TrimInputCharacters
+        public string StrongIdentity
         {
             get;
             private set;
         }
 
-        internal ParameterInfo Parameter
+        public static ParameterInfoReference GetParameter(ParameterInfo parameter, MethodReference method)
         {
-            get;
-            private set;
-        }
-
-        public string Name
-        {
-            get
+            lock (parameters)
             {
-                return Parameter.Name;
+                return parameters.GetOrCreate(parameter, m =>
+                {
+                    var result = new ParameterInfoReference(parameter, method);
+
+                    ReferenceCache.Save(result, parameter);
+
+                    return result;
+                });
             }
         }
 
-        public bool IsOut
+        public ParameterInfoData Create(ParameterInfo targetItem)
         {
-            get
-            {
-                return Parameter.IsOut;
-            }
-        }
+            var method = MethodReference.GetMethod((MethodInfo) targetItem.Member);
 
-        public ArgumentPrepareAttribute.ArgumentPrepareMode PrepareMode
-        {
-            get;
-            private set;
-        }
-
-        public TypeReference ParameterType
-        {
-            get
-            {
-                return TypeReference.GetType(Parameter.ParameterType);
-            }
-        }
-
-        public FunctionMetaData Owner
-        {
-            get;
-            private set;
-        }
-
-        public string HelpIdentity
-        {
-            get;
-            private set;
+            return new ParameterInfoData(targetItem, method);
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Reflection;
 using HtmlAgilityPack;
 using NetRunner.Executable.Common;
 using NetRunner.Executable.Invokation.Documentation;
+using NetRunner.Executable.Invokation.Remoting;
 using NetRunner.Executable.RawData;
 using NetRunner.TestExecutionProxy;
 
@@ -45,22 +46,24 @@ namespace NetRunner.Executable.Invokation.Functions
                 var inputArgument = inputArguments[i];
                 var parameterInfo = expectedTypes[i];
 
-                helpChanges.Add(new AddCellParameterHelp(inputArgument, parameterInfo));
+                ParameterInfoData parameterInfoData = parameterInfo.GetData();
 
-                if (parameterInfo.IsOut)
+                helpChanges.Add(new AddCellParameterHelp(inputArgument, parameterInfoData));
+
+                if (parameterInfoData.IsOut)
                 {
                     continue;
                 }
 
                 var conversionErrorHeader = string.Format(
                     "Unable to convert value '{2}' of parameter '{0}' of function '{1}'",
-                    parameterInfo.Name,
+                    parameterInfoData.Name,
                     functionReference.DisplayName,
                     inputArgument.CleanedContent);
 
                 var cellInfo = new CellParsingInfo(parameterInfo, inputArgument);
                 var conversionResult = ParametersConverter.ConvertParameter(cellInfo, conversionErrorHeader);
-                var parameterData = new ParameterValue(parameterInfo.Name, conversionResult.Result);
+                var parameterData = new ParameterValue(parameterInfoData.Name, conversionResult.Result);
 
                 actualTypes.Add(parameterData);
 

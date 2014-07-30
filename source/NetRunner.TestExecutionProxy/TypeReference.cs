@@ -10,7 +10,7 @@ using NetRunner.ExternalLibrary.Properties;
 namespace NetRunner.TestExecutionProxy
 {
     [Serializable]
-    public sealed class TypeReference : GeneralReferenceObject, IHelpIdentity, IReference<TypeData>
+    public sealed class TypeReference : GeneralReferenceObject, IHelpIdentity, IDataCreation<TypeData, Type>
     {
         private static readonly object syncRoot = new object();
 
@@ -31,7 +31,7 @@ namespace NetRunner.TestExecutionProxy
                 {
                     result = new TypeReference(type);
                     references[type] = result;
-                    ReferenceCache.Save(result, new TypeData(type));
+                    ReferenceCache.Save(result, type);
                 }
             }
 
@@ -75,6 +75,11 @@ namespace NetRunner.TestExecutionProxy
         {
             get;
             private set;
+        }
+
+        public TypeData Create(Type targetItem)
+        {
+            return new TypeData(targetItem);
         }
 
         public override string ToString()

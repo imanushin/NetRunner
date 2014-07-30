@@ -4,6 +4,7 @@ using System.Linq;
 using HtmlAgilityPack;
 using NetRunner.Executable.Common;
 using NetRunner.Executable.Invokation.Documentation;
+using NetRunner.Executable.Invokation.Remoting;
 using NetRunner.Executable.RawData;
 using NetRunner.ExternalLibrary.Properties;
 using NetRunner.TestExecutionProxy;
@@ -101,7 +102,7 @@ namespace NetRunner.Executable.Invokation.Functions
                     Index = index
                 })
                 .Where(item => item.Index < functionReference.Arguments.Count)
-                .Select(item => new AddCellParameterHelp(item.Argument, functionReference.Arguments[item.Index]));
+                .Select(item => new AddCellParameterHelp(item.Argument, functionReference.Arguments[item.Index].GetData()));
 
             status.Changes.AddRange(argumentsHelp);
 
@@ -110,7 +111,7 @@ namespace NetRunner.Executable.Invokation.Functions
 
         private HtmlCell GetParameterCell(ParameterValue parameterValue)
         {
-            var parameterIndex = functionReference.Arguments.IndexOf(p => string.Equals(p.Name, parameterValue.Name, StringComparison.Ordinal));
+            var parameterIndex = functionReference.Arguments.IndexOf(p => string.Equals(p.GetData().Name, parameterValue.Name, StringComparison.Ordinal));
 
             Validate.IsNotNull(
                 parameterIndex,

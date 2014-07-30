@@ -10,25 +10,15 @@ using NetRunner.ExternalLibrary.Properties;
 
 namespace NetRunner.TestExecutionProxy
 {
-    public sealed class FunctionMetaData : GeneralReferenceObject, IHelpIdentity
+    public sealed class FunctionMetaData : GeneralReferenceObject
     {
-        private const string methodIdentityFormat = "M:{0}.{1}({2})";
-
         private readonly Lazy<GeneralIsolatedReference> targetObject;
 
         private FunctionMetaData([NotNull] MethodInfo method, [NotNull] Lazy<GeneralIsolatedReference> targetObject, TypeReference objectType)
         {
             Method = method;
-            Owner = objectType;
             this.targetObject = targetObject;
-
-            AvailableFunctionNames = GetFunctionNamesAvailable(method);
-
-            HelpIdentity = string.Format(
-                methodIdentityFormat,
-                Owner.TargetType.FullName,
-                SystemName,
-                string.Join(",", method.GetParameters().Select(a => ReplaseRefSymbol(a.ParameterType.FullName))));
+            MethodReference = MethodReference.GetMethod(method);
         }
 
         internal FunctionMetaData([NotNull] MethodInfo method, [NotNull] GeneralLazyIsolatedReference targetObject)
@@ -41,30 +31,6 @@ namespace NetRunner.TestExecutionProxy
         {
         }
 
-        private static ReadOnlyCollection<string> GetFunctionNamesAvailable(MethodInfo method)
-        {
-            var result = new List<string>();
-
-            var allMarkers = method.GetCustomAttributes<AdditionalFunctionNameAttribute>().ToArray();
-
-            result.AddRange(allMarkers.OfType<AdditionalFunctionNameAttribute>().Select(a => a.Name));
-
-            var parentType = method.DeclaringType;
-            var assembly = parentType.Assembly;
-
-            var excludeDefaultName = method.GetCustomAttributes<ExcludeDefaultFunctionNameAttribute>()
-                .Concat(parentType.GetCustomAttributes<ExcludeDefaultFunctionNameAttribute>())
-                .Concat(assembly.GetCustomAttributes<ExcludeDefaultFunctionNameAttribute>())
-                .FirstOrDefault();
-
-            if (excludeDefaultName == null || !excludeDefaultName.ExcludeDefaultFunctionName)
-            {
-                result.Add(method.Name);
-            }
-
-            return result.AsReadOnly();
-        }
-
         internal MethodInfo Method
         {
             [Pure]
@@ -72,56 +38,10 @@ namespace NetRunner.TestExecutionProxy
             private set;
         }
 
-        public ReadOnlyCollection<string> AvailableFunctionNames
-        {
-            [Pure]
-            get;
-            private set;
-        }
-
-        public string SystemName
-        {
-            [Pure]
-            get
-            {
-                return Method.Name;
-            }
-        }
-
-        public TypeReference ReturnType
-        {
-            [Pure]
-            get
-            {
-                return TypeReference.GetType(Method.ReturnType);
-            }
-        }
-
-        public int ParametersCount
-        {
-            [Pure]
-            get
-            {
-                return Method.GetParameters().Length;
-            }
-        }
-
-        public TypeReference Owner
+        public MethodReference MethodReference
         {
             get;
             private set;
-        }
-
-        public string HelpIdentity
-        {
-            get;
-            private set;
-        }
-
-        [Pure]
-        public ParameterInfoReference[] GetParameters()
-        {
-            return Method.GetParameters().Select(p => new ParameterInfoReference(p, this)).ToArray();
         }
 
         [NotNull]
@@ -256,7 +176,7 @@ namespace NetRunner.TestExecutionProxy
         {
             var result = Method.GetParameters()
                 .Where(p => string.Equals(name, p.Name, StringComparison.OrdinalIgnoreCase))
-                .Select(p => new ParameterInfoReference(p, this))
+                .Select(p => ParameterInfoReference.GetParameter(p, MethodReference))
                 .FirstOrDefault();
 
             if (result == null)
@@ -265,15 +185,6 @@ namespace NetRunner.TestExecutionProxy
             return result;
         }
 
-        private static string ReplaseRefSymbol(string typeName)
-        {
-            if (typeName.EndsWith("&"))
-            {
-                return typeName.Substring(0, typeName.Length - 1) + "@";
-            }
-
-            return typeName;
-        }
 
     }
 }

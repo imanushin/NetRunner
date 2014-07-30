@@ -9,7 +9,7 @@ using NetRunner.ExternalLibrary.Properties;
 
 namespace NetRunner.TestExecutionProxy
 {
-    public sealed class PropertyReference : GeneralReferenceObject, IReference<PropertyData>
+    public sealed class PropertyReference : GeneralReferenceObject, IDataCreation<PropertyData, PropertyInfo>
     {
         private readonly PropertyInfo property;
 
@@ -34,7 +34,7 @@ namespace NetRunner.TestExecutionProxy
 
             StrongIdentity = TypeReference.GetType(property.DeclaringType) + "." + property.Name;
 
-            ReferenceCache.Save(this, new PropertyData(property));
+            ReferenceCache.Save(this, property);
         }
 
         public string StrongIdentity
@@ -69,6 +69,11 @@ namespace NetRunner.TestExecutionProxy
             {
                 return ExecutionResult.FromException(ex);
             }
+        }
+
+        public PropertyData Create(PropertyInfo targetItem)
+        {
+            return new PropertyData(targetItem);
         }
     }
 }

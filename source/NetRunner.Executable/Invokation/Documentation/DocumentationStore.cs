@@ -197,7 +197,7 @@ namespace NetRunner.Executable.Invokation.Documentation
                     continue;
                 }
 
-                AddNewMember(string.Format(ParameterInfoReference.ParameterFormat, memberName, newMemberName.InnerText), parameterNode);
+                AddNewMember(string.Format(ParameterInfoData.ParameterFormat, memberName, newMemberName.InnerText), parameterNode);
             }
         }
     }

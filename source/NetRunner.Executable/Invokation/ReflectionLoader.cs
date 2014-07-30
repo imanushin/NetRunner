@@ -10,6 +10,7 @@ using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using NetRunner.Executable.Common;
+using NetRunner.Executable.Invokation.Remoting;
 using NetRunner.Executable.Properties;
 using NetRunner.ExternalLibrary;
 using NetRunner.ExternalLibrary.Properties;
@@ -39,7 +40,7 @@ namespace NetRunner.Executable.Invokation
 
         [NotNull]
         private static Dictionary<TypeReference, ReadOnlyList<TestFunctionReference>> testContainersFunctions = new Dictionary<TypeReference, ReadOnlyList<TestFunctionReference>>();
-            
+
         [NotNull]
         private static ReadOnlyList<LazyIsolatedReference<BaseTestContainer>> testContainers = ReadOnlyList<LazyIsolatedReference<BaseTestContainer>>.Empty;
 
@@ -99,7 +100,7 @@ namespace NetRunner.Executable.Invokation
             testContainers = reflectionInvoker.CreateTypeInstances<BaseTestContainer>(testTypes.ToArray()).ToReadOnlyList();
 
             functions = testContainers
-                .SelectMany(tc => reflectionInvoker.FindFunctionsAvailable(tc).Select(f => new TestFunctionReference(f, tc.Type)))
+                .SelectMany(tc => reflectionInvoker.FindFunctionsAvailable(tc).Select(f => new TestFunctionReference(f, tc.Type, f.MethodReference)))
                 .ToReadOnlyList();
 
             testContainersFunctions = functions.ToLookup(f => f.Owner).ToDictionary(i => i.Key, i => i.ToReadOnlyList());
@@ -170,22 +171,22 @@ namespace NetRunner.Executable.Invokation
             var allMethods = targetObject.GetMethods();
 
             var methodCandidates =
-                allMethods.Where(m => m.GetParameters().Select(p => p.Name)
+                allMethods.Where(m => m.MethodReference.GetData().Parameters.Select(p => p.GetData().Name)
                     .SequenceEqual(argumentNames, StringComparer.OrdinalIgnoreCase));
 
             string joinedNames = TestFunctionReference.CleanFunctionName(string.Concat(argumentNames));
 
             methodCandidates = methodCandidates.Concat(
                 allMethods
-                .Where(m => m.ParametersCount == argumentNames.Count)
-                .Where(m => m.AvailableFunctionNames.Any(fn => string.Equals(fn, joinedNames, StringComparison.OrdinalIgnoreCase))));
+                .Where(m => m.MethodReference.GetData().Parameters.Count == argumentNames.Count)
+                .Where(m => m.MethodReference.GetData().AvailableFunctionNames.Any(fn => string.Equals(fn, joinedNames, StringComparison.OrdinalIgnoreCase))));
 
             var firstCandidate = methodCandidates.FirstOrDefault();
 
             if (firstCandidate == null)
                 return null;
 
-            return new TestFunctionReference(firstCandidate, targetObject.GetType());
+            return new TestFunctionReference(firstCandidate, targetObject.GetType(), firstCandidate.MethodReference);
         }
 
         [CanBeNull]
@@ -296,7 +297,7 @@ namespace NetRunner.Executable.Invokation
             reflectionInvoker.SendStatistic(counts);
         }
 
-        public static TData LoadData<TData>(IReference<TData> reference)
+        public static TData LoadData<TData, TValueData>(IDataCreation<TData, TValueData> reference)
             where TData : class
         {
             Validate.ArgumentIsNotNull(reference, "reference");

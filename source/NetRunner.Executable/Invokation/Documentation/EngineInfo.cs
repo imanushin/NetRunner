@@ -177,7 +177,7 @@ namespace NetRunner.Executable.Invokation.Documentation
                 innerHtml.AppendFormat("<p><i>{0}</i>  </p>", rawHelp);
             }
 
-            string systemName = function.Method.SystemName;
+            string systemName = function.MethodData.SystemName;
 
             if (function.AvailableFunctionNames.Any() &&
                 (function.AvailableFunctionNames.Count > 1 ||
@@ -191,21 +191,21 @@ namespace NetRunner.Executable.Invokation.Documentation
 
             innerHtml.AppendFormat("<b>{0} {1}(", CutType(function.ResultType), systemName);
 
-            innerHtml.AppendJoin(", ", AppendParameter, function.Arguments);
+            innerHtml.AppendJoin(", ", AppendParameter, function.Arguments.Select(p=>p.GetData()));
 
             innerHtml.AppendFormat(")</b>");
 
             functionNode.InnerHtml = innerHtml.ToString();
         }
 
-        private static void AppendParameter(StringBuilder builder, ParameterInfoReference parameter)
+        private static void AppendParameter(StringBuilder builder, ParameterInfoData parameter)
         {
             var hint = HtmlHintManager.GetHintAttributeValue(parameter);
-
+            
             if (string.IsNullOrEmpty(hint))
             {
                 builder.AppendFormat(
-                    "<b>{0}{1} {2}</b>", 
+                    "<b>{0}{1} {2}</b>",
                     parameter.IsOut ? "out " : string.Empty,
                     CutType(parameter.ParameterType),
                     parameter.Name);

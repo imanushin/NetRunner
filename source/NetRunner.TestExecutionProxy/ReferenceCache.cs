@@ -13,7 +13,7 @@ namespace NetRunner.TestExecutionProxy
 
         private static readonly object syncRoot = new object();
 
-        public static void Save<TData>(IReference<TData> reference, TData data)
+        public static void Save<TData, TValueData>(IDataCreation<TData, TValueData> reference, TValueData data)
             where TData : class
         {
             lock (syncRoot)
@@ -24,14 +24,16 @@ namespace NetRunner.TestExecutionProxy
             }
         }
 
-        public static TData Get<TData>(IReference<TData> reference)
+        public static TData Get<TData, TValueData>(IDataCreation<TData, TValueData> reference)
             where TData : class
         {
             lock (syncRoot)
             {
                 var typeDictionary = cache.GetOrAdd(reference.GetType());
 
-                return (TData)typeDictionary[reference.StrongIdentity];
+                var value = (TValueData)typeDictionary[reference.StrongIdentity];
+
+                return reference.Create(value);
             }
         }
     }
