@@ -13,7 +13,7 @@ namespace NetRunner.TestExecutionProxy
     public sealed class TypeData : IHelpIdentity
     {
         private const string typeIdentityFormat = "T:{0}";
-        
+
         internal TypeData(Type type)
         {
             Name = type.Name;
@@ -21,6 +21,8 @@ namespace NetRunner.TestExecutionProxy
 
             HelpIdentity = string.Format(typeIdentityFormat, type.FullName);
             Properties = type.GetProperties().Select(PropertyReference.GetPropertyReference).ToList().AsReadOnly();
+            
+            ElementType = TypeReference.GetType(type.GetElementType() ?? type);
         }
 
         public string Name
@@ -36,6 +38,13 @@ namespace NetRunner.TestExecutionProxy
         }
 
         public string HelpIdentity
+        {
+            get;
+            private set;
+        }
+
+        [NotNull]
+        public TypeReference ElementType
         {
             get;
             private set;

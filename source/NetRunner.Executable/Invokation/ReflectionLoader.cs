@@ -305,5 +305,12 @@ namespace NetRunner.Executable.Invokation
 
             return reflectionInvoker.LoadData(reference);
         }
+
+        public static bool IsAssignableFrom(this TypeReference currentType, TypeReference targetType)
+        {
+            Validate.IsNotNull(reflectionInvoker, "Test domain does not initialized");
+
+            return reflectionInvoker.IsAssignableFrom(currentType, targetType);
+        }
     }
 }

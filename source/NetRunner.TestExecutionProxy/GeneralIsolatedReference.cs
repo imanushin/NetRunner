@@ -136,7 +136,7 @@ namespace NetRunner.TestExecutionProxy
             }
             catch (Exception ex)
             {
-                return string.Format("Unable to get string of {0}: {1}", GetType().TargetType.Name, ex);
+                return string.Format("Unable to get string of {0}: {1}", GetType(), ex);
             }
         }
 

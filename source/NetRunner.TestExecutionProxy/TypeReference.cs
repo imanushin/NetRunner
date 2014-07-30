@@ -11,11 +11,12 @@ using NetRunner.ExternalLibrary.Properties;
 namespace NetRunner.TestExecutionProxy
 {
     [Serializable]
-    public sealed class TypeReference : GeneralReferenceObject, IDataCreation<TypeData, Type>
+    public sealed class TypeReference : IDataCreation<TypeData, Type>
     {
         private static readonly object syncRoot = new object();
 
         private static readonly Dictionary<Type, TypeReference> references = new Dictionary<Type, TypeReference>();
+        private static readonly Dictionary<TypeReference, Type> types = new Dictionary<TypeReference, Type>();
 
         public static TypeReference GetType(Type type)
         {
@@ -28,6 +29,7 @@ namespace NetRunner.TestExecutionProxy
                 {
                     var r = new TypeReference(t);
                     ReferenceCache.Save(r, type);
+                    types[r] = t;
                     return r;
                 });
             }
@@ -35,8 +37,6 @@ namespace NetRunner.TestExecutionProxy
 
         private TypeReference(Type targetType)
         {
-            TargetType = targetType;
-
             StrongIdentity = targetType.FullName;
         }
 
@@ -46,17 +46,17 @@ namespace NetRunner.TestExecutionProxy
             private set;
         }
 
-        internal Type TargetType
+        public Type TargetType
         {
-            get;
-            private set;
+            get
+            {
+                lock (syncRoot)
+                {
+                    return types[this];
+                }
+            }
         }
 
-        public TypeReference GetElementType()
-        {
-            return new TypeReference(TargetType.GetElementType());
-        }
-        
         public TypeData Create(Type targetItem)
         {
             return new TypeData(targetItem);
@@ -64,12 +64,15 @@ namespace NetRunner.TestExecutionProxy
 
         public override string ToString()
         {
-            return TargetType.ToString();
+            return StrongIdentity;
         }
 
-        public bool IsAssignableFrom(TypeReference otherType)
+        internal bool IsAssignableFrom(TypeReference otherType)
         {
-            return TargetType.IsAssignableFrom(otherType.TargetType);
+            var myType = TargetType;
+            var secondType = otherType.TargetType;
+
+            return myType.IsAssignableFrom(secondType);
         }
 
         public override bool Equals(object obj)
@@ -81,12 +84,12 @@ namespace NetRunner.TestExecutionProxy
                 return false;
             }
 
-            return TargetType == other.TargetType;
+            return string.Equals(StrongIdentity, other.StrongIdentity);
         }
 
         public override int GetHashCode()
         {
-            return TargetType.GetHashCode();
+            return StrongIdentity.GetHashCode();
         }
     }
 }

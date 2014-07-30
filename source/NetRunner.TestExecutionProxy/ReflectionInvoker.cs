@@ -191,7 +191,7 @@ namespace NetRunner.TestExecutionProxy
         {
             var functions = new List<FunctionMetaData>();
 
-            var targetType = testContainer.Type.TargetType;
+            var targetType = ReferenceCache.Get(testContainer.Type);
 
             try
             {
@@ -229,6 +229,11 @@ namespace NetRunner.TestExecutionProxy
             where TData : class
         {
             return ReferenceCache.Get(reference);
+        }
+
+        public bool IsAssignableFrom(TypeReference current, TypeReference target)
+        {
+            return current.IsAssignableFrom(target);
         }
     }
 }

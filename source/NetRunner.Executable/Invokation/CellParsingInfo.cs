@@ -28,7 +28,7 @@ namespace NetRunner.Executable.Invokation
         {
             ParameterInfoData data = parameter.GetData();
 
-            return data.IsOut ? data.ParameterType.GetElementType() : data.ParameterType;
+            return data.IsOut ? data.ParameterType.GetData().ElementType : data.ParameterType;
         }
 
         public CellParsingInfo(
