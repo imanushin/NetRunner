@@ -225,9 +225,10 @@ namespace NetRunner.TestExecutionProxy
             TestStatistic.GlobalStatisticInternal = counts.ToTestStatistic();
         }
 
-        public TypeData LoadData(TypeReference reference)
+        public TData LoadData<TData>(IReference<TData> reference)
+            where TData : class
         {
-            return TypeReference.GetTypeData(reference);
+            return ReferenceCache.Get(reference);
         }
     }
 }

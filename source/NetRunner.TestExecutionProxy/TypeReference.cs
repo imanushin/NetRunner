@@ -9,12 +9,11 @@ using NetRunner.ExternalLibrary.Properties;
 
 namespace NetRunner.TestExecutionProxy
 {
-    public sealed class TypeReference : GeneralReferenceObject, IHelpIdentity
+    public sealed class TypeReference : GeneralReferenceObject, IHelpIdentity, IReference<TypeData>
     {
         private static readonly object syncRoot = new object();
 
         private static readonly Dictionary<Type, TypeReference> references = new Dictionary<Type, TypeReference>();
-        private static readonly Dictionary<string, TypeData> datas = new Dictionary<string, TypeData>();
 
         private const string typeIdentityFormat = "T:{0}";
 
@@ -31,7 +30,7 @@ namespace NetRunner.TestExecutionProxy
                 {
                     result = new TypeReference(type);
                     references[type] = result;
-                    datas[result.StrongIdentity]=new TypeData(type);
+                    ReferenceCache.Save(result, new TypeData(type));
                 }
             }
 
@@ -118,14 +117,6 @@ namespace NetRunner.TestExecutionProxy
             }
 
             return null;
-        }
-
-        public static TypeData GetTypeData(TypeReference reference)
-        {
-            lock (syncRoot)
-            {
-                return datas[reference.StrongIdentity];
-            }
         }
     }
 }

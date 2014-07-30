@@ -53,6 +53,7 @@
     <Compile Include="EmbeddedTestContainer.cs" />
     <Compile Include="EnumParser.cs" />
     <Compile Include="ExcludeDefaultFunctionNameAttribute.cs" />
+    <Compile Include="CollectionExtensions.cs" />
     <Compile Include="FunctionContainer.cs" />
     <Compile Include="GenericParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

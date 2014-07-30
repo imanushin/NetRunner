@@ -296,7 +296,8 @@ namespace NetRunner.Executable.Invokation
             reflectionInvoker.SendStatistic(counts);
         }
 
-        public static TypeData LoadData(TypeReference reference)
+        public static TData LoadData<TData>(IReference<TData> reference)
+            where TData : class
         {
             Validate.ArgumentIsNotNull(reference, "reference");
             Validate.IsNotNull(reflectionInvoker, "Test domain does not initialized");

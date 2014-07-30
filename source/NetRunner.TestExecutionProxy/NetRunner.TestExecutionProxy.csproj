@@ -49,6 +49,7 @@
     <Compile Include="GeneralLazyIsolatedReference.cs" />
     <Compile Include="GeneralReferenceObject.cs" />
     <Compile Include="IHelpIdentity.cs" />
+    <Compile Include="IReference.cs" />
     <Compile Include="IsolatedParser.cs" />
     <Compile Include="IsolatedReference.cs" />
     <Compile Include="LazyIsolatedReference.cs" />
@@ -56,6 +57,7 @@
     <Compile Include="ParameterInfoReference.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PropertyReference.cs" />
+    <Compile Include="ReferenceCache.cs" />
     <Compile Include="ReflectionHelpers.cs" />
     <Compile Include="ReflectionInvoker.cs" />
     <Compile Include="TableResultReference.cs" />

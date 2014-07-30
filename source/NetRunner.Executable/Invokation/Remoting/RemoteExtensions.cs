@@ -3,32 +3,43 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NetRunner.ExternalLibrary;
 using NetRunner.TestExecutionProxy;
 
 namespace NetRunner.Executable.Invokation.Remoting
 {
     internal static class RemoteExtensions
     {
-        private static readonly Dictionary<string, TypeData> types = new Dictionary<string, TypeData>();
-
-        public static TypeData GetData(this TypeReference reference)
+        private static class GenericHelper<TData>
+            where TData : class
         {
-            var identity = reference.StrongIdentity;
+            private static readonly Dictionary<string, TData> cache = new Dictionary<string, TData>();
 
-            lock (types)
+            public static TData GetData(IReference<TData> reference)
             {
-                TypeData data;
-
-                if (!types.TryGetValue(identity, out data))
+                lock (cache)
                 {
-                    data = ReflectionLoader.LoadData(reference);
+                    TData data;
 
-                    types[identity] = data;
+                    string strongIdentity = reference.StrongIdentity;
+
+                    if (!cache.TryGetValue(strongIdentity, out data))
+                    {
+                        data = ReflectionLoader.LoadData(reference);
+
+                        cache[strongIdentity] = data;
+                    }
+
+                    return data;
                 }
-
-                return data;
             }
+
         }
 
+        public static TData GetData<TData>(this IReference<TData> reference)
+            where TData : class
+        {
+            return GenericHelper<TData>.GetData(reference);
+        }
     }
 }
