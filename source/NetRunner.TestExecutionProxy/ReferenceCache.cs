@@ -24,6 +24,25 @@ namespace NetRunner.TestExecutionProxy
             }
         }
 
+        public static Tuple<TReference, TData>[] Get<TData, TValueData, TReference>(IEnumerable<TReference> references)
+            where TData : class
+            where TReference : IDataCreation<TData, TValueData>
+        {
+            var refArray = references.ToArray();
+
+            if (!refArray.Any())
+            {
+                return new Tuple<TReference, TData>[0];
+            }
+
+            lock (syncRoot)
+            {
+                var typeDictionary = cache.GetOrAdd(refArray.First().GetType());
+
+                return refArray.Select(r => Tuple.Create(r, r.Create((TValueData)typeDictionary[r.StrongIdentity]))).ToArray();
+            }
+        }
+
         public static TData Get<TData, TValueData>(IDataCreation<TData, TValueData> reference)
             where TData : class
         {

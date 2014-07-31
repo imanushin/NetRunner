@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using NetRunner.ExternalLibrary;
@@ -49,22 +50,31 @@ namespace NetRunner.TestExecutionProxy
 
         private void AddMethods(IEnumerable<MethodReference> methods)
         {
+            var types = new HashSet<TypeReference>();
+
+            var parameters = new List<ParameterInfoReference>();
+
             foreach (var method in methods)
             {
                 MethodData methodData = ReferenceCache.Get(method);
 
                 Methods[method] = methodData;
 
-                foreach (var parameter in methodData.Parameters)
-                {
-                    var parameterInfoData = ReferenceCache.Get(parameter);
+                parameters.AddRange(methodData.Parameters);
 
-                    Parameters[parameter] = parameterInfoData;
+                types.Add(methodData.ReturnType);
+            }
 
-                    Types[parameterInfoData.ParameterType] = ReferenceCache.Get(parameterInfoData.ParameterType);
-                }
+            var parametersDatas = ReferenceCache.Get<ParameterInfoData, ParameterInfo, ParameterInfoReference>(parameters);
 
-                Types[methodData.ReturnType] = ReferenceCache.Get(methodData.ReturnType);
+            foreach (var parametersData in parametersDatas)
+            {
+                Parameters[parametersData.Item1] = parametersData.Item2;
+            }
+
+            foreach (var typeReference in types)
+            {
+                AddType(typeReference);
             }
         }
 
