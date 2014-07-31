@@ -31,7 +31,7 @@ document/FitnesseRoot/RecentChanges/
 /fitnesse/FitNesseRoot/*.zip
 
 /fitnesse/FitNesseRoot/RecentChanges
-#/fitnesse/FitNesseRoot/files/testResults/*
+/fitnesse/FitNesseRoot/files/testResults/*
 /fitnesse/test_runner.log
 /binary/tools/TestsGenerator/TestsGenerator.vshost.exe
 /binary/tools/TestsGenerator/TestsGenerator.vshost.exe.manifest
