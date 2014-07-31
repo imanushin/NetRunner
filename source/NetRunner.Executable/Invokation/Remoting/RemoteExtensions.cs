@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.UI.WebControls;
 using NetRunner.ExternalLibrary;
 using NetRunner.ExternalLibrary.Properties;
 using NetRunner.TestExecutionProxy;
@@ -35,6 +37,16 @@ namespace NetRunner.Executable.Invokation.Remoting
                 }
             }
 
+            public static void Save(IEnumerable<KeyValuePair<IDataCreation<TData, TValueData>, TData>> referenceToData)
+            {
+                lock (cache)
+                {
+                    foreach (var item in referenceToData)
+                    {
+                        cache[item.Key.StrongIdentity] = item.Value;
+                    }
+                }
+            }
         }
 
         public static TData GetData<TData, TValueData>(this IDataCreation<TData, TValueData> reference)
@@ -51,6 +63,14 @@ namespace NetRunner.Executable.Invokation.Remoting
                     .Properties
                     .FirstOrDefault(p => String.Equals(p.GetData().Name, propertyName, StringComparison.OrdinalIgnoreCase));
 
+        }
+
+        public static void Cache(TestContainersMetaData data)
+        {
+            GenericHelper<TypeReference, Type>.Save(data.Types.Cast<KeyValuePair<IDataCreation<TypeReference, Type>, TypeReference>>());
+            GenericHelper<PropertyReference, PropertyInfo>.Save(data.Properties.Cast<KeyValuePair<IDataCreation<PropertyReference, PropertyInfo>, PropertyReference>>());
+            GenericHelper<MethodReference, MethodInfo>.Save(data.Methods.Cast<KeyValuePair<IDataCreation<MethodReference, MethodInfo>, MethodReference>>());
+            GenericHelper<ParameterInfoReference, ParameterInfo>.Save(data.Parameters.Cast<KeyValuePair<IDataCreation<ParameterInfoReference, ParameterInfo>, ParameterInfoReference>>());
         }
     }
 }

@@ -312,5 +312,14 @@ namespace NetRunner.Executable.Invokation
 
             return reflectionInvoker.IsAssignableFrom(currentType, targetType);
         }
+
+        public static void UpdateDatas()
+        {
+            Validate.IsNotNull(reflectionInvoker, "Test domain does not initialized");
+
+            var data = reflectionInvoker.LoadMetaData(testContainers.ToArray());
+
+            RemoteExtensions.Cache(data);
+        }
     }
 }

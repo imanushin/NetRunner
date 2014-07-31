@@ -235,5 +235,10 @@ namespace NetRunner.TestExecutionProxy
         {
             return current.IsAssignableFrom(target);
         }
+
+        public TestContainersMetaData LoadMetaData(LazyIsolatedReference<BaseTestContainer>[] testContainers)
+        {
+            return TestContainersMetaData.GetMetaData(testContainers);
+        }
     }
 }

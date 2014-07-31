@@ -10,12 +10,9 @@ namespace NetRunner.TestExecutionProxy
 {
     public sealed class TableResultReference : GeneralIsolatedReference
     {
-        private readonly BaseTableArgument baseTableArgument;
-
         internal TableResultReference(BaseTableArgument baseTableArgument)
             : base(baseTableArgument, typeof(BaseTableArgument))
         {
-            this.baseTableArgument = baseTableArgument;
         }
 
         public ExecutionResult ExecuteBeforeAllFunctionsCallMethod(FunctionMetaData method)
