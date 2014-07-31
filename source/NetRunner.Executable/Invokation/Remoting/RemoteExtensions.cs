@@ -37,13 +37,14 @@ namespace NetRunner.Executable.Invokation.Remoting
                 }
             }
 
-            public static void Save(IEnumerable<KeyValuePair<IDataCreation<TData, TValueData>, TData>> referenceToData)
+            public static void Save<TReference>(IEnumerable<Tuple<TReference, TData>> referenceToData)
+                where TReference : IDataCreation<TData, TValueData>
             {
                 lock (cache)
                 {
                     foreach (var item in referenceToData)
                     {
-                        cache[item.Key.StrongIdentity] = item.Value;
+                        cache[item.Item1.StrongIdentity] = item.Item2;
                     }
                 }
             }
@@ -67,10 +68,10 @@ namespace NetRunner.Executable.Invokation.Remoting
 
         public static void Cache(TestContainersMetaData data)
         {
-            GenericHelper<TypeReference, Type>.Save(data.Types.Cast<KeyValuePair<IDataCreation<TypeReference, Type>, TypeReference>>());
-            GenericHelper<PropertyReference, PropertyInfo>.Save(data.Properties.Cast<KeyValuePair<IDataCreation<PropertyReference, PropertyInfo>, PropertyReference>>());
-            GenericHelper<MethodReference, MethodInfo>.Save(data.Methods.Cast<KeyValuePair<IDataCreation<MethodReference, MethodInfo>, MethodReference>>());
-            GenericHelper<ParameterInfoReference, ParameterInfo>.Save(data.Parameters.Cast<KeyValuePair<IDataCreation<ParameterInfoReference, ParameterInfo>, ParameterInfoReference>>());
+            GenericHelper<TypeData, Type>.Save(data.Types.Select(kv => Tuple.Create(kv.Key,kv.Value)));
+            GenericHelper<PropertyData, PropertyInfo>.Save(data.Properties.Select(kv => Tuple.Create(kv.Key, kv.Value)));
+            GenericHelper<MethodData, MethodInfo>.Save(data.Methods.Select(kv => Tuple.Create(kv.Key, kv.Value)));
+            GenericHelper<ParameterInfoData, ParameterInfo>.Save(data.Parameters.Select(kv => Tuple.Create(kv.Key, kv.Value)));
         }
     }
 }

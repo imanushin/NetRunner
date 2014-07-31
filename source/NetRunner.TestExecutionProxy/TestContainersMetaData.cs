@@ -7,6 +7,7 @@ using NetRunner.ExternalLibrary;
 
 namespace NetRunner.TestExecutionProxy
 {
+    [Serializable]
     public sealed class TestContainersMetaData
     {
         internal TestContainersMetaData()

@@ -65,6 +65,8 @@ namespace NetRunner.Executable
 
             ReflectionLoader.CreateNewApplicationDomain();
 
+            ReflectionLoader.UpdateDatas();
+
             DocumentationStore.LoadForAssemblies(ReflectionLoader.LoadedAssemblies);
 
             communicator.SendDocument(HtmlHintManager.HtmlHeader);
