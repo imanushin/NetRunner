@@ -289,12 +289,13 @@ namespace NetRunner.Executable.Invokation
             return reflectionInvoker.CreateOnTestDomain(value);
         }
 
-        public static void UpdateCounts(TestCounts counts)
+        public static void UpdateCounts(TestCounts suiteCounts, TestCounts testCounts)
         {
-            Validate.ArgumentIsNotNull(counts, "counts");
+            Validate.ArgumentIsNotNull(suiteCounts, "suiteCounts");
+            Validate.ArgumentIsNotNull(suiteCounts, "testCounts");
             Validate.IsNotNull(reflectionInvoker, "Test domain does not initialized");
 
-            reflectionInvoker.SendStatistic(counts);
+            reflectionInvoker.SendStatistic(suiteCounts, testCounts);
         }
 
         public static TData LoadData<TData, TValueData>(IDataCreation<TData, TValueData> reference)

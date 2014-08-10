@@ -144,7 +144,7 @@ namespace NetRunner.InternalTests
             return new TableAnalyser(new[] { currentTest.Tables[tableIndex - 1] });
         }
 
-        public TableAnalyser AnalyseAllTablesInAllTests()
+        public TableAnalyser AnalyzeAllTablesInAllTests()
         {
             var nodes = new HtmlNode[0];
 
@@ -163,22 +163,35 @@ namespace NetRunner.InternalTests
 
         public int ExceptionCountIs()
         {
-            return TestStatistic.GlobalStatistic.Errors;
+            return TestStatistic.CurrentTestStatistic.Errors;
         }
 
         public int FailCountIs()
         {
-            return TestStatistic.GlobalStatistic.Wrong;
+            return TestStatistic.CurrentTestStatistic.Wrong;
         }
 
         public int IgnoresCountIs()
         {
-            return TestStatistic.GlobalStatistic.Skipped;
+            return TestStatistic.CurrentTestStatistic.Skipped;
         }
 
         public bool SuccessGreaterThanZero()
         {
-            return TestStatistic.GlobalStatistic.Right > 0;
+            return TestStatistic.CurrentTestStatistic.Right > 0;
+        }
+
+        public bool SuiteResultsGreaterThatLocalResults()
+        {
+            var suiteResults = TestStatistic.SuiteStatistic;
+            var testResults = TestStatistic.CurrentTestStatistic;
+
+            return
+                suiteResults.Errors >= testResults.Errors &&
+                suiteResults.Right >= testResults.Right &&
+                suiteResults.Skipped >= testResults.Skipped &&
+                suiteResults.Wrong >= testResults.Wrong;
+
         }
 
         [StringTrim]
@@ -191,20 +204,6 @@ namespace NetRunner.InternalTests
         public int NonTrimmedStringLengthOfIs([StringTrim(false)] string inputData)
         {
             return inputData.Length;
-        }
-
-        /// <summary>
-        /// Analyse raw result of the text executed <br/>
-        /// Usage:<br/>
-        /// | '''Raw Result Contains''' | 123 |
-        /// </summary>
-        /// <param name="data"></param>
-        /// <returns></returns>
-        [StringTrim]
-        public bool RawResultContains(string data)
-        {
-            Debugger.Launch();
-            return rawResult.Contains(data);
         }
     }
 }

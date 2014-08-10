@@ -50,9 +50,17 @@ namespace NetRunner.TestExecutionProxy
             IgnoreCount++;
         }
 
-        public TestStatistic ToTestStatistic()
+        public void Merge(TestCounts localCounts)
         {
-            return new TestStatistic(SuccessCount, FailCount, ExceptionCount, ExceptionCount);
+            SuccessCount += localCounts.SuccessCount;
+            FailCount += localCounts.FailCount;
+            ExceptionCount += localCounts.ExceptionCount;
+            IgnoreCount += localCounts.IgnoreCount;
+        }
+
+        public void Update(TestStatistic testStatistic)
+        {
+            testStatistic.Update(SuccessCount, FailCount, IgnoreCount, ExceptionCount);
         }
     }
 }

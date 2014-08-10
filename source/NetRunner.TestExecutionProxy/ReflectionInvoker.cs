@@ -220,9 +220,10 @@ namespace NetRunner.TestExecutionProxy
             return TypeReference.GetType(type);
         }
 
-        public void SendStatistic(TestCounts counts)
+        public void SendStatistic(TestCounts suiteStatistic, TestCounts currentTestStatistic)
         {
-            TestStatistic.GlobalStatisticInternal = counts.ToTestStatistic();
+            suiteStatistic.Update(TestStatistic.SuiteStatisticInternal);
+            currentTestStatistic.Update(TestStatistic.CurrentTestStatisticInternal);
         }
 
         public TData LoadData<TData, TValueData>(IDataCreation<TData, TValueData> reference)

@@ -1,5 +1,5 @@
 !note check that result does not contain call stack
-| '''Analyse All Tables In All Tests''' |
+| '''Analyze All Tables In All Tests''' |
 | '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
 | 1..100 | 1..100 | Not Contain | !-NetRunner.Executable.-! |
 | 1..100 | 1..100 | Not Contain | !-Internal execution error-! |
@@ -8,3 +8,4 @@
 | check | ''' fail count is ''' | 0 |
 | check | ''' ignores count is ''' | 0 |
 | '''Success Greater Than Zero ''' |
+| '''Suite Results Greater That Local Results''' |

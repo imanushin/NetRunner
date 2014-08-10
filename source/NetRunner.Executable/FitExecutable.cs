@@ -71,13 +71,15 @@ namespace NetRunner.Executable
 
             communicator.SendDocument(EngineInfo.PrintTestEngineInformation());
 
+            var globalCounts = new TestCounts();
+
             for (string document = communicator.ReceiveDocument(); document.Any(); document = communicator.ReceiveDocument())
             {
                 communicator.SendDocument(HtmlHintManager.TestHeader);
                 
                 Trace.WriteLine("Processing document of size: " + document.Length);
 
-                var counts = new TestCounts();
+                var localCounts = new TestCounts();
 
                 try
                 {
@@ -91,9 +93,14 @@ namespace NetRunner.Executable
 
                     foreach (var test in executionPlan.FunctionsSequence)
                     {
-                        var result = RootInvoker.InvokeTable(test, counts);
+                        var testCounts = new TestCounts();
 
-                        ReflectionLoader.UpdateCounts(counts);
+                        var result = RootInvoker.InvokeTable(test, testCounts);
+
+                        localCounts.Merge(testCounts);
+                        globalCounts.Merge(testCounts);
+
+                        ReflectionLoader.UpdateCounts(globalCounts, localCounts);
 
                         communicator.SendDocument(result + test.Table.TextAfterTable);
                     }
@@ -102,7 +109,7 @@ namespace NetRunner.Executable
 
                     communicator.SendDocument(HtmlHintManager.GetTestFooter());
 
-                    communicator.SendCounts(counts);
+                    communicator.SendCounts(localCounts);
                 }
                 catch (Exception e)
                 {
@@ -110,13 +117,13 @@ namespace NetRunner.Executable
 
                     try
                     {
-                        counts.IncrementExceptionCount();
+                        localCounts.IncrementExceptionCount();
 
-                        communicator.SendCounts(counts);
+                        communicator.SendCounts(localCounts);
                     }
                     catch (Exception ex)
                     {
-                        Trace.TraceError("Unable to send counts '{0}': {1}", counts, ex);
+                        Trace.TraceError("Unable to send counts '{0}': {1}", localCounts, ex);
                     }
                 }
             }

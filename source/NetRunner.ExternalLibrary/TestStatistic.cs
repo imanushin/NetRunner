@@ -8,19 +8,18 @@ namespace NetRunner.ExternalLibrary
 {
     /// <summary>
     /// Test statistic of the functions executed.
-    /// This is readonly class, to use property <see cref="GlobalStatistic"/> to get the latest execution status
+    /// This is mutable class
     /// </summary>
     public sealed class TestStatistic
     {
         [UsedImplicitly]
-        internal static TestStatistic GlobalStatisticInternal = new TestStatistic(0, 0, 0, 0);
+        internal static readonly TestStatistic SuiteStatisticInternal = new TestStatistic();
 
-        internal TestStatistic(int right, int wrong, int skipped, int errors)
+        [UsedImplicitly]
+        internal static readonly TestStatistic CurrentTestStatisticInternal = new TestStatistic();
+
+        private TestStatistic()
         {
-            Right = right;
-            Wrong = wrong;
-            Skipped = skipped;
-            Errors = errors;
         }
 
         /// <summary>
@@ -60,14 +59,45 @@ namespace NetRunner.ExternalLibrary
         }
 
         /// <summary>
-        /// Current statistic. After each test invokation it is changed to the other, so read this property to get the latest information
+        /// Common suite statistic. This field is updated after each table execution.
         /// </summary>
+        public static TestStatistic SuiteStatistic
+        {
+            get
+            {
+                return SuiteStatisticInternal;
+            }
+        }
+
+        /// <summary>
+        /// Statistic of the currently executed test.  This field is updated after each table execution.
+        /// </summary>
+        public static TestStatistic CurrentTestStatistic
+        {
+            get
+            {
+                return CurrentTestStatisticInternal;
+            }
+        }
+
+        /// <summary>
+        /// Obsolete property. Please use <see cref="CurrentTestStatistic"/> or <see cref="SuiteStatistic"/> instead of your requirements.
+        /// </summary>
+        [Obsolete("Please use CurrentTestStatistic or SuiteStatistic", true)]
         public static TestStatistic GlobalStatistic
         {
             get
             {
-                return GlobalStatisticInternal;
+                throw new NotSupportedException();
             }
+        }
+
+        internal void Update(int right, int wrong, int skipped, int errors)
+        {
+            Right = right;
+            Wrong = wrong;
+            Skipped = skipped;
+            Errors = errors;
         }
     }
 }
