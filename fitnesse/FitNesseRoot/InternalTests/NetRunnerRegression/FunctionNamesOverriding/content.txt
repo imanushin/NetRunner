@@ -17,7 +17,7 @@
 
 | check | '''Row Count Of Table''' | 1 | '''is''' | 1 | 
 
-| '''Analyse Table''' | 1 |
+| '''Analyze Table''' | 1 |
 | '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
 | 1 | 1 | Contains | Unable to find function |
 | 1 | 1 | Contains | Test Function 1  |
@@ -27,21 +27,21 @@
 
 | check | '''Row Count Of Table''' | 2 | '''is''' | 1 | 
 
-| '''Analyse Table''' | 2 |
+| '''Analyze Table''' | 2 |
 | '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
 | 1 | 1 | Contains | !-Some Test Function 1-!  |
 | 1..100 | 1..100 | Count | 1 |
 
 | check | '''Row Count Of Table''' | 3 | '''is''' | 1 | 
 
-| '''Analyse Table''' | 3 |
+| '''Analyze Table''' | 3 |
 | '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
 | 1 | 1 | Contains | !-Test Function 2-!  |
 | 1..100 | 1..100 | Count | 1 |
 
 | check | '''Row Count Of Table''' | 4 | '''is''' | 1 | 
 
-| '''Analyse Table''' | 4 |
+| '''Analyze Table''' | 4 |
 | '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
 | 1 | 1 | Contains | !-Some Test Function 2-!  |
 | 1..100 | 1..100 | Count | 1 |

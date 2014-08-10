@@ -14,7 +14,7 @@
 
 | check | '''Row Count Of Table''' | 1 | '''is''' | 1 | 
 
-| '''Analyse Table''' | 1 |
+| '''Analyze Table''' | 1 |
 | '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
 | 1 | 1 | Contains | Unable to find function |
 | 1..100 | 1..100 | Contains | class="error" |

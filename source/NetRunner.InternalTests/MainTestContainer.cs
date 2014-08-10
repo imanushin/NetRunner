@@ -121,6 +121,11 @@ namespace NetRunner.InternalTests
             return currentTest != null;
         }
 
+        public RawResultAnalyzer AnalyzeHtml()
+        {
+            return new RawResultAnalyzer(rawResult);
+        }
+
         public IEnumerable CurrentTestResults()
         {
             return currentTest.Counts.Select(c => new
@@ -130,7 +135,7 @@ namespace NetRunner.InternalTests
             });
         }
 
-        public TableAnalyser AnalyseTable(int tableIndex)
+        public TableAnalyser AnalyzeTable(int tableIndex)
         {
             return new TableAnalyser(new[] { currentTest.Tables[tableIndex - 1] });
         }

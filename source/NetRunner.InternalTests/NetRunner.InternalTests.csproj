@@ -51,6 +51,7 @@
     <Compile Include="IndexRange.cs" />
     <Compile Include="MainTestContainer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RawResultAnalyzer.cs" />
     <Compile Include="SingleTest.cs" />
     <Compile Include="TableAnalyser.cs" />
     <Compile Include="TestResults.cs" />

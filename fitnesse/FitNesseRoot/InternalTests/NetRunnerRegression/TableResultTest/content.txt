@@ -16,7 +16,7 @@
 
 | check | '''Row Count Of Table''' | 1 | '''is''' | 4 | 
 
-| '''Analyse Table''' | 1 |
+| '''Analyze Table''' | 1 |
 | '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
 | 1 | 1 | Contains | create subfolders in |
 | 2 | 1 | Contains | ./ |
@@ -29,7 +29,7 @@
 
 | check | '''Row Count Of Table''' | 2 | '''is''' | 4 | 
 
-| '''Analyse Table''' | 2 |
+| '''Analyze Table''' | 2 |
 | '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
 | 1 | 1 | Contains | remove subfolders from |
 | 2 | 1 | Contains | ./ |
@@ -40,7 +40,7 @@
 
 | check | '''Row Count Of Table''' | 3 | '''is''' | 4 | 
 
-| '''Analyse Table''' | 3 |
+| '''Analyze Table''' | 3 |
 | '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
 | 1 | 1 | Contains | create subfolders in |
 | 2 | 1 | Contains | ./ |
@@ -52,7 +52,7 @@
 
 | check | '''Row Count Of Table''' | 4 | '''is''' | 3 | 
 
-| '''Analyse Table''' | 4 |
+| '''Analyze Table''' | 4 |
 | '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
 | 1 | 1 | Contains | create subfolders in |
 | 2 | 1 | Contains | :: |
@@ -64,7 +64,7 @@
 
 | check | '''Row Count Of Table''' | 5 | '''is''' | 3 | 
 
-| '''Analyse Table''' | 5 |
+| '''Analyze Table''' | 5 |
 | '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
 | 1 | 1 | Contains | create subfolders in |
 | 2 | 1 | Contains | ./ |
@@ -78,7 +78,7 @@
 
 | check | '''Row Count Of Table''' | 6 | '''is''' | 3 | 
 
-| '''Analyse Table''' | 6 |
+| '''Analyze Table''' | 6 |
 | '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
 | 1 | 1 | Contains | create subfolders in |
 | 2 | 1 | Contains | ./ |
@@ -93,7 +93,7 @@
 
 | check | '''Row Count Of Table''' | 7 | '''is''' | 5 | 
 
-| '''Analyse Table''' | 7 |
+| '''Analyze Table''' | 7 |
 | '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
 | 1 | 1 | Contains | create subfolders in |
 | 2 | 1 | Contains | ./ |
@@ -107,7 +107,7 @@
 
 | check | '''Row Count Of Table''' | 8 | '''is''' | 5 | 
 
-| '''Analyse Table''' | 8 |
+| '''Analyze Table''' | 8 |
 | '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
 | 1 | 1 | Contains | remove subfolders from |
 | 2 | 1 | Contains | ./ |
@@ -118,7 +118,7 @@
 
 | check | '''Row Count Of Table''' | 9 | '''is''' | 3 | 
 
-| '''Analyse Table''' | 9 |
+| '''Analyze Table''' | 9 |
 | '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
 | 1 | 1 | Contains | create subfolders in |
 | 1 | 1 | Contains | !-ArgumentException-! |
@@ -131,7 +131,7 @@
 
 | check | '''Row Count Of Table''' | 10 | '''is''' | 4 | 
 
-| '''Analyse Table''' | 10 |
+| '''Analyze Table''' | 10 |
 | '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
 | 1 | 1 | Contains | Check Settings |
 | 1 | 1 | Contains | class="pass" |
@@ -141,7 +141,7 @@
 
 | check | '''Row Count Of Table''' | 11 | '''is''' | 4 | 
 
-| '''Analyse Table''' | 11 |
+| '''Analyze Table''' | 11 |
 | '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
 | 1 | 1 | Contains | Check Settings |
 | 1 | 1 | Contains | class="pass" |
@@ -153,7 +153,7 @@
 
 | check | '''Row Count Of Table''' | 12 | '''is''' | 4 | 
 
-| '''Analyse Table''' | 12 |
+| '''Analyze Table''' | 12 |
 | '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
 | 1 | 1 | Contains | Check Settings |
 | 1 | 1 | Contains | class="fail" |
@@ -166,7 +166,7 @@
 
 | check | '''Row Count Of Table''' | 13 | '''is''' | 2 | 
 
-| '''Analyse Table''' | 13 |
+| '''Analyze Table''' | 13 |
 | '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
 | 1 | 1 | Contains | Check Settings |
 | 1..100 | 1 | Contains | class="pass" |

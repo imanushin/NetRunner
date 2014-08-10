@@ -15,7 +15,7 @@
 
 | check | '''Row Count Of Table''' | 1 | '''is''' | 1 | 
 
-| '''Analyse Table''' | 1 |
+| '''Analyze Table''' | 1 |
 | '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
 | 1 | 1 | Contains | missing method call |
 | 1 | 1 | Contains | function |
@@ -24,7 +24,7 @@
 
 | check | '''Row Count Of Table''' | 2 | '''is''' | 1 | 
 
-| '''Analyse Table''' | 2 |
+| '''Analyze Table''' | 2 |
 | '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
 | 3 | 1 | Contains | non-integer |
 | 3 | 1 | Contains | convert |
@@ -35,7 +35,7 @@
 
 | check | '''Row Count Of Table''' | 3 | '''is''' | 1 | 
 
-| '''Analyse Table''' | 3 |
+| '''Analyze Table''' | 3 |
 | '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
 | 5 | 1 | Contains | non-integer |
 | 5 | 1 | Contains | convert |
@@ -47,7 +47,7 @@
 
 | check | '''Row Count Of Table''' | 4 | '''is''' | 1 | 
 
-| '''Analyse Table''' | 4 |
+| '''Analyze Table''' | 4 |
 | '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
 | 7 | 1 | Contains | non-integer |
 | 7 | 1 | Contains | convert |
@@ -58,7 +58,7 @@
 
 | check | '''Row Count Of Table''' | 5 | '''is''' | 4 | 
 
-| '''Analyse Table''' | 5 |
+| '''Analyze Table''' | 5 |
 | '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
 | 3 | 1 | Contains | non-integer |
 | 3 | 1 | Contains | convert |
@@ -78,14 +78,14 @@
 
 | check | '''Row Count Of Table''' | 6 | '''is''' | 1 | 
 
-| '''Analyse Table''' | 6 |
+| '''Analyze Table''' | 6 |
 | '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
 | 1..100 | 1..100 | Contains | class="error" |
 | 1..100 | 1..100 | Count | 3 |
 
 | check | '''Row Count Of Table''' | 7 | '''is''' | 1 | 
 
-| '''Analyse Table''' | 7 |
+| '''Analyze Table''' | 7 |
 | '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
 | 1..100 | 1..100 | Contains | class="error" |
 | 1..100 | 1..100 | Count | 6 |
@@ -93,7 +93,7 @@
 
 | check | '''Row Count Of Table''' | 8 | '''is''' | 1 | 
 
-| '''Analyse Table''' | 8 |
+| '''Analyze Table''' | 8 |
 | '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
 | 1..100 | 1..100 | Not Contain | class="error" |
 | 1..100 | 1..100 | Count | 1 |
@@ -101,7 +101,7 @@
 
 | check | '''Row Count Of Table''' | 9 | '''is''' | 1 | 
 
-| '''Analyse Table''' | 9 |
+| '''Analyze Table''' | 9 |
 | '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
 | 1..100 | 1..100 | Not Contain | class="error" |
 | 1..100 | 1..100 | Count | 1 |
