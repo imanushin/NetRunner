@@ -67,9 +67,7 @@ namespace NetRunner.Executable.Invokation.Functions
             {
                 var currentRow = Rows[rowIndex];
 
-                var cells = currentRow.Cells.Select(c => c.CleanedContent + "<br/> <i class=\"code\">missing</i>").ToReadOnlyList();
-
-                status.Changes.Add(new AppendRowWithCells(HtmlParser.FailCssClass, cells));
+                status.Changes.Add(new MarkRowAsMissing(currentRow.RowReference));
 
                 status.AllIsOk = false;
             }

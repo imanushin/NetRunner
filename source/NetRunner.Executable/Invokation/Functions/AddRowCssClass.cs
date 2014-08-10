@@ -34,8 +34,8 @@ namespace NetRunner.Executable.Invokation.Functions
 
             var document = table.OwnerDocument;
 
-            //Highlight multiple cells, because fitnesse is unable to navigate of tr items
-            foreach (HtmlNode cellNode in targetRow.ChildNodes.Where(n => string.Equals(n.Name, HtmlParser.TableCellNodeName, StringComparison.OrdinalIgnoreCase)))
+            //Highlight multiple cells, because FitNesse is unable to navigate of tr items
+            foreach (HtmlNode cellNode in targetRow.SelectNodesWithName(HtmlParser.TableCellNodeName))
             {
                 var oldAttributes = cellNode.Attributes.AttributesWithName(HtmlParser.ClassAttributeName).FirstOrDefault();
 

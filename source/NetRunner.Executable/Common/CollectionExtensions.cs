@@ -54,6 +54,15 @@ namespace NetRunner.Executable.Common
                 .FirstOrDefault(item => string.Equals(item.ChildNodes.First().Name, HtmlParser.BoldNodeName, StringComparison.OrdinalIgnoreCase));
         }
 
+        internal static ReadOnlyList<HtmlNode> SelectNodesWithName(this HtmlNode node, string name)
+        {
+            return node
+                .ChildNodes
+                .Where(cn => !ReferenceEquals(null, cn))
+                .Where(cn => string.Equals(cn.Name, name, StringComparison.OrdinalIgnoreCase))
+                .ToReadOnlyList();
+        }
+
         internal static ReadOnlyList<XmlElement> SelectNodesWithName(this XmlNode node, string name)
         {
             return node

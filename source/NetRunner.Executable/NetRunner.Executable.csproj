@@ -70,6 +70,7 @@
     <Compile Include="Invokation\Documentation\DocumentationStore.cs" />
     <Compile Include="Invokation\Documentation\EngineInfo.cs" />
     <Compile Include="Invokation\Functions\MarkAsBoldCellChange.cs" />
+    <Compile Include="Invokation\Functions\MarkRowAsMissing.cs" />
     <Compile Include="Invokation\Functions\SequenceExecutionStatus.cs" />
     <Compile Include="Invokation\ParsedTable.cs" />
     <Compile Include="Invokation\Documentation\TestExecutionPlan.cs" />

@@ -9,7 +9,7 @@
 | '''Current Test Results''' |
 | '''Type''' | '''Count''' |
 | right | 4 |
-| wrong | 7 |
+| wrong | 8 |
 | ignores | 0 |
 | exceptions | 3 |
 
@@ -168,3 +168,13 @@
 | '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
 | 1 | 3 | Contains | Unable to get string |
 | 1..100 | 1..100 | Not Contain | class="pass" |
+
+
+| check | '''Row Count Of Table''' | 15 | '''is''' | 5 | 
+
+| '''Analyze Table''' | 15 |
+| '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
+| 1..100 | 1 | Contains | class="fail" |
+| 1..100 | 1..4 | Not Contain | missing |
+| 1..100 | 5 | Contains | class="fail" |
+| 1..100 | 5 | Contains | missing |

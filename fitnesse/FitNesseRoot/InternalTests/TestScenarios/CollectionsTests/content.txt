@@ -77,3 +77,10 @@
 | '''List Wrong To string''' |
 | First |
 | 123 |
+
+
+| '''list''' | 2 | '''in out objects''' |
+| '''In Value''' | '''Out Value''' |
+| 1 | 1 |
+| 2 | 2 |
+| 3 | 3 |
