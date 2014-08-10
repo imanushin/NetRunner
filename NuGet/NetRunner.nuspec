@@ -2,16 +2,18 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>NetRunner</id>
-        <version>1.0.9</version>
-        <authors>Igor Manushin,Sergey Dramarecky</authors>
+        <version>1.0.10</version>
+        <authors>Igor Manushin, Sergey Dramarecky</authors>
         <licenseUrl>https://github.com/imanushin/NetRunner/blob/master/license.txt</licenseUrl>
         <projectUrl>https://github.com/imanushin/NetRunner/wiki</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>This tool is the bridge from FitNesse host and you test code. Use it to write tests on FitNesse and execute them in .Net</description>
         <summary>Fast runner for FitNesse. Because of many improvements it could execute code faster and allow to simplify C# and fitnesse code to get the better execution instead of fitSharp runner.</summary>
         <releaseNotes>Last version contains these improvements:
-1. Fix for empty collection result (NetRunner tries to generate help for the first row)
-2. Fix for NetRunner work without NetRunner.ExternalLibrary.dll placed near</releaseNotes>
+1. Function helps are now presented in the history pages
+2. Fix for incorrect html markup for the missing collections elements
+3. Improve TestsStatistic class: make it mutable, add ability to see current test statistic and full execution statistic
+</releaseNotes>
         <language>en-US</language>
         <tags>FitNesse, NetRunner, Tests, Testing, FitSharp</tags>
         <frameworkAssemblies>
