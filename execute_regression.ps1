@@ -9,7 +9,7 @@ if ( Test-Path $xmlFilePath )
 
 cd .\fitnesse
 
-java -jar fitnesse-standalone.jar -c 'InternalTests.NetRunnerRegression?suite&format=xml' -b $xmlFilePath -p 10000
+java -jar fitnesse-standalone.jar -c 'InternalTests.NetRunnerRegression?suite&format=xml' -b $xmlFilePath
 
 cd..
 

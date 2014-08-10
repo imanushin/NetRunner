@@ -1,1 +1,0 @@
-| '''set fitnesse path''' | http://localhost:${FITNESSE_PORT} |

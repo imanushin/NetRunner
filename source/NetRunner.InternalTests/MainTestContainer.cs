@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,62 +27,43 @@ namespace NetRunner.InternalTests
         {
         }
 
-        public bool SetFitNessePath(Uri pathToRoot)
-        {
-            try
-            {
-                var request = WebRequest.CreateHttp(pathToRoot);
-
-                using (var responce = request.GetResponse())
-                {
-                    using (var stream = responce.GetResponseStream())
-                    {
-                        using (var reader = new StreamReader(stream))
-                        {
-                            reader.ReadToEnd();
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Trace.TraceError("Unable to access to {0}: {1}", pathToRoot, ex);
-
-                return false;
-            }
-
-            pathToFitNesseRoot = pathToRoot;
-
-            return true;
-        }
-
         public void ExecutePageOnPort(string pageLocalUrl, int port)
         {
+            var currentAssemblyLocation = new FileInfo(Assembly.GetExecutingAssembly().Location);
+
+            var folderRoot = currentAssemblyLocation.Directory.Parent.Parent;
+
+            var fitNesseRoot = folderRoot.GetDirectories("fitnesse").First();
+
             pageLocalUrl = pageLocalUrl.Trim();
 
             if (pageLocalUrl.StartsWith("."))
                 pageLocalUrl = pageLocalUrl.Substring(1);
 
-            var testUri = new Uri(pathToFitNesseRoot, pageLocalUrl + "?test&format=xml");
+            var resultXmlFile = new FileInfo(Path.Combine(folderRoot.FullName, "localTestResults.xml"));
 
-            Trace.TraceInformation("Accessing url: {0}", testUri);
-
-            var request = WebRequest.CreateHttp(testUri);
-
-            using (var responce = request.GetResponse())
+            if (resultXmlFile.Exists)
             {
-                using (var stream = responce.GetResponseStream())
-                {
-                    using (var reader = new StreamReader(stream))
-                    {
-                        rawResult = reader.ReadToEnd();
-
-                        testResult = new TestResults(rawResult);
-
-                        InitTest("1");
-                    }
-                }
+                resultXmlFile.Delete();
             }
+
+            var executionLine = string.Format("-jar fitnesse-standalone.jar -c \"{0}?suite&format=xml\" -b \"{1}\"", pageLocalUrl, resultXmlFile.FullName);
+
+            Trace.TraceInformation("Execution line: {0}", executionLine);
+
+            var processStartInfo = new ProcessStartInfo("java.exe", executionLine);
+
+            processStartInfo.WorkingDirectory = fitNesseRoot.FullName;
+
+            var newProcess = Process.Start(processStartInfo);
+
+            newProcess.WaitForExit();
+
+            rawResult = File.ReadAllText(resultXmlFile.FullName);
+
+            testResult = new TestResults(rawResult);
+
+            InitTest("1");
         }
 
         public int TestsCount()
