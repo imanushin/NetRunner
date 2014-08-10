@@ -1,7 +1,7 @@
 !define testName {''.InternalTests.TestScenarios.TableResultTests''}
 !define invokationWasSkippedText {Row invokation was skipped because of parser errors}
 
-| '''execute page''' | ${testName} | '''on port''' | ${FITNESSE_PORT} |
+| '''execute page''' | ${testName} |
 
 | check | '''tests count''' | 1 |
 

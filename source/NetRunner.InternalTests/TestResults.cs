@@ -20,12 +20,14 @@ namespace NetRunner.InternalTests
 
             var rootNode = xmlDocument.ChildNodes.Cast<XmlNode>().First(n => string.Equals(n.Name, "testResults", StringComparison.Ordinal));
 
-            var tests = rootNode.ChildNodes.Cast<XmlNode>().Where(n => string.Equals(n.Name, "rootPath", StringComparison.Ordinal)).ToArray();
             var results = rootNode.ChildNodes.Cast<XmlNode>().Where(n => string.Equals(n.Name, "result", StringComparison.Ordinal)).ToArray();
 
-            for (int i = 0; i < tests.Length; i++)
+            for (int i = 0; i < results.Length; i++)
             {
-                var name = tests[i].InnerText;
+                var pageHistoryLink = results[i].ChildNodes.Cast<XmlNode>().First(n => string.Equals(n.Name, "pageHistoryLink", StringComparison.Ordinal)).InnerText;
+
+                var name = pageHistoryLink.Split('&').First();
+
                 var content = results[i].ChildNodes.Cast<XmlNode>().First(n => string.Equals(n.Name, "content", StringComparison.Ordinal)).InnerText;
                 var counts = results[i].ChildNodes.Cast<XmlNode>().First(n => string.Equals(n.Name, "counts", StringComparison.Ordinal));
 

@@ -27,7 +27,7 @@ namespace NetRunner.InternalTests
         {
         }
 
-        public void ExecutePageOnPort(string pageLocalUrl, int port)
+        public void ExecutePage(string pageLocalUrl)
         {
             var currentAssemblyLocation = new FileInfo(Assembly.GetExecutingAssembly().Location);
 

@@ -1,6 +1,6 @@
 !define testName {''.InternalTests.TestScenarios.EmptyTest''}
 
-| '''execute page''' | ${testName} | '''on port''' | ${FITNESSE_PORT} |
+| '''execute page''' | ${testName} |
 
 | check | '''tests count''' | 1 |
 

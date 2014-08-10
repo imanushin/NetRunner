@@ -1,6 +1,6 @@
 !define testName {''.InternalTests.TestScenarios.FunctionNamesOverriding''}
 
-| '''execute page''' | ${testName} | '''on port''' | ${FITNESSE_PORT} |
+| '''execute page''' | ${testName} |
 
 | check | '''tests count''' | 1 |
 

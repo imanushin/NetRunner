@@ -1,0 +1,13 @@
+!define testName {''.InternalTests.TestScenarios''}
+!define testsCount {10}
+
+| '''execute page''' | ${testName} |
+
+| check | '''tests count''' | ${testsCount} |
+
+
+| '''Analyze Html''' |
+| '''text''' | '''count''' |
+| http://cdn.jsdelivr.net/qtip2/2.2.0/jquery.qtip.min.js | ${testsCount} |
+| $('[helpId]').each(function() { | ${testsCount} |
+| Execution plan | ${testsCount} |
