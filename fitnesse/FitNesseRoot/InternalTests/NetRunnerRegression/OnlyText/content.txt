@@ -14,3 +14,12 @@
 | exceptions | 0 |
 
 
+| '''Analyze Html''' |
+| '''text''' | '''count''' |
+| http://cdn.jsdelivr.net/qtip2/2.2.0/jquery.qtip.min.js | 1 |
+| $('[helpId]').each(function() { | 1 |
+| Some text | 1 |
+| Included page: | 1 |
+| Execution plan | 1 |
+| !-FitSample.dll-! | 2 |
+| !-NetRunner.GeneratedTests.dll-! | 2 |

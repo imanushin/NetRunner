@@ -9,9 +9,19 @@ namespace NetRunner.InternalTests
 {
     internal sealed class RawResultAnalyzer : BaseTableArgument
     {
+        private readonly string rawResult;
+
         public RawResultAnalyzer(string rawResult)
         {
-            throw new NotImplementedException();
+            this.rawResult = rawResult.ToLowerInvariant();
+        }
+
+        public void Check(string text, out int count)
+        {
+            count = rawResult.Split(new[]
+            {
+                text.ToLowerInvariant()
+            }, StringSplitOptions.None).Length - 1;
         }
     }
 }

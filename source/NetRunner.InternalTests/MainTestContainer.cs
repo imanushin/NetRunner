@@ -121,6 +121,10 @@ namespace NetRunner.InternalTests
             return currentTest != null;
         }
 
+        /// <summary>
+        /// Checks how often target text exists
+        /// </summary>
+        /// <returns></returns>
         public RawResultAnalyzer AnalyzeHtml()
         {
             return new RawResultAnalyzer(rawResult);
