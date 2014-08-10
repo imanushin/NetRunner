@@ -26,7 +26,7 @@ namespace NetRunner.InternalTests
             {
                 var pageHistoryLink = results[i].ChildNodes.Cast<XmlNode>().First(n => string.Equals(n.Name, "pageHistoryLink", StringComparison.Ordinal)).InnerText;
 
-                var name = pageHistoryLink.Split('&').First();
+                var name = pageHistoryLink.Split('?').First();
 
                 var content = results[i].ChildNodes.Cast<XmlNode>().First(n => string.Equals(n.Name, "content", StringComparison.Ordinal)).InnerText;
                 var counts = results[i].ChildNodes.Cast<XmlNode>().First(n => string.Equals(n.Name, "counts", StringComparison.Ordinal));
