@@ -16,7 +16,7 @@ namespace NetRunner.InternalTests
 {
     internal sealed class MainTestContainer : BaseTestContainer
     {
-        private Uri pathToFitnesseRoot;
+        private Uri pathToFitNesseRoot;
 
         private TestResults testResult;
         private SingleTest currentTest;
@@ -26,7 +26,7 @@ namespace NetRunner.InternalTests
         {
         }
 
-        public bool SetFitnessePath(Uri pathToRoot)
+        public bool SetFitNessePath(Uri pathToRoot)
         {
             try
             {
@@ -50,7 +50,7 @@ namespace NetRunner.InternalTests
                 return false;
             }
 
-            pathToFitnesseRoot = pathToRoot;
+            pathToFitNesseRoot = pathToRoot;
 
             return true;
         }
@@ -62,7 +62,7 @@ namespace NetRunner.InternalTests
             if (pageLocalUrl.StartsWith("."))
                 pageLocalUrl = pageLocalUrl.Substring(1);
 
-            var testUri = new Uri(pathToFitnesseRoot, pageLocalUrl + "?test&format=xml");
+            var testUri = new Uri(pathToFitNesseRoot, pageLocalUrl + "?test&format=xml");
 
             Trace.TraceInformation("Accessing url: {0}", testUri);
 

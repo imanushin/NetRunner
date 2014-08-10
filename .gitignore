@@ -47,3 +47,4 @@ document/FitnesseRoot/RecentChanges/
 /binary/tools/BigTestsGenerator/BigTestsGenerator.vshost.exe.config
 /binary/tools/BigTestsGenerator/BigTestsGenerator.vshost.exe.manifest
 /NuGet/push.bat
+/testResults.xml
