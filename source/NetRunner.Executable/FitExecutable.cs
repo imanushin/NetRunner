@@ -69,11 +69,12 @@ namespace NetRunner.Executable
 
             DocumentationStore.LoadForAssemblies(ReflectionLoader.LoadedAssemblies);
 
-            communicator.SendDocument(HtmlHintManager.HtmlHeader);
             communicator.SendDocument(EngineInfo.PrintTestEngineInformation());
 
             for (string document = communicator.ReceiveDocument(); document.Any(); document = communicator.ReceiveDocument())
             {
+                communicator.SendDocument(HtmlHintManager.TestHeader);
+                
                 Trace.WriteLine("Processing document of size: " + document.Length);
 
                 var counts = new TestCounts();
@@ -99,7 +100,7 @@ namespace NetRunner.Executable
 
                     communicator.SendDocument(HtmlParser.LineBreak);
 
-                    communicator.SendDocument(HtmlHintManager.HtmlFooter);
+                    communicator.SendDocument(HtmlHintManager.GetTestFooter());
 
                     communicator.SendCounts(counts);
                 }

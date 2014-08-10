@@ -35,6 +35,13 @@ namespace NetRunner.Executable.Invokation.Documentation
 // Create the tooltips only when document ready
 $(document).ready(function()
 {
+     if(true === window.helpWasCreated )
+     {
+         return;
+     }
+
+     window.helpWasCreated = true;
+
      $('[helpId]').each(function() {
         var helpIdValue = $( this ).attr('helpid');
 
@@ -55,7 +62,7 @@ $(document).ready(function()
 });
   </script>
 ";
-        
+
         public static string GetHintAttributeValue(TestFunctionReference function)
         {
             return GetOrCreateHintValue(function, f => f.Identity, DocumentationStore.GetFor);
@@ -90,8 +97,8 @@ $(document).ready(function()
                 {
                     string documentation = documentationGet(item);
 
-                    internalId = string.IsNullOrEmpty(documentation) ? 
-                        string.Empty : 
+                    internalId = string.IsNullOrEmpty(documentation) ?
+                        string.Empty :
                         string.Format("helpitem_{0}", Interlocked.Increment(ref indexer));
 
                     functionKeyMap[identity] = internalId;
@@ -106,7 +113,7 @@ $(document).ready(function()
             }
         }
 
-        public static string HtmlHeader
+        public static string TestHeader
         {
             get
             {
@@ -114,18 +121,17 @@ $(document).ready(function()
             }
         }
 
-        public static string HtmlFooter
+        public static string GetTestFooter()
         {
-            get
+            lock (syncRoot)
             {
-                lock (syncRoot)
-                {
-                    var result = resultHtmls.ToString();
+                var result = resultHtmls.ToString();
 
-                    resultHtmls.Clear();
+                functionKeyMap.Clear();
 
-                    return result;
-                }
+                resultHtmls.Clear();
+
+                return result;
             }
         }
     }
