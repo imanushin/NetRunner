@@ -7,6 +7,9 @@ using NetRunner.ExternalLibrary.Properties;
 
 namespace NetRunner.ExternalLibrary
 {
+    /// <summary>
+    /// System class for all types which are used from the FitNesse markup.
+    /// </summary>
     public abstract class FunctionContainer
     {
         public delegate void BeforeFunctionCallHandler(MethodInfo targetFunction);

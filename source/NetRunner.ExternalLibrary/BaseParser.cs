@@ -22,20 +22,30 @@ namespace NetRunner.ExternalLibrary
         {
             public static readonly int EmbeddedParsersPriority = -10;
 
-            public static readonly int ConverterParserPrioriry = -5;
+            /// <summary>
+            /// See type <see cref="Convert"/> and parser <see cref="ConverterParser"/> for details.
+            /// </summary>
+            public static readonly int ConverterParserPriority = -5;
 
+            /// <summary>
+            /// Default priority of the all user parsers. This priority is always more than all default parsers.
+            /// </summary>
             public static readonly int DefaultPriority = 0;
         }
         // ReSharper restore ConvertToConstant.Global
 
         /// <summary>
-        /// Create parser with the zero priorite (e.g. this parser will be used <b>before</b> any embedded parser)
+        /// Create parser with the zero priority (e.g. this parser will be used <b>before</b> any embedded parser)
         /// </summary>
         protected BaseParser()
             : this(Priorities.DefaultPriority)
         {
         }
 
+        /// <summary>
+        /// Create the parser with the target priority. All default parsers have priority below zero.
+        /// </summary>
+        /// <param name="priority"></param>
         protected BaseParser(int priority)
         {
             Priority = priority;

@@ -12,7 +12,7 @@ namespace NetRunner.ExternalLibrary
     public sealed class ConverterParser : BaseParser
     {
         internal ConverterParser()
-            :base(Priorities.ConverterParserPrioriry)
+            :base(Priorities.ConverterParserPriority)
         {
         }
 
@@ -42,6 +42,9 @@ namespace NetRunner.ExternalLibrary
             }
         }
 
+        /// <summary>
+        /// This parser can be disabled in the any time of the execution, however it is recommended to disable it before the first function execute.
+        /// </summary>
         public static bool IsDisabled
         {
             get;

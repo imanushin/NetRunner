@@ -13,7 +13,7 @@ namespace NetRunner.ExternalLibrary
         Inherited = false, AllowMultiple = false)]
     public sealed class ArgumentPrepareAttribute : Attribute
     {
-        public static readonly ArgumentPrepareAttribute Default = new ArgumentPrepareAttribute(ArgumentPrepareMode.CleanupHtmlContent);
+        internal static readonly ArgumentPrepareAttribute Default = new ArgumentPrepareAttribute(ArgumentPrepareMode.CleanupHtmlContent);
 
         public enum ArgumentPrepareMode
         {

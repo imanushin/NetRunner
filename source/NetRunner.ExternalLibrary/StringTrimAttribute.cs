@@ -12,7 +12,7 @@ namespace NetRunner.ExternalLibrary
     Inherited = false, AllowMultiple = false)]
     public sealed class StringTrimAttribute : BaseOperationMarkerAttribute
     {
-        public static readonly StringTrimAttribute Default = new StringTrimAttribute(false);
+        internal static readonly StringTrimAttribute Default = new StringTrimAttribute(false);
 
         public StringTrimAttribute(bool trimInputString = true)
         {

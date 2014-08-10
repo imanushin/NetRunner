@@ -16,6 +16,9 @@ namespace NetRunner.ExternalLibrary
 
         private readonly Dictionary<Type,Dictionary<string,object>> parsedTypes = new Dictionary<Type, Dictionary<string, object>>(); 
 
+        /// <summary>
+        /// Function checks that target value is existing in the dictionary and returns it in this case.
+        /// </summary>
         public sealed override bool TryParse<TResult>(string value, out TResult parsedResult)
         {
             var targetType = typeof (TResult);
@@ -26,16 +29,16 @@ namespace NetRunner.ExternalLibrary
 
                 if (!parsedTypes.TryGetValue(targetType, out currentDictionary))
                 {
-                    var tempDictinary = GetValues<TResult>();
+                    var tempDictionary = GetValues<TResult>();
 
-                    if (tempDictinary == null)
+                    if (tempDictionary == null)
                     {
                         parsedResult = default(TResult);
 
                         return false;
                     }
 
-                    currentDictionary = tempDictinary.ToDictionary(kv => kv.Key, kv => (object) kv.Value);
+                    currentDictionary = tempDictionary.ToDictionary(kv => kv.Key, kv => (object) kv.Value);
 
                     parsedTypes[targetType] = currentDictionary;
                 }
@@ -73,6 +76,12 @@ namespace NetRunner.ExternalLibrary
             }
         }
 
+        /// <summary>
+        /// By default all whitespaces in the input lines are replaced.
+        /// This function is called in the two cases:
+        /// 1. New value is added to the dictionary
+        /// 2. Parser needs to parse input value
+        /// </summary>
         protected virtual string ReplaceWhiteSpace(string inputString)
         {
             return inputString
