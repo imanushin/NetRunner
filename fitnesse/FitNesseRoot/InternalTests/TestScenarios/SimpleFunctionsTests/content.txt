@@ -37,3 +37,5 @@
 | '''Concat ''' | abc | '''And''' | ''cba'' |
 
 | check | '''Concat ''' | abc | '''And''' | ''cba'' | ''abccba'' |
+
+| ignored table | ignored argument |

@@ -91,7 +91,7 @@
     <Compile Include="Invokation\Functions\AddTraceLine.cs" />
     <Compile Include="Invokation\Functions\AppendRowWithCells.cs" />
     <Compile Include="Invokation\Functions\CssClassCellChange.cs" />
-    <Compile Include="Invokation\Functions\EmptyTestFunction.cs" />
+    <Compile Include="Invokation\Functions\IgnoredTestFunction.cs" />
     <Compile Include="Invokation\FunctionExecutionResult.cs" />
     <Compile Include="Invokation\FunctionHeader.cs" />
     <Compile Include="Invokation\Functions\AddRowCssClass.cs" />

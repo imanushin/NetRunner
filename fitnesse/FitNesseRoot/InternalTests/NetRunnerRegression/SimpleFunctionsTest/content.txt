@@ -10,7 +10,7 @@
 | '''Type''' | '''Count''' |
 | right | 6 |
 | wrong | 3 |
-| ignores | 0 |
+| ignores | 1 |
 | exceptions | 3 |
 
 | check | '''Row Count Of Table''' | 1 | '''is''' | 1 | 
@@ -139,6 +139,12 @@
 | '''Analyze Table''' | 12 |
 | '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
 | 1..100 | 1..100 | Contains | class="pass" |
+
+| check | '''Row Count Of Table''' | 13 | '''is''' | 1 | 
+
+| '''Analyze Table''' | 13 |
+| '''Column''' | '''Row''' | '''Operation''' | '''Parameter''' |
+| 1..100 | 1..100 | Contains | class="ignore" |
 
 | check | '''Trimmed String Length Of''' | ''   1   '' | '''is''' | 1 |
 

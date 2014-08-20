@@ -32,7 +32,7 @@ namespace NetRunner.Executable.Invokation
             var header = ParseHeader(headerRow);
 
             if (header == null)
-                return new ParsedTable(table, EmptyTestFunction.Instance, ReadOnlyList<AbstractTableChange>.Empty);
+                return new ParsedTable(table, new IgnoredTestFunction(table.Rows), ReadOnlyList<AbstractTableChange>.Empty);
 
             var functionToExecute = ReflectionLoader.FindFunction(header.FunctionName, header.Arguments.Count);
 
@@ -95,7 +95,7 @@ namespace NetRunner.Executable.Invokation
             var header = ParseHeader(row);
 
             if (header == null)
-                return EmptyTestFunction.Instance;
+                return new IgnoredTestFunction(row);
 
             var functionReference = ReflectionLoader.FindFunction(header.FunctionName, header.Arguments.Count);
 
