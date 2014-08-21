@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 using System.Xml;
 using NetRunner.Executable.Common;
 using NetRunner.Executable.Invokation.Remoting;
@@ -16,10 +17,13 @@ namespace NetRunner.Executable.Invokation.Documentation
 {
     internal static class DocumentationStore
     {
+        private const char genericItemStart = '`';
+        private static readonly string[] genericSuffixes = Enumerable.Range(1, 9).Select(i => string.Format("{0}{1}", genericItemStart, i)).ToArray();
+
         private static readonly Dictionary<string, string> internalStore = new Dictionary<string, string>();
         private static readonly ReadOnlyList<string> microsoftNamespaces = new ReadOnlyList<string>(new[] { "System.", "Microsoft." });
 
-        
+
         private static string TryFindForKey(string identity)
         {
             string result;
@@ -35,14 +39,6 @@ namespace NetRunner.Executable.Invokation.Documentation
         public static string GetFor(IHelpIdentity function)
         {
             return TryFindForKey(function.HelpIdentity);
-        }
-
-        [CanBeNull]
-        public static string GetFor(PropertyReference property)
-        {
-            var result = TryFindForKey(property.GetData().HelpIdentity);
-
-            return result ?? GetFor(property.GetData().Owner.GetData());
         }
 
         public static void LoadForAssemblies(ReadOnlyList<string> assemblyPathes)
@@ -63,7 +59,7 @@ namespace NetRunner.Executable.Invokation.Documentation
                         continue;
                     }
 
-                    Trace.TraceInformation("Analysing html help file: '{0}'", xmlFile);
+                    Trace.TraceInformation("Analyzing html help file: '{0}'", xmlFile);
 
                     var xmlDocument = new XmlDocument();
 
@@ -137,6 +133,16 @@ namespace NetRunner.Executable.Invokation.Documentation
 
         private static void AddNewMember(string memberName, XmlNode summaryNode)
         {
+            if (memberName.Contains(genericItemStart))
+            {
+                memberName = genericSuffixes.Aggregate(memberName, (current, suffix) => current.Replace(suffix, string.Empty));
+            }
+
+            if (memberName.StartsWith("M:", StringComparison.Ordinal) && memberName.Contains('{'))
+            {
+                memberName = Regex.Replace(memberName, @"\{(.*?)\}", string.Empty);
+            }
+
             internalStore[memberName] = HtmlParser.ReplaceUnknownTags(summaryNode.InnerXml);
         }
 
@@ -167,7 +173,6 @@ namespace NetRunner.Executable.Invokation.Documentation
                 else
                 {
                     newNode = ownerDocument.CreateElement("b");
-
                 }
 
                 newNode.InnerText = targetType;

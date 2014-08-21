@@ -27,9 +27,9 @@ namespace NetRunner.TestExecutionProxy
 
             HelpIdentity = string.Format(
                 methodIdentityFormat,
-                method.DeclaringType.FullName,
+                ReflectionHelpers.GetTypeNameWithoutGenerics(method.DeclaringType),
                 SystemName,
-                string.Join(",", method.GetParameters().Select(a => ReplaseRefSymbol(a.ParameterType.FullName))));
+                string.Join(",", method.GetParameters().Select(a => ReplaseRefSymbol(ReflectionHelpers.GetTypeNameWithoutGenerics(a.ParameterType)))));
 
         }
 
@@ -38,7 +38,7 @@ namespace NetRunner.TestExecutionProxy
             get;
             private set;
         }
-        
+
         public ReadOnlyCollection<string> AvailableFunctionNames
         {
             [Pure]

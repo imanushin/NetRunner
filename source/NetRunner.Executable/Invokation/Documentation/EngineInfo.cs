@@ -209,6 +209,8 @@ namespace NetRunner.Executable.Invokation.Documentation
                     parameter.IsOut ? "out " : string.Empty,
                     CutType(parameter.ParameterType),
                     parameter.Name);
+
+                return;
             }
 
             builder.AppendFormat(
@@ -230,6 +232,11 @@ namespace NetRunner.Executable.Invokation.Documentation
             if (typesToCut.TryGetValue(name, out result))
             {
                 return result;
+            }
+
+            if (name.Contains("`"))
+            {
+                name = name.Substring(0, name.IndexOf("`", StringComparison.Ordinal));
             }
 
             return name;

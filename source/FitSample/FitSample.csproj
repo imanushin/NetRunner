@@ -47,6 +47,7 @@
     </Compile>
     <Compile Include="CreateFolderArgument.cs" />
     <Compile Include="FunctionNamesTestContainer.cs" />
+    <Compile Include="GenericEnumInfo.cs" />
     <Compile Include="IncorrectEqualityClass.cs" />
     <Compile Include="IncorrectToStringClass.cs" />
     <Compile Include="NetRunnerTestContainer.cs" />

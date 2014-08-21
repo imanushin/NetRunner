@@ -178,5 +178,15 @@ namespace FitSample
                 }
             };
         }
+
+        /// <summary>
+        /// Compare generic types
+        /// </summary>
+        /// <param name="input">Input generic value</param>
+        /// <returns>Result generic value</returns>
+        public GenericEnumInfo<EnvironmentVariableTarget> CompareEnvironmentVariableTarget(GenericEnumInfo<EnvironmentVariableTarget> input)
+        {
+            return input;
+        }
     }
 }

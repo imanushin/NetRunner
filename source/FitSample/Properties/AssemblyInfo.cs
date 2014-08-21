@@ -14,3 +14,5 @@ using NetRunner.ExternalLibrary;
 
 [assembly: ExcludeDefaultFunctionName(false)]
 [assembly: ArgumentPrepare(ArgumentPrepareAttribute.ArgumentPrepareMode.CleanupHtmlContent)]
+
+[assembly: InternalsVisibleTo("NetRunner.Executable.Tests")]

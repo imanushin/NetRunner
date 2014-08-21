@@ -68,5 +68,20 @@ namespace NetRunner.TestExecutionProxy
 
             return FindAttribute(defaultValue, property.DeclaringType);
         }
+
+        public static string GetTypeNameWithoutGenerics(Type type)
+        {
+            var result = type.FullName;
+
+            var firstBrace = result.IndexOf('`');
+
+            if (firstBrace < 0)
+            {
+                return result;
+            }
+
+            return result.Substring(0, firstBrace);
+        }
+
     }
 }
