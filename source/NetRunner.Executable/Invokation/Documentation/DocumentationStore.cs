@@ -118,6 +118,11 @@ namespace NetRunner.Executable.Invokation.Documentation
                         continue;
                     }
 
+                    if (memberName.StartsWith("M:", StringComparison.Ordinal) && memberName.Contains('{'))
+                    {
+                        memberName = Regex.Replace(memberName, @"\{(.*?)\}", string.Empty);
+                    }
+
                     ReplaceWellKnownNodes(summaryNode);
 
                     ProcessParams(member, memberName);
@@ -136,11 +141,6 @@ namespace NetRunner.Executable.Invokation.Documentation
             if (memberName.Contains(genericItemStart))
             {
                 memberName = genericSuffixes.Aggregate(memberName, (current, suffix) => current.Replace(suffix, string.Empty));
-            }
-
-            if (memberName.StartsWith("M:", StringComparison.Ordinal) && memberName.Contains('{'))
-            {
-                memberName = Regex.Replace(memberName, @"\{(.*?)\}", string.Empty);
             }
 
             internalStore[memberName] = HtmlParser.ReplaceUnknownTags(summaryNode.InnerXml);

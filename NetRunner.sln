@@ -14,6 +14,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetRunner.TestExecutionProx
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetRunner.GeneratedTests", "source\NetRunner.GeneratedTests\NetRunner.GeneratedTests.csproj", "{347EE748-E2E2-4B31-8E75-96AAED63028C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetRunner.TestExecutionProxy.Tests", "source\NetRunner.TestExecutionProxy.Tests\NetRunner.TestExecutionProxy.Tests.csproj", "{BF75EE24-3C82-4AC5-BE43-023FE9AB701E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetRunner.Executable.Tests", "source\NetRunner.Executable.Tests\NetRunner.Executable.Tests.csproj", "{D1D07315-BEB3-4C28-BB46-2871100D6688}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,6 +48,14 @@ Global
 		{347EE748-E2E2-4B31-8E75-96AAED63028C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{347EE748-E2E2-4B31-8E75-96AAED63028C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{347EE748-E2E2-4B31-8E75-96AAED63028C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF75EE24-3C82-4AC5-BE43-023FE9AB701E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF75EE24-3C82-4AC5-BE43-023FE9AB701E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF75EE24-3C82-4AC5-BE43-023FE9AB701E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF75EE24-3C82-4AC5-BE43-023FE9AB701E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1D07315-BEB3-4C28-BB46-2871100D6688}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1D07315-BEB3-4C28-BB46-2871100D6688}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1D07315-BEB3-4C28-BB46-2871100D6688}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1D07315-BEB3-4C28-BB46-2871100D6688}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

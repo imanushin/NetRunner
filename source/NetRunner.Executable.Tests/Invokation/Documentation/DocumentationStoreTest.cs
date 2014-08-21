@@ -23,10 +23,18 @@ namespace NetRunner.Executable.Tests.Invokation.Documentation
                 .GetMethods()
                 .First(m => string.Equals(m.Name, "CompareEnvironmentVariableTarget", StringComparison.Ordinal));
 
-            var document = DocumentationStore.GetFor(new MethodData(method, MethodReference.GetMethod(method)));
+            var methodReference = MethodReference.GetMethod(method);
+
+            var document = DocumentationStore.GetFor(new MethodData(method, methodReference));
 
             Assert.IsNotNull(document);
             Assert.IsFalse(string.IsNullOrWhiteSpace(document));
+
+            var parameter = new ParameterInfoData(method.GetParameters().First(), methodReference);
+
+            var parameterHelp = DocumentationStore.GetFor(parameter);
+
+            Assert.IsNotNull(parameterHelp);
         }
 
         internal static void LoadAssemblies()

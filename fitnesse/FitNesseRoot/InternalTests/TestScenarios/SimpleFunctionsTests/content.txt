@@ -39,3 +39,6 @@
 | check | '''Concat ''' | abc | '''And''' | ''cba'' | ''abccba'' |
 
 | ignored table | ignored argument |
+
+| check | '''Compare Environment Variable Target''' | User | User |
+| check | '''Compare Environment Variable Target''' | User | Process |
